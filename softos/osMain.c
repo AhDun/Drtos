@@ -148,14 +148,13 @@ osErrorValue osMainPrintFunc(void)
 */
 osErrorValue osMainSpeedTest(void)
 {
-	u32 t0,t1,k0;
+	u32 t0,t1;
 	RunTask_TIT -> TC = Task_State_Up_IN;
 	t0 = SysTick->VAL;
 	osTaskSwitch_Enable();//触发任务切换
 	t1 = SysTick->VAL;
-	k0 = (t0 - t1) / (osCPU_Freq / 8);
 	#if (osTaskUsePrint  > 0)
-	TST.TSSU = k0;
+	TST.TSSU = (t0 - t1) / (osCPU_Freq / 8);
 	#endif
 	print("任务切换速度测试\nt0=%d\nt1=%d\n切换速度=%fus\n",t0,t1,((t0 - t1) / (osCPU_Freq / 8))*1.0);
 	return (OK);

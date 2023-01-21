@@ -35,7 +35,7 @@ void Task1_Func(char* a)
 	LCD_ShowString(10,10,tftlcd_data.width,tftlcd_data.height,16,"softos Demo");
 	RTC_Config();
 	RTC_Set_WakeUp(RTC_WakeUpClock_CK_SPRE_16bits,0);//配置WAKE UP中断,1秒钟中断一次
-	timebz = osSignalLogin(Signal_Mutual);
+	timebz = osSignalLogin(Signal_Binary);
 	osSignalApply_Wait(timebz);
 	while(1) 
 	{
@@ -83,7 +83,7 @@ void Task2_Func(void)
 		for(b = 0; b < 50;b++){
 				buf[b] = ' ';
 		}
-		sprint((char *)buf,"Memory ALL: %dB Surplus: %dB",osMemoryAllSize(),osMemoryMaxMallocValue());
+		sprint((char *)buf,"Memory ALL: %dB Surplus: %dB",osMemoryGetAllValue(),osMemoryGetFreeValue());
 		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
 		for(b = 0; b < 50;b++){
 				buf[b] = ' ';

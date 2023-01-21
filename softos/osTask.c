@@ -758,6 +758,7 @@ osErrorValue osTaskAddrReplace(TaskInfoTable* TIT,void* NewTA)
 osErrorValue  osTaskInfoPrint(void)
 {
 	osTaskInfoPrintOut("%s",1);
+	return (0);
 } 
 
 /*

@@ -46,6 +46,7 @@ _MemoryUnit 	MemoryPool[MemTank_Max];//内存池
 osErrorValue  osMemoryInit(void)
 {
 	MemoryNextAddr = &MemoryPool[0];//初始化内存地址
+	return (OK);
 }
 
 
@@ -71,7 +72,7 @@ void* osMemoryMalloc(u32 MemSize)
 		 
 	}else{
 		Length = 0;
-		MemoryAddr1 = &MemoryPool[0];
+		MemoryAddr1 = &MemoryPool[Head];
 		MemoryAddr2 = NULL;
 		do{
 			_MemoryStruct = (MemoryStruct*)MemoryAddr1;
@@ -86,7 +87,7 @@ void* osMemoryMalloc(u32 MemSize)
 						MemoryAddr1 += MemSize;
 						_MemoryStruct = (MemoryStruct*)MemoryAddr1;	
 						_MemoryStruct -> MemoryFlag = Memory_Free;
-						_MemoryStruct -> MemoryLength = Length - sizeof(MemoryStruct);
+						_MemoryStruct -> MemoryLength = Length - MemSize;
 
 						_MemoryStruct = (MemoryStruct*)MemoryAddr2;
 						_MemoryStruct -> MemoryLength  = (_MemoryLength)MemSize;
@@ -117,25 +118,92 @@ void* osMemoryMalloc(u32 MemSize)
 
 			return (MemoryAddr2 + sizeof(MemoryStruct)); 
 		}
+		#if (osMemoryDebug_Enable > 0)
+		osMemoryDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
+		#endif
 		return (NULL);
 	}
-	return (NULL);
+
 }
 
-osErrorValue osMemoryFree(u8* addr){
+osErrorValue osMemoryFree(void* addr){
+	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((u8*)addr - sizeof(MemoryStruct));
+	MemoryStruct* _MemoryStruct2 = _MemoryStruct1 + _MemoryStruct1 -> MemoryLength;;
+
+	if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free){
+		_MemoryStruct1 -> MemoryFlag = Memory_Free;
+		return (OK);
+	}else if((_MemoryUnit*)_MemoryStruct2 >= MemoryNextAddr){
+		_MemoryStruct1 -> MemoryFlag = Memory_Free;
+		return (OK);
+	}
+	else{
+		#if (osMemoryDebug_Enable > 0)
+		osMemoryDebug("内存释放失败! 内存地址不正确\n");
+		#endif
+		return (Error);
+	}
+	
+}
+
+u32 osMemoryGetFreeValue(void)
+{
+	_MemoryUnit* MemoryAddr = &MemoryPool[Head];
 	MemoryStruct* _MemoryStruct;
-	_MemoryStruct = (MemoryStruct*)(addr - sizeof(MemoryStruct));
-	_MemoryStruct -> MemoryFlag = Memory_Free;
-	return (OK);
+	u32 Vaule = 0;
+	while(MemoryAddr < MemoryNextAddr){
+		_MemoryStruct = (MemoryStruct*)MemoryAddr;
+		if(_MemoryStruct -> MemoryFlag == Memory_Free){
+			Vaule += _MemoryStruct -> MemoryLength;
+		}
+		MemoryAddr += _MemoryStruct -> MemoryLength;
+	}
+	Vaule += (&MemoryPool[MemTank_Max] - MemoryNextAddr);
+	return (Vaule);
 }
-void* osMemoryExtend(u8* addr,u32 MemSize){
+u32 osMemoryGetPassValue(void)
+{
+	_MemoryUnit* MemoryAddr = &MemoryPool[Head];
+	MemoryStruct* _MemoryStruct;
+	u32 Vaule = 0;
+	while(MemoryAddr < MemoryNextAddr){
+		_MemoryStruct = (MemoryStruct*)MemoryAddr;
+		if(_MemoryStruct -> MemoryFlag == Memory_Free){
+			if(_MemoryStruct -> MemoryLength > Vaule){
+				Vaule = _MemoryStruct -> MemoryLength;
+			}
+		}
+		MemoryAddr += _MemoryStruct -> MemoryLength;
+	}
+	if((&MemoryPool[MemTank_Max] - MemoryNextAddr) > Vaule){
+		Vaule = &MemoryPool[MemTank_Max] - MemoryNextAddr;
+	}
+	return (Vaule - sizeof(MemoryStruct));
 }
-u32 osMemoryMaxMallocValue(void){
+
+u32 osMemoryGetAllValue(void)
+{
+	return (&MemoryPool[MemTank_Max] - &MemoryPool[Head]);
 }
-u32 osMemoryAllSize(void){
+
+osErrorValue osMemorySum(void)
+{
+	_MemoryUnit* MemoryAddr = &MemoryPool[Head];
+	MemoryStruct* _MemoryStruct;
+	u32 Count = 0;
+	while(MemoryAddr < MemoryNextAddr){
+		_MemoryStruct = (MemoryStruct*)MemoryAddr;
+		if(_MemoryStruct -> MemoryFlag == Memory_Occupy || _MemoryStruct -> MemoryFlag == Memory_Free){
+			Count += 1;
+		}else{
+			return (Error);
+		}
+		MemoryAddr += _MemoryStruct -> MemoryLength;
+	}
+	return (Count);
 }
-u32 osMemoryMarginSize(void){
-}
+
+
 
 /*
                                                   FILE-END

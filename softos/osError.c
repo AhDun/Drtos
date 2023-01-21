@@ -77,7 +77,7 @@ void osTaskError_HardFault(void)
 		}
 		osErrorDebug("任务栈总大小:%d字节\n任务栈剩余:%d字节\n",(RunTask_TIT -> TSS - 1),Read_PSP() - ((u32)RunTask_TIT -> TH - ((RunTask_TIT -> TSS - 1))));
 		osErrorDebug("任务异常处:%X\n",Read_PC(),0);
-		osErrorDebug("内存总量:%d字节\n内存余量:%d字节",osMemoryAllSize(),osMemoryMarginSize());
+		osErrorDebug("内存总量:%d字节\n内存余量:%d字节",osMemoryGetAllValue(),osMemoryGetFreeValue());
 	}
 	osTaskSet(0,Task_Set_Pause);
 

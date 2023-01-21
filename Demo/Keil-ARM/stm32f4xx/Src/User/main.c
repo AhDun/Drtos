@@ -53,32 +53,38 @@
 int main(int argc, char *argv[])
 {
 /*--------------------------------------demo---------------------------------------------------------*/
-	u32 _tr0;
-	char  a[100] = {"Hello World"};
+//	u32 _tr0;
+//	char  a[100] = {"Hello World"};
 
-	u8* b;
-	u8*	c;
-	u8* d;
+//	u8* b;
+//	u8*	c;
+//	u8* d;
 
-	osIRQ_Init();
-	osUART_Init();
-	osMemoryInit();
+//	osIRQ_Init();
+//	osUART_Init();
+//	osMemoryInit();
 
-//	print("%d\n",&MemoryPool[0]);
+////	print("%d\n",&MemoryPool[0]);
 
-	b = osMemoryMalloc(1);
-	print("%d\n",b);
-	//osMemoryFree(b);
-	c = osMemoryMalloc(1);
-	print("%d\n",c);
-	osMemoryFree(c);
-	d = osMemoryMalloc(2);
-	print("%d\n",d);
+//	b = osMemoryMalloc(1);
+//	print("%d\n",b);
+//	//osMemoryFree(b);
+//	c = osMemoryMalloc(2);
+//	print("%d\n",c);
+//	osMemoryFree(c);
+//	d = osMemoryMalloc(2);
+//	print("%d\n",d);
+//	osMemoryFree(d);
 
-	//print("%d\n",MemoryNextAddr);
+//	print("%d\n",osMemoryGetPassValue());
+
+//	d = osMemoryMalloc(2);
+//	print("%d\n",d);
+//	osMemoryFree(d);
+//	//print("%d\n",MemoryNextAddr);
 
 
-	while(1);
+//	while(1);
 
 
 

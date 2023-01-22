@@ -37,6 +37,7 @@
                                                   <函数区>
 */
 
+
 /*
  *@函数名称: 无
 
@@ -92,7 +93,7 @@ int main(int argc, char *argv[])
 	if(osInit() ==Error){//系统初始化
 		print("系统初始化失败");
 	}
-	osMainPrintFunc();
+	//osMainPrintFunc();
 
 
 

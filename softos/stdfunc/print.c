@@ -629,6 +629,55 @@ void tprint(const char* c,unsigned int s)
 	}
 
 }
+
+
+__asm void print(const char* s,...)
+{
+	PRESERVE8
+	extern  xprint
+	
+	PUSH	{R3}
+	PUSH	{R2}
+	PUSH	{R1}
+	PUSH	{R0}
+	MOV		R1,#0x00
+	MOV		R0,SP
+	PUSH 	{R4-R12,LR}
+	LDR		R2,=xprint
+    BLX     R2						//跳转到BX寄存器中所指向的值
+	NOP
+	NOP
+	POP  	{R4-R12,LR}
+	POP		{R0}
+	POP		{R1}
+	POP		{R2}
+	POP		{R3}
+	BX		LR
+}
+__asm void sprint(char* s,const char* c,...)
+{
+	PRESERVE8
+	extern  xprint
+
+	PUSH	{R3}
+	PUSH	{R2}
+	PUSH	{R1}
+	PUSH	{R0}
+	MOV		R1,#0x01
+	MOV		R0,SP
+	PUSH 	{R4-R12,LR}
+	LDR		R2,=xprint
+    BLX     R2						//跳转到BX寄存器中所指向的值
+	NOP
+	NOP
+	POP  	{R4-R12,LR}
+	POP		{R0}
+	POP		{R1}
+	POP		{R2}
+	POP		{R3}
+	BX		LR
+}
+	
 /*
                                                   FILE-END
 */

@@ -83,7 +83,7 @@ void Task2_Func(void)
 		for(b = 0; b < 50;b++){
 				buf[b] = ' ';
 		}
-		sprint((char *)buf,"Memory ALL: %dB Surplus: %dB",osMemoryGetAllValue(),osMemoryGetFreeValue());
+		sprint((char *)buf,"Memory ALL: %dB Surplus: %dB",osMemoryGetAllValue(),osMemoryGetPassValue());
 		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
 		for(b = 0; b < 50;b++){
 				buf[b] = ' ';

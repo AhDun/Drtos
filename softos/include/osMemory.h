@@ -40,11 +40,11 @@
 //}
 
 //内存配置{
-#define MemTank_Max 	4 * 900 //32KB//内存池大小
+#define MemTank_Max 	8 * 900 //32KB//内存池大小
 
 #define osMemoryDebug print//DeBug输出函数
 #define osMemoryDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
-#define osMemoryMarginSizeOut(a) print("\nosMemory: 剩余内存大小 %d 字节\n",a)//DeBug输出函数
+
 #define osMemoryMarginSizeOut_Enable 1//配置 1:开启Debug输出 0:关闭Debug输出
 #define osMemorySequence_Enable 0 //内存顺序分配   1：启用 0：禁用
 #define osMemTankSur_Enable 	1 //内存余量记录   1：启用 0：禁用

@@ -523,11 +523,6 @@
               <FilePath>..\..\..\SoftOs\stdfunc\LinkList.c</FilePath>
             </File>
             <File>
-              <FileName>print.asm</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\..\SoftOs\stdfunc\print.asm</FilePath>
-            </File>
-            <File>
               <FileName>print.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\SoftOs\stdfunc\print.c</FilePath>

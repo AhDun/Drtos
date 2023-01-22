@@ -16,7 +16,6 @@
 ".\objects\usart.o"
 ".\objects\linklist.o"
 ".\objects\print.o"
-".\objects\print_1.o"
 ".\objects\str.o"
 ".\objects\stm32f4xx_it.o"
 ".\objects\startup_stm32f40_41xxx.o"

@@ -52,11 +52,11 @@ static void _print_lu(unsigned int num,int* s);
 static void _print_lf(double* num,char ctrl,int* s);
 static void _pchar(int p,int* s);
 
-void print(const char* s,...);
-void sprint(char* s,const char* c,...);
+extern __asm void print(const char* s,...);
+extern __asm void sprint(char* s,const char* c,...);
 
-void xprint(int sp,int c);
-void tprint(const char* c,unsigned int s);
+extern void xprint(int sp,int c);
+extern void tprint(const char* c,unsigned int s);
 
 
 /*

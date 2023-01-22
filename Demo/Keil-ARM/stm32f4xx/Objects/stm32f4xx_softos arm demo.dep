@@ -1,5 +1,5 @@
 Dependencies for Project 'stm32f4xx', Target 'softos arm demo': (DO NOT MODIFY !)
-F (.\Src\User\main.c)(0x63CBE9C3)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (.\Src\User\main.c)(0x63CCE6FD)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (Src\User\main.h)(0x638ACC4C)
 I (.\Src\Drive\stm32f4xx.h)(0x6374728F)
 I (.\Src\Drive\CMSIS\core_cm4.h)(0x5559F3AE)
@@ -40,7 +40,7 @@ I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -50,9 +50,9 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 I (.\Src\App\Demo.h)(0x6396C50B)
-F (.\Src\App\Demo.c)(0x63CBE7BC)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\demo.o --omf_browse .\objects\demo.crf --depend .\objects\demo.d)
+F (.\Src\App\Demo.c)(0x63CBF325)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\demo.o --omf_browse .\objects\demo.crf --depend .\objects\demo.d)
 I (.\Src\User\main.h)(0x638ACC4C)
 I (.\Src\Drive\stm32f4xx.h)(0x6374728F)
 I (.\Src\Drive\CMSIS\core_cm4.h)(0x5559F3AE)
@@ -94,7 +94,7 @@ I (Src\App\Demo.h)(0x6396C50B)
 I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -104,7 +104,7 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 I (.\Src\Func\tftlcd.h)(0x6304F938)
 I (.\Src\Func\rtc.h)(0x63747471)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x599ECD2E)
@@ -149,7 +149,7 @@ I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -159,7 +159,7 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 F (..\..\..\SoftOs\osCPU.c)(0x63C61A60)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\oscpu.o --omf_browse .\objects\oscpu.crf --depend .\objects\oscpu.d)
 I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\User\Main.h)(0x638ACC4C)
@@ -201,7 +201,7 @@ I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -211,7 +211,7 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 F (..\..\..\SoftOs\osError.c)(0x63CBE62E)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\oserror.o --omf_browse .\objects\oserror.crf --depend .\objects\oserror.d)
 I (.\Src\User\main.h)(0x638ACC4C)
 I (.\Src\Drive\stm32f4xx.h)(0x6374728F)
@@ -254,7 +254,7 @@ I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osConfig.h)(0x63C61ABF)
@@ -263,7 +263,7 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 F (..\..\..\SoftOs\osMain.c)(0x63CBE9C3)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\osmain.o --omf_browse .\objects\osmain.crf --depend .\objects\osmain.d)
 I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\User\Main.h)(0x638ACC4C)
@@ -305,7 +305,7 @@ I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -315,7 +315,7 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 F (..\..\..\SoftOs\osMemory.c)(0x63CBEB19)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\osmemory.o --omf_browse .\objects\osmemory.crf --depend .\objects\osmemory.d)
 I (.\Src\User\Main.h)(0x638ACC4C)
 I (.\Src\Drive\stm32f4xx.h)(0x6374728F)
@@ -353,8 +353,8 @@ I (.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h)(0x555C4782)
 I (.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h)(0x555C4782)
 I (.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h)(0x555C4782)
 I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
@@ -410,7 +410,7 @@ I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -419,8 +419,8 @@ I (..\..\..\softos\include\osSignal.h)(0x63969A06)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
-F (..\..\..\SoftOs\osSignal.c)(0x6396B1C8)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\ossignal.o --omf_browse .\objects\ossignal.crf --depend .\objects\ossignal.d)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
+F (..\..\..\SoftOs\osSignal.c)(0x63CBF319)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\ossignal.o --omf_browse .\objects\ossignal.crf --depend .\objects\ossignal.d)
 I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\User\Main.h)(0x638ACC4C)
 I (.\Src\Drive\stm32f4xx.h)(0x6374728F)
@@ -461,7 +461,7 @@ I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -471,7 +471,7 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 F (..\..\..\SoftOs\osTask.c)(0x63CBEA2F)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\ostask.o --omf_browse .\objects\ostask.crf --depend .\objects\ostask.d)
 I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\User\Main.h)(0x638ACC4C)
@@ -513,7 +513,7 @@ I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -523,14 +523,14 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 F (..\..\..\softos\osCPU.asm)(0x63C61A28)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include--pd "__UVISION_VERSION SETA 527" --pd "STM32F407xx SETA 1"--list .\listings\oscpu.lst --xref -o .\objects\oscpu_1.o --depend .\objects\oscpu_1.d)
 F (..\..\..\softos\include\osClock.h)(0x6389BF72)()
 F (..\..\..\softos\include\osConfig.h)(0x63C61ABF)()
 F (..\..\..\softos\include\osCPU.h)(0x63C619E8)()
 F (..\..\..\softos\include\osError.h)(0x63876B04)()
 F (..\..\..\softos\include\osMain.h)(0x6381EDA4)()
-F (..\..\..\softos\include\osMemory.h)(0x63CBE95C)()
+F (..\..\..\softos\include\osMemory.h)(0x63CBF24D)()
 F (..\..\..\softos\include\osPost.h)(0x63C61FCF)()
 F (..\..\..\softos\include\osSignal.h)(0x63969A06)()
 F (..\..\..\softos\include\osTask.h)(0x63C61E71)()
@@ -576,7 +576,7 @@ I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -586,7 +586,7 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 I (.\Src\App\Demo.h)(0x6396C50B)
 F (.\Src\Func\SysTick.c)(0x63C508DE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\systick.o --omf_browse .\objects\systick.crf --depend .\objects\systick.d)
 I (Src\Func\SysTick.h)(0x6379CE21)
@@ -629,7 +629,7 @@ I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
 I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -639,7 +639,7 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 F (.\Src\Func\tftlcd.c)(0x63969C5F)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\tftlcd.o --omf_browse .\objects\tftlcd.crf --depend .\objects\tftlcd.d)
 I (Src\Func\tftlcd.h)(0x6304F938)
 I (.\Src\User\main.h)(0x638ACC4C)
@@ -682,7 +682,7 @@ I (C:\Keil\ARM\ARMCC\include\stdlib.h)(0x6316F5FE)
 I (Src\Func\font.h)(0x6304F938)
 I (Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (.\Src\App\Demo.h)(0x6396C50B)
 I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
@@ -695,7 +695,7 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 F (.\Src\Func\usart.c)(0x63709879)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\usart.o --omf_browse .\objects\usart.crf --depend .\objects\usart.d)
 I (Src\Func\usart.h)(0x62BD5028)
 I (.\Src\User\main.h)(0x638ACC4C)
@@ -735,7 +735,7 @@ I (.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h)(0x555C4782)
 I (.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h)(0x555C4782)
 I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 F (..\..\..\SoftOs\stdfunc\LinkList.c)(0x638357DA)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\linklist.o --omf_browse .\objects\linklist.crf --depend .\objects\linklist.d)
 I (..\..\..\softos\include\osMain.h)(0x6381EDA4)
 I (.\Src\User\Main.h)(0x638ACC4C)
@@ -777,7 +777,7 @@ I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -787,9 +787,8 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
-F (..\..\..\SoftOs\stdfunc\print.asm)(0x6381FEBA)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include--pd "__UVISION_VERSION SETA 527" --pd "STM32F407xx SETA 1"--list .\listings\print.lst --xref -o .\objects\print.o --depend .\objects\print.d)
-F (..\..\..\SoftOs\stdfunc\print.c)(0x63C0CAD2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\print_1.o --omf_browse .\objects\print_1.crf --depend .\objects\print_1.d)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
+F (..\..\..\SoftOs\stdfunc\print.c)(0x63CCE4AB)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\print.o --omf_browse .\objects\print.crf --depend .\objects\print.d)
 I (.\Src\User\main.h)(0x638ACC4C)
 I (.\Src\Drive\stm32f4xx.h)(0x6374728F)
 I (.\Src\Drive\CMSIS\core_cm4.h)(0x5559F3AE)
@@ -826,7 +825,7 @@ I (.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h)(0x555C4782)
 I (.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h)(0x555C4782)
 I (.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h)(0x555C4782)
 I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 F (..\..\..\SoftOs\stdfunc\str.c)(0x638186CE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I .\Src\App -I .\Src\Drive -I .\Src\Drive\CMSIS -I .\Src\Drive\STM32F4xx_StdPeriph_Driver -I .\Src\Func -I .\Src\User -I ..\..\..\SoftOs -I ..\..\..\softos\stdfunc -I ..\..\..\softos\include -I ..\..\..\softos\stdfunc\include -I .\Src\Drive\STM32F4xx_StdPeriph_Driver\inc-I.\RTE\_softos_arm_demo-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-IC:\Keil\ARM\CMSIS\Include-IC:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Device\Include-D__UVISION_VERSION="527" -DSTM32F407xx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o .\objects\str.o --omf_browse .\objects\str.crf --depend .\objects\str.d)
@@ -912,7 +911,7 @@ I (.\Src\User\STM32xxGPIO.h)(0x6380E10B)
 I (.\Src\Func\SysTick.h)(0x6379CE21)
 I (.\Src\Func\usart.h)(0x62BD5028)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (..\..\..\softos\stdfunc\include\print.h)(0x639B4D7A)
+I (..\..\..\softos\stdfunc\include\print.h)(0x63CCE4BC)
 I (..\..\..\softos\stdfunc\include\Str.h)(0x63750458)
 I (..\..\..\softos\stdfunc\include\LinkList.h)(0x6389AD9E)
 I (..\..\..\softos\include\osError.h)(0x63876B04)
@@ -922,7 +921,7 @@ I (..\..\..\softos\include\osPost.h)(0x63C61FCF)
 I (..\..\..\softos\include\osTask.h)(0x63C61E71)
 I (..\..\..\softos\include\osCPU.h)(0x63C619E8)
 I (..\..\..\softos\include\osClock.h)(0x6389BF72)
-I (..\..\..\softos\include\osMemory.h)(0x63CBE95C)
+I (..\..\..\softos\include\osMemory.h)(0x63CBF24D)
 F (.\Src\Drive\stm32f4xx_it.h)(0x5559F376)()
 F (.\Src\Drive\CMSIS\core_cm4.h)(0x5559F3AE)()
 F (.\Src\Drive\CMSIS\core_cmFunc.h)(0x5559F39E)()

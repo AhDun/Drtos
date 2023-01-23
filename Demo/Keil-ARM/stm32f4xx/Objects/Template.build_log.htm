@@ -27,7 +27,46 @@ Project File Date:  01/22/2023
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil\ARM\ARMCC\Bin'
 Build target 'softos arm demo'
-".\Objects\Template.axf" - 0 Error(s), 0 Warning(s).
+compiling osError.c...
+compiling osCPU.c...
+compiling SysTick.c...
+compiling stm32f4xx_it.c...
+compiling main.c...
+compiling LinkList.c...
+..\..\..\SoftOs\stdfunc\LinkList.c(186): warning:  #940-D: missing return statement at end of non-void function "uLinkListInsert" 
+  }
+..\..\..\SoftOs\stdfunc\LinkList.c: 1 warning, 0 errors
+compiling osMain.c...
+compiling rtc.c...
+compiling osMemory.c...
+compiling osPost.c...
+..\..\..\SoftOs\osPost.c(70): warning:  #177-D: variable "uList"  was declared but never referenced
+  	_uList*	uList;
+..\..\..\SoftOs\osPost.c: 1 warning, 0 errors
+compiling osTask.c...
+compiling osClock.c...
+compiling osSignal.c...
+..\..\..\SoftOs\osSignal.c(178): warning:  #223-D: function "uLinkListInsert" declared implicitly
+  		uLinkListInsert(&ST -> SP,uList,TuList);
+..\..\..\SoftOs\osSignal.c: 1 warning, 0 errors
+compiling Demo.c...
+compiling tftlcd.c...
+Src\Func\tftlcd.c(1254): warning:  #111-D: statement is unreachable
+   	return r;						
+Src\Func\tftlcd.c(1076): warning:  #177-D: variable "r1"  was declared but never referenced
+  	u16 r1,r2,r3;
+Src\Func\tftlcd.c(1076): warning:  #177-D: variable "r2"  was declared but never referenced
+  	u16 r1,r2,r3;
+Src\Func\tftlcd.c(1076): warning:  #177-D: variable "r3"  was declared but never referenced
+  	u16 r1,r2,r3;
+Src\Func\tftlcd.c(1077): warning:  #177-D: variable "value"  was declared but never referenced
+  	u32 value;
+Src\Func\tftlcd.c(1392): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i;
+Src\Func\tftlcd.c: 6 warnings, 0 errors
+linking...
+Program Size: Code=16344 RO-data=19136 RW-data=76 ZI-data=6108  
+".\Objects\Template.axf" - 0 Error(s), 9 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -41,7 +80,7 @@ Package Vendor: Keil
   C:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

@@ -65,15 +65,93 @@ typedef	struct
 
 
 
+/*
 
+ *@函数名称: uLinkListAdd
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 单向链表增加
+
+ *@输入参数: LinkListHeadAddr	- 	链表链头部的地址
+			 AdduList			- 	要添加的链表的地址
+				
+
+ *@返 回 值: _LinkListXError	0.成功添加	-1.添加时发生错误	
+
+ *@注    释: 无
+
+*/
 
 extern _LinkListXError uLinkListAdd(void* LinkListHeadAddr,void*  AdduList);
-extern _LinkListXError mLinkListAdd(void* LinkListHeadAddr,_mList* LinkListAddr);
-extern _LinkListXError uLinkListInsert(void* LinkListHeadAddr,_uList* CLinkListAddr,_uList* LinkListAddr);
+/*
 
+ *@函数名称: uLinkListAdd
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 单向链表增加
+
+ *@输入参数: 	1.LinkListHeadAddr		-void*		-链表头部
+				2.LinkListAddr			-void*		-要添加的链表
+
+ *@返 回 值: 	_LinkListXError		0.无异常	-1.发生错误	
+
+ *@注    释: 无
+
+*/
 extern _LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList);
-extern _LinkListXError mLinkListRemvoe(void* LinkListHeadAddr,_mList* LinkListAddr);
-extern _uList* uLinkListEndRead(void* LinkListHeadAddr);
+/*
+
+ *@函数名称: uLinkListAdd
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 单向链表增加
+
+ *@输入参数: 	1.LinkListHeadAddr		-void*		-链表头部
+				2.LinkListAddr			-void*		-要添加的链表
+
+ *@返 回 值: 	_LinkListXError		0.无异常	-1.发生错误	
+
+ *@注    释: 无
+
+*/
+extern _LinkListXError uLinkListHeadRemvoe(void* LinkListHeadAddr);
+/*
+
+ *@函数名称: uLinkListAdd
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 单向链表增加
+
+ *@输入参数: 	1.LinkListHeadAddr		-void*		-链表头部
+				2.LinkListAddr			-void*		-要添加的链表
+
+ *@返 回 值: 	_LinkListXError		0.无异常	-1.发生错误	
+
+ *@注    释: 无
+
+*/
+extern void* uLinkListReadEnd(void* LinkListHeadAddr);
+/*
+
+ *@函数名称: uLinkListAdd
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 单向链表增加
+
+ *@输入参数: 	1.LinkListHeadAddr		-void*		-链表头部
+				2.LinkListAddr			-void*		-要添加的链表
+
+ *@返 回 值: 	_LinkListXError		0.无异常	-1.发生错误	
+
+ *@注    释: 无
+
+*/
+extern void* uLinkListReadEndAndRemvoe(void* LinkListHeadAddr);
 
 
 

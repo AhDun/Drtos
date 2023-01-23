@@ -2622,7 +2622,7 @@ Image component sizes
 
       1372        326          0          0          0       3579   demo.o
        100          0          0          0          0       3229   linklist.o
-       296         96          0          0          0     284319   main.o
+       296         96          0          0          0     284323   main.o
        180         24          0          0          0       4061   misc.o
        386         22          0          8          0       1890   osclock.o
        204          8          0          1          0       1407   oscpu.o
@@ -2651,7 +2651,7 @@ Image component sizes
        352         26          0          2        200       2432   usart.o
 
     ----------------------------------------------------------------------
-     14678       2202      19136         72       6108     455166   Object Totals
+     14678       2202      19136         72       6108     455170   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         30          0          0          4          4          0   (incl. Padding)
 
@@ -2704,8 +2704,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     16344       2274      19136         76       6108     444142   Grand Totals
-     16344       2274      19136         76       6108     444142   ELF Image Totals
+     16344       2274      19136         76       6108     444146   Grand Totals
+     16344       2274      19136         76       6108     444146   ELF Image Totals
      16344       2274      19136         76          0          0   ROM Totals
 
 ==============================================================================

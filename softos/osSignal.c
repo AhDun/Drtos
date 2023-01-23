@@ -227,6 +227,86 @@ osErrorValue osSignalApplyPost(SemaphoreTable* ST)
 
 */
 
+osErrorValue osSignalApplyToken(SemaphoreTable* ST)
+{
+	SemaphoreToken* SemaphoreToken_Buf = osMemoryMalloc(sizeof(SemaphoreToken));//为信号量结构体申请内存
+	if(SemaphoreToken_Buf == NULL){
+		return (Error);
+	}else{
+		SemaphoreToken_Buf -> DownAddr = NULL;
+		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTask_TIT;
+		ST -> SP = (_SignalPost*)SemaphoreToken_Buf;
+		return (OK);
+	}
+}
+
+
+/*
+
+ *@函数名称: osSignalApply_Wait
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 信号量请求
+
+ *@输入参数: SemaphoreTable* ST(信号量结构体)
+
+ *@返 回 值: -1:发生错误 / 0:请求成功
+
+ *@注    释: 无
+
+*/
+
+osErrorValue osSignalWaitToken(SemaphoreTable* ST)
+{
+	SemaphoreToken* SemaphoreToken_Buf1;
+	SemaphoreToken* SemaphoreToken_Buf2;
+	TaskInfoTable*	TaskInfoTable_Buf;
+	SemaphoreToken* SemaphoreToken_Buf = osMemoryMalloc(sizeof(SemaphoreToken));//为信号量结构体申请内存
+	if(SemaphoreToken_Buf == NULL){
+		return (Error);
+	}else{
+//		SemaphoreToken_Buf -> DownAddr = NULL;
+//		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTask_TIT;
+//		ST -> SP = (_SignalPost*)SemaphoreToken_Buf;
+		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTask_TIT;
+
+		SemaphoreToken_Buf1 = (SemaphoreToken*)ST -> SP;
+		SemaphoreToken_Buf2 = NULL;
+		while(1){
+			TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf1 -> TaskInfo;
+			if(RunTask_TIT -> TPL < TaskInfoTable_Buf -> TPL){
+				if(SemaphoreToken_Buf2 == NULL){
+					SemaphoreToken_Buf -> DownAddr = (_NextAddr*)ST -> SP;
+					ST -> SP = (_SignalPost*)SemaphoreToken_Buf;
+				}else{
+					SemaphoreToken_Buf -> DownAddr = (_NextAddr*)SemaphoreToken_Buf1;
+					SemaphoreToken_Buf2 -> DownAddr = (_NextAddr*)SemaphoreToken_Buf;
+					RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
+					osTaskSwitch_Enable();//触发异常,进行任务切换
+				}
+				return (OK);
+			}
+			else{
+				SemaphoreToken_Buf2 = SemaphoreToken_Buf1;
+				if(SemaphoreToken_Buf1 -> DownAddr == NULL){
+					SemaphoreToken_Buf2 -> DownAddr = (_NextAddr*)SemaphoreToken_Buf;
+					return (OK);
+				}
+				SemaphoreToken_Buf1 = (SemaphoreToken*)SemaphoreToken_Buf1 -> DownAddr;
+				RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
+				osTaskSwitch_Enable();//触发异常,进行任务切换
+			}
+		}
+		
+//		RunTask_TIT -> TC = Task_State_Up_SI;//修改为信号挂起(等待态)
+//		osTaskSwitch_Enable();//触发异常,进行任务切换
+
+		return (OK);
+	}
+}
+
+
 osErrorValue osSignalApply_Wait(SemaphoreTable* ST)
 {
 	TaskInfoTable* TIT;
@@ -234,10 +314,10 @@ osErrorValue osSignalApply_Wait(SemaphoreTable* ST)
 	switch(ST ->ST){
 		case Signal_Binary:	
 							if(ST -> SP != NULL){
-								return osSignalWaitPost(ST);
+								return osSignalWaitToken(ST);
 
 							}else{
-								return osSignalApplyPost(ST);
+								return osSignalApplyToken(ST);
 							}
 		case Signal_Mutual:
 							if(ST -> SP != NULL){
@@ -245,12 +325,10 @@ osErrorValue osSignalApply_Wait(SemaphoreTable* ST)
 								TIT = (TaskInfoTable*)uList -> Body;
 								if(RunTask_TIT -> TPL < TIT -> TPL){
 									TIT -> TPL = RunTask_TIT -> TPL;//
-									return osSignalWaitPost(ST);
-								}else{
-									return osSignalWaitPost(ST);
 								}
+								return osSignalWaitToken(ST);
 							}else{
-								return osSignalApplyPost(ST);
+								return osSignalApplyToken(ST);
 							}
 		case Signal_Count:
 							if(ST -> SV > 0){
@@ -258,9 +336,9 @@ osErrorValue osSignalApply_Wait(SemaphoreTable* ST)
 								return (OK);	
 							}else{
 								if(ST -> SP != NULL){
-									return osSignalWaitPost(ST);
+									return osSignalWaitToken(ST);
 								}else{
-									return osSignalApplyPost(ST);
+									return osSignalApplyToken(ST);
 								}
 							}
 		default:return(Error);
@@ -314,6 +392,26 @@ osErrorValue osSignalFreePost(SemaphoreTable* ST)
 		return (OK);
 	}
 }
+
+osErrorValue osSignalFreeToken(SemaphoreTable* ST)
+{
+	SemaphoreToken* SemaphoreToken_Buf;
+	TaskInfoTable*	TaskInfoTable_Buf;
+
+
+	if(ST -> SP != NULL){
+		SemaphoreToken_Buf = (SemaphoreToken*)ST -> SP;
+		TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf  -> TaskInfo;
+		TaskInfoTable_Buf -> TC = Task_State_Up_IN;  //主动挂起(挂起态)
+
+		ST -> SP = (_SignalPost*)SemaphoreToken_Buf -> DownAddr;
+		osMemoryFree(SemaphoreToken_Buf);
+		return (OK);
+	}else{
+		return (Error);
+	}
+
+}
 /*
 
  *@函数名称: osSignalFree
@@ -333,13 +431,13 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 {
 	switch(ST ->ST){
 		case Signal_Binary:
-							return osSignalFreePost(ST);
+							return osSignalFreeToken(ST);
 		case Signal_Mutual:
 							RunTask_TIT -> TPL = RunTask_TIT -> TPLb;
-							return osSignalFreePost(ST);
+							return osSignalFreeToken(ST);
 		case Signal_Count:
 							ST -> SV = ST -> SV + 1;
-							return osSignalFreePost(ST);
+							return osSignalFreeToken(ST);
 		default:return(Error);
 	}
 }

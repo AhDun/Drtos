@@ -132,7 +132,7 @@ void osClockTimePulse(void)
 			print("任务调度次数:%d | 预计耗时:%dus\n",TST.TSC,TST.TSC*TST.TSSU);
 		}
 		TST.TSC = 0;
-		print("内存总量:%d字节 | 内存余量:%d字节 | 可分配:%d字节\n",osMemoryAllSize(),osMemoryMarginSize(),osMemoryMaxMallocValue());
+		print("内存总量:%d字节 | 内存余量:%d字节 | 可分配:%d字节\n",osMemoryGetAllValue(),osMemoryGetFreeValue(),osMemoryGetPassValue());
 		tprint("系统已运行: %d天 %h小时 %m分钟 %s秒\n",osTime. TSRT);
 		#endif
 		#endif

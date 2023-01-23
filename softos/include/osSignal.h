@@ -52,13 +52,19 @@
 /*
                                                   数据类型别名声明区
 */
-typedef     u32      _SemaphoreValue;
-typedef     u8       _SemaphoreType;
-typedef		u8 		 _Occupy_TaskID;
-typedef		u32		 _SignalPost;
+typedef     u32     _SemaphoreValue;
+typedef     u8      _SemaphoreType;
+typedef		u32		_SignalPost;
+typedef		u32		_TaskInfo;
 /*
                                                   结构式数据类型别名声明区
 */
+typedef struct
+{
+	_NextAddr*  DownAddr;//下一个表的地址
+	_TaskInfo*	TaskInfo;
+}SemaphoreToken;//信号量令牌
+
 typedef struct
 {
     _SemaphoreValue 	 SV;//信号值

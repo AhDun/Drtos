@@ -54,7 +54,7 @@
 int main(int argc, char *argv[])
 {
 /*--------------------------------------demo---------------------------------------------------------*/
-//	u32 _tr0;
+	u32 _tr0;
 //	char  a[100] = {"Hello World"};
 
 //	u8* b;
@@ -87,24 +87,35 @@ int main(int argc, char *argv[])
 
 //	while(1);
 
-	PostForm F1;
-	PostForm F2;
-	PostForm F3;
-	PostForm F4;
+//	PostForm F1;
+//	PostForm F2;
+//	PostForm F3;
+//	PostForm F4;
 
-	//uLinkListAdd(&F1.DownAddr,&F2);
-	uLinkListAdd(&F1.DownAddr,&F3);
-	uLinkListAdd(&F1.DownAddr,&F4);
-	uLinkListHeadRemvoe(&F1.DownAddr);
+//	//uLinkListAdd(&F1.DownAddr,&F2);
+//	uLinkListAdd(&F1.DownAddr,&F3);
+//	uLinkListAdd(&F1.DownAddr,&F4);
+//	uLinkListHeadRemvoe(&F1.DownAddr);
 
-	uLinkListRemvoe(&F1.DownAddr,&F2);
-	uLinkListRemvoe(&F1.DownAddr,&F3);
-	uLinkListRemvoe(&F1.DownAddr,&F4);
+//	uLinkListRemvoe(&F1.DownAddr,&F2);
+//	uLinkListRemvoe(&F1.DownAddr,&F3);
+//	uLinkListRemvoe(&F1.DownAddr,&F4);
+
+
+
+
 
 	if(osInit() ==Error){//系统初始化
 		print("系统初始化失败");
 	}
 
+	osMemoryMalloc(27328);
+//		
+//	osSignalApply_Wait(timebz1);
+//	osSignalApply_Wait(timebz1);
+//	RunTask_TIT -> TPL = -2;
+//	osSignalApply_Wait(timebz1);
+//	osSignalApply_Wait(timebz1);
 
 	//osMainPrintFunc();
 
@@ -243,7 +254,10 @@ int main(int argc, char *argv[])
 //		TST.TSC = 0;
 //		print("内存总量:%d字节 | 内存余量:%d字节\n",osMemoryAllSize(),osMemoryMaxMallocValue());
 //		tprint("系统已运行: %d天 %h小时 %m分钟 %s秒\n",osTime. TSRT);
-		osTaskDelayMs(1000);
+		osTaskDelayMs(10000);
+//		for(_tr0 = 0;_tr0 < MemTank_Max;_tr0++){
+//			MemoryPool[_tr0] = _tr0;
+//		}
 	}
 /*---------------------------------------------------------------------------------------------------*/
 }

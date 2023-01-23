@@ -57,14 +57,6 @@ typedef	struct
                                                   <函数声明区>
 */
 
-
-
-
-
-
-
-
-
 /*
 
  *@函数名称: uLinkListAdd
@@ -73,11 +65,11 @@ typedef	struct
 
  *@函数功能: 单向链表增加
 
- *@输入参数: LinkListHeadAddr	- 	链表链头部的地址
-			 AdduList			- 	要添加的链表的地址
+ *@输入参数: LinkListHeadAddr	 	链表链头部的地址
+			 AdduList			 	要添加的链表的地址
 				
 
- *@返 回 值: _LinkListXError	0.成功添加	-1.添加时发生错误	
+ *@返 回 值: _LinkListXError		0.成功添加	1.添加时发生错误	
 
  *@注    释: 无
 
@@ -86,16 +78,16 @@ typedef	struct
 extern _LinkListXError uLinkListAdd(void* LinkListHeadAddr,void*  AdduList);
 /*
 
- *@函数名称: uLinkListAdd
+ *@函数名称: uLinkListRemvoe
 
  *@函数版本: 1.0.0
 
- *@函数功能: 单向链表增加
+ *@函数功能: 单向链表删除
 
- *@输入参数: 	1.LinkListHeadAddr		-void*		-链表头部
-				2.LinkListAddr			-void*		-要添加的链表
+ *@输入参数: LinkListHeadAddr	 	链表链头部的地址
+			 ReuList			 	要删除的链表的地址
 
- *@返 回 值: 	_LinkListXError		0.无异常	-1.发生错误	
+ *@返 回 值: _LinkListXError		0.删除添加	1.删除时发生错误
 
  *@注    释: 无
 
@@ -103,16 +95,15 @@ extern _LinkListXError uLinkListAdd(void* LinkListHeadAddr,void*  AdduList);
 extern _LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList);
 /*
 
- *@函数名称: uLinkListAdd
+ *@函数名称: uLinkListHeadRemvoe
 
  *@函数版本: 1.0.0
 
- *@函数功能: 单向链表增加
+ *@函数功能: 单向头部链表删除
 
- *@输入参数: 	1.LinkListHeadAddr		-void*		-链表头部
-				2.LinkListAddr			-void*		-要添加的链表
+ *@输入参数: LinkListHeadAddr	 	链表链头部的地址
 
- *@返 回 值: 	_LinkListXError		0.无异常	-1.发生错误	
+ *@返 回 值: _LinkListXError		0.删除添加	1.删除时发生错误
 
  *@注    释: 无
 
@@ -120,16 +111,15 @@ extern _LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList);
 extern _LinkListXError uLinkListHeadRemvoe(void* LinkListHeadAddr);
 /*
 
- *@函数名称: uLinkListAdd
+ *@函数名称: uLinkListReadEnd
 
  *@函数版本: 1.0.0
 
- *@函数功能: 单向链表增加
+ *@函数功能: 单向尾部链表删除
 
- *@输入参数: 	1.LinkListHeadAddr		-void*		-链表头部
-				2.LinkListAddr			-void*		-要添加的链表
+ *@输入参数: 	LinkListHeadAddr	链表头部
 
- *@返 回 值: 	_LinkListXError		0.无异常	-1.发生错误	
+ *@返 回 值: 	返回尾部链表的地址
 
  *@注    释: 无
 
@@ -143,19 +133,14 @@ extern void* uLinkListReadEnd(void* LinkListHeadAddr);
 
  *@函数功能: 单向链表增加
 
- *@输入参数: 	1.LinkListHeadAddr		-void*		-链表头部
-				2.LinkListAddr			-void*		-要添加的链表
+ *@输入参数: LinkListHeadAddr	链表头部
 
- *@返 回 值: 	_LinkListXError		0.无异常	-1.发生错误	
+ *@返 回 值: 返回尾部链表的地址
 
  *@注    释: 无
 
 */
 extern void* uLinkListReadEndAndRemvoe(void* LinkListHeadAddr);
-
-
-
-
 
 
 /*

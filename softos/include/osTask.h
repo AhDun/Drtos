@@ -270,13 +270,13 @@ extern osErrorValue osTaskInit(void);
 
  *@函数功能: 根据任务名称查询任务表地址
 
- *@输入参数: TN	-	任务名称	
-			 TA	-	任务地址
-			 TSS - 	任务栈长度
-			 TTW - 	任务时间轮片
-			 TPL -  任务优先级
-			 TPP -	任务传参
-			 TC -	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
+ *@输入参数: TN		任务名称	
+			 TA		任务地址
+			 TSS  	任务栈长度
+			 TTW  	任务时间轮片
+			 TPL    任务优先级
+			 TPP 	任务传参
+			 TC 	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
 	
  *@返 回 值: osErrorValue -		函数错误返回值 (-1: 表示创建任务发生错误,> - 1: 注册后任务ID，表示已完成注册)
 			 

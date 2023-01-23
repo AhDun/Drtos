@@ -46,28 +46,100 @@
  *@注    释: 无
 
 */
-_LinkListXError uLinkListAdd(void* LinkListHeadAddr,_uList* LinkListAddr)
+_LinkListXError uLinkListAdd(void* LinkListHeadAddr,void*  AdduList)
 {
-	_uList* uList;
-	u32* LinkListHead = (u32*)LinkListHeadAddr;
+	_uList* uList_Buf;
+	u32* LinkListHeadAddr_Buf = (u32*)LinkListHeadAddr;
 
-	LinkListAddr -> DownAddr = NULL;
+	while(*LinkListHeadAddr_Buf != NULL){
+		uList_Buf = (_uList*)LinkListHeadAddr_Buf;
+		LinkListHeadAddr_Buf = uList_Buf -> DownAddr;
+	}
+	*LinkListHeadAddr_Buf = (u32)AdduList;
+	return (OK);
+}
 
 
-	if(*LinkListHead == NULL){//表头为空，可以直接写入
-		*LinkListHead = (u32)LinkListAddr;
-		return (OK);//单向
+_LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList)
+{
+	_uList* uList_Buf;
+	_uList* uList_Buf1;
+	u32* LinkListHeadAddr_Buf = (u32*)LinkListHeadAddr;
 
-	}else{
-		uList = (_uList*) *LinkListHead;
-		while(uList -> DownAddr != NULL){
-			uList = (_uList*) uList-> DownAddr;
+	if(*LinkListHeadAddr_Buf != NULL){
+		uList_Buf = (_uList*)LinkListHeadAddr_Buf;
+		uList_Buf1 = (_uList*)LinkListHeadAddr_Buf;
+		while(uList_Buf != ReuList){
+			uList_Buf1 = uList_Buf;
+			uList_Buf = (_uList*)uList_Buf -> DownAddr;
+			if(uList_Buf == NULL){
+				return (Error);
+			}
 		}
-		uList -> DownAddr = (_NextAddr*)LinkListAddr;
+		if(uList_Buf == uList_Buf1){
+			*LinkListHeadAddr_Buf = (u32)uList_Buf -> DownAddr;
+		}else{
+			uList_Buf1 -> DownAddr = uList_Buf -> DownAddr;
+		}
 		return (OK);
-
+	}
+	else{
+		return (Error);
 	}
 }
+
+_LinkListXError uLinkListHeadRemvoe(void* LinkListHeadAddr)
+{
+	return uLinkListRemvoe(LinkListHeadAddr,LinkListHeadAddr);
+}
+
+void* uLinkListReadEnd(void* LinkListHeadAddr)
+{
+	_uList* uList_Buf;
+	u32* LinkListHeadAddr_Buf = (u32*)LinkListHeadAddr;
+
+	if(*LinkListHeadAddr_Buf != NULL){
+		uList_Buf = (_uList*)LinkListHeadAddr_Buf;
+		while(uList_Buf -> DownAddr != NULL){
+			uList_Buf = (_uList*)uList_Buf -> DownAddr;
+		}
+		return ((void*)uList_Buf);
+	}
+	else{
+		return (NULL);
+	}
+
+
+}
+
+void* uLinkListReadEndAndRemvoe(void* LinkListHeadAddr)
+{
+	_uList* uList_Buf;
+	_uList* uList_Buf1;
+	u32* LinkListHeadAddr_Buf = (u32*)LinkListHeadAddr;
+
+	if(*LinkListHeadAddr_Buf != NULL){
+		uList_Buf = (_uList*)LinkListHeadAddr_Buf;
+		uList_Buf1 = (_uList*)LinkListHeadAddr_Buf;
+		while(uList_Buf -> DownAddr != NULL){
+			uList_Buf1 = uList_Buf;
+			uList_Buf = (_uList*)uList_Buf -> DownAddr;
+		}
+		if(uList_Buf == uList_Buf1){
+			*LinkListHeadAddr_Buf = NULL;
+		}else{
+			uList_Buf1 -> DownAddr = NULL;
+		}
+		return ((void*)uList_Buf);
+	}
+	else{
+		return (NULL);
+	}
+
+
+}
+
+
 /*
 
  *@函数名称: uLinkListAdd
@@ -86,31 +158,31 @@ _LinkListXError uLinkListAdd(void* LinkListHeadAddr,_uList* LinkListAddr)
 */
 _LinkListXError uLinkListInsert(void* LinkListHeadAddr,_uList* CLinkListAddr,_uList* LinkListAddr)
 {
-	_uList* uList;
-	_uList* uList1;
-	u32* LinkListHead = (u32*)LinkListHeadAddr;
-	if(*LinkListHead != NULL){
-		if(*LinkListHead == (u32)CLinkListAddr){
-			*LinkListHead = (u32)LinkListAddr;
-			LinkListAddr -> DownAddr = (_NextAddr*)CLinkListAddr;
-			return (OK);
-		}else{
-			uList = (_uList*) *LinkListHead;
-			while(uList != CLinkListAddr){
-				uList1 = uList;
-				uList = (_uList*) uList -> DownAddr;
-				if(uList == NULL){
-					return (Error);
-				}
-			}
-			uList1 -> DownAddr = (_NextAddr*)LinkListAddr;
-			LinkListAddr -> DownAddr = (_NextAddr*)CLinkListAddr;
-			return (OK);
-		}
-		
-	}else{
-		return uLinkListAdd(LinkListHeadAddr,LinkListAddr);
-	}
+//	_uList* uList;
+//	_uList* uList1;
+//	u32* LinkListHead = (u32*)LinkListHeadAddr;
+//	if(*LinkListHead != NULL){
+//		if(*LinkListHead == (u32)CLinkListAddr){
+//			*LinkListHead = (u32)LinkListAddr;
+//			LinkListAddr -> DownAddr = (_NextAddr*)CLinkListAddr;
+//			return (OK);
+//		}else{
+//			uList = (_uList*) *LinkListHead;
+//			while(uList != CLinkListAddr){
+//				uList1 = uList;
+//				uList = (_uList*) uList -> DownAddr;
+//				if(uList == NULL){
+//					return (Error);
+//				}
+//			}
+//			uList1 -> DownAddr = (_NextAddr*)LinkListAddr;
+//			LinkListAddr -> DownAddr = (_NextAddr*)CLinkListAddr;
+//			return (OK);
+//		}
+//		
+//	}else{
+//		return uLinkListAdd(LinkListHeadAddr,LinkListAddr);
+//	}
 }
 /*
 
@@ -173,31 +245,31 @@ _LinkListXError mLinkListAdd(void* LinkListHeadAddr,_mList* LinkListAddr)
 
 */
 
-_LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,_uList* LinkListAddr)
-{
-	_uList* uList;
-	_uList* uList1;
-	u32* LinkListHead = (u32*)LinkListHeadAddr;
-	if(*LinkListHead == (u32)LinkListAddr){//
-		uList = (_uList*)*LinkListHead;
-		uList = (_uList*)uList -> DownAddr;//这个表指向的下一个表
-		if(uList == NULL){//只有这一张表
-			*LinkListHead = NULL;//直接清空
-		}else{
-			*LinkListHead = (u32)uList;//
-		}
-		return (OK);
-	}else{
-		uList = (_uList*) *LinkListHead;
-		do{
-			uList1 = uList;//备份
-			uList = (_uList*)uList -> DownAddr;
-		}while(uList != LinkListAddr);
-		uList1 -> DownAddr = uList -> DownAddr;
-		return (OK);
+//_LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,_uList* LinkListAddr)
+//{
+//	_uList* uList;
+//	_uList* uList1;
+//	u32* LinkListHead = (u32*)LinkListHeadAddr;
+//	if(*LinkListHead == (u32)LinkListAddr){//
+//		uList = (_uList*)*LinkListHead;
+//		uList = (_uList*)uList -> DownAddr;//这个表指向的下一个表
+//		if(uList == NULL){//只有这一张表
+//			*LinkListHead = NULL;//直接清空
+//		}else{
+//			*LinkListHead = (u32)uList;//
+//		}
+//		return (OK);
+//	}else{
+//		uList = (_uList*) *LinkListHead;
+//		do{
+//			uList1 = uList;//备份
+//			uList = (_uList*)uList -> DownAddr;
+//		}while(uList != LinkListAddr);
+//		uList1 -> DownAddr = uList -> DownAddr;
+//		return (OK);
 
-	}
-}
+//	}
+//}
 /*
 
  *@函数名称: mLinkListRemvoe

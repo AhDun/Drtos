@@ -76,10 +76,8 @@ osErrorValue osPostSend(void* PB,TaskInfoTable* TIT)
 		if(PF == NULL){//如果返回为空,说明申请失败
 				return (Error);//返回错误
 		}else{
-			PF -> PB = (_PostBody*)PB;//
-			uList = &PF -> uList;
-			uList -> Body = (_Body*)PF;
-			uLinkListAdd(&TIT -> PF,&PF -> uList);
+			PF -> PB = PB;
+			uLinkListAdd(&TIT -> PF,PF -> DownAddr);
 		}
 		if(TIT -> TPL <  RunTask_TIT -> TPL && TIT -> TC == Task_State_Up_PT){//如果这个任务高于当前工作运行任务栏的优先级，就占用
 			//TL[_tr0].TITA -> TC &= TIT_Task_State_TC_RST;//清除这个任务的状态位

@@ -87,12 +87,25 @@ int main(int argc, char *argv[])
 
 //	while(1);
 
+	PostForm F1;
+	PostForm F2;
+	PostForm F3;
+	PostForm F4;
 
+	//uLinkListAdd(&F1.DownAddr,&F2);
+	uLinkListAdd(&F1.DownAddr,&F3);
+	uLinkListAdd(&F1.DownAddr,&F4);
+	uLinkListHeadRemvoe(&F1.DownAddr);
 
+	uLinkListRemvoe(&F1.DownAddr,&F2);
+	uLinkListRemvoe(&F1.DownAddr,&F3);
+	uLinkListRemvoe(&F1.DownAddr,&F4);
 
 	if(osInit() ==Error){//系统初始化
 		print("系统初始化失败");
 	}
+
+
 	//osMainPrintFunc();
 
 

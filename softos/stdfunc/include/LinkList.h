@@ -47,6 +47,8 @@ typedef	struct
 	_Body*		Body;//表内容
 
 }_mList;//双向链表
+
+
 /*
                                                   <数据声明区>
 */
@@ -65,11 +67,11 @@ typedef	struct
 
 
 
-extern _LinkListXError uLinkListAdd(void* LinkListHeadAddr,_uList* LinkListAddr);
+extern _LinkListXError uLinkListAdd(void* LinkListHeadAddr,void*  AdduList);
 extern _LinkListXError mLinkListAdd(void* LinkListHeadAddr,_mList* LinkListAddr);
 extern _LinkListXError uLinkListInsert(void* LinkListHeadAddr,_uList* CLinkListAddr,_uList* LinkListAddr);
 
-extern _LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,_uList* LinkListAddr);
+extern _LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList);
 extern _LinkListXError mLinkListRemvoe(void* LinkListHeadAddr,_mList* LinkListAddr);
 extern _uList* uLinkListEndRead(void* LinkListHeadAddr);
 

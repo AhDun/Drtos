@@ -77,7 +77,17 @@ void SysTick_Handler(void)
 	osClockTimePulse();
 }
 
+/*
+ *@函数名称: SysTick_us
 
+ *@函数功能: 微秒延时
+
+ *@输入参数: 无
+
+ *@返 回 值: 无
+
+ *@注    释: 无
+*/
 void SysTick_us(u32 us)
 {
 	u32 VALs = SysTick->VAL - (us * (osCPU_Freq / 8));

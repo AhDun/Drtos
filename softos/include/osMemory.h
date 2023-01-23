@@ -40,7 +40,7 @@
 //}
 
 //内存配置{
-#define MemTank_Max 	8 * 900 //32KB//内存池大小
+#define MemTank_Max 	4 * 900 //32KB//内存池大小
 
 #define osMemoryDebug print//DeBug输出函数
 #define osMemoryDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出

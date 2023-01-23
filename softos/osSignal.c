@@ -267,60 +267,6 @@ osErrorValue osSignalApply_Wait(SemaphoreTable* ST)
 	}
 }
 
-
-/*
-osErrorValue osSignalApply_Wait(SemaphoreTable* ST)
-{
-	 switch(ST ->SP){
-#ifdef osSignalMutual_Enable 
-        case Signal_Mutual://互斥信号量 
-							if(ST -> SV == false){
-								if(RunTask_TIT -> TPL < TL[ST -> OTID].TITA -> TPL && ST -> OTID < (_TaskIDMax + 1)){
-									TL[ST -> OTID].TITA -> TPL = RunTask_TIT -> TPL;//临时提高优先级
-								}
-                                while(TST.TSS != TaskSwitch_Ready);//查询任务可切换态,如果是不可切换,无限循环,直到可切换态
-                                //RunTask_TIT -> TC &= TIT_Task_State_TC_RST;//任务的状态位复位
-                                RunTask_TIT -> TC = Task_State_Up_SI;//修改为信号挂起(等待态)
-                                RunTask_TIT -> TS =  &ST->SV;
-                                osTaskSwitch_Enable();//触发异常,进行任务切换
-                            }
-							ST -> OTID = RunTask_TIT -> TI;
-							ST -> SV = false;
-                            return (OK);//请求成功!返回OK
-#endif
-#ifdef osSignalBinary_Enable                            
-        case Signal_Binary://二值信号量
-                            if(ST -> SV == false){
-                                while(TST.TSS != TaskSwitch_Ready);//查询任务可切换态,如果是不可切换,无限循环,直到可切换态
-                                //RunTask_TIT -> TC &= TIT_Task_State_TC_RST;//任务的状态位复位
-                                RunTask_TIT -> TC = Task_State_Up_SI;//修改为信号挂起(等待态)
-                                RunTask_TIT -> TS =  &ST->SV;
-                                osTaskSwitch_Enable();//触发异常,进行任务切换
-                            }
-							ST -> SV = false;
-                            return (OK);//请求成功!返回OK
-                            
-#endif
-#ifdef osSignalCount_Enable
-        case Signal_Count://计数信号量
-                           if(ST -> SV == 0){
-                                while(TST.TSS != TaskSwitch_Ready);//查询任务可切换态,如果是不可切换,无限循环,直到可切换态
-                                //RunTask_TIT -> TC &= TIT_Task_State_TC_RST;//任务的状态位复位
-                                RunTask_TIT -> TC = Task_State_Up_SI;//修改为信号挂起(等待态)
-                                RunTask_TIT -> TS =  &ST->SV;
-                                osTaskSwitch_Enable();//触发异常,进行任务切换
-                            }
-							if(ST -> SV > 0){
-								ST -> SV = ST -> SV - 1;
-							}
-                            return (OK);//请求成功!返回OK
-#endif
-		case Signal_Logout://无效信号量
-							return (OK);
-        default:return (Error);//信号量的类型,发生错误,返回错误
-    }
-}
-*/
 /*
 
  *@函数名称: osSignalFreePost
@@ -397,42 +343,7 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 		default:return(Error);
 	}
 }
-/*
-osErrorValue osSignalFree(SemaphoreTable* ST)
-{
-	switch(ST ->ST){
-#ifdef osSignalMutual_Enable 
-        case Signal_Mutual://互斥信号量
-							if(ST -> SV == false){
-								RunTask_TIT -> TPL = RunTask_TIT -> TPLb;//将当前正在运行的任务的副优先级加载到主优先级中
-								ST -> SV = true;//设信号值为有效值
-								ST -> OTID = _TaskIDMax + 1;//设为就绪态
-								return (OK);//释放成功,返回OK
-							}
-							else{
-								return (Error);//发生错误 
-							}
-#endif
-#ifdef osSignalBinary_Enable                            
-        case Signal_Binary://二值信号量
-							if(ST -> SV == false){
-								ST -> SV = true;//设信号值为有效值
-								return (OK);//释放成功,返回OK
-							}
-							else{
-								return (Error);//发生错误
-							}
-                            
-#endif
-#ifdef osSignalCount_Enable
-        case Signal_Count://计数信号量
-							ST -> SV = ST -> SV + 1;//
-                            return (OK);//释放成功,返回OK
-#endif
-        default:return (Error);//信号量的类型,发生错误,返回错误
-    }
-}
-*/
+
 /*
 
  *@函数名称: osSignalLogout

@@ -28,8 +28,7 @@
                                                   <宏定义区>
 */
 
-#define osClockTimePeriod 					1000 //系统时间周期，单位us
-#define osClockTimePeriodStandard			1000 //系统时间基准周期，单位us
+
 
 
 #define TaskOccupyRatioSamplingTime 		1000 //任务统计时间，单位ms

@@ -51,11 +51,11 @@
 /*
                                                   <数据声明区>
 */
-typedef  u8  CPU_Occupy;//CPU总占用量
+typedef  u8  _CPU_Occupy;//CPU总占用量
 
 typedef struct
 {
-    CPU_Occupy CO;//CPU总占用量
+    _CPU_Occupy CO;//CPU总占用量
 
 }CPUState;//CPU状况
 
@@ -76,7 +76,7 @@ extern   void INTX_ENABLE(void);
 
 extern __asm  void osTASK_Stack_Init(u32* tpp,u32* tsa,u32* eca,u32* tsas);
 
-extern __asm void osTASK_FIRST_START(u32* tsas);
+extern __asm void osTASK_START(u32* tsas);
 
 extern  __asm void CPU_PendSV(void);
 

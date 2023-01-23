@@ -48,7 +48,7 @@ osErrorValue osInit(void)
 	/*if(*/osIRQ_Init() /*== Error){//系统中断初始化
 		return (Error)*/;//发生错误,返回错误
 	/*}*/
-	/*if(*/osUART_Init()/* == Error){//系统串口初始化
+	/*if(*/osDebug_Init()/* == Error){//系统串口初始化
 		return (Error)*/;//发生错误,返回错误
 	/*}*/
 	if(osMemoryInit() == Error){

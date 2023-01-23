@@ -139,7 +139,7 @@ osErrorValue osMemoryFree(void* addr){
 	}
 	else{
 		#if (osMemoryDebug_Enable > 0)
-		osMemoryDebug("内存释放失败! 内存地址不正确\n");
+		osMemoryDebug("内存释放失败! 内存地址不正确 %X\n",addr);
 		#endif
 		return (Error);
 	}

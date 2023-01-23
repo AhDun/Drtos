@@ -23,7 +23,7 @@
 #include "osMain.h"
 #include "osCPU.h"
 
-CPUState CPUS;//CPU状况
+CPUState CPUS;
 
 /*
                                                   变量初始化区
@@ -33,16 +33,16 @@ CPUState CPUS;//CPU状况
                                                   <函数区>
 */
 
-const u32 NVIC_PendSV = 0xE000ED04;//PendSV
-const u32 NVIC_PendSV_SET = 0x10000000;
+//const u32 NVIC_PendSV = 0xE000ED04;//PendSV
+//const u32 NVIC_PendSV_SET = 0x10000000;
 
 /*
 
- *@函数名称: osTASK_START
+ *@函数名称: osTASK_Stack_Init
 
  *@函数版本: 1.0.0
 
- *@函数功能: 任务启动
+ *@函数功能: 任务栈初始化
 
  *@输入参数: u32 tta(任务传参) ,u32 *tsa(任务开始地址),u32 *eca(任务结束回调地址),u32 *tsas(任务栈地址)
 
@@ -51,6 +51,9 @@ const u32 NVIC_PendSV_SET = 0x10000000;
  *@注    释: 无
 
 */
+
+
+
 
 __asm void osTASK_Stack_Init(u32* tpp,u32* tsa,u32* eca,u32* tsas)
 						  //R0      ,R1      ,R2      ,R3
@@ -120,7 +123,7 @@ __asm void osTASK_Stack_Init(u32* tpp,u32* tsa,u32* eca,u32* tsas)
  *@注   释: 无
 
 */
-__asm void osTASK_FIRST_START(u32* tsas)
+__asm void osTASK_START(u32* tsas)
 								//R0
 								//C编译器函数各个传参对应的寄存器
 {
@@ -160,11 +163,41 @@ __asm  void FPU_STACK_ENABLE(void)
 	BX		LR					//退出函数，跳转到BX寄存器中所存的地址
 }
 
+/*
+
+ *@函数名称: Read_PSP
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 读取PSP栈指针
+
+ *@输入参数: 无
+
+ *@返 回 值: 无
+
+ *@注   释: 无
+
+*/
 __asm int Read_PSP(void)
 {
 	MRS	  	R0,		PSP		//通过MRS命令将PSP（进程栈）寄存器中的内容读到R1寄存器中
 	BX		LR
 }
+/*
+
+ *@函数名称: Read_PC
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 读取PC值
+
+ *@输入参数: 无
+
+ *@返 回 值: 无
+
+ *@注   释: 无
+
+*/
 __asm int Read_PC(void)
 {
 	MRS	  	R1,		PSP		//通过MRS命令将PSP（进程栈）寄存器中的内容读到R1寄存器中
@@ -196,7 +229,7 @@ __asm void PendSV_Handler(void)
 	
 
 	CPSIE   I
-	LDR 	R0,		=osTaskNext
+	LDR 	R0,	=osTaskNext
 	BLX 	R0
 	CPSID   I			//禁用所有中断
 
@@ -217,24 +250,6 @@ __asm void PendSV_Handler(void)
     BX	  LR
 	NOP
 }
-
-//__asm void CPU_PendSV(void)
-//{
-//	PRESERVE8
-
-//	extern NVIC_PendSV
-//	extern NVIC_PendSV_SET
-
-//	PUSH    {R0,R1,LR}
-//	CPSID   I						//禁用所有中断
-//    LDR     R0,     =NVIC_PendSV 	//将PendSV寄存器的地址加载到R0寄存器中
-//    LDR     R1,     =NVIC_PendSV_SET//将PendSV寄存器内核悬起使能值加载到R1寄存器中
-//    STR     R1, [R0]				//将PendSV寄存器内核悬起使能写入R0寄存器所指向的地址
-//    CPSIE   I						//使能所有中断
-//	POP     {R0,R1,PC}
-//	NOP
-////    BX      LR						//跳转到LR寄存器中所指向的值
-//}
 /*
                                                   FILE-END
 */

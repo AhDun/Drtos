@@ -104,7 +104,7 @@ osErrorValue osTaskInit(void)
 	RunTask_TIT = TL[TST. TDN].TITA;//将即将运行的任务信息表的指针传送给正在运行任务表
 	TST. TDN = TST. TDN + 1;//轮盘指针向后移一位     
 	osTime.TTWM = RunTask_TIT -> TTW;//将当前任务的时间轮片写入到时间记录器
-	osTASK_FIRST_START(&RunTask_TIT -> TRS);//启动第一个任务
+	osTASK_START(&RunTask_TIT -> TRS);//启动第一个任务
     return (OK);//返回OK
 }		
 /*

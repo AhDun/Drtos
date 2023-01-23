@@ -43,7 +43,9 @@
 
 //硬件驱动{
 #define osClock_Init() 		 SysTick_us_Init(osCPU_Freq,osClockTimePeriod)//系统时钟初始化函数
-#define osUART_Init() 		 USART1_Init(115200)//系统串口初始化函数
+
+#define osDebug_Init() 		 USART1_Init(115200)//系统串口初始化函数
+
 #define osIRQ_Init()  		 do{\
 								NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);\
 								NVIC_SetPriority (SysTick_IRQn, 0x04|0x02|0x01);\
@@ -51,17 +53,19 @@
 							 }while(0);//系统中断初始化函数
 
 
-#define osPause()   do{\
+#define osClockPause()   	do{\
 									SysTick->CTRL &= ~(0x02) ;\
 								}while(0);//暂停系统
 
-#define osRecover() do{\
+#define osClockRecover() 	do{\
 									SysTick->CTRL |= (0x02) ;\
 								}while(0);//恢复系统
 
+//}
 
+
+//函数差异化{
 #define osTaskTimeUs(a) 	SysTick_us(us)//微秒级延时
-
 
 //}
 
@@ -81,7 +85,6 @@
 #define osFPU_Enable                    0//启用FPU硬件   1：启用 0：禁用
 #endif
 
-
 #define osTaskAutoStack_Enable			1//任务栈自动分配   1：启用 0：禁用
 		/*启用后会为任务栈自动分配内存*/
 
@@ -93,7 +96,13 @@
 
 #define osTaskUsePrint 					0//打印各任务使用情况 1：启用 0：禁用
 
+
 #define osTaskUsePrintClock 			1//时钟中断打印各任务使用情况 1：启用 0：禁用
+
+
+#define osClockTimePeriod 					1000 //系统时间周期，单位us
+
+#define osClockTimePeriodStandard			1000 //系统时间基准周期，单位us
 
 //}
 

@@ -25,3 +25,8 @@
 *.sct 
 *.map 
 *.uvopt 
+
+
+JLinkLog.txt
+JLinkSettings.ini
+debug.ini

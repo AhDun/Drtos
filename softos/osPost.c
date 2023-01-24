@@ -67,7 +67,6 @@ osErrorValue osPostInit(void)
 osErrorValue osPostSend(void* PB,TaskInfoTable* TIT)
 {
 	PostForm* PF;
-	_uList*	uList;
 
 	if(TIT -> TI >= TST.TLMA){//如果写入任务ID不能大于任务活动量,否则返回错误
 		return (Error);//出现错误,返回Error
@@ -77,7 +76,7 @@ osErrorValue osPostSend(void* PB,TaskInfoTable* TIT)
 				return (Error);//返回错误
 		}else{
 			PF -> PB = PB;
-			uLinkListAdd(&TIT -> PF,PF -> DownAddr);
+			uLinkListAdd(&TIT -> PF,&PF -> DownAddr);
 		}
 		if(TIT -> TPL <  RunTask_TIT -> TPL && TIT -> TC == Task_State_Up_PT){//如果这个任务高于当前工作运行任务栏的优先级，就占用
 			//TL[_tr0].TITA -> TC &= TIT_Task_State_TC_RST;//清除这个任务的状态位
@@ -92,6 +91,7 @@ osErrorValue osPostSend(void* PB,TaskInfoTable* TIT)
 			TIT -> TC = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
 		}
 	}
+	//TIT -> TC = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
 	return (OK);//发送成功，返回OK
 }
 
@@ -114,17 +114,17 @@ osErrorValue osPostSend(void* PB,TaskInfoTable* TIT)
 u32* osPostRead(void)
 {
 	PostForm* PF;
-	_uList*	uList;
 	u32*	Buf;
 
 	#if (osPostHead > 0)
 
 	if(RunTask_TIT -> PF != NULL){
-		uList = (_uList*)RunTask_TIT -> PF;
-		PF = (PostForm*)uList -> Body;
+
+		PF = (PostForm*)RunTask_TIT -> PF;
 		Buf = PF -> PB;
-		RunTask_TIT -> PF = uList -> DownAddr;
-		osMemoryFree((u8*)(PF));//释放内存
+		RunTask_TIT -> PF = PF -> DownAddr;
+
+		osMemoryFree(PF);//释放内存
 		return (Buf);
 		
 	}else{
@@ -132,12 +132,10 @@ u32* osPostRead(void)
 	}
 	#else
 
-	uList  =  uLinkListEndRead(RunTask_TIT -> PF);
-	if(uList != NULL){
-		PF = (PostForm*)uList -> Body;
-		uLinkListRemvoe(&RunTask_TIT -> PF,uList);
+	if(RunTask_TIT -> PF != NULL){
+		PF  =  uLinkListReadEndAndRemvoe(&RunTask_TIT -> PF);
 		Buf = PF -> PB;
-		osMemoryFree((u8*)(PF));//释放内存
+		osMemoryFree(PF);//释放内存
 		return (Buf);
 		
 	}else{

@@ -94,7 +94,7 @@
 #define osTaskNewR_Enable				1//加载任务时新寄存器   1：启用 0：禁用
 		/*可以通过关闭加载任务时新寄存器，加快新任务的启动速度，但是可能会影响任务的稳定性*/
 
-#define osTaskUsePrint 					1//打印各任务使用情况 1：启用 0：禁用
+#define osTaskUsePrint 					0//打印各任务使用情况 1：启用 0：禁用
 
 
 #define osTaskUsePrintClock 			1//时钟中断打印各任务使用情况 1：启用 0：禁用

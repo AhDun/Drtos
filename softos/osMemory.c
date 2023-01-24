@@ -45,7 +45,11 @@ _MemoryUnit 	MemoryPool[MemTank_Max];//内存池
 */
 osErrorValue  osMemoryInit(void)
 {
+	u32 addr;
 	MemoryNextAddr = &MemoryPool[0];//初始化内存地址
+	for(addr = 0;addr < MemTank_Max;addr++){
+		MemoryPool[addr] = 0x00;
+	}
 	return (OK);
 }
 
@@ -58,6 +62,15 @@ void* osMemoryMalloc(u32 MemSize)
 	_MemoryUnit* MemoryAddr2;
 	s32 Length;
 
+	#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+		#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+		osProtect_ENABLE();//进入临界保护
+		#endif
+		if(osMemorySum() == Error){
+			return (NULL);
+		}
+	#endif
+
 	MemSize += sizeof(MemoryStruct);
 	if((MemoryNextAddr  + MemSize) <= (&MemoryPool[MemTank_Max])){//检查内存池是否已满
 
@@ -67,7 +80,11 @@ void* osMemoryMalloc(u32 MemSize)
 		
 		MemoryNewAddr = (void *)(MemoryNextAddr + sizeof(MemoryStruct));
 		MemoryNextAddr = (u8* )( MemoryNextAddr + MemSize);
-
+		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+			osProtect_DISABLE();//退出临界保护
+			#endif
+		#endif
 		return MemoryNewAddr;
 		 
 	}else{
@@ -98,7 +115,11 @@ void* osMemoryMalloc(u32 MemSize)
 						_MemoryStruct -> MemoryLength  = (_MemoryLength)Length;
 						_MemoryStruct -> MemoryFlag = Memory_Occupy;
 					}
-	
+					#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+						#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+						osProtect_DISABLE();//退出临界保护
+						#endif
+					#endif
 					return (MemoryAddr2 + sizeof(MemoryStruct)); 
 				}
 				
@@ -115,11 +136,20 @@ void* osMemoryMalloc(u32 MemSize)
 			_MemoryStruct -> MemoryFlag = Memory_Occupy;
 
 			MemoryNextAddr += MemSize;
-
+			#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+				#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+				osProtect_DISABLE();//退出临界保护
+				#endif
+			#endif
 			return (MemoryAddr2 + sizeof(MemoryStruct)); 
 		}
-		#if (osMemoryDebug_Enable > 0)
-		osMemoryDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
+		#if (osMemoryDebug_Enable > 0)//开启了内存保护配置
+		osMemoryErrorDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
+		#endif
+		#if (MemoryProtect_Enable > 0)
+			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+			osProtect_DISABLE();//退出临界保护
+			#endif
 		#endif
 		return (NULL);
 	}
@@ -127,36 +157,97 @@ void* osMemoryMalloc(u32 MemSize)
 }
 void* osMemoryReset(void* addr,u8 data)
 {
+	
 	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((u8*)addr - sizeof(MemoryStruct));
 	s32 Length = (_MemoryStruct1 -> MemoryLength) - sizeof(MemoryStruct);
 	_MemoryUnit* addr_Buf = (_MemoryUnit*)addr;
-	while(Length--){
-		*addr_Buf =  data;
-		addr_Buf++;
+
+	#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+		#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+		osProtect_ENABLE();//进入临界保护
+		#endif
+		if(osMemorySum() == Error){
+			return (NULL);
+		}
+	#endif
+	if(_MemoryStruct1 -> MemoryFlag == Memory_Free || _MemoryStruct1 -> MemoryFlag == Memory_Occupy){
+		while(Length--){
+			*addr_Buf =  data;
+			addr_Buf++;
+		}
+		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+			osProtect_DISABLE();//退出临界保护
+			#endif
+		#endif
+		return addr;
 	}
-	return addr;
+	else{
+		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+			osProtect_DISABLE();//退出临界保护
+			#endif
+		#endif
+		return (NULL);
+	}
+
+	
+
+}
+void* osMemoryMallocAndReset(u32 MemSize)
+{
+	return osMemoryReset(osMemoryMalloc(MemSize),0x00);
 }
 
 osErrorValue osMemoryFree(void* addr)
 {
 	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((u8*)addr - sizeof(MemoryStruct));
 	MemoryStruct* _MemoryStruct2 = _MemoryStruct1 + _MemoryStruct1 -> MemoryLength;;
-
+	#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+		#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+		osProtect_ENABLE();//进入临界保护
+		#endif
+		if(osMemorySum() == Error){
+			return (Error);
+		}
+	#endif
 	if(_MemoryStruct1 -> MemoryFlag == Memory_Free){
 		#if (osMemoryDebug_Enable > 0)
-		osMemoryDebug("内存已释放! 勿重复释放 %X\n",addr);
+		osMemoryErrorDebug("内存已释放! 勿重复释放 %X\n",addr);
 		#endif
-		return (Error);
+		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+			osProtect_DISABLE();//退出临界保护
+			#endif
+		#endif
+		return (Error - 1);
 	}else if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free){
 		_MemoryStruct1 -> MemoryFlag = Memory_Free;
+		osMemoryReset(addr,0x00);
+		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+			osProtect_DISABLE();//退出临界保护
+			#endif
+		#endif
 		return (OK);
 	}else if((_MemoryUnit*)_MemoryStruct2 >= MemoryNextAddr){
 		_MemoryStruct1 -> MemoryFlag = Memory_Free;
+		osMemoryReset(addr,0x00);
+		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+			osProtect_DISABLE();//退出临界保护
+			#endif
+		#endif
 		return (OK);
 	}
 	else{
 		#if (osMemoryDebug_Enable > 0)
-		osMemoryDebug("内存释放失败! 内存地址不正确 %X\n",addr);
+		osMemoryErrorDebug("内存释放失败! 内存地址不正确 %X\n",addr);
+		#endif
+		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+			osProtect_DISABLE();//退出临界保护
+			#endif
 		#endif
 		return (Error);
 	}
@@ -219,7 +310,7 @@ osErrorValue osMemorySum(void)
 			Count += 1;
 		}else{
 			#if (osMemoryDebug_Enable > 0)
-			osMemoryDebug("内存块异常! %X\n",_MemoryStruct);
+			osMemoryErrorDebug("内存块异常! %X\n",_MemoryStruct);
 			#endif
 			return (Error);
 		}

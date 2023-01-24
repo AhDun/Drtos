@@ -26,6 +26,8 @@
                                                   <宏定义区>
 */
 
+#define osTask_Enable 	//启用任务 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
+
 #define TaskListLength 		osMaximumTask 	//任务轮询表长度，这个意味着最大的任务量
 
 #if TaskListLength <= 255 //当任务量小于255时
@@ -140,7 +142,7 @@
 //#define osTaskSwitch_Strong_Enable() 	CPU_SVC()//触发强制任务切换
 
 #define osTaskDebug(a,b) print("\nosTask: %s:%s\n",a,b)//DeBug输出函数
-#define osTaskInfoPrintOut	 print
+
 #define osTaskDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
 

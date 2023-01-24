@@ -28,7 +28,7 @@
                                                   <宏定义区>
 */
 
-
+#define osClock_Enable 	//启用时钟 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 
 
 #define TaskOccupyRatioSamplingTime 		1000 //任务统计时间，单位ms

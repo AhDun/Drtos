@@ -508,17 +508,6 @@ osErrorValue osTaskDelayUs(u32 us)
 	return (OK);
 }
 
-//osErrorValue os_TaskSignal_Choke(void)
-//{
-//    while(TDST. TSIAF != TSIAF_VOID);
-//    osProtect_ENABLE();
-//    osTime.TTWM = RunTask_TIT -> TTW;
-//	TDST. TSIAF = TSIAF_HangUp;
-//	RunTask_TIT -> TC &= TIT_Task_State_TC_RST;
-//    RunTask_TIT -> TC |= Task_State_Up;
-//	osTASK_SWITCH_START();
-//	return (OK);
-//}
 
 /*
 
@@ -594,31 +583,6 @@ void osTaskNext(void)
 		TST.TDN = NULL;//清空任务调度计数
     }
 }
-///*
-
-// *@函数名称: osTaskISR
-
-// *@函数版本: 1.0.0
-
-// *@函数功能: 任务配置
-
-// *@输入参数: 无	
-
-// *@返 回 值: -1:创建错误，0: 创建成功
-
-// *@注    释: 无
-
-//*/
-//osErrorValue osTaskISR(TaskInfoTable* TIT)
-//{
-//	while(TST.TSS != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
-//	//TIT -> TC &= TIT_Task_State_TC_RST;//置位状态位
-//	TIT -> TC = Task_State_Up_IN;//主动挂起(挂起态)
-//	TST. TDN = TIT -> TI;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
-//	osTaskSwitch_Enable();
-//	return (OK);//返回OK
-//}
-
 /*
 
  *@函数名称: osTaskSet
@@ -718,9 +682,10 @@ osErrorValue osTaskSet(TaskInfoTable* TIT,_Task_Set_Pv Pv)
 osErrorValue osTaskExit(void)
 {
 	//RunTask_TIT -> TC &= TIT_Task_State_TC_RST;//置位状态位
-	RunTask_TIT -> TC = Task_State_ST;//设为终止态
-	osTaskSwitch_Enable();//触发任务切换
-	while(true);
+	while(true){
+		RunTask_TIT -> TC = Task_State_ST;//设为终止态
+		osTaskSwitch_Enable();//触发任务切换
+	}
 }
 /*
 
@@ -755,11 +720,6 @@ osErrorValue osTaskAddrReplace(TaskInfoTable* TIT,void* NewTA)
 }
 
 
-osErrorValue  osTaskInfoPrint(void)
-{
-	osTaskInfoPrintOut("%s",1);
-	return (0);
-} 
 
 /*
                                                   FILE-END

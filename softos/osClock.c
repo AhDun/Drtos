@@ -73,8 +73,7 @@ void osClockTimePulse(void)
 	u32 _tr0;//变量初始化
 
 	#if (osClockTimePeriod < osClockTimePeriodStandard) //
-	if(++osTime.CTPV >= (osClockTimePeriodStandard /osClockTimePeriod))
-	{
+	if(++osTime.CTPV >= (osClockTimePeriodStandard /osClockTimePeriod)){
 		osTime.CTPV = NULL;
 	#endif
     /*----------------------------------计时---------------------------------------*/

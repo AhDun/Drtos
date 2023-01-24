@@ -75,7 +75,7 @@ typedef	struct
 
 */
 
-extern _LinkListXError uLinkListAdd(void* LinkListHeadAddr,void*  AdduList);
+_LinkListXError uLinkListAdd(void* LinkListHeadAddr,void*  AdduList);
 /*
 
  *@函数名称: uLinkListRemvoe
@@ -92,7 +92,7 @@ extern _LinkListXError uLinkListAdd(void* LinkListHeadAddr,void*  AdduList);
  *@注    释: 无
 
 */
-extern _LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList);
+_LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList);
 /*
 
  *@函数名称: uLinkListHeadRemvoe
@@ -108,7 +108,7 @@ extern _LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList);
  *@注    释: 无
 
 */
-extern _LinkListXError uLinkListHeadRemvoe(void* LinkListHeadAddr);
+_LinkListXError uLinkListHeadRemvoe(void* LinkListHeadAddr);
 /*
 
  *@函数名称: uLinkListReadEnd
@@ -124,7 +124,7 @@ extern _LinkListXError uLinkListHeadRemvoe(void* LinkListHeadAddr);
  *@注    释: 无
 
 */
-extern void* uLinkListReadEnd(void* LinkListHeadAddr);
+void* uLinkListReadEnd(void* LinkListHeadAddr);
 /*
 
  *@函数名称: uLinkListAdd
@@ -140,7 +140,7 @@ extern void* uLinkListReadEnd(void* LinkListHeadAddr);
  *@注    释: 无
 
 */
-extern void* uLinkListReadEndAndRemvoe(void* LinkListHeadAddr);
+void* uLinkListReadEndAndRemvoe(void* LinkListHeadAddr);
 
 
 /*

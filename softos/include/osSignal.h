@@ -79,12 +79,12 @@ typedef struct
                                                   <函数声明区>
 */
 #if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
-extern SemaphoreTable* osSignalLogin(_SemaphoreType SP);
+SemaphoreTable* osSignalLogin(_SemaphoreType SP);
 #else
-extern osErrorValue osSignalLogin(SemaphoreTable* ST,_SemaphoreType SP);
+osErrorValue osSignalLogin(SemaphoreTable* ST,_SemaphoreType SP);
 #endif
-extern osErrorValue osSignalApply_Wait(SemaphoreTable* ST);
-extern osErrorValue osSignalFree(SemaphoreTable* ST);
+osErrorValue osSignalApply_Wait(SemaphoreTable* ST);
+osErrorValue osSignalFree(SemaphoreTable* ST);
 
 /*
                                                   FILE-END

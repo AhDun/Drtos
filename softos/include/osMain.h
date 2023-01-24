@@ -64,9 +64,9 @@
 /*
                                                   <º¯ÊýÉùÃ÷Çø>
 */
-extern osErrorValue osInit(void);
-extern osErrorValue osMainPrintFunc(void);
-extern osErrorValue osMainSpeedTest(void);
+osErrorValue osInit(void);
+osErrorValue osMainPrintFunc(void);
+osErrorValue osMainSpeedTest(void);
 
 
 

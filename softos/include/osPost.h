@@ -65,7 +65,7 @@ typedef struct
  *@注   释: 无
 
 */
-extern osErrorValue osPostInit(void);
+osErrorValue osPostInit(void);
 /*
 
  *@函数名称: osPostSend
@@ -82,7 +82,7 @@ extern osErrorValue osPostInit(void);
  *@注   释: 无
 
 */
-extern osErrorValue osPostSend(void* PB,TaskInfoTable* TIT);
+osErrorValue osPostSend(void* PB,TaskInfoTable* TIT);
 /*
 
  *@函数名称: osPostRead
@@ -98,7 +98,7 @@ extern osErrorValue osPostSend(void* PB,TaskInfoTable* TIT);
  *@注   释: 无
 
 */
-extern u32* osPostRead(void);
+u32* osPostRead(void);
 /*
 
  *@函数名称: osPostRead_Wait
@@ -114,7 +114,7 @@ extern u32* osPostRead(void);
  *@注   释: 无
 
 */
-extern u32* osPostReadWait(void);
+u32* osPostReadWait(void);
 
 #endif
 /*

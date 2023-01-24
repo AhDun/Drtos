@@ -59,9 +59,9 @@ extern osTIME osTime;
 /*
                                                   <º¯ÊýÉùÃ÷Çø>
 */
-extern osErrorValue osClockInit(void);
+osErrorValue osClockInit(void);
 
-extern void osClockTimePulse(void);
+void osClockTimePulse(void);
 
 
 #endif

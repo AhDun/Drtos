@@ -260,8 +260,7 @@ extern TaskDispatchStateTable TST;//任务调度状态表
 
  *@注    释: 无
 */
-extern osErrorValue osTaskInit(void);	
-
+osErrorValue osTaskInit(void);	
 
 #if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
 /*
@@ -284,7 +283,7 @@ extern osErrorValue osTaskInit(void);
 			 
  *@注    释: 无
 */
-extern osErrorValue osTaskLogin(
+osErrorValue osTaskLogin(
 	_TaskName *TN,
 	void*  TA,	
 	_TaskStackSize  TSS,
@@ -293,9 +292,9 @@ extern osErrorValue osTaskLogin(
     void*  TPP, 
     _TaskConfig  TC
 );
-extern osErrorValue osTaskRegister_Write(
+osErrorValue osTaskRegister_Write(
 #else //不启用任务栈自动分配
-extern osErrorValue osTaskLogin(
+osErrorValue osTaskLogin(
 #endif 
 	TaskInfoTable* TIT,
 	_TaskName *TN,
@@ -328,7 +327,7 @@ osErrorValue	osTaskLogout(TaskInfoTable* TIT);
 
  *@注    释: 无
 */
-extern TaskInfoTable* osTaskNameToTable(_TaskName *TN);
+TaskInfoTable* osTaskNameToTable(_TaskName *TN);
 /*
 
  *@函数名称: osTaskNext
@@ -344,7 +343,7 @@ extern TaskInfoTable* osTaskNameToTable(_TaskName *TN);
  *@注    释: 无
 
 */
-extern void osTaskNext(void);
+void osTaskNext(void);
 /*
 
  *@函数名称: osTaskDelayMs
@@ -360,7 +359,7 @@ extern void osTaskNext(void);
  *@注    释: 无
 
 */
-extern osErrorValue osTaskDelayMs(u32 ms);
+osErrorValue osTaskDelayMs(u32 ms);
 /*
 
  *@函数名称: osTaskDelayUs
@@ -376,7 +375,7 @@ extern osErrorValue osTaskDelayMs(u32 ms);
  *@注    释: 无
 
 */
-extern osErrorValue osTaskDelayUs(u32 us);
+osErrorValue osTaskDelayUs(u32 us);
 
 //extern osErrorValue osTaskSwitch_State(void);
 ///*
@@ -410,7 +409,7 @@ extern osErrorValue osTaskDelayUs(u32 us);
  *@注    释: 无
 
 */
-extern osErrorValue osTaskSet(TaskInfoTable* TIT,_Task_Set_Pv Pv);
+osErrorValue osTaskSet(TaskInfoTable* TIT,_Task_Set_Pv Pv);
 /*
 
  *@函数名称: osTaskAddrReplace
@@ -426,7 +425,7 @@ extern osErrorValue osTaskSet(TaskInfoTable* TIT,_Task_Set_Pv Pv);
  *@注    释: 无
 
 */
-extern osErrorValue osTaskAddrReplace(TaskInfoTable* TIT,void* NewTA);
+osErrorValue osTaskAddrReplace(TaskInfoTable* TIT,void* NewTA);
 /*
 
  *@函数名称: osTaskExit
@@ -442,7 +441,7 @@ extern osErrorValue osTaskAddrReplace(TaskInfoTable* TIT,void* NewTA);
  *@注    释: 无
 
 */
-extern osErrorValue osTaskExit(void);
+osErrorValue osTaskExit(void);
 
 
 #endif

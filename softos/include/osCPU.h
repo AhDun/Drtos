@@ -70,25 +70,25 @@ extern CPUState CPUS;//CPU×´¿ö
 */
 
 
-extern   void INTX_DISABLE(void);
+void INTX_DISABLE(void);
 
-extern   void INTX_ENABLE(void);
+void INTX_ENABLE(void);
 
-extern __asm  void osTASK_Stack_Init(u32* tpp,u32* tsa,u32* eca,u32* tsas);
+__asm  void osTASK_Stack_Init(u32* tpp,u32* tsa,u32* eca,u32* tsas);
 
-extern __asm void osTASK_START(u32* tsas);
+__asm void osTASK_START(u32* tsas);
 
-extern  __asm void CPU_PendSV(void);
+__asm void CPU_PendSV(void);
 
-extern  void CPU_PendSV_STATE(void);
+void CPU_PendSV_STATE(void);
 
-extern __asm void CPU_SVC(void);
+__asm void CPU_SVC(void);
 
-extern __asm  void FPU_STACK_ENABLE(void);
+__asm  void FPU_STACK_ENABLE(void);
 
-extern __asm int Read_PSP(void);
+__asm int Read_PSP(void);
 
-extern __asm int Read_PC(void);
+__asm int Read_PC(void);
 
 
 #endif

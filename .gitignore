@@ -30,3 +30,4 @@
 JLinkLog.txt
 JLinkSettings.ini
 debug.ini
+*.uvguix.*

@@ -82,6 +82,7 @@ typedef  struct
 */
 osErrorValue  osMemoryInit(void);
 void* osMemoryMalloc(u32 MemSize);
+void* osMemoryReset(void* addr,u8 data);
 
 osErrorValue osMemoryFree(void* addr);
 

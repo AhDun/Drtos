@@ -57,7 +57,7 @@ void Task2_Func(void)
 {
 	int a = 0;
 	int b = 0;
-	u8 buf[50];
+	u8* buf = osMemoryMalloc(50);
 	
 
     //osSignalWaitInquire(&S1);
@@ -75,27 +75,24 @@ void Task2_Func(void)
     LCD_ShowString(10,60,tftlcd_data.width,tftlcd_data.height,16,osNameVersionNumberS);
 	while(1){
 		FRONT_COLOR=GBLUE;
+
+//		sprint((char *)buf,"TaskCount: %d TaskSwitchTime: %dus",TST.TSC,TST.TSC*TST.TSSU);
+//		LCD_ShowString(10,120,tftlcd_data.width,tftlcd_data.height,16,buf);
 //		for(b = 0; b < 50;b++){
 //				buf[b] = ' ';
 //		}
-//		sprint((char *)buf,"TaskCount: %d TaskSwitchTime: %dus",TST.TSC,TST.TSC*TST.TSSU);
-//		LCD_ShowString(10,120,tftlcd_data.width,tftlcd_data.height,16,buf);
-		for(b = 0; b < 50;b++){
-				buf[b] = ' ';
-		}
-		sprint((char *)buf,"Memory ALL: %dB Surplus: %dB C:%d",osMemoryGetAllValue(),osMemoryGetPassValue(),osMemorySum());
+		osMemoryReset(buf,' ');
+		sprint((char *)buf,"Memory A: %dB P: %dB S:%d",osMemoryGetAllValue(),osMemoryGetPassValue(),osMemorySum());
 		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
-		for(b = 0; b < 50;b++){
-				buf[b] = ' ';
-		}
+
+		osMemoryReset(buf,' ');
 		sprint((char *)buf,"CPU: %d%%  RUNTIME:%d:%2d:%2d:%2d",CPUS.CO,(osTime. TSRT / 1000) /86400,((osTime. TSRT / 1000) /3600) % 24,((osTime. TSRT / 1000) /60) % 60,(osTime. TSRT / 1000) % 60);
 		LCD_ShowString(10,180,tftlcd_data.width,tftlcd_data.height,16,buf);
 		LCD_ShowString(10,210,tftlcd_data.width,tftlcd_data.height,16,"------------TaskList--------------");
 		LCD_ShowString(10,240,tftlcd_data.width,tftlcd_data.height,16,"Name  CPU  Class ");
         for(a = 0;a < TST.TLMA;a++){
-			for(b = 0; b < 50;b++){
-				buf[b] = ' ';
-			}
+
+			osMemoryReset(buf,' ');
 			sprint((char *)buf,"%s  %d%ms  %d ",TL[a].TITA ->TN,TL[a].TITA -> TOR,TL[a].TITA -> TPL);
 			LCD_ShowString(10,270+(a*25),tftlcd_data.width,tftlcd_data.height,16,buf);
 		}

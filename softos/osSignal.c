@@ -266,10 +266,9 @@ osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 	if(SemaphoreToken_Buf == NULL){
 		return (Error);
 	}else{
-//		SemaphoreToken_Buf -> DownAddr = NULL;
-//		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTask_TIT;
-//		ST -> SP = (_SignalPost*)SemaphoreToken_Buf;
+
 		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTask_TIT;
+		SemaphoreToken_Buf -> DownAddr = NULL;
 
 		SemaphoreToken_Buf1 = (SemaphoreToken*)ST -> SP;
 		SemaphoreToken_Buf2 = NULL;
@@ -282,27 +281,22 @@ osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 				}else{
 					SemaphoreToken_Buf -> DownAddr = (_NextAddr*)SemaphoreToken_Buf1;
 					SemaphoreToken_Buf2 -> DownAddr = (_NextAddr*)SemaphoreToken_Buf;
-					RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
-					osTaskSwitch_Enable();//触发异常,进行任务切换
 				}
+				RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
+				osTaskSwitch_Enable();//触发异常,进行任务切换
 				return (OK);
 			}
 			else{
 				SemaphoreToken_Buf2 = SemaphoreToken_Buf1;
 				if(SemaphoreToken_Buf1 -> DownAddr == NULL){
-					SemaphoreToken_Buf2 -> DownAddr = (_NextAddr*)SemaphoreToken_Buf;
+					SemaphoreToken_Buf1 -> DownAddr = (_NextAddr*)SemaphoreToken_Buf;
+					RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
+					osTaskSwitch_Enable();//触发异常,进行任务切换
 					return (OK);
 				}
 				SemaphoreToken_Buf1 = (SemaphoreToken*)SemaphoreToken_Buf1 -> DownAddr;
-				RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
-				osTaskSwitch_Enable();//触发异常,进行任务切换
 			}
 		}
-		
-//		RunTask_TIT -> TC = Task_State_Up_SI;//修改为信号挂起(等待态)
-//		osTaskSwitch_Enable();//触发异常,进行任务切换
-
-		return (OK);
 	}
 }
 
@@ -403,9 +397,11 @@ osErrorValue osSignalFreeToken(SemaphoreTable* ST)
 		SemaphoreToken_Buf = (SemaphoreToken*)ST -> SP;
 		TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf  -> TaskInfo;
 		TaskInfoTable_Buf -> TC = Task_State_Up_IN;  //主动挂起(挂起态)
-
 		ST -> SP = (_SignalPost*)SemaphoreToken_Buf -> DownAddr;
 		osMemoryFree(SemaphoreToken_Buf);
+		if(TaskInfoTable_Buf -> TPL < RunTask_TIT -> TPL){
+			osTaskSwitch_Enable();//触发异常,进行任务切换
+		}
 		return (OK);
 	}else{
 		return (Error);

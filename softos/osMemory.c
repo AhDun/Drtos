@@ -125,12 +125,29 @@ void* osMemoryMalloc(u32 MemSize)
 	}
 
 }
+void* osMemoryReset(void* addr,u8 data)
+{
+	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((u8*)addr - sizeof(MemoryStruct));
+	s32 Length = (_MemoryStruct1 -> MemoryLength) - sizeof(MemoryStruct);
+	_MemoryUnit* addr_Buf = (_MemoryUnit*)addr;
+	while(Length--){
+		*addr_Buf =  data;
+		addr_Buf++;
+	}
+	return addr;
+}
 
-osErrorValue osMemoryFree(void* addr){
+osErrorValue osMemoryFree(void* addr)
+{
 	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((u8*)addr - sizeof(MemoryStruct));
 	MemoryStruct* _MemoryStruct2 = _MemoryStruct1 + _MemoryStruct1 -> MemoryLength;;
 
-	if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free){
+	if(_MemoryStruct1 -> MemoryFlag == Memory_Free){
+		#if (osMemoryDebug_Enable > 0)
+		osMemoryDebug("内存已释放! 勿重复释放 %X\n",addr);
+		#endif
+		return (Error);
+	}else if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free){
 		_MemoryStruct1 -> MemoryFlag = Memory_Free;
 		return (OK);
 	}else if((_MemoryUnit*)_MemoryStruct2 >= MemoryNextAddr){
@@ -159,26 +176,31 @@ u32 osMemoryGetFreeValue(void)
 		MemoryAddr += _MemoryStruct -> MemoryLength;
 	}
 	Vaule += (&MemoryPool[MemTank_Max] - MemoryNextAddr);
-	return (Vaule);
+	return (Vaule >= sizeof(MemoryStruct)? Vaule - sizeof(MemoryStruct) : NULL);
 }
+
 u32 osMemoryGetPassValue(void)
 {
 	_MemoryUnit* MemoryAddr = &MemoryPool[Head];
 	MemoryStruct* _MemoryStruct;
 	u32 Vaule = 0;
+	s32 Length = 0;
 	while(MemoryAddr < MemoryNextAddr){
 		_MemoryStruct = (MemoryStruct*)MemoryAddr;
 		if(_MemoryStruct -> MemoryFlag == Memory_Free){
-			if(_MemoryStruct -> MemoryLength > Vaule){
-				Vaule = _MemoryStruct -> MemoryLength;
+			Length += _MemoryStruct -> MemoryLength;
+		}else{
+			if(Length > Vaule){
+				Vaule = Length;
 			}
+			Length = 0;
 		}
 		MemoryAddr += _MemoryStruct -> MemoryLength;
 	}
 	if((&MemoryPool[MemTank_Max] - MemoryNextAddr) > Vaule){
 		Vaule = &MemoryPool[MemTank_Max] - MemoryNextAddr;
 	}
-	return (Vaule - sizeof(MemoryStruct));
+	return (Vaule >= sizeof(MemoryStruct)? Vaule - sizeof(MemoryStruct) : NULL);
 }
 
 u32 osMemoryGetAllValue(void)
@@ -196,6 +218,9 @@ osErrorValue osMemorySum(void)
 		if(_MemoryStruct -> MemoryFlag == Memory_Occupy || _MemoryStruct -> MemoryFlag == Memory_Free){
 			Count += 1;
 		}else{
+			#if (osMemoryDebug_Enable > 0)
+			osMemoryDebug("内存块异常! %X\n",_MemoryStruct);
+			#endif
 			return (Error);
 		}
 		MemoryAddr += _MemoryStruct -> MemoryLength;

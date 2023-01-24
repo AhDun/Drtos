@@ -55,6 +55,8 @@ int main(int argc, char *argv[])
 {
 /*--------------------------------------demo---------------------------------------------------------*/
 	u32 _tr0;
+	SemaphoreTable* timebz1;
+
 //	char  a[100] = {"Hello World"};
 
 //	u8* b;
@@ -109,7 +111,20 @@ int main(int argc, char *argv[])
 		print("系统初始化失败");
 	}
 
-	osMemoryMalloc(27328);
+//	osMemoryMalloc(1);
+	//osMemoryMalloc(25000+2310-150);
+
+//	timebz1 = osSignalLogin(Signal_Binary);
+//	osSignalApply_Wait(timebz1);
+//	osSignalApply_Wait(timebz1);
+//	osSignalApply_Wait(timebz1);
+//	osSignalApply_Wait(timebz1);
+//	osSignalFree(timebz1);
+//	osSignalFree(timebz1);
+//	osSignalFree(timebz1);
+//	osSignalFree(timebz1);
+//	osSignalFree(timebz1);
+
 //		
 //	osSignalApply_Wait(timebz1);
 //	osSignalApply_Wait(timebz1);
@@ -196,7 +211,7 @@ int main(int argc, char *argv[])
 	Task3_Func,			                //任务地址
 	Task3_Stack_size,		                        //任务栈长度
 	50,		                                    //任务时间轮片
-	-1,                                          //任务优先级
+	-2,                                          //任务优先级
 	"Hello",									//任务传参
 	Task_Set_Default                                    
 	);
@@ -254,9 +269,10 @@ int main(int argc, char *argv[])
 //		TST.TSC = 0;
 //		print("内存总量:%d字节 | 内存余量:%d字节\n",osMemoryAllSize(),osMemoryMaxMallocValue());
 //		tprint("系统已运行: %d天 %h小时 %m分钟 %s秒\n",osTime. TSRT);
-		osTaskDelayMs(10000);
-//		for(_tr0 = 0;_tr0 < MemTank_Max;_tr0++){
+		osTaskDelayMs(3000);
+//		for(_tr0 = 580;_tr0 < MemTank_Max;_tr0++){
 //			MemoryPool[_tr0] = _tr0;
+//			osTaskDelayMs(10);
 //		}
 	}
 /*---------------------------------------------------------------------------------------------------*/

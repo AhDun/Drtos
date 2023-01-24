@@ -82,7 +82,7 @@ void Task2_Func(void)
 //				buf[b] = ' ';
 //		}
 		osMemoryReset(buf,' ');
-		sprint((char *)buf,"Memory A: %dB P: %dB S:%d",osMemoryGetAllValue(),osMemoryGetPassValue(),osMemorySum());
+		sprint((char *)buf,"Memory F: %dB P: %dB S:%d",osMemoryGetFreeValue(),osMemoryGetPassValue(),osMemorySum());
 		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
 
 		osMemoryReset(buf,' ');

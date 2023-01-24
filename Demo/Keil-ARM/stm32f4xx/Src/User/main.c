@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
 	}
 
 
+	//osMemoryMalloc(25000);
 
 	print("%d",osTaskLogin(
 	"RTC", 			                    //任务名称
@@ -105,6 +106,7 @@ int main(int argc, char *argv[])
 	"Hello",									//任务传参
 	Task_Set_Default                                    
 	);
+
 
 
 	while(1){

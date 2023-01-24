@@ -118,35 +118,24 @@ u32* osPostRead(void)
 	PostForm* PF;
 	u32*	Buf;
 
-	#if (osPostHead > 0)
+	
 
 	if(RunTask_TIT -> PF != NULL){
-
+		#if (osPostHead > 0)
 		PF = (PostForm*)RunTask_TIT -> PF;
 		Buf = PF -> PB;
 		RunTask_TIT -> PF = PF -> DownAddr;
-
-		if(osMemoryFree(PF) != OK){
-			print("%s","12");
-		}
-		return (Buf);
-		
-	}else{
-		return (NULL);//没有邮件，返回空
-	}
-	#else
-
-	if(RunTask_TIT -> PF != NULL){
+		#else
 		PF  =  uLinkListReadEndAndRemvoe(&RunTask_TIT -> PF);
 		Buf = PF -> PB;
-		osMemoryFree(PF);//释放内存
+		#endif
+		osMemoryFree(PF);
 		return (Buf);
 		
 	}else{
 		return (NULL);//没有邮件，返回空
 	}
-
-	#endif
+	
 	/*
 	if(RunTask_TIT -> PF == 0){//如果为空值说明没有邮件
 		return (NULL);//没有邮件，返回空

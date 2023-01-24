@@ -85,7 +85,7 @@ void* osMemoryMalloc(u32 MemSize)
 			osProtect_DISABLE();//退出临界保护
 			#endif
 		#endif
-		return MemoryNewAddr;
+		return osMemoryReset(MemoryNewAddr,0x00);
 		 
 	}else{
 		Length = 0;
@@ -106,21 +106,17 @@ void* osMemoryMalloc(u32 MemSize)
 						_MemoryStruct -> MemoryFlag = Memory_Free;
 						_MemoryStruct -> MemoryLength = Length - MemSize;
 
-						_MemoryStruct = (MemoryStruct*)MemoryAddr2;
-						_MemoryStruct -> MemoryLength  = (_MemoryLength)MemSize;
-						_MemoryStruct -> MemoryFlag = Memory_Occupy;
-
-					}else{
-						_MemoryStruct = (MemoryStruct*)MemoryAddr2;
-						_MemoryStruct -> MemoryLength  = (_MemoryLength)Length;
-						_MemoryStruct -> MemoryFlag = Memory_Occupy;
+						Length = MemSize;
 					}
+					_MemoryStruct = (MemoryStruct*)MemoryAddr2;
+					_MemoryStruct -> MemoryLength  = (_MemoryLength)Length;
+					_MemoryStruct -> MemoryFlag = Memory_Occupy;
 					#if (MemoryProtect_Enable > 0)//开启了内存保护配置
 						#if (osCriticalToProtect_Enable > 0)//启用了临界保护
 						osProtect_DISABLE();//退出临界保护
 						#endif
 					#endif
-					return (MemoryAddr2 + sizeof(MemoryStruct)); 
+					return osMemoryReset(MemoryAddr2 + sizeof(MemoryStruct),0x00);
 				}
 				
 			}else if(_MemoryStruct -> MemoryFlag == Memory_Occupy){
@@ -141,7 +137,7 @@ void* osMemoryMalloc(u32 MemSize)
 				osProtect_DISABLE();//退出临界保护
 				#endif
 			#endif
-			return (MemoryAddr2 + sizeof(MemoryStruct)); 
+			return osMemoryReset(MemoryAddr2 + sizeof(MemoryStruct),0x00); 
 		}
 		#if (osMemoryDebug_Enable > 0)//开启了内存保护配置
 		osMemoryErrorDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
@@ -221,18 +217,8 @@ osErrorValue osMemoryFree(void* addr)
 			#endif
 		#endif
 		return (Error - 1);
-	}else if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free){
+	}else if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free || (_MemoryUnit*)_MemoryStruct2 > MemoryNextAddr){
 		_MemoryStruct1 -> MemoryFlag = Memory_Free;
-		osMemoryReset(addr,0x00);
-		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
-			osProtect_DISABLE();//退出临界保护
-			#endif
-		#endif
-		return (OK);
-	}else if((_MemoryUnit*)_MemoryStruct2 >= MemoryNextAddr){
-		_MemoryStruct1 -> MemoryFlag = Memory_Free;
-		osMemoryReset(addr,0x00);
 		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
 			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
 			osProtect_DISABLE();//退出临界保护
@@ -281,10 +267,10 @@ u32 osMemoryGetPassValue(void)
 		if(_MemoryStruct -> MemoryFlag == Memory_Free){
 			Length += _MemoryStruct -> MemoryLength;
 		}else{
-			if(Length > Vaule){
-				Vaule = Length;
-			}
 			Length = 0;
+		}
+		if(Length > Vaule){
+			Vaule = Length;
 		}
 		MemoryAddr += _MemoryStruct -> MemoryLength;
 	}

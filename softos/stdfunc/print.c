@@ -223,22 +223,27 @@ static void _print_X(int num,int* s)
 	int _BUF;
 	vpchar('0',s);
 	vpchar('x',s);
-	while(1){
-		_BUF = ((num >> _FLAG) & 0x0F);
-		switch(_BUF){
-			case 0: if(_FLAG & 0x80000000){vpchar(_BUF + 48,s);}break;
-			case 10:vpchar('A',s);_FLAG = _FLAG | 0x80000000;break;
-			case 11:vpchar('B',s);_FLAG = _FLAG | 0x80000000;break;
-			case 12:vpchar('C',s);_FLAG = _FLAG | 0x80000000;break;
-			case 13:vpchar('D',s);_FLAG = _FLAG | 0x80000000;break;
-			case 14:vpchar('E',s);_FLAG = _FLAG | 0x80000000;break;
-			case 15:vpchar('F',s);_FLAG = _FLAG | 0x80000000;break;
-			default:vpchar(_BUF + 48,s);_FLAG = _FLAG | 0x80000000;break;
+	if(num == 0x00){
+		vpchar(0 + 48,s);
+		vpchar(0 + 48,s);
+	}else{
+		while(1){
+			_BUF = ((num >> _FLAG) & 0x0F);
+			switch(_BUF){
+				case 0: if(_FLAG & 0x80000000){vpchar(_BUF + 48,s);}break;
+				case 10:vpchar('A',s);_FLAG = _FLAG | 0x80000000;break;
+				case 11:vpchar('B',s);_FLAG = _FLAG | 0x80000000;break;
+				case 12:vpchar('C',s);_FLAG = _FLAG | 0x80000000;break;
+				case 13:vpchar('D',s);_FLAG = _FLAG | 0x80000000;break;
+				case 14:vpchar('E',s);_FLAG = _FLAG | 0x80000000;break;
+				case 15:vpchar('F',s);_FLAG = _FLAG | 0x80000000;break;
+				default:vpchar(_BUF + 48,s);_FLAG = _FLAG | 0x80000000;break;
+			}
+			if((_FLAG & 0x7FFFFFFF) == 0){
+				break;
+			}
+			_FLAG = _FLAG - 4;
 		}
-		if((_FLAG & 0x7FFFFFFF) == 0){
-			break;
-		}
-		_FLAG = _FLAG - 4;
 	}
 }
 /*
@@ -262,22 +267,27 @@ static void _print_x(int num,int* s)
 	int _BUF;
 	vpchar('0',s);
 	vpchar('x',s);
-	while(1){
-		_BUF = ((num >> _FLAG) & 0x0F);
-		switch(_BUF){
-			case 0: if(_FLAG & 0x80000000){vpchar(_BUF + 48,s);}break;
-			case 10:vpchar('a',s);_FLAG = _FLAG | 0x80000000;break;
-			case 11:vpchar('b',s);_FLAG = _FLAG | 0x80000000;break;
-			case 12:vpchar('c',s);_FLAG = _FLAG | 0x80000000;break;
-			case 13:vpchar('d',s);_FLAG = _FLAG | 0x80000000;break;
-			case 14:vpchar('e',s);_FLAG = _FLAG | 0x80000000;break;
-			case 15:vpchar('f',s);_FLAG = _FLAG | 0x80000000;break;
-			default:vpchar(_BUF + 48,s);_FLAG = _FLAG | 0x80000000;break;
+	if(num == 0x00){
+		vpchar(0 + 48,s);
+		vpchar(0 + 48,s);
+	}else{
+		while(1){
+			_BUF = ((num >> _FLAG) & 0x0F);
+			switch(_BUF){
+				case 0: if(_FLAG & 0x80000000){vpchar(_BUF + 48,s);}break;
+				case 10:vpchar('a',s);_FLAG = _FLAG | 0x80000000;break;
+				case 11:vpchar('b',s);_FLAG = _FLAG | 0x80000000;break;
+				case 12:vpchar('c',s);_FLAG = _FLAG | 0x80000000;break;
+				case 13:vpchar('d',s);_FLAG = _FLAG | 0x80000000;break;
+				case 14:vpchar('e',s);_FLAG = _FLAG | 0x80000000;break;
+				case 15:vpchar('f',s);_FLAG = _FLAG | 0x80000000;break;
+				default:vpchar(_BUF + 48,s);_FLAG = _FLAG | 0x80000000;break;
+			}
+			if((_FLAG & 0x7FFFFFFF) == 0){
+				break;
+			}
+			_FLAG = _FLAG - 4;
 		}
-		if((_FLAG & 0x7FFFFFFF) == 0){
-			break;
-		}
-		_FLAG = _FLAG - 4;
 	}
 }
 /*

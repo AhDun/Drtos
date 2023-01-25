@@ -36,7 +36,7 @@ void Task1_Func(char* a)
 	RTC_Config();
 	RTC_Set_WakeUp(RTC_WakeUpClock_CK_SPRE_16bits,0);//配置WAKE UP中断,1秒钟中断一次
 	timebz = osSignalLogin(Signal_Binary);
-	osSignalApply_Wait(timebz);
+	osSignalUseWait(timebz);
 	while(1) 
 	{
         RTC_GetTime(RTC_Format_BIN,&RTC_TimeStruct);
@@ -48,7 +48,7 @@ void Task1_Func(char* a)
 		BACK_COLOR=BLACK;
 		LCD_ShowString(10,90,tftlcd_data.width,tftlcd_data.height,16,buf);	
 
-		osSignalApply_Wait(timebz);
+		osSignalUseWait(timebz);
 	}
 	
 }
@@ -56,7 +56,6 @@ void Task1_Func(char* a)
 void Task2_Func(void)
 {
 	int a = 0;
-	int b = 0;
 	u8* buf = osMemoryMalloc(50);
 	
 

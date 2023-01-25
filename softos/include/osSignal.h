@@ -68,8 +68,8 @@ typedef struct
 typedef struct
 {
     _SemaphoreValue 	 SV;//信号值
-    _SemaphoreType   	ST;//信号的类型
-	_SignalPost*		 SP;
+    _SemaphoreType   	 ST;//信号的类型
+	SemaphoreToken*		 SP;//信号量令牌链头
 }SemaphoreTable;//信号量
 
 /*
@@ -79,11 +79,28 @@ typedef struct
                                                   <函数声明区>
 */
 #if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
+
+/*
+
+ *@函数名称: osSignalLogin
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 信号量注册
+
+ *@输入参数: SemaphoreTable* ST(信号量结构体)
+
+ *@返 回 值: 无
+
+ *@注    释: 无
+
+*/
 SemaphoreTable* osSignalLogin(_SemaphoreType SP);
 #else
 osErrorValue osSignalLogin(SemaphoreTable* ST,_SemaphoreType SP);
 #endif
-osErrorValue osSignalApply_Wait(SemaphoreTable* ST);
+
+osErrorValue osSignalUseWait(SemaphoreTable* ST);
 osErrorValue osSignalFree(SemaphoreTable* ST);
 
 /*

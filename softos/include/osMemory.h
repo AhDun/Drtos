@@ -48,6 +48,7 @@
 								//内存保护也不一定保证内存块一定不会发生错误!!!,只会降低内存发生错误的概率
 
 #define osMemoryErrorDebug print//DeBug输出函数
+
 #define osMemoryDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
 
@@ -64,20 +65,24 @@
                                                   <数据声明区>
 */
 
-typedef u8 	_MemoryFlag;
-typedef u16 _MemoryLength;
+
 
 typedef u8	_MemoryUnit;
 
 extern _MemoryUnit*    MemoryNextAddr;//内存新地址
 extern _MemoryUnit 	MemoryPool[MemTank_Max];//内存池
 
+//内存块结构{
+typedef u8 	_MemoryFlag;
+typedef u16 _MemoryLength;
+
 typedef  struct
 { 
 	_MemoryFlag 	MemoryFlag;//内存标志
 	_MemoryLength	MemoryLength;//内存长度
 
-}MemoryStruct;//内存块结构
+}MemoryStruct;
+//}
 
 
 /*
@@ -132,22 +137,6 @@ void* osMemoryMalloc(u32 MemSize);
 
 */
 void* osMemoryReset(void* addr,u8 data);
-/*
-
- *@函数名称: osMemoryFree
-
- *@函数版本: 1.0.0
-
- *@函数功能: 释放内存
-
- *@输入参数: 0
-
- *@返 回 值: 
-
- *@注    释: 无
-
-*/
-void* osMemoryMallocAndReset(u32 MemSize);
 /*
 
  *@函数名称: osMemoryFree

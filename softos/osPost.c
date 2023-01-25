@@ -118,8 +118,6 @@ u32* osPostRead(void)
 	PostForm* PF;
 	u32*	Buf;
 
-	
-
 	if(RunTask_TIT -> PF != NULL){
 		#if (osPostHead > 0)
 		PF = (PostForm*)RunTask_TIT -> PF;
@@ -135,32 +133,6 @@ u32* osPostRead(void)
 	}else{
 		return (NULL);//没有邮件，返回空
 	}
-	
-	/*
-	if(RunTask_TIT -> PF == 0){//如果为空值说明没有邮件
-		return (NULL);//没有邮件，返回空
-	}else{//进行查表
-		if(((PostForm*)RunTask_TIT -> PF) -> nPF != NULL){//从链表头的读取一张表，并这表的新指针是否空，如果为空则说明只有这一张表
-			PF = ((PostForm*)RunTask_TIT -> PF);//第一张表
-			while(1){
-				PF1 = (PostForm*)PF -> nPF;//读第二张表，或者是下一个链表
-				if( PF1 -> nPF == NULL){//如果第二张表的新指针为空，如果这是链表末尾
-					PF -> nPF = NULL;//将上一个链表的新指针清空
-					_var1 = PF1 -> PB;//读取这个链表的邮件内容
-					osMemoryFree((u8*)PF1);//释放内存
-					break;
-				}else{
-					PF = PF1;//
-				}
-			}
-		}else{
-			_var1 = ((PostForm*)RunTask_TIT -> PF) -> PB;//读取这个链表的邮件内容
-			osMemoryFree((u8*)(RunTask_TIT -> PF));//释放内存
-			RunTask_TIT -> PF = NULL;//将链表头的新指针清空
-		}
-		return (_var1);
-	}
-	*/
 }
 /*
 

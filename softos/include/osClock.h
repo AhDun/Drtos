@@ -39,6 +39,7 @@
 
 #if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
 typedef u32 _TotalSystemRunningTime;//系统运行时间
+typedef u32 _TaskISRRunningTime;//系统运行时间
 #endif
 typedef	u32	_TaskTimeWheelMargin;//任务轮片时间
 #if (osClockTimePeriod < osClockTimePeriodStandard)
@@ -50,6 +51,7 @@ typedef struct
 {
 	#if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
 	_TotalSystemRunningTime 	TSRT;//系统运行时间
+	_TaskISRRunningTime			TISRRT;
 	#endif
 	_TaskTimeWheelMargin	   TTWM;//任务轮片时间
 	#if (osClockTimePeriod < osClockTimePeriodStandard)
@@ -57,6 +59,10 @@ typedef struct
 	#endif
 }osTIME;
 //}
+//typedef struct
+//{
+
+//}osCPU;
 
 
 extern osTIME osTime;

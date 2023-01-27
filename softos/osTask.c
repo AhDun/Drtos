@@ -715,6 +715,7 @@ osErrorValue osTaskErrorHardFault(u32 pc,u32 psp)
 {
 	#if (osTaskRunError_Enable > 0)
 	u8 Count = 1;
+	osTaskEnterISR();
 	while(Count--){
 		osTaskErrorDebug("\n\n\n名称为%s的任务发生“硬件错误”异常!!!\n",RunTask_TIT -> TN);
 		osTaskErrorDebug("任务优先级:%d\n",RunTask_TIT -> TPL);
@@ -750,6 +751,7 @@ osErrorValue osTaskErrorHardFault(u32 pc,u32 psp)
 	#elif(osTaskErrorSet == 0)
 	osTaskSet(NULL,Task_Set_Pause);
 	#endif
+	osTaskExitISR();
 	return (OK);
 }
 /*
@@ -811,14 +813,14 @@ osErrorValue osTaskMonitor(void)
 		}
 	}
 	
-	print("任务总使用量:%d%% | ",CPUS.CO);
+	print("CPU总使用量:%d%% = 任务 %d%% + 中断%d%% | ",CPUS.CTO + CPUS.CISRO,CPUS.CTO,CPUS.CISRO);
 	if(TST.TSC*TST.TSSU > 1000){
 		print("任务调度次数:%d | 预计耗时:%d.%dms\n",TST.TSC,TST.TSC*TST.TSSU / 1000,TST.TSC*TST.TSSU % 1000 / 100);
 	}else{
 		print("任务调度次数:%d | 预计耗时:%dus\n",TST.TSC,TST.TSC*TST.TSSU);
 	}
 	TST.TSC = 0;
-	print("内存 总量:%d字节 | 余量:%d字节 | 可分配:%d字节 块数:%d\n",osMemoryGetAllValue(),osMemoryGetFreeValue(),osMemoryGetPassValue(),osMemorySum());
+	print("内存 总量:%d字节 | 余量:%d字节 | 可分配:%d字节 | 块数:%d\n",osMemoryGetAllValue(),osMemoryGetFreeValue(),osMemoryGetPassValue(),osMemorySum());
 	tprint("系统已运行: %d天 %h小时 %m分钟 %s秒\n",osTime. TSRT);
 	
 	return (OK);

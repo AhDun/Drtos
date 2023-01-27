@@ -79,11 +79,11 @@ void Task2_Func(void)
 //		}
 		osMemoryReset(buf,' ');
 		sprint((char *)buf,"Memory F: %dB P: %dB S:%d",osMemoryGetFreeValue(),osMemoryGetPassValue(),osMemorySum());
-		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
+		LCD_ShowString(10,120,tftlcd_data.width,tftlcd_data.height,16,buf);
 
 		osMemoryReset(buf,' ');
-		sprint((char *)buf,"CPU: %d%%  RUNTIME:%d:%2d:%2d:%2d",CPUS.CO,(osTime. TSRT / 1000) /86400,((osTime. TSRT / 1000) /3600) % 24,((osTime. TSRT / 1000) /60) % 60,(osTime. TSRT / 1000) % 60);
-		LCD_ShowString(10,180,tftlcd_data.width,tftlcd_data.height,16,buf);
+		sprint((char *)buf,"CPU:%d%%=T %d%%+I %d%%  R:%d:%2d:%2d:%2d",CPUS.CTO+CPUS.CISRO,CPUS.CTO,CPUS.CISRO,(osTime. TSRT / 1000) /86400,((osTime. TSRT / 1000) /3600) % 24,((osTime. TSRT / 1000) /60) % 60,(osTime. TSRT / 1000) % 60);
+		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
 		LCD_ShowString(10,210,tftlcd_data.width,tftlcd_data.height,16,"------------TaskList--------------");
 		LCD_ShowString(10,240,tftlcd_data.width,tftlcd_data.height,16,"Name  CPU  Class ");
         for(a = 0;a < TST.TLMA;a++){
@@ -92,7 +92,8 @@ void Task2_Func(void)
 			sprint((char *)buf,"%s  %d%ms  %d ",TL[a].TITA ->TN,TL[a].TITA -> TOR,TL[a].TITA -> TPL);
 			LCD_ShowString(10,270+(a*25),tftlcd_data.width,tftlcd_data.height,16,buf);
 		}
-		osTaskDelayMs(1000);
+		osTaskMonitor();
+		osTaskDelayMs(500);
 	}
 }
 

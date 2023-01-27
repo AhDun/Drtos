@@ -73,6 +73,7 @@ u8 RTC_Config(void)
 		//RTC_Set_Date(22,12,11,7);
 		RTC_WriteBackupRegister(RTC_BKP_DR0,0X5050); //RTC写寄存器
 	}
+
 	return 0;
 }
 
@@ -181,12 +182,14 @@ RTC_DateTypeDef RTC_DateStruct;
 //RTC WAKE UP中断服务函数
 void RTC_WKUP_IRQHandler(void)
 {    
-	
+	osTaskEnterISR();
 	if(RTC_GetFlagStatus(RTC_FLAG_WUTF)==SET)//WK_UP中断?
 	{ 
 		RTC_ClearFlag(RTC_FLAG_WUTF);	//清除中断标志
 	
 		osSignalFree(timebz);
+
+		
 		
 		/*RTC_GetTime(RTC_Format_BIN,&RTC_TimeStruct);
 		sprintf((char *)buf,"Time: %.2d:%.2d:%.2d",RTC_TimeStruct.RTC_Hours,RTC_TimeStruct.RTC_Minutes,RTC_TimeStruct.RTC_Seconds);
@@ -197,6 +200,7 @@ void RTC_WKUP_IRQHandler(void)
 		printf("%s\r\n",buf);*/
 		
 	}   
-	EXTI_ClearITPendingBit(EXTI_Line22);//清除中断线22的中断标志 								
+	EXTI_ClearITPendingBit(EXTI_Line22);//清除中断线22的中断标志 
+	osTaskExitISR();								
 }
  

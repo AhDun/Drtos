@@ -119,28 +119,31 @@ void osClockTimePulse(void)
 	#endif
      /*----------------------------------统计---------------------------------------*/
 	#if (osPerformanceStatistics_Enable > 0) //开启了性能统计
-    if(TST.TSS == TaskSwitch_Ready){//任务调度状态为未调度，进行计时
+	if(TST.TISRF > NULL){
+		osTime.TISRRT++;
+	}
+	else if(TST.TSS == TaskSwitch_Ready){//任务调度状态为未调度，进行计时
         RunTask_TIT -> TOT++;//任务占用时长计数
     }
     if(osTime. TSRT % TaskOccupyRatioSamplingTime == 0){//系统每过一定时长，就进行占用比例统计
-        CPUS.CO = 0;//CPU占用量设为0
+        CPUS.CTO = 0;//CPU占用量设为0
         for(_tr0 = NULL;_tr0 < TST.TLMA;_tr0++){//对每一个任务进行遍历
             //TL[_tr0].TITA -> TOR = TL[_tr0].TITA -> TOT / (TaskOccupyRatioSamplingTime / 100);//计算这个任务占用比
 			TL[_tr0].TITA -> TOR = TL[_tr0].TITA -> TOT;//计算这个任务占用比
 			//计算公式：占用比 = 单位时间内的占用时长 / (单位时间 / 100)
-            CPUS.CO = CPUS.CO + (TL[_tr0].TITA -> TOR / (TaskOccupyRatioSamplingTime / 100));//计算CPU占用量
+            CPUS.CTO += (TL[_tr0].TITA -> TOR / (TaskOccupyRatioSamplingTime / 100));//计算CPU占用量
 			//计算公式：CPU占用量 = CPU占用量 + 每个任务的占用量
             TL[_tr0].TITA -> TOT = 0;//清空单位时间内的占用时长
         }
-		#if (osTaskUsePrint  > 0)
-		#if (osTaskUsePrintClock > 0)
-		osTaskMonitor();
-		#endif
-		#endif
+		if(osTime.TISRRT > NULL){
+			CPUS.CISRO = (osTime.TISRRT / (TaskOccupyRatioSamplingTime / 100));//计算CPU占用量
+			osTime.TISRRT = 0;
+		}
+		
     }
 	#endif
     /*----------------------------------轮片---------------------------------------*/
-    if(osTime.TTWM > 0 && TST.TSS == TaskSwitch_Ready){ //时间轮片
+    if(osTime.TTWM > 0 && TST.TSS == TaskSwitch_Ready && TST.TISRF == NULL){ //时间轮片
 	   //当前正在运行的任务的轮片时间大于0并且调度状态为未调度状态
         osTime.TTWM--;//当前正在运行的任务的轮片时间减一
         if(osTime.TTWM == 0){//当目前正在运行的任务的轮片时间为零时

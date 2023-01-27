@@ -49,11 +49,16 @@
 /*
                                                   <数据声明区>
 */
-typedef  u8  _CPU_Occupy;//CPU总占用量
+typedef  u8  _CPUTaskOccupy;//CPU用户
+typedef  u8  _CPUISROccupy;//CPU总占用量
 
 typedef struct
 {
-    _CPU_Occupy CO;//CPU总占用量
+ 
+	_CPUTaskOccupy CTO;//
+	_CPUISROccupy	CISRO;//
+	_CPUISROccupy	CISRO;//
+
 
 }CPUState;//CPU状况
 

@@ -564,8 +564,8 @@ void osTaskNext(void)
 										TST. TDN = TST. TDN + 1;//轮盘指针向后移一位  
 										osTime.TTWM = RunTask_TIT -> TTW;//将当前任务的时间轮片写入到时间记录器
 										TST.TSS = TaskSwitch_Ready;//将调度状态设为"未调度"
-										#if (osTaskUsePrint  > 0)
-										TST.TSC = TST.TSC + 1;
+										#if (osPerformanceStatistics_Enable > 0)
+										PS.TSC += 1;
 										#endif
 										return;//退出函数
 
@@ -778,8 +778,8 @@ osErrorValue osTaskSpeedTest(void)
 	t0 = SysTick->VAL;
 	osTaskSwitch_Enable();//触发任务切换
 	t1 = SysTick->VAL;
-	#if (osTaskUsePrint  > 0)
-	TST.TSSU = (t0 - t1) / (osCPU_Freq / 8);
+	#if (osPerformanceStatistics_Enable > 0)
+	PS.TSSU = (t0 - t1) / (osCPU_Freq / 8);
 	#endif
 	#if (osTaskDebug_Enable > 0)
 	osTaskErrorDebug("任务切换速度测试\nt0=%d\nt1=%d\n切换速度=%fus\n",t0,t1,((t0 - t1) / (osCPU_Freq / 8))*1.0);
@@ -813,13 +813,12 @@ osErrorValue osTaskMonitor(void)
 		}
 	}
 	
-	print("CPU总使用量:%d%% = 任务 %d%% + 中断%d%% | ",CPUS.CTO + CPUS.CISRO,CPUS.CTO,CPUS.CISRO);
-	if(TST.TSC*TST.TSSU > 1000){
-		print("任务调度次数:%d | 预计耗时:%d.%dms\n",TST.TSC,TST.TSC*TST.TSSU / 1000,TST.TSC*TST.TSSU % 1000 / 100);
+	print("CPU总使用量:%d%% = 任务 %d%% + 中断%d%% + 调度%d%%\n",PS.CTO + PS.CISRO + PS.CSO,PS.CTO,PS.CISRO,PS.CSO);
+	if(PS.TSC*PS.TSSU > 1000){
+		print("任务调度次数:%d | 预计耗时:%dms\n",PS.TSCb,PS.TSCb*PS.TSSU / 1000);
 	}else{
-		print("任务调度次数:%d | 预计耗时:%dus\n",TST.TSC,TST.TSC*TST.TSSU);
+		print("任务调度次数:%d | 预计耗时:%dus\n",PS.TSCb,PS.TSCb*PS.TSSU);
 	}
-	TST.TSC = 0;
 	print("内存 总量:%d字节 | 余量:%d字节 | 可分配:%d字节 | 块数:%d\n",osMemoryGetAllValue(),osMemoryGetFreeValue(),osMemoryGetPassValue(),osMemorySum());
 	tprint("系统已运行: %d天 %h小时 %m分钟 %s秒\n",osTime. TSRT);
 	

@@ -61,7 +61,7 @@ osErrorValue osPostSend(void* PB,TaskInfoTable* TIT)
 			PF -> PB = PB;
 			PF -> DownAddr = NULL;
 
-			uLinkListAdd(&TIT -> PF,PF);
+			uLinkListAdd(&TIT -> PF,&PF -> DownAddr);
 		}
 		if(TIT -> TPL <  RunTask_TIT -> TPL && TIT -> TC == Task_State_Up_PT){//如果这个任务高于当前工作运行任务栏的优先级，就占用
 			//TL[_tr0].TITA -> TC &= TIT_Task_State_TC_RST;//清除这个任务的状态位

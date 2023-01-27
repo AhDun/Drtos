@@ -82,8 +82,11 @@ void Task2_Func(void)
 		LCD_ShowString(10,120,tftlcd_data.width,tftlcd_data.height,16,buf);
 
 		osMemoryReset(buf,' ');
-		sprint((char *)buf,"CPU:%d%%=T %d%%+I %d%%  R:%d:%2d:%2d:%2d",CPUS.CTO+CPUS.CISRO,CPUS.CTO,CPUS.CISRO,(osTime. TSRT / 1000) /86400,((osTime. TSRT / 1000) /3600) % 24,((osTime. TSRT / 1000) /60) % 60,(osTime. TSRT / 1000) % 60);
+		sprint((char *)buf,"CPU: %d%% = T %d%% + I %d%% + S %d%%",PS.CTO+PS.CISRO+PS.CSO,PS.CTO,PS.CISRO,PS.CSO);
 		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
+		osMemoryReset(buf,' ');
+		sprint((char *)buf,"R:%d:%2d:%2d:%2d",(osTime. TSRT / 1000) /86400,((osTime. TSRT / 1000) /3600) % 24,((osTime. TSRT / 1000) /60) % 60,(osTime. TSRT / 1000) % 60);
+		LCD_ShowString(10,180,tftlcd_data.width,tftlcd_data.height,16,buf);
 		LCD_ShowString(10,210,tftlcd_data.width,tftlcd_data.height,16,"------------TaskList--------------");
 		LCD_ShowString(10,240,tftlcd_data.width,tftlcd_data.height,16,"Name  CPU  Class ");
         for(a = 0;a < TST.TLMA;a++){
@@ -93,7 +96,7 @@ void Task2_Func(void)
 			LCD_ShowString(10,270+(a*25),tftlcd_data.width,tftlcd_data.height,16,buf);
 		}
 		osTaskMonitor();
-		osTaskDelayMs(500);
+		osTaskDelayMs(1000);
 	}
 }
 

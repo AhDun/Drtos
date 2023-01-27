@@ -212,7 +212,7 @@ osErrorValue osMemoryFree(void* addr)
 			#endif
 		#endif
 		return (Error - 1);//返回错误
-	}else if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free || (_MemoryUnit*)_MemoryStruct2 > MemoryNextAddr){
+	}else if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free || (_MemoryUnit*)_MemoryStruct2 >= MemoryNextAddr){
 			 //检查这个要释放的块,所指向下一个块的状态是否为释放态或占用态,再或者这个要释放的块的尾地址大于新地址,这个块才可以被释放
 		_MemoryStruct1 -> MemoryFlag = Memory_Free;//设为释放态
 		#if (MemoryProtect_Enable > 0)//开启了内存保护配置

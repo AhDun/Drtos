@@ -59,12 +59,30 @@ typedef struct
 	#endif
 }osTIME;
 //}
-//typedef struct
-//{
 
-//}osCPU;
+#if (osPerformanceStatistics_Enable > 0)
+typedef  u8  	_CPUTaskOccupy;//
+typedef  u8  	_CPUISROccupy;//
+typedef	 u8 	_CPUSwitchOccupy;
+typedef		u32		_TaskSwitchConut;//任务调度次数
+typedef		u8		_TaskSwitchSpeedUs;//任务切换速度测试
 
+//性能统计{
+typedef struct
+{
+ 
+	_CPUTaskOccupy  	CTO;//
+	_CPUISROccupy		CISRO;//
+	_CPUSwitchOccupy	CSO;//
+	_TaskSwitchConut	TSC;//任务调度次数
+	_TaskSwitchConut	TSCb;//任务调度次数
+	_TaskSwitchSpeedUs	TSSU;//任务切换速度测试
 
+}_PerformanceStatistics;
+//}
+#endif
+
+extern _PerformanceStatistics PS;//性能统计
 extern osTIME osTime;
 /*
                                                   <函数声明区>

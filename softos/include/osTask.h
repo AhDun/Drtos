@@ -221,20 +221,13 @@ typedef		u8		_TaskListMaximumActivity;//任务最大活动量
 typedef 	u8		_TaskDispatchNum;//任务调度状态
 typedef     u8      _TaskSwitchState;//任务调度计数
 typedef		u8		_TaskISRFlag;
-#if (osTaskUsePrint  > 0)
-typedef		u32		_TaskSwitchConut;//任务调度次数
-typedef		u8		_TaskSwitchSpeedUs;//任务切换速度测试
-#endif
 typedef struct
 {
 	_TaskSwitchState	    TSS;//任务调度状态
 	_TaskDispatchNum		TDN;//任务调度计数
     _TaskListMaximumActivity	TLMA;//任务最大活动量
 	_TaskISRFlag				TISRF;//中断状态
-	#if (osTaskUsePrint  > 0)
-	_TaskSwitchConut			TSC;//任务调度次数
-	_TaskSwitchSpeedUs			TSSU;//任务切换速度测试
-	#endif
+
     
 } TaskDispatchStateTable;
 //}

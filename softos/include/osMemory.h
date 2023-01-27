@@ -38,10 +38,10 @@
 //}
 
 //内存配置{
-#define MemTank_Max 	32 * 1024 //内存池大小配置
+#define MemTank_Max 	64 * 1024 //内存池大小配置
 
 
-#define MemoryProtect_Enable 1 // 内存保护配置 	1:开启保护 0:关闭保护	
+#define MemoryProtect_Enable 0 // 内存保护配置 	1:开启保护 0:关闭保护	
 								//启用保护申请内存与释放内存所用的时长将会增加
 								//内存保护也不一定保证内存块一定不会发生错误!!!,只会降低内存发生错误的概率
 

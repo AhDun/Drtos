@@ -21,7 +21,7 @@
 #include "osConfig.h"
 #include "osCPU.h"
 
-CPUState CPUS;
+
 
 /*
                                                   变量初始化区

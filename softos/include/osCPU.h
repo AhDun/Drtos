@@ -36,37 +36,17 @@
 #define LR_INIT_VALUE 0xFFFFFFFD//xPSR寄存器初始化变量
 #endif
 
-#define CPU_xPSR 	0x04u
-#define CPU_PC 		0x04u
-#define CPU_LR 		0x04u
-#define CPU_R12 	0x04u
-#define CPU_R3 		0x04u
-#define CPU_R2 		0x04u
-#define CPU_R1		0x04u
-#define CPU_R0 		0x04u
-
-
-/*
-                                                  <数据声明区>
-*/
-typedef  u8  _CPUTaskOccupy;//CPU用户
-typedef  u8  _CPUISROccupy;//CPU总占用量
-
-typedef struct
-{
- 
-	_CPUTaskOccupy CTO;//
-	_CPUISROccupy	CISRO;//
-	_CPUISROccupy	CISRO;//
-
-
-}CPUState;//CPU状况
 
 /*
                                                   <数据声明区>
 */
 
-extern CPUState CPUS;//CPU状况
+
+/*
+                                                  <数据声明区>
+*/
+
+
 
 /*
                                                   <函数声明区>

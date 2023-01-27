@@ -115,14 +115,18 @@ int main(int argc, char *argv[])
 //				print("正在运行\n");
 //			}	
 //		}
-//		print("任务总使用量:%d%% | ",CPUS.CO);
+//		print("任务总使用量:%d%% | ",PS.CO);
 //		print("任务调度次数:%d | 预计耗时:%dus\n",TST.TSC,TST.TSC*TST.TSSU);
 //		TST.TSC = 0;
 //		print("内存总量:%d字节 | 内存余量:%d字节\n",osMemoryAllSize(),osMemoryMaxMallocValue());
 //		tprint("系统已运行: %d天 %h小时 %m分钟 %s秒\n",osTime. TSRT);
-		osTaskDelayMs(10);
-		osPostSend((u32*)"hello Main",osTaskNameToTable("Main"));
-		osPostReadWait();
+		osTaskDelayMs(1000);
+		for(_tr0 = 0;_tr0 < 100;_tr0++){
+			osPostSend((u32*)"hello",osTaskNameToTable("Main"));
+		}
+		for(_tr0 = 0;_tr0 < 100;_tr0++){
+			osPostReadWait();
+		}
 //		for(_tr0 = 10;_tr0 < MemTank_Max;_tr0++){
 //			MemoryPool[_tr0] = _tr0;
 //			osTaskDelayMs(10);

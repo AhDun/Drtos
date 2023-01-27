@@ -147,6 +147,9 @@
 
 #define osTaskDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
+#define osTaskEnterISR()			TST.TISRF += 1;
+#define osTaskExitISR()				TST.TISRF -= 1;
+
 
 
 
@@ -228,7 +231,7 @@ typedef struct
 	_TaskSwitchState	    TSS;//任务调度状态
 	_TaskDispatchNum		TDN;//任务调度计数
     _TaskListMaximumActivity	TLMA;//任务最大活动量
-	_TaskISRFlag				TISRF;//中断
+	_TaskISRFlag				TISRF;//中断状态
 	#if (osTaskUsePrint  > 0)
 	_TaskSwitchConut			TSC;//任务调度次数
 	_TaskSwitchSpeedUs			TSSU;//任务切换速度测试

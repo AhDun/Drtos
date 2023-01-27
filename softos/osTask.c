@@ -26,8 +26,6 @@
                                                   <数据初始区>
 */
 u32 NULL_Value = 0;
-//_TaskRealSP* UPTask_TRS;
-//_TaskRealSP* STTask_TRS;
 TaskDispatchStateTable TST;//任务调度状态表
 TaskInfoTable*	RunTask_TIT;//当前正在运行任务的信息表
 TaskList TL[TaskListLength];//任务轮询表

@@ -13,8 +13,6 @@
 
  *@文件作者: AhDun (mail: ahdunxx@163.com)
 
- *@开发环境: STM32F407ZGT6@168MHz & MDK-ARM Version: 5.27.1.0
-
  *@注    释: 
 
 */
@@ -106,6 +104,11 @@
 						osTaskSpeedTest();\
 					}while(0);//系统初始化
 
+
+#define osDebugError 		print
+#define osDebugInfo 		print
+#define osDebugWarning 		print
+
 //}
 
 //功能配置{
@@ -133,7 +136,7 @@
 #define osTaskNewR_Enable				1//加载任务时新寄存器   1：启用 0：禁用
 		/*可以通过关闭加载任务时新寄存器，加快新任务的启动速度，但是可能会影响任务的稳定性*/
 
-#define osTaskUsePrint 					0//打印各任务使用情况 1：启用 0：禁用
+#define osTaskUsePrint 					1//打印各任务使用情况 1：启用 0：禁用
 
 
 #define osTaskUsePrintClock 			1//时钟中断打印各任务使用情况 1：启用 0：禁用

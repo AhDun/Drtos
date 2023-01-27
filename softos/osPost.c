@@ -11,8 +11,6 @@
 
  *@文件作者: AhDun (mail: ahdunxx@163.com)
 
- *@开发环境: STM32F407ZGT6@168MHz & MDK-ARM Version: 5.27.1.0
-
  *@注    释: 无
 
 */
@@ -55,6 +53,9 @@ osErrorValue osPostSend(void* PB,TaskInfoTable* TIT)
 	}else{
 		PF = osMemoryMalloc(sizeof(PostForm));//申请内存
 		if(PF == NULL){//如果返回为空,说明申请失败
+			#if (osPostDebugError_Enable > 0)
+			osPostDebugError("发送邮件时申请内存失败 %s\n",RunTask_TIT -> TN);
+			#endif
 			return (Error);//返回错误
 		}else{
 			PF -> PB = PB;
@@ -109,7 +110,12 @@ u32* osPostRead(void)
 		PF  =  uLinkListReadEndAndRemvoe(&RunTask_TIT -> PF);
 		Buf = PF -> PB;
 		#endif
-		osMemoryFree(PF);
+		if(osMemoryFree(PF) == Error){
+			#if (osPostDebugError_Enable > 0)
+			osPostDebugError("读取邮件时释放内存失败 %s\n",RunTask_TIT -> TN);
+			#endif
+			return (Buf);
+		}
 		return (Buf);
 		
 	}else{

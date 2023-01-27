@@ -11,8 +11,6 @@
 
  *@文件作者: AhDun (mail: ahdunxx@163.com)
 
- *@开发环境: STM32F407ZGT6@168MHz & MDK-ARM Version: 5.27.1.0
-
  *@注   释: 无
 
 */
@@ -47,7 +45,7 @@
 								//启用保护申请内存与释放内存所用的时长将会增加
 								//内存保护也不一定保证内存块一定不会发生错误!!!,只会降低内存发生错误的概率
 
-#define osMemoryErrorDebug print//DeBug输出函数
+#define osMemoryErrorDebug osDebugError//DeBug输出函数
 
 #define osMemoryDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 

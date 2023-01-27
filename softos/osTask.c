@@ -11,8 +11,6 @@
 
  *@文件作者: AhDun (mail: ahdunxx@163.com)
 
- *@开发环境: STM32F407ZGT6@168MHz & MDK-ARM Version: 5.27.1.0
-
  *@注    释: 
 
 */
@@ -56,6 +54,9 @@ osErrorValue osTaskInit(void)
     for(_tr0 = 0;_tr0 < TaskListLength;_tr0++){
         TL[_tr0].TITA = (TaskInfoTable*)TaskList_NULLValue;
     }
+
+	TST.TISRF = 0;
+	TST.TSS = TaskSwitch_Ready;
     /***********************************系统任务初始化**********************************/
 #if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
 	if(osTaskLogin(
@@ -68,7 +69,7 @@ osErrorValue osTaskInit(void)
     Task_Set_Default    	//任务配置
 	) == Error){
 		#if (osTaskDebug_Enable > 0)
-		osTaskDebug("Main","任务创建失败");
+		osTaskErrorDebug("Main 任务创建失败\n");
 		#endif
 		return (Error);//返回Error
 	}
@@ -85,17 +86,12 @@ osErrorValue osTaskInit(void)
     Task_Set_Default    	//任务配置
 	) == Error){
 		#if (osTaskDebug_Enable > 0)
-		osTaskDebug("Main","任务创建失败");
+		osTaskErrorDebug("Main 任务创建失败\n");
 		#endif
 		return (Error);//返回Error
 	}
 #endif
 
-#if (osFPU_Enable > 0) //启用了FPU
-    //FPU_STACK_ENABLE();//使能FPU压栈
-	//FPU->FPCCR &= ~(0x40000000);
-	
-#endif
 	TST. TDN = NULL;    
 	RunTask_TIT = TL[TST. TDN].TITA;//将即将运行的任务信息表的指针传送给正在运行任务表
 	TST. TDN = TST. TDN + 1;//轮盘指针向后移一位     
@@ -144,21 +140,21 @@ osErrorValue osTaskLogin(
 	TIT = osMemoryMalloc(sizeof(TaskInfoTable));//为任务表分配内存
 	if(TIT == NULL){//如果为空，就说明内存分配失败
 		#if (osTaskDebug_Enable > 0)
-		osTaskDebug(TN,"注册任务: 任务表分配内存失败");
+		osTaskErrorDebug("注册任务时,任务表分配内存失败 %s\n",TN);
 		#endif
 		return (Error);//返回错误
 	}
 	TH = osMemoryMalloc(TSS);//为任务栈分配内存
 	if(TH == NULL){//如果为空，就说明内存分配失败
 		#if (osTaskDebug_Enable > 0)
-		osTaskDebug(TN,"注册任务: 任务栈分配内存失败");
+		osTaskErrorDebug("注册任务时,任务栈分配内存失败 %s\n",TN);
 		#endif
 		return (Error);//返回错误
 	}
 	_var0 = osTaskRegister_Write(TIT,TN,TA,TH,TSS,TTW,TPL,TPP, TC);//这个时候内存分配完成，就进行进行普通注册
 	if(_var0 == Error){//如果为错误值，就说明内存分配失败
 		#if (osTaskDebug_Enable > 0)
-		osTaskDebug(TN,"注册任务: 任务注册失败");
+		osTaskErrorDebug("注册任务时,任务注册失败 %s\n",TN);
 		#endif
 		return (Error);//返回错误
 	}
@@ -213,7 +209,7 @@ osErrorValue osTaskLogin(
 		osProtect_DISABLE();//退出保护
 #endif
 		#if (osTaskDebug_Enable > 0)
-		osTaskDebug(TN,"注册任务: 任务栈内存太小");
+		osTaskErrorDebug("注册任务时任务栈内存太小 %s\n" ,TN);
 		#endif
 		return (Error);//返回错误
 	}
@@ -223,7 +219,7 @@ osErrorValue osTaskLogin(
 		osProtect_DISABLE();//退出保护
 #endif
 		#if (osTaskDebug_Enable > 0)
-		osTaskDebug(TN,"注册任务: 任务栈内存太小");
+		osTaskErrorDebug("注册任务时任务栈内存太小 %s\n" ,TN);
 		#endif
 		return (Error);//返回错误
 	}
@@ -256,7 +252,7 @@ osErrorValue osTaskLogin(
 		osProtect_DISABLE();//退出保护
 #endif
 		#if (osTaskDebug_Enable > 0)
-		osTaskDebug(TN,"注册任务: 任务量数量已最大");
+		osTaskErrorDebug("注册任务时,任务量数量已最大 %s\n",TN);
 		#endif
 		return (Error);//返回错误
 	}
@@ -321,19 +317,19 @@ osErrorValue osTaskLogout(_TaskName *TN)
 		if(StrComp((s8*)TN,(s8*)TL[_var0].TITA -> TN)){//与*TN指针所指的字符串进行比较,如果相同就进入
 			if(osMemoryFree((u8*)(((u32)TL[_var0].TITA -> TH) - ((TL[_var0].TITA -> TSS - 1) * 4))) == Error){//释放任务栈占用的内存
 				#if (osTaskDebug_Enable > 0)
-				osTaskDebug(TN,"释放任务: 栈内存释放失败");
+				osTaskErrorDebug("注销任务时,栈内存释放失败 %s\n",TN);
 				#endif
 				return (Error);//释放内存发生错误,返回错误
 			}
 			if(osTaskLogout_Write(TL[_var0].TITA) == Error){//任务写入注销写入
 				#if (osTaskDebug_Enable > 0)
-				osTaskDebug(TN,"释放任务: 注销失败");
+				osTaskErrorDebug("注销任务时,注销失败 %s\n",TN);
 				#endif
 				return (Error);//释放内存发生错误,返回错误
 			}
 			if(osMemoryFree(&(TL[_var0].TITA -> TI)) == Error){//释放任务表占用的内存
 				#if (osTaskDebug_Enable > 0)
-				osTaskDebug(TN,"释放任务: 任务表释放失败");
+				osTaskErrorDebug("注销任务时,任务表释放失败 %s\n",TN);
 				#endif
 				return (Error);//释放内存发生错误,返回错误
 			}
@@ -392,7 +388,7 @@ osErrorValue	osTaskLogout(TaskInfoTable* TIT)
 		osProtect_DISABLE();//退出保护
 		#endif
 		#if (osTaskDebug_Enable > 0)
-		osTaskDebug("","释放任务: 未知");
+		osTaskErrorDebug("释放任务: 未知\n");
 		#endif
 		return (Error);//发生错误，返回错误
 	}
@@ -448,7 +444,7 @@ TaskInfoTable* osTaskNameToTable(_TaskName *TN)
 		}
 	}
 	#if (osTaskDebug_Enable > 0)
-	osTaskDebug(TN,"查询任务ID: 没有找到对应的任务ID");
+	osTaskErrorDebug("查询任务时没有找到对应的任务句柄 %s\n",TN);
 	#endif
 	return (NULL);//没有对应的任务ID,返回错误
 }
@@ -656,7 +652,7 @@ osErrorValue osTaskSet(TaskInfoTable* TIT,_Task_Set_Pv Pv)
 		}
 	}
 	#if (osTaskDebug_Enable > 0)
-	osTaskDebug(RunTask_TIT -> TN,"任务配置: 不是正确的配置项");
+	osTaskErrorDebug("任务配置时不是正确的配置项 %s\n" ,RunTask_TIT -> TN);
 	#endif
 	return (Error);
 }
@@ -717,40 +713,42 @@ osErrorValue osTaskAddrReplace(TaskInfoTable* TIT,void* NewTA)
 
 osErrorValue osTaskErrorHardFault(u32 pc,u32 psp)
 {
-	u8 _v1 = 3;
-	while(_v1--){
-		osTaskErrorDebug("\n\n\n名称为%s的任务发生“硬件错误”异常!!!\n",RunTask_TIT -> TN,0);
-		osTaskErrorDebug("任务优先级:%d\n",RunTask_TIT -> TPL,0);
-		osTaskErrorDebug("任务当前使用量:%d%%\n",RunTask_TIT -> TOR,0);
+	#if (osTaskRunError_Enable > 0)
+	u8 Count = 1;
+	while(Count--){
+		osTaskErrorDebug("\n\n\n名称为%s的任务发生“硬件错误”异常!!!\n",RunTask_TIT -> TN);
+		osTaskErrorDebug("任务优先级:%d\n",RunTask_TIT -> TPL);
+		osTaskErrorDebug("任务当前使用量:%d%%\n",RunTask_TIT -> TOR);
 		osTaskErrorDebug("任务延时剩余时间:%d%ms\n任务单次最大运行时长:%dms\n",RunTask_TIT -> TTF,RunTask_TIT -> TTW);
 		osTaskErrorDebug("任务最一近状态:",0,0);
 		switch(RunTask_TIT -> TC){
-			case Task_State_Up_TD:osTaskErrorDebug("轮片挂起\n",0,0);break;
-			case Task_State_Up_IN:osTaskErrorDebug("主动挂起\n",0,0);break;
-			case Task_State_Up_DT:osTaskErrorDebug("延时挂起\n",0,0);break;
-			case Task_State_Up_SI:osTaskErrorDebug("信号挂起\n",0,0);break;
-			case Task_State_Up_PT:osTaskErrorDebug("邮件挂起\n",0,0);break;
-			case Task_State_DI:osTaskErrorDebug("禁用态\n",0,0);break;
-			case Task_State_ST:osTaskErrorDebug("终止态\n",0,0);break;
-			case Task_State_RB:osTaskErrorDebug("重启态\n",0,0);break;
-			case Task_State_OP:osTaskErrorDebug("运行态\n",0,0);break;
-			case Task_State_Up:osTaskErrorDebug("挂起态\n",0,0);break;
+			case Task_State_Up_TD:osTaskErrorDebug("轮片挂起\n");break;
+			case Task_State_Up_IN:osTaskErrorDebug("主动挂起\n");break;
+			case Task_State_Up_DT:osTaskErrorDebug("延时挂起\n");break;
+			case Task_State_Up_SI:osTaskErrorDebug("信号挂起\n");break;
+			case Task_State_Up_PT:osTaskErrorDebug("邮件挂起\n");break;
+			case Task_State_DI:osTaskErrorDebug("禁用态\n");break;
+			case Task_State_ST:osTaskErrorDebug("终止态\n");break;
+			case Task_State_RB:osTaskErrorDebug("重启态\n");break;
+			case Task_State_OP:osTaskErrorDebug("运行态\n");break;
+			case Task_State_Up:osTaskErrorDebug("挂起态\n");break;
 		}
-		osTaskErrorDebug("任务邮箱状态:",0,0);
+		osTaskErrorDebug("任务邮箱状态:");
 		if(RunTask_TIT -> PF == NULL){
-			osTaskErrorDebug("空的\n",0,0);
+			osTaskErrorDebug("空的\n");
 		}
 		else{
-			osTaskErrorDebug("非空\n",0,0);
+			osTaskErrorDebug("非空\n");
 		}
 		osTaskErrorDebug("任务栈总大小:%d字节\n任务栈剩余:%d字节\n",(RunTask_TIT -> TSS - 1),psp - ((u32)RunTask_TIT -> TH - ((RunTask_TIT -> TSS - 1))));
 		osTaskErrorDebug("任务异常处:%X\n",pc);
 		osTaskErrorDebug("内存总量:%d字节\n内存余量:%d字节",osMemoryGetAllValue(),osMemoryGetFreeValue());
 	}
+	#endif
 	#if (osTaskErrorSet == 1)
-	osTaskSet(0,Task_Set_Reboot);
+	osTaskSet(NULL,Task_Set_Reboot);
 	#elif(osTaskErrorSet == 0)
-	osTaskSet(0,Task_Set_Pause);
+	osTaskSet(NULL,Task_Set_Pause);
 	#endif
 	return (OK);
 }
@@ -769,9 +767,10 @@ osErrorValue osTaskErrorHardFault(u32 pc,u32 psp)
  *@注    释: 无
 
 */
-#if (osSpeedTest_Enable > 0)
+
 osErrorValue osTaskSpeedTest(void)
 {
+	#if (osSpeedTest_Enable > 0)
 	u32 t0,t1;
 	RunTask_TIT -> TC = Task_State_Up_IN;
 	t0 = SysTick->VAL;
@@ -780,12 +779,50 @@ osErrorValue osTaskSpeedTest(void)
 	#if (osTaskUsePrint  > 0)
 	TST.TSSU = (t0 - t1) / (osCPU_Freq / 8);
 	#endif
-	print("任务切换速度测试\nt0=%d\nt1=%d\n切换速度=%fus\n",t0,t1,((t0 - t1) / (osCPU_Freq / 8))*1.0);
+	#if (osTaskDebug_Enable > 0)
+	osTaskErrorDebug("任务切换速度测试\nt0=%d\nt1=%d\n切换速度=%fus\n",t0,t1,((t0 - t1) / (osCPU_Freq / 8))*1.0);
+	#endif
+	#endif
 	return (OK);
 }
-#endif
 
+osErrorValue osTaskMonitor(void)
 
+{
+	u8 _tr0;
+	for(_tr0 = NULL;_tr0 < TST.TLMA;_tr0++){//对每一个任务进行遍历
+		print("任务<%s>的使用量为:占用时长:%dms | 任务优先级:%d | 任务状态:",TL[_tr0].TITA -> TN,TL[_tr0].TITA -> TOR,TL[_tr0].TITA -> TPL);
+		if(TL[_tr0].TITA != RunTask_TIT || TST.TSS != TaskSwitch_Ready){
+			switch(TL[_tr0].TITA -> TC){
+				case Task_State_Up_TD:print("轮片挂起\n");break;
+				case Task_State_Up_IN:print("主动挂起\n");break;
+				case Task_State_Up_DT:print("延时挂起\n");break;
+				case Task_State_Up_SI:print("信号挂起\n");break;
+				case Task_State_Up_PT:print("邮件挂起\n");break;
+				case Task_State_DI:print("禁用态\n");break;
+				case Task_State_ST:print("终止态\n");break;
+				case Task_State_RB:print("重启态\n");break;
+				case Task_State_OP:print("运行态\n");break;
+				case Task_State_Up:print("挂起态\n");break;
+			}
+		}
+		else{
+			print("正在运行\n");
+		}
+	}
+	
+	print("任务总使用量:%d%% | ",CPUS.CO);
+	if(TST.TSC*TST.TSSU > 1000){
+		print("任务调度次数:%d | 预计耗时:%d.%dms\n",TST.TSC,TST.TSC*TST.TSSU / 1000,TST.TSC*TST.TSSU % 1000 / 100);
+	}else{
+		print("任务调度次数:%d | 预计耗时:%dus\n",TST.TSC,TST.TSC*TST.TSSU);
+	}
+	TST.TSC = 0;
+	print("内存 总量:%d字节 | 余量:%d字节 | 可分配:%d字节 块数:%d\n",osMemoryGetAllValue(),osMemoryGetFreeValue(),osMemoryGetPassValue(),osMemorySum());
+	tprint("系统已运行: %d天 %h小时 %m分钟 %s秒\n",osTime. TSRT);
+	
+	return (OK);
+}
 
 
 /*

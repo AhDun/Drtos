@@ -1,17 +1,50 @@
 /*
                                                   FILE-START
 */
+
+/*
+
+* softos内核
+
+* 版权所有(C) 2023 AhDun 版权所有.
+
+* 本处现免费准许任何人士取得本处的副本
+
+* 本软件和相关的文档文件(以下简称“软件”)，用于处理
+
+* 本软件不受限制，包括但不限制的权利
+
+* 使用、复制、修改、合并、发布、分发、转许可和/或销售的副本软件，并允许向其提供软件的人这样做，
+
+* 须符合以下条件:
+
+* 上述版权声明及本许可声明应包括在所有
+
+* 本软件的副本或大部分。
+
+* 软件是“按原样”提供的，没有任何形式的保证，明示或
+
+* 暗示，包括但不限于适销性、适用性的保证
+
+* 用于特定目的和不侵权。在任何情况下，作者或
+
+* 版权拥有人须承担任何申索、损害赔偿或其他责任，不论是否
+
+* 在合同、侵权或其他诉讼中，由，由或在
+
+* 与软件的联系或对软件的使用或其他交易。
+
+*/
+
 /*
 
  *@文件名称: osClock.c
 
- *@文件内容: 系统"时钟"系文件
+ *@文件内容: 系统时钟文件
 
  *@文件版本: 1.0.0
 
  *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@开发环境: STM32F407ZGT6@168MHz & MDK-ARM Version: 5.27.1.0
 
  *@注    释: 
 
@@ -97,42 +130,11 @@ void osClockTimePulse(void)
 			//计算公式：占用比 = 单位时间内的占用时长 / (单位时间 / 100)
             CPUS.CO = CPUS.CO + (TL[_tr0].TITA -> TOR / (TaskOccupyRatioSamplingTime / 100));//计算CPU占用量
 			//计算公式：CPU占用量 = CPU占用量 + 每个任务的占用量
-			#if (osTaskUsePrint  > 0)
-			#if (osTaskUsePrintClock > 0)
-			print("任务<%s>的使用量为:占用时长:%dms | 任务优先级:%d | 任务状态:",TL[_tr0].TITA -> TN,TL[_tr0].TITA -> TOT,TL[_tr0].TITA -> TPL);
-			if(TL[_tr0].TITA != RunTask_TIT || TST.TSS != TaskSwitch_Ready){
-				switch(TL[_tr0].TITA -> TC){
-					case Task_State_Up_TD:print("轮片挂起\n");break;
-					case Task_State_Up_IN:print("主动挂起\n");break;
-					case Task_State_Up_DT:print("延时挂起\n");break;
-					case Task_State_Up_SI:print("信号挂起\n");break;
-					case Task_State_Up_PT:print("邮件挂起\n");break;
-					case Task_State_DI:print("禁用态\n");break;
-					case Task_State_ST:print("终止态\n");break;
-					case Task_State_RB:print("重启态\n");break;
-					case Task_State_OP:print("运行态\n");break;
-					case Task_State_Up:print("挂起态\n");break;
-				}
-			}
-			else{
-				print("正在运行\n");
-			}
-			#endif
-			#endif
-
             TL[_tr0].TITA -> TOT = 0;//清空单位时间内的占用时长
         }
 		#if (osTaskUsePrint  > 0)
 		#if (osTaskUsePrintClock > 0)
-		print("任务总使用量:%d%% | ",CPUS.CO);
-		if(TST.TSC*TST.TSSU > 1000){
-			print("任务调度次数:%d | 预计耗时:%d.%dms\n",TST.TSC,TST.TSC*TST.TSSU / 1000,TST.TSC*TST.TSSU % 1000 / 100);
-		}else{
-			print("任务调度次数:%d | 预计耗时:%dus\n",TST.TSC,TST.TSC*TST.TSSU);
-		}
-		TST.TSC = 0;
-		print("内存总量:%d字节 | 内存余量:%d字节 | 可分配:%d字节\n",osMemoryGetAllValue(),osMemoryGetFreeValue(),osMemoryGetPassValue());
-		tprint("系统已运行: %d天 %h小时 %m分钟 %s秒\n",osTime. TSRT);
+		osTaskMonitor();
 		#endif
 		#endif
     }

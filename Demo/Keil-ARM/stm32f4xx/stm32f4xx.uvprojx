@@ -403,6 +403,11 @@
           <GroupName>OS</GroupName>
           <Files>
             <File>
+              <FileName>osConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\softos\include\osConfig.h</FilePath>
+            </File>
+            <File>
               <FileName>osClock.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\SoftOs\osClock.c</FilePath>
@@ -441,11 +446,6 @@
               <FileName>osClock.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\softos\include\osClock.h</FilePath>
-            </File>
-            <File>
-              <FileName>osConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osConfig.h</FilePath>
             </File>
             <File>
               <FileName>osCPU.h</FileName>
@@ -768,9 +768,6 @@
               <FilePath>.\Src\Drive\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>Readme</GroupName>
         </Group>
       </Groups>
     </Target>

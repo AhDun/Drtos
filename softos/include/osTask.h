@@ -13,8 +13,6 @@
 
  *@文件作者: AhDun (mail: ahdunxx@163.com)
 
- *@开发环境: STM32F407ZGT6@168MHz & MDK-ARM Version: 5.27.1.0
-
  *@注    释: 
 
 */
@@ -141,14 +139,17 @@
 #define osTaskSwitch_Enable() 			do{TST.TSS = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
 //#define osTaskSwitch_Strong_Enable() 	CPU_SVC()//触发强制任务切换
 
-#define osTaskDebug(a,b) print("\nosTask: %s:%s\n",a,b)//DeBug输出函数
+//#define osTaskDebug(a,b) print("\nosTask: %s:%s\n",a,b)//DeBug输出函数
 
-#define osTaskErrorDebug print
+#define osTaskErrorDebug 		osDebugError
 
 #define osTaskDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
-#define osTaskEnterISR()			TST.TISRF += 1;
-#define osTaskExitISR()				TST.TISRF -= 1;
+
+#define osTaskRunError_Enable 1 //任务运行时发生致命错误 1:开启Debug输出 0:关闭Debug输出
+
+#define osTaskEnterISR()			TST.TISRF += 1;//进入 中断
+#define osTaskExitISR()				TST.TISRF -= 1;//
 
 
 
@@ -191,7 +192,7 @@ typedef struct
 	_TaskName*			TN; 	//任务名称
 	_TaskConfig 		TC;  	//任务控制量	
 	_TaskHandle* 		TH;  	//任务栈地址
-	_TaskStackSize 	TSS;   	//任务栈长度
+	_TaskStackSize 		TSS;   	//任务栈长度
 #ifdef osSignalMutual_Enable
 	_TaskPriorityLevel	TPLb;   //任务备用优先级
 #endif
@@ -452,9 +453,10 @@ osErrorValue osTaskExit(void);
 
 osErrorValue osTaskErrorHardFault(u32 pc,u32 psp);
 
-#if (osSpeedTest_Enable > 0)
+
 osErrorValue osTaskSpeedTest(void);
-#endif
+
+osErrorValue osTaskMonitor(void);
 
 #endif
 

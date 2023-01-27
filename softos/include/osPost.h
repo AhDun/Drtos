@@ -13,8 +13,6 @@
 
  *@文件作者: AhDun (mail: ahdunxx@163.com)
 
- *@开发环境: STM32F407ZGT6@168MHz & MDK-ARM Version: 5.27.1.0
-
  *@注   释: 无
 
 */
@@ -32,6 +30,10 @@
 #define osPost_Enable 		//启用邮箱 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 
 #define osPostHead		1	 //读邮件顺序  1：正序 0：倒序
+
+#define osPostDebugError_Enable 1 //
+
+#define osPostDebugError	osDebugError 
 
 /*
                                                   <数据声明区>

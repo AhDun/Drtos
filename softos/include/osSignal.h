@@ -11,8 +11,6 @@
 
  *@文件作者: AhDun (mail: ahdunxx@163.com)
 
- *@开发环境: STM32F407ZGT6@168MHz & MDK-ARM Version: 5.27.1.0
-
  *@注    释: 无
 
 */
@@ -47,6 +45,10 @@
 #define osSignalMutual_Enable //启用互斥信号量
 #define osSignalBinary_Enable //启用二值信号量
 #define osSignalCount_Enable  //启用计数信号量
+
+#define osSignalDebugError_Enable 1 //
+
+#define osSignalDebugError	osDebugError 
 
 
 /*

@@ -20,7 +20,7 @@
 /*
                                                   <引用文件区>
 */
-#include "osMain.h"
+#include "osConfig.h"
 #include "osCPU.h"
 
 CPUState CPUS;
@@ -51,10 +51,6 @@ CPUState CPUS;
  *@注    释: 无
 
 */
-
-
-
-
 __asm void osTASK_Stack_Init(u32* tpp,u32* tsa,u32* eca,u32* tsas)
 						  //R0      ,R1      ,R2      ,R3
 						  //C编译器函数各个传参对应的寄存器
@@ -140,69 +136,34 @@ __asm void osTASK_START(u32* tsas)
   BX    LR	//退出函数，跳转到BX寄存器中所存的地址
 }
 
-/*
 
- *@函数名称: FPU_STACK_ENABLE
 
- *@函数版本: 1.0.0
-
- *@函数功能: 使能FPU压栈
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注   释: 无
-
-*/
-__asm  void FPU_STACK_ENABLE(void)
+__asm void HardFault_Handler(void)
 {
-    MRS		R0,		CONTROL	   	//通过MRS命令读取控制寄存器到R0寄存器
-	ORR		R0,		R0,#0x04   	//R0寄存器与0x04进行或运算，使的bit2位 置1
-	MSR		CONTROL,R0			//再通过MSR命令将R0寄存器中的内容写回控制寄存器中
-	BX		LR					//退出函数，跳转到BX寄存器中所存的地址
-}
+	extern osTaskErrorHardFault
+	
+	PUSH	{R4,LR}
 
-/*
-
- *@函数名称: Read_PSP
-
- *@函数版本: 1.0.0
-
- *@函数功能: 读取PSP栈指针
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注   释: 无
-
-*/
-__asm int Read_PSP(void)
-{
-	MRS	  	R0,		PSP		//通过MRS命令将PSP（进程栈）寄存器中的内容读到R1寄存器中
-	BX		LR
-}
-/*
-
- *@函数名称: Read_PC
-
- *@函数版本: 1.0.0
-
- *@函数功能: 读取PC值
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注   释: 无
-
-*/
-__asm int Read_PC(void)
-{
 	MRS	  	R1,		PSP		//通过MRS命令将PSP（进程栈）寄存器中的内容读到R1寄存器中
 	LDR		R0,		[R1,#0x14]
-	BX		LR
+	MRS	  	R1,		PSP		//通过MRS命令将PSP（进程栈）寄存器中的内容读到R1寄存器中
+	
+	BL.W	osTaskErrorHardFault
+
+	POP		{R4,PC}
+}
+
+__asm void SysTick_Handler(void)
+{
+	extern osClockTimePulse
+	
+	PUSH	{R4,LR}
+
+	BL.W	osClockTimePulse
+
+	POP		{R4,PC}
+
+	NOP
 }
 
 __asm void PendSV_Handler(void)
@@ -229,8 +190,7 @@ __asm void PendSV_Handler(void)
 	
 
 	CPSIE   I
-	LDR 	R0,	=osTaskNext
-	BLX 	R0
+	BL.W	osTaskNext
 	CPSID   I			//禁用所有中断
 
 	LDR   R0,	=RunTask_TIT

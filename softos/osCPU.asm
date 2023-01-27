@@ -25,7 +25,7 @@
 ;
 ;	EXPORT  PendSV_Handler
 	EXPORT  CPU_PendSV
-	EXPORT  CPU_PendSV_STATE
+	;EXPORT  CPU_PendSV_STATE
 	EXPORT  CPU_SVC
 	EXPORT	INTX_DISABLE
 	EXPORT	INTX_ENABLE
@@ -68,13 +68,13 @@ CPU_SVC
 ;
 ; 注    释: 无
 ;
-CPU_PendSV_STATE
+;CPU_PendSV_STATE
 
-	LDR     R4,     =NVIC_PendSV	;将PendSV寄存器的地址加载到R4寄存器中
-    NOP								;空指令,作用屏蔽warning: A1581W警告
-    LDR     R4, [R4]				;将R4寄存器的值做为指针取值到R4中
-    AND     R4, R4,#NVIC_PendSV_SET	;将R4寄存器的值与0x10000000进行相与运算
-    BX      LR						;跳转到LR寄存器中所指向的值
+	;LDR     R4,     =NVIC_PendSV	;将PendSV寄存器的地址加载到R4寄存器中
+    ;NOP								;空指令,作用屏蔽warning: A1581W警告
+    ;LDR     R4, [R4]				;将R4寄存器的值做为指针取值到R4中
+    ;AND     R4, R4,#NVIC_PendSV_SET	;将R4寄存器的值与0x10000000进行相与运算
+    ;BX      LR						;跳转到LR寄存器中所指向的值
 ;
 ; 函数名称: CPU_PendSV
 ;
@@ -95,6 +95,8 @@ CPU_PendSV
     STR     R1, [R0]				;将PendSV寄存器内核悬起使能写入R0寄存器所指向的地址
 	POP     {R0,R1,PC}
 ;    BX      LR						;跳转到LR寄存器中所指向的值
+
+
 
 INTX_DISABLE
 

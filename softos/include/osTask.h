@@ -143,6 +143,8 @@
 
 #define osTaskDebug(a,b) print("\nosTask: %s:%s\n",a,b)//DeBug输出函数
 
+#define osTaskErrorDebug print
+
 #define osTaskDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
 
@@ -187,11 +189,11 @@ typedef struct
 	_TaskConfig 		TC;  	//任务控制量	
 	_TaskHandle* 		TH;  	//任务栈地址
 	_TaskStackSize 	TSS;   	//任务栈长度
-#if defined osSignalMutual_Enable ||  defined osSignalBinary_Enable || define osSignalCount_Enable
+#ifdef osSignalMutual_Enable
 	_TaskPriorityLevel	TPLb;   //任务备用优先级
 #endif
 //#ifdef osPost_Enable
-	_PostForm*			PF;
+	_PostForm*			PF;		//任务邮箱
 //#endif
 	_TaskTimeWheel 		TTW;	//任务时间轮片
 	_TaskPriorityLevel 	TPL;	//任务优先级
@@ -216,6 +218,7 @@ typedef struct
 typedef		u8		_TaskListMaximumActivity;//任务最大活动量
 typedef 	u8		_TaskDispatchNum;//任务调度状态
 typedef     u8      _TaskSwitchState;//任务调度计数
+typedef		u8		_TaskISRFlag;
 #if (osTaskUsePrint  > 0)
 typedef		u32		_TaskSwitchConut;//任务调度次数
 typedef		u8		_TaskSwitchSpeedUs;//任务切换速度测试
@@ -225,6 +228,7 @@ typedef struct
 	_TaskSwitchState	    TSS;//任务调度状态
 	_TaskDispatchNum		TDN;//任务调度计数
     _TaskListMaximumActivity	TLMA;//任务最大活动量
+	_TaskISRFlag				TISRF;//中断
 	#if (osTaskUsePrint  > 0)
 	_TaskSwitchConut			TSC;//任务调度次数
 	_TaskSwitchSpeedUs			TSSU;//任务切换速度测试
@@ -443,6 +447,11 @@ osErrorValue osTaskAddrReplace(TaskInfoTable* TIT,void* NewTA);
 */
 osErrorValue osTaskExit(void);
 
+osErrorValue osTaskErrorHardFault(u32 pc,u32 psp);
+
+#if (osSpeedTest_Enable > 0)
+osErrorValue osTaskSpeedTest(void);
+#endif
 
 #endif
 

@@ -33,6 +33,8 @@
 
 #define TaskOccupyRatioSamplingTime 		1000 //任务统计时间，单位ms
 
+#define osClockGetTimePulse()	osTime. TSRT
+
 /*
                                                   <数据声明区>
 */
@@ -44,23 +46,56 @@ typedef	u32	_TaskTimeWheelMargin;//任务轮片时间
 #if (osClockTimePeriod < osClockTimePeriodStandard)
 typedef u32 _ClockTimePeriodValue; //时间周期计数
 #endif
+
+//系统时间{
 typedef struct
 {
-#if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
-	_TotalSystemRunningTime TSRT;//系统运行时间
-#endif
+	#if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
+	_TotalSystemRunningTime 	TSRT;//系统运行时间
+	#endif
 	_TaskTimeWheelMargin	   TTWM;//任务轮片时间
-#if (osClockTimePeriod < osClockTimePeriodStandard)
+	#if (osClockTimePeriod < osClockTimePeriodStandard)
 	_ClockTimePeriodValue      CTPV;//时间周期计数
-#endif
-}osTIME;//系统时间
+	#endif
+}osTIME;
+//}
+
 
 extern osTIME osTime;
 /*
                                                   <函数声明区>
 */
-osErrorValue osClockInit(void);
+/*
 
+ *@函数名称: osClockInit
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 系统时钟初始化
+
+ *@输入参数: 无
+
+ *@返 回 值: 无
+
+ *@注    释: 无
+
+*/
+osErrorValue osClockInit(void);
+/*
+
+ *@函数名称: osClockTimePulse
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 系统时钟脉冲处理
+
+ *@输入参数: 无
+
+ *@返 回 值: 无
+
+ *@注    释: 无
+
+*/
 void osClockTimePulse(void);
 
 

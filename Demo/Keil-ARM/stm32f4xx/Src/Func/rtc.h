@@ -2,7 +2,7 @@
 #define _rtc_H
 
 #include "main.h"
-#include "osMain.h"
+#include "osConfig.h"
 
 extern SemaphoreTable* s1;
 extern SemaphoreTable* timebz;

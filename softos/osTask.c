@@ -20,7 +20,7 @@
 /*
                                                   <引用文件区>
 */
-#include "osMain.h"
+#include "osConfig.h"
 #include "osTask.h"
 /*
                                                   <数据初始区>
@@ -31,8 +31,6 @@ u32 NULL_Value = 0;
 TaskDispatchStateTable TST;//任务调度状态表
 TaskInfoTable*	RunTask_TIT;//当前正在运行任务的信息表
 TaskList TL[TaskListLength];//任务轮询表
-
-
 
 /*
                                                   <函数区>
@@ -718,6 +716,77 @@ osErrorValue osTaskAddrReplace(TaskInfoTable* TIT,void* NewTA)
 	}
 
 }
+
+osErrorValue osTaskErrorHardFault(u32 pc,u32 psp)
+{
+	u8 _v1 = 3;
+	while(_v1--){
+		osTaskErrorDebug("\n\n\n名称为%s的任务发生“硬件错误”异常!!!\n",RunTask_TIT -> TN,0);
+		osTaskErrorDebug("任务优先级:%d\n",RunTask_TIT -> TPL,0);
+		osTaskErrorDebug("任务当前使用量:%d%%\n",RunTask_TIT -> TOR,0);
+		osTaskErrorDebug("任务延时剩余时间:%d%ms\n任务单次最大运行时长:%dms\n",RunTask_TIT -> TTF,RunTask_TIT -> TTW);
+		osTaskErrorDebug("任务最一近状态:",0,0);
+		switch(RunTask_TIT -> TC){
+			case Task_State_Up_TD:osTaskErrorDebug("轮片挂起\n",0,0);break;
+			case Task_State_Up_IN:osTaskErrorDebug("主动挂起\n",0,0);break;
+			case Task_State_Up_DT:osTaskErrorDebug("延时挂起\n",0,0);break;
+			case Task_State_Up_SI:osTaskErrorDebug("信号挂起\n",0,0);break;
+			case Task_State_Up_PT:osTaskErrorDebug("邮件挂起\n",0,0);break;
+			case Task_State_DI:osTaskErrorDebug("禁用态\n",0,0);break;
+			case Task_State_ST:osTaskErrorDebug("终止态\n",0,0);break;
+			case Task_State_RB:osTaskErrorDebug("重启态\n",0,0);break;
+			case Task_State_OP:osTaskErrorDebug("运行态\n",0,0);break;
+			case Task_State_Up:osTaskErrorDebug("挂起态\n",0,0);break;
+		}
+		osTaskErrorDebug("任务邮箱状态:",0,0);
+		if(RunTask_TIT -> PF == NULL){
+			osTaskErrorDebug("空的\n",0,0);
+		}
+		else{
+			osTaskErrorDebug("非空\n",0,0);
+		}
+		osTaskErrorDebug("任务栈总大小:%d字节\n任务栈剩余:%d字节\n",(RunTask_TIT -> TSS - 1),psp - ((u32)RunTask_TIT -> TH - ((RunTask_TIT -> TSS - 1))));
+		osTaskErrorDebug("任务异常处:%X\n",pc);
+		osTaskErrorDebug("内存总量:%d字节\n内存余量:%d字节",osMemoryGetAllValue(),osMemoryGetFreeValue());
+	}
+	#if (osTaskErrorSet == 1)
+	osTaskSet(0,Task_Set_Reboot);
+	#elif(osTaskErrorSet == 0)
+	osTaskSet(0,Task_Set_Pause);
+	#endif
+	return (OK);
+}
+/*
+
+ *@函数名称: osTaskSpeedTest
+
+ *@函数版本: 1.0.0
+
+ *@函数功能: 任务切换速度测试
+
+ *@输入参数: 无	
+
+ *@返 回 值: -1:创建错误，0: 创建成功
+
+ *@注    释: 无
+
+*/
+#if (osSpeedTest_Enable > 0)
+osErrorValue osTaskSpeedTest(void)
+{
+	u32 t0,t1;
+	RunTask_TIT -> TC = Task_State_Up_IN;
+	t0 = SysTick->VAL;
+	osTaskSwitch_Enable();//触发任务切换
+	t1 = SysTick->VAL;
+	#if (osTaskUsePrint  > 0)
+	TST.TSSU = (t0 - t1) / (osCPU_Freq / 8);
+	#endif
+	print("任务切换速度测试\nt0=%d\nt1=%d\n切换速度=%fus\n",t0,t1,((t0 - t1) / (osCPU_Freq / 8))*1.0);
+	return (OK);
+}
+#endif
+
 
 
 

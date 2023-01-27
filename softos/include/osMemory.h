@@ -23,9 +23,9 @@
 /*
                                                   <引用文件区>
 */
-//#include "osError.h"
+//
 #include "print.h"
-#include "osMain.h"
+#include "osConfig.h"
 /*
                                                   <宏定义区>
 */
@@ -69,8 +69,8 @@
 
 typedef u8	_MemoryUnit;
 
-extern _MemoryUnit*    MemoryNextAddr;//内存新地址
-extern _MemoryUnit 	MemoryPool[MemTank_Max];//内存池
+extern _MemoryUnit*    	MemoryNextAddr;//内存新地址
+extern _MemoryUnit 		MemoryPool[MemTank_Max];//内存池
 
 //内存块结构{
 typedef u8 	_MemoryFlag;

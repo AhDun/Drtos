@@ -20,7 +20,7 @@
 /*
                                                   <引用文件区>
 */
-#include "osMain.h"
+#include "osConfig.h"
 #include "LinkList.h"
 
 /*

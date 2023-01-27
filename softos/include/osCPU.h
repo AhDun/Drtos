@@ -84,11 +84,8 @@ void CPU_PendSV_STATE(void);
 
 __asm void CPU_SVC(void);
 
-__asm  void FPU_STACK_ENABLE(void);
 
-__asm int Read_PSP(void);
 
-__asm int Read_PC(void);
 
 
 #endif

@@ -16,20 +16,10 @@
  *@注    释: 
 */
 
-/*
-                             __ _            
-                            / _| |           
-                  ___  ___ | |_| |_ ___  ___ 
-                 / __|/ _ \|  _| __/ _ \/ __|
-                 \__ \ (_) | | | || (_) \__ \
-                 |___/\___/|_|  \__\___/|___/
-                            
-						softos v1.0.0
 
-*/
 #include "main.h"
 #include "SysTick.h"
-#include "osMain.h"
+#include "osConfig.h"
 #include "Demo.h"
 #include "print.h"
 
@@ -54,13 +44,10 @@
 int main(int argc, char *argv[])
 {
 /*--------------------------------------demo---------------------------------------------------------*/
-//	u32 _tr0;
+	u32 _tr0;
 //	SemaphoreTable* timebz1;
 
-
-	if(osInit() ==Error){//系统初始化
-		print("系统初始化失败");
-	}
+	osInit();
 
 
 	//osMemoryMalloc(25000);
@@ -138,7 +125,7 @@ int main(int argc, char *argv[])
 		osTaskDelayMs(10);
 		osPostSend((u32*)"hello Main",osTaskNameToTable("Main"));
 		osPostReadWait();
-//		for(_tr0 = 580;_tr0 < MemTank_Max;_tr0++){
+//		for(_tr0 = 10;_tr0 < MemTank_Max;_tr0++){
 //			MemoryPool[_tr0] = _tr0;
 //			osTaskDelayMs(10);
 //		}

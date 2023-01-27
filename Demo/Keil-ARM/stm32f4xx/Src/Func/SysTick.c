@@ -19,7 +19,7 @@
                                                   <引用文件区>
 */
 #include "SysTick.h"
-#include "osMain.h"
+#include "osConfig.h"
 
 
 /*
@@ -56,7 +56,7 @@ s8 SysTick_us_Init(u8 SysCLK,u16 us)
 	SysTick->VAL = 0x00;        		//清空计数器
 	SysTick->CTRL |= ( 0x01 | 0x02) ; //开始倒数
                 //开始倒数  | 计数到0时，产生异常
-	while(SysTick_us_Init_Test_Flag == Unknown);//如果SysTick定时器，未正常工作，则阻塞
+	while(osClockGetTimePulse() == 0);//如果SysTick定时器，未正常工作，则阻塞
 	return (OK);
 }
 
@@ -71,11 +71,11 @@ s8 SysTick_us_Init(u8 SysCLK,u16 us)
 
  *@注    释: 无
 */
-void SysTick_Handler(void)
-{
-	SysTick_us_Init_Test_Flag_OK();
-	osClockTimePulse();
-}
+//void SysTick_Handler(void)
+//{
+//	
+//	osClockTimePulse();
+//}
 
 /*
  *@函数名称: SysTick_us

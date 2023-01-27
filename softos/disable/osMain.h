@@ -50,21 +50,13 @@
 
 #define osMainDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
-#define osMainPrintInfo()  do{\
-							osMainDebugInfo("系统名称: %s\n",osName);\
-							osMainDebugInfo("系统版本号: %s\n",osVersionNumberS);\
-							osMainDebugInfo("系统最大任务量: %d\n",osMaximumTask);\
-							osMainDebugInfo("系统编译日期: %s\n",__DATE__);\
-							osMainDebugInfo("系统编译时间: %s\n",__TIME__);\
-							osMainDebugInfo("CPU名称: %s\n",osCPU_Name);\
-							osMainDebugInfo("CPU主频: %dMHz\n",osCPU_Freq);\
-							}while(0);
+
 
 
 /*
                                                   <函数声明区>
 */
-osErrorValue osInit(void);
+//osErrorValue osInit(void);
 osErrorValue osMainPrintFunc(void);
 osErrorValue osMainSpeedTest(void);
 

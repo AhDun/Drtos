@@ -408,19 +408,14 @@
               <FilePath>..\..\..\SoftOs\osClock.c</FilePath>
             </File>
             <File>
+              <FileName>osCPU.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\softos\osCPU.asm</FilePath>
+            </File>
+            <File>
               <FileName>osCPU.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\SoftOs\osCPU.c</FilePath>
-            </File>
-            <File>
-              <FileName>osError.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\osError.c</FilePath>
-            </File>
-            <File>
-              <FileName>osMain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\osMain.c</FilePath>
             </File>
             <File>
               <FileName>osMemory.c</FileName>
@@ -443,11 +438,6 @@
               <FilePath>..\..\..\SoftOs\osTask.c</FilePath>
             </File>
             <File>
-              <FileName>osCPU.asm</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\..\softos\osCPU.asm</FilePath>
-            </File>
-            <File>
               <FileName>osClock.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\softos\include\osClock.h</FilePath>
@@ -461,16 +451,6 @@
               <FileName>osCPU.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\softos\include\osCPU.h</FilePath>
-            </File>
-            <File>
-              <FileName>osError.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osError.h</FilePath>
-            </File>
-            <File>
-              <FileName>osMain.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osMain.h</FilePath>
             </File>
             <File>
               <FileName>osMemory.h</FileName>

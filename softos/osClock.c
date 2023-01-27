@@ -20,7 +20,7 @@
 /*
                                                   <引用文件区>
 */
-#include "osMain.h"
+#include "osConfig.h"
 #include "osClock.h"
 
 /*
@@ -54,11 +54,11 @@ osErrorValue osClockInit(void)
 }
 /*
 
- *@函数名称: osTime_Handler
+ *@函数名称: osClockTimePulse
 
  *@函数版本: 1.0.0
 
- *@函数功能: 系统时钟处理
+ *@函数功能: 系统时钟脉冲处理
 
  *@输入参数: 无
 
@@ -79,9 +79,9 @@ void osClockTimePulse(void)
     /*----------------------------------计时---------------------------------------*/
 	#if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
 	#if (osClockTimePeriod > osClockTimePeriodStandard)
-	osTime. TSRT = osTime. TSRT + (osClockTimePeriod / osClockTimePeriodStandard);//系统运行时长进行计时
+	osTime. TSRT += (osClockTimePeriod / osClockTimePeriodStandard);//系统运行时长进行计时
 	#else
-	osTime. TSRT = osTime. TSRT + 1;//系统运行时长进行计时
+	osTime. TSRT += 1;//系统运行时长进行计时
 	#endif
 	#endif
      /*----------------------------------统计---------------------------------------*/
@@ -186,6 +186,10 @@ void osClockTimePulse(void)
 	}
 	#endif
 }
+
+
+
+
 
 /*
                                                   FILE-END

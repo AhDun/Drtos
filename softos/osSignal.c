@@ -20,7 +20,7 @@
 /*
                                                   <引用文件区>
 */
-#include "osMain.h"
+#include "osConfig.h"
 #include "osSignal.h"
 /*
 
@@ -191,7 +191,7 @@ static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 			}
 			TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf1 -> TaskInfo;
 			if(RunTask_TIT -> TPL < TaskInfoTable_Buf -> TPL){
-				if(SemaphoreToken_Buf2 == NULL){
+				if(SemaphoreToken_Buf2 == NULL){//
 					SemaphoreToken_Buf -> DownAddr = (_NextAddr*)ST -> SP;
 					ST -> SP = (SemaphoreToken*)SemaphoreToken_Buf;
 				}else{
@@ -202,8 +202,8 @@ static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 				osTaskSwitch_Enable();//触发异常,进行任务切换
 				return (OK);
 			}else{
-				SemaphoreToken_Buf2 = SemaphoreToken_Buf1;
-				SemaphoreToken_Buf1 = (SemaphoreToken*)SemaphoreToken_Buf1 -> DownAddr;
+				SemaphoreToken_Buf2 = SemaphoreToken_Buf1;//备份当前令牌
+				SemaphoreToken_Buf1 = (SemaphoreToken*)SemaphoreToken_Buf1 -> DownAddr;//加载下一个令牌
 			}
 		}
 	}
@@ -213,7 +213,7 @@ static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 osErrorValue osSignalUseWait(SemaphoreTable* ST)
 {
 	TaskInfoTable* TIT;
-	_uList* uList;
+	SemaphoreToken* SemaphoreToken_Buf;
 	switch(ST ->ST){
 		case Signal_Binary:	
 							if(ST -> SP != NULL){
@@ -224,8 +224,8 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 							}
 		case Signal_Mutual:
 							if(ST -> SP != NULL){
-								uList = (_uList*)ST -> SP;
-								TIT = (TaskInfoTable*)uList -> Body;
+								SemaphoreToken_Buf = (SemaphoreToken*)ST -> SP;
+								TIT = (TaskInfoTable*)SemaphoreToken_Buf -> TaskInfo;
 								if(RunTask_TIT -> TPL < TIT -> TPL){
 									TIT -> TPL = RunTask_TIT -> TPL;//
 								}
@@ -248,30 +248,6 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 	}
 }
 
-
-static osErrorValue osSignalFreeToken(SemaphoreTable* ST)
-{
-	SemaphoreToken* SemaphoreToken_Buf;
-	TaskInfoTable*	TaskInfoTable_Buf;
-
-
-	if(ST -> SP != NULL){
-		SemaphoreToken_Buf = (SemaphoreToken*)ST -> SP;
-		TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf  -> TaskInfo;
-		TaskInfoTable_Buf -> TC = Task_State_Up_IN;  //主动挂起(挂起态)
-		ST -> SP = (SemaphoreToken*)SemaphoreToken_Buf -> DownAddr;
-		if(osMemoryFree(SemaphoreToken_Buf) != OK){
-			return (Error);
-		}
-		if(TaskInfoTable_Buf -> TPL < RunTask_TIT -> TPL){
-			osTaskSwitch_Enable();//触发异常,进行任务切换
-		}
-		return (OK);
-	}else{
-		return (Error);
-	}
-
-}
 /*
 
  *@函数名称: osSignalFree
@@ -289,16 +265,35 @@ static osErrorValue osSignalFreeToken(SemaphoreTable* ST)
 */
 osErrorValue osSignalFree(SemaphoreTable* ST)
 {
+	SemaphoreToken* SemaphoreToken_Buf;
+	TaskInfoTable*	TaskInfoTable_Buf;
+
 	switch(ST ->ST){
 		case Signal_Binary:
-							return osSignalFreeToken(ST);
+							break;
 		case Signal_Mutual:
 							RunTask_TIT -> TPL = RunTask_TIT -> TPLb;
-							return osSignalFreeToken(ST);
+							break;
 		case Signal_Count:
 							ST -> SV = ST -> SV + 1;
-							return osSignalFreeToken(ST);
+							break;
 		default:return(Error);
+	}
+
+	if(ST -> SP != NULL){
+		SemaphoreToken_Buf = (SemaphoreToken*)ST -> SP;
+		TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf  -> TaskInfo;
+		TaskInfoTable_Buf -> TC = Task_State_Up_IN;  //主动挂起(挂起态)
+		ST -> SP = (SemaphoreToken*)SemaphoreToken_Buf -> DownAddr;
+		if(osMemoryFree(SemaphoreToken_Buf) != OK){
+			return (Error);
+		}
+		if(TaskInfoTable_Buf -> TPL < RunTask_TIT -> TPL){
+			osTaskSwitch_Enable();//触发异常,进行任务切换
+		}
+		return (OK);
+	}else{
+		return (Error);
 	}
 }
 
@@ -320,19 +315,16 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 osErrorValue osSignalLogout(SemaphoreTable* ST)
 {
 	#if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
+	ST -> SV = 0;//将信号值设为零
+	ST -> ST = 0;//写入信号类型
+	ST -> SP = 0;
 	#if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
 
 	if(osMemoryFree((u8*)ST) == Error){//需要把信号量的所占内存释放
 		return (Error);//释放内存时,发生错误,返回错误
 	}
-	
-	#endif
-
-
-	ST -> SV = 0;//将信号值设为零
-	ST -> ST = 0;//写入信号类型
-	ST -> SP = 0;
 	return (OK);//注销成功!返回OK
+	#endif
 	#else 
 	return (Error);//注销成功!返回OK
 	#endif

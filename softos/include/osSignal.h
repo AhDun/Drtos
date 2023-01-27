@@ -26,7 +26,7 @@
                                                   <引用文件区>
 */
 #include "main.h"
-#include "osMain.h"
+#include "osConfig.h"
 //#include "osTask.h"
 /*
                                                   <宏定义区>
@@ -52,7 +52,7 @@
 /*
                                                   数据类型别名声明区
 */
-typedef     u32     _SemaphoreValue;
+typedef     u8     _SemaphoreValue;
 typedef     u8      _SemaphoreType;
 typedef		u32		_SignalPost;
 typedef		u32		_TaskInfo;

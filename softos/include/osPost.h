@@ -24,7 +24,7 @@
                                                   <引用文件区>
 */
 #include "main.h"
-#include "osMain.h"
+#include "osConfig.h"
 #include "osTask.h"
 /*
                                                   <宏定义区>
@@ -50,22 +50,6 @@ typedef struct
 /*
                                                   <函数声明区>
 */
-/*
-
- *@函数名称: osPostInit
-
- *@函数版本: 1.0.0
-
- *@函数功能: 初始化邮箱
-
- *@输入参数: 无
-
- *@返 回 值: 函数错误返回值 (0:表示初始化成功，-1:表示初始化失败)
-
- *@注   释: 无
-
-*/
-osErrorValue osPostInit(void);
 /*
 
  *@函数名称: osPostSend

@@ -2,7 +2,7 @@
 #define __LED_H_
 
 #include "main.h"
-#include "osMain.h"
+#include "osConfig.h"
 
 #define delay_ms(a)  osTaskDelayMs(a)
 

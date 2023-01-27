@@ -20,9 +20,8 @@ int Get_Temperture(void);
 
 void Task1_Func(char* a)
 {
-	u8 b;
 	RTC_TimeTypeDef RTC_TimeStruct;
-	u8 buf[20];
+	u8* buf = osMemoryMalloc(20);
 	TFTLCD_Init();			//LCD≥ı ºªØ
 	print(a);
 	osPostSend((u32*)"hello Main",osTaskNameToTable("Main"));
@@ -40,9 +39,7 @@ void Task1_Func(char* a)
 	while(1) 
 	{
         RTC_GetTime(RTC_Format_BIN,&RTC_TimeStruct);
-		for(b = 0; b < 20;b++){
-			buf[b] = ' ';
-		}
+		osMemoryReset(buf,' ');
         sprint((char *)buf,"RTC:%2d:%2d:%2d",RTC_TimeStruct.RTC_Hours,RTC_TimeStruct.RTC_Minutes,RTC_TimeStruct.RTC_Seconds);
 		FRONT_COLOR=YELLOW;
 		BACK_COLOR=BLACK;

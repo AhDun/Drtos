@@ -146,7 +146,7 @@ void* uLinkListReadEndAndRemvoe(void* LinkListHeadAddr);
 /*
                                                   <引用文件区>
 */
-#include "osMain.h"
+#include "osConfig.h"
 
 #endif
 /*

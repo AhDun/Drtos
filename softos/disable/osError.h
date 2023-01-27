@@ -25,14 +25,14 @@
 /*
                                                   <宏定义区>
 */
-#define osErrorDebug(a,b,c) print(a,b,c)
+//#define osErrorDebug(a,b,c) print(a,b,c)
 
 /*
                                                   <自定数据类型声明区>
 */
 
 
-typedef s32 osErrorValue;//函数错误返回值
+
 
 /*
                                                   <数据声明区>
@@ -41,7 +41,7 @@ typedef s32 osErrorValue;//函数错误返回值
 /*
                                                   <函数声明区>
 */
-void osTaskError_HardFault(void);
+//void osTaskError_HardFault(void);
 
 #endif
 /*

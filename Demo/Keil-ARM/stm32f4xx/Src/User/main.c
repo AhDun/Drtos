@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
 	//osMemoryMalloc(25000);
 
-	print("%d",osTaskLogin(
+	print("%X",osTaskLogin(
 	"RTC", 			                    //任务名称
 	Task1_Func,			            //任务地址
 	Task1_Stack_size,		                    //任务栈长度
@@ -93,6 +93,7 @@ int main(int argc, char *argv[])
 	);
 
 
+	//osTaskLogout("LED2");
 
 	while(1){
 //		for(_tr0 = 0;_tr0 < TST.TLMA;_tr0++){

@@ -149,7 +149,7 @@
 /*
                                                   <数据声明区>
 */
-typedef s32 osErrorValue;//函数错误返回值
+typedef int32_t osErrorValue;//函数错误返回值
 
 /*
                                                   <引用文件区>

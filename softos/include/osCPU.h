@@ -57,9 +57,9 @@ void INTX_DISABLE(void);
 
 void INTX_ENABLE(void);
 
-__asm  void osTASK_Stack_Init(u32* tpp,u32* tsa,u32* eca,u32* tsas);
+__asm  void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas);
 
-__asm void osTASK_START(u32* tsas);
+__asm void osTASK_START(uint32_t* tsas);
 
 __asm void CPU_PendSV(void);
 

@@ -31,7 +31,7 @@
 
 #define osPostHead		1	 //读邮件顺序  1：正序 0：倒序
 
-#define osPostDebugError_Enable 1 //
+#define osPostDebugError_Enable 1 //邮箱错误DeBug  1:开启Debug输出 0:关闭Debug输出
 
 #define osPostDebugError	osDebugError 
 
@@ -39,7 +39,7 @@
                                                   <数据声明区>
 */
 
-typedef		u32		 _PostBody;//邮件主体
+typedef		uint32_t		 _PostBody;//邮件主体
 //邮箱表单{
 typedef struct 
 {
@@ -84,7 +84,7 @@ osErrorValue osPostSend(void* PB,TaskInfoTable* TIT);
  *@注   释: 无
 
 */
-u32* osPostRead(void);
+uint32_t* osPostRead(void);
 /*
 
  *@函数名称: osPostRead_Wait
@@ -100,7 +100,7 @@ u32* osPostRead(void);
  *@注   释: 无
 
 */
-u32* osPostReadWait(void);
+uint32_t* osPostReadWait(void);
 
 #endif
 /*

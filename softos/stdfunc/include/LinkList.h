@@ -30,10 +30,10 @@
 /*
                                                   <自定数据类型声明区>
 */
-typedef	s32		_LinkListXError;
-typedef	u8		_xLink;
-typedef	u32		_NextAddr;
-typedef	u32		_Body;
+typedef	int32_t		_LinkListXError;
+typedef	uint8_t		_xLink;
+typedef	uint32_t		_NextAddr;
+typedef	uint32_t		_Body;
 typedef	struct
 {
 	_NextAddr*  DownAddr;//下一个表的地址

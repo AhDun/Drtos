@@ -137,6 +137,10 @@
 	#define osProtect_ENABLE() 				INTX_DISABLE()//进入临界保护
 #endif
 #define osTaskSwitch_Enable() 			do{TST.TSS = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
+#if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
+#define osTaskLogout(TN) 	osTaskLogout_Write(osTaskNameToTable(TN))
+#endif
+
 //#define osTaskSwitch_Strong_Enable() 	CPU_SVC()//触发强制任务切换
 
 //#define osTaskDebug(a,b) print("\nosTask: %s:%s\n",a,b)//DeBug输出函数
@@ -156,31 +160,31 @@
                                                   数据类型别名声明区
 */
 
-typedef     u8		_Task_Set_Pv;//
+typedef     uint8_t		_Task_Set_Pv;//
 
 
 //任务表{
 #if _TaskIDMax<= 253
-	typedef 	u8 	_TaskID;//任务ID
+	typedef 	uint8_t 	_TaskID;//任务ID
 #endif
-typedef 	u8 		_TaskName;//任务名称
-typedef 	u8 		_TaskConfig;//任务控制量
-typedef 	u32 	_TaskHandle;//任务栈地址
-typedef 	u32 	_TaskStackSize;//任务栈长度
-typedef 	u32 	_TaskSemaphore;//任务信号量
-typedef 	u32 	_TaskTimeWheel;//任务时间轮片
+typedef 	uint8_t 		_TaskName;//任务名称
+typedef 	uint8_t 		_TaskConfig;//任务控制量
+typedef 	uint32_t 	_TaskHandle;//任务栈地址
+typedef 	uint32_t 	_TaskStackSize;//任务栈长度
+typedef 	uint32_t 	_TaskSemaphore;//任务信号量
+typedef 	uint32_t 	_TaskTimeWheel;//任务时间轮片
 #if _TaskPriorityLevelMax <= 126 && _TaskPriorityLevelMin >= -127
-	typedef 	s8 		_TaskPriorityLevel;//任务优先级
+	typedef 	int8_t 		_TaskPriorityLevel;//任务优先级
 #endif
-typedef		u32		_PostForm;
-typedef 	u32 	_TaskAddr;
-typedef		u32		_TaskRealSP;
-typedef		u32		_TaskTimeFlag;
+typedef		uint32_t		_PostForm;
+typedef 	uint32_t 	_TaskAddr;
+typedef		uint32_t		_TaskRealSP;
+typedef		uint32_t		_TaskTimeFlag;
 #if (osPerformanceStatistics_Enable > 0) //开启了性能统计
-typedef     u16     _TaskOccupyTime;//任务占用时长
-typedef     u16      _TaskOccupyRatio;//任务占用比
+typedef     uint16_t     _TaskOccupyTime;//任务占用时长
+typedef     uint16_t      _TaskOccupyRatio;//任务占用比
 #endif
-typedef     u32     _TaskParameterPass;//任务传参
+typedef     uint32_t     _TaskParameterPass;//任务传参
 
 
 typedef struct
@@ -217,10 +221,10 @@ typedef struct
 //}
 
 //任务调度状态表{
-typedef		u8		_TaskListMaximumActivity;//任务最大活动量
-typedef 	u8		_TaskDispatchNum;//任务调度状态
-typedef     u8      _TaskSwitchState;//任务调度计数
-typedef		u8		_TaskISRFlag;
+typedef		uint8_t		_TaskListMaximumActivity;//任务最大活动量
+typedef 	uint8_t		_TaskDispatchNum;//任务调度状态
+typedef     uint8_t      _TaskSwitchState;//任务调度计数
+typedef		uint8_t		_TaskISRFlag;
 typedef struct
 {
 	_TaskSwitchState	    TSS;//任务调度状态
@@ -235,7 +239,7 @@ typedef struct
 /*
                                                   <数据声明区>
 */
-extern u32 NULL_Value;//一个空值
+extern uint32_t NULL_Value;//一个空值
 extern TaskInfoTable*	RunTask_TIT;//当前正在运行的任务表指针
 
 extern TaskList TL[TaskListLength];//任务轮询表
@@ -278,11 +282,11 @@ osErrorValue osTaskInit(void);
 			 TPP 	任务传参
 			 TC 	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
 	
- *@返 回 值: osErrorValue -		函数错误返回值 (-1: 表示创建任务发生错误,> - 1: 注册后任务ID，表示已完成注册)
+ *@返 回 值: 0:注册失败		任务句柄值:注册成功
 			 
  *@注    释: 无
 */
-osErrorValue osTaskLogin(
+TaskInfoTable* osTaskLogin(
 	_TaskName *TN,
 	void*  TA,	
 	_TaskStackSize  TSS,
@@ -291,9 +295,12 @@ osErrorValue osTaskLogin(
     void*  TPP, 
     _TaskConfig  TC
 );
-osErrorValue osTaskRegister_Write(
+
+TaskInfoTable* osTaskRegister_Write(
 #else //不启用任务栈自动分配
-osErrorValue osTaskLogin(
+
+TaskInfoTable* osTaskLogin(
+
 #endif 
 	TaskInfoTable* TIT,
 	_TaskName *TN,
@@ -306,8 +313,10 @@ osErrorValue osTaskLogin(
     _TaskConfig  TC
 );
 
+
+
 #if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
-osErrorValue osTaskLogout(_TaskName *TN);
+//osErrorValue osTaskLogout(_TaskName *TN);
 osErrorValue osTaskLogout_Write(TaskInfoTable* TIT);
 #else 							//不启用任务栈自动分配
 osErrorValue	osTaskLogout(TaskInfoTable* TIT);
@@ -358,7 +367,7 @@ void osTaskNext(void);
  *@注    释: 无
 
 */
-osErrorValue osTaskDelayMs(u32 ms);
+osErrorValue osTaskDelayMs(uint32_t ms);
 /*
 
  *@函数名称: osTaskDelayUs
@@ -374,7 +383,7 @@ osErrorValue osTaskDelayMs(u32 ms);
  *@注    释: 无
 
 */
-osErrorValue osTaskDelayUs(u32 us);
+osErrorValue osTaskDelayUs(uint32_t us);
 
 //extern osErrorValue osTaskSwitch_State(void);
 ///*
@@ -442,7 +451,7 @@ osErrorValue osTaskAddrReplace(TaskInfoTable* TIT,void* NewTA);
 */
 osErrorValue osTaskExit(void);
 
-osErrorValue osTaskErrorHardFault(u32 pc,u32 psp);
+osErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp);
 
 
 osErrorValue osTaskSpeedTest(void);

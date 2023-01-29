@@ -89,17 +89,17 @@ osErrorValue osPostSend(void* PB,TaskInfoTable* TIT)
 
  *@函数功能: 读取邮件
 
- *@输入参数: u8* ResiduePost(邮箱指针)
+ *@输入参数: uint8_t* ResiduePost(邮箱指针)
 
  *@返 回 值: 邮件内容
 
  *@注   释: 无
 
 */
-u32* osPostRead(void)
+uint32_t* osPostRead(void)
 {
 	PostForm* PF;
-	u32*	Buf;
+	uint32_t*	Buf;
 
 	if(RunTask_TIT -> PF != NULL){
 		#if (osPostHead > 0)
@@ -137,7 +137,7 @@ u32* osPostRead(void)
  *@注   释: 无
 
 */
-u32* osPostReadWait(void)
+uint32_t* osPostReadWait(void)
 {
 	if(RunTask_TIT -> PF == 0){//没有邮件,进行等待
 		while(TST.TSS != TaskSwitch_Ready);//查询任务可切换态,如果是不可切换,无限循环,直到可切换态

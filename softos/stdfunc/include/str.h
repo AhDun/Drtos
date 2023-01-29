@@ -54,7 +54,7 @@ signed char CharComp(signed char *strs,signed char *strc);
 
  *@函数功能: 字符串比较
 
- *@输入参数: s8 *strs(原字符串),s8 *strc(比较字符串)
+ *@输入参数: int8_t *strs(原字符串),int8_t *strc(比较字符串)
 
  *@返 回 值: 无
 
@@ -71,7 +71,7 @@ signed char StrComp(signed char *strs,signed char *strc);
 
  *@函数功能: 字符串比较
 
- *@输入参数: s8 *strs(原字符串),s8 *strc(比较字符串)
+ *@输入参数: int8_t *strs(原字符串),int8_t *strc(比较字符串)
 
  *@返 回 值: 无
 
@@ -87,7 +87,7 @@ signed char StrCutComp(signed char *strs,signed char *strc,signed char cutchar);
 
  *@函数功能: 截止式比较字符串
 
- *@输入参数: s8 *strs(原字符串),s8 *strc(比较字符串),s8 cutchar(截止字符)
+ *@输入参数: int8_t *strs(原字符串),int8_t *strc(比较字符串),int8_t cutchar(截止字符)
 
  *@返 回 值: 无
 

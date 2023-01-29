@@ -7,8 +7,6 @@
 
  *@文件作者: AhDun (mail: ahdunxx@163.com)
 
- *
-
  *@注    释: 
 */
 
@@ -31,6 +29,7 @@
                                                   <宏定义区>
 */
 #define ActionValue_Enable 	1	//操作值  1：启用 0：禁用
+
 #define DataTypeSize_Enabled 0	//数据类型长度  1：启用 0：禁用
 		/*如果使用标准的数据类型库，如:stdint.h，就无需启用此数据类型长度*/
 #define DataType_Enabled 	0	//数据类型  1：启用 0：禁用
@@ -62,7 +61,7 @@
 #define NULL 					  0u //空
 #define Pass					  0u //通过
 #define Unknown                   -1 //未知
-#define Head					  0  //首部
+#define Head					  0u  //首部
 //}
 //}
 #endif

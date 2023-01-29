@@ -49,13 +49,13 @@
 _LinkListXError uLinkListAdd(void* LinkListHeadAddr,void*  AdduList)
 {
 	_uList* uList_Buf;
-	u32* LinkListHeadAddr_Buf = (u32*)LinkListHeadAddr;
+	uint32_t* LinkListHeadAddr_Buf = (uint32_t*)LinkListHeadAddr;
 
 	while(*LinkListHeadAddr_Buf != NULL){
 		uList_Buf = (_uList*)LinkListHeadAddr_Buf;
 		LinkListHeadAddr_Buf = uList_Buf -> DownAddr;
 	}
-	*LinkListHeadAddr_Buf = (u32)AdduList;
+	*LinkListHeadAddr_Buf = (uint32_t)AdduList;
 	return (OK);
 }
 
@@ -64,7 +64,7 @@ _LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList)
 {
 	_uList* uList_Buf;
 	_uList* uList_Buf1;
-	u32* LinkListHeadAddr_Buf = (u32*)LinkListHeadAddr;
+	uint32_t* LinkListHeadAddr_Buf = (uint32_t*)LinkListHeadAddr;
 
 	if(*LinkListHeadAddr_Buf != NULL){
 		uList_Buf = (_uList*)LinkListHeadAddr_Buf;
@@ -77,7 +77,7 @@ _LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList)
 			}
 		}
 		if(uList_Buf == uList_Buf1){
-			*LinkListHeadAddr_Buf = (u32)uList_Buf -> DownAddr;
+			*LinkListHeadAddr_Buf = (uint32_t)uList_Buf -> DownAddr;
 		}else{
 			uList_Buf1 -> DownAddr = uList_Buf -> DownAddr;
 		}
@@ -96,7 +96,7 @@ _LinkListXError uLinkListHeadRemvoe(void* LinkListHeadAddr)
 void* uLinkListReadEnd(void* LinkListHeadAddr)
 {
 	_uList* uList_Buf;
-	u32* LinkListHeadAddr_Buf = (u32*)LinkListHeadAddr;
+	uint32_t* LinkListHeadAddr_Buf = (uint32_t*)LinkListHeadAddr;
 
 	if(*LinkListHeadAddr_Buf != NULL){
 		uList_Buf = (_uList*)LinkListHeadAddr_Buf;
@@ -116,7 +116,7 @@ void* uLinkListReadEndAndRemvoe(void* LinkListHeadAddr)
 {
 	_uList* uList_Buf;
 	_uList* uList_Buf1;
-	u32* LinkListHeadAddr_Buf = (u32*)LinkListHeadAddr;
+	uint32_t* LinkListHeadAddr_Buf = (uint32_t*)LinkListHeadAddr;
 
 	if(*LinkListHeadAddr_Buf != NULL){
 		uList_Buf = (_uList*)LinkListHeadAddr_Buf;

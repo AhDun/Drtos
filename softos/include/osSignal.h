@@ -25,7 +25,6 @@
 */
 #include "main.h"
 #include "osConfig.h"
-//#include "osTask.h"
 /*
                                                   <宏定义区>
 */
@@ -46,7 +45,7 @@
 #define osSignalBinary_Enable //启用二值信号量
 #define osSignalCount_Enable  //启用计数信号量
 
-#define osSignalDebugError_Enable 1 //
+#define osSignalDebugError_Enable 1 //信号量错误DeBug  1:开启Debug输出 0:关闭Debug输出
 
 #define osSignalDebugError	osDebugError 
 
@@ -54,29 +53,34 @@
 /*
                                                   数据类型别名声明区
 */
-typedef     u8     _SemaphoreValue;
-typedef     u8      _SemaphoreType;
-typedef		u32		_SignalPost;
-typedef		u32		_TaskInfo;
+
 /*
                                                   结构式数据类型别名声明区
 */
+//信号量令牌{
+typedef		uint32_t		_TaskInfo;
 typedef struct
 {
 	_NextAddr*  DownAddr;//下一个表的地址
-	_TaskInfo*	TaskInfo;
-}SemaphoreToken;//信号量令牌
+	_TaskInfo*	TaskInfo;//任务句柄
+}SemaphoreToken;
+//}
 
+//信号量{
+typedef     uint8_t     _SemaphoreValue;
+typedef     uint8_t      _SemaphoreType;
 typedef struct
 {
     _SemaphoreValue 	 SV;//信号值
     _SemaphoreType   	 ST;//信号的类型
 	SemaphoreToken*		 SP;//信号量令牌链头
-}SemaphoreTable;//信号量
+}SemaphoreTable;
+//}
 
 /*
                                                   <数据声明区>
 */
+
 /*
                                                   <函数声明区>
 */

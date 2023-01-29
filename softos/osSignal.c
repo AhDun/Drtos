@@ -230,9 +230,11 @@ static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 
 osErrorValue osSignalUseWait(SemaphoreTable* ST)
 {
+#if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
 	TaskInfoTable* TIT;
 	SemaphoreToken* SemaphoreToken_Buf;
 	switch(ST ->ST){
+#ifdef osSignalBinary_Enable 
 		case Signal_Binary:	
 							if(ST -> SP != NULL){
 								return osSignalWaitToken(ST);
@@ -240,6 +242,8 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 							}else{
 								return osSignalApplyToken(ST);
 							}
+#endif
+#ifdef osSignalMutual_Enable 
 		case Signal_Mutual:
 							if(ST -> SP != NULL){
 								SemaphoreToken_Buf = (SemaphoreToken*)ST -> SP;
@@ -251,6 +255,8 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 							}else{
 								return osSignalApplyToken(ST);
 							}
+#endif
+#ifdef osSignalCount_Enable
 		case Signal_Count:
 							if(ST -> SV > 0){
 								ST -> SV =  ST -> SV - 1;
@@ -262,12 +268,14 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 									return osSignalApplyToken(ST);
 								}
 							}
+#endif
 		default:
 				#if (osSignalDebugError_Enable > 0)
 				osSignalDebugError("占用信号量时输入类型错误 %s\n",RunTask_TIT -> TN);
 				#endif
 				return(Error);
 	}
+#endif
 }
 
 /*
@@ -287,25 +295,31 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 */
 osErrorValue osSignalFree(SemaphoreTable* ST)
 {
+#if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
 	SemaphoreToken* SemaphoreToken_Buf;
 	TaskInfoTable*	TaskInfoTable_Buf;
 
 	switch(ST ->ST){
+#ifdef osSignalBinary_Enable
 		case Signal_Binary:
 							break;
+#endif
+#ifdef osSignalMutual_Enable
 		case Signal_Mutual:
 							RunTask_TIT -> TPL = RunTask_TIT -> TPLb;
 							break;
+#endif
+#ifdef osSignalCount_Enable
 		case Signal_Count:
 							ST -> SV = ST -> SV + 1;
 							break;
+#endif
 		default:
 				#if (osSignalDebugError_Enable > 0)
 				osSignalDebugError("释放信号量时类型错误 %s\n",RunTask_TIT -> TN);
 				#endif
 				return(Error);
 	}
-
 	if(ST -> SP != NULL){
 		SemaphoreToken_Buf = (SemaphoreToken*)ST -> SP;
 		TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf  -> TaskInfo;
@@ -327,6 +341,7 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 		#endif
 		return (Error);
 	}
+	#endif
 }
 
 /*
@@ -352,7 +367,7 @@ osErrorValue osSignalLogout(SemaphoreTable* ST)
 	ST -> SP = 0;
 	#if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
 
-	if(osMemoryFree((u8*)ST) == Error){//需要把信号量的所占内存释放
+	if(osMemoryFree((uint8_t*)ST) == Error){//需要把信号量的所占内存释放
 		#if (osSignalDebugError_Enable > 0)
 		osSignalDebugError("注销信号量时释放内存错误 %s\n",RunTask_TIT -> TN);
 		#endif

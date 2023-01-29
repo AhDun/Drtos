@@ -38,7 +38,7 @@
 //}
 
 //内存配置{
-#define MemTank_Max 	64 * 1024 //内存池大小配置
+#define MemTank_Max 	16 * 1024 //内存池大小配置
 
 
 #define MemoryProtect_Enable 0 // 内存保护配置 	1:开启保护 0:关闭保护	
@@ -49,14 +49,9 @@
 
 #define osMemoryDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
-
 #define osMemorySequence_Enable 0 //内存顺序分配   1：启用 0：禁用
 
-#if (osMemorySequence_Enable == 0)
-#define osMemoryMerge_Enable   1 //内存块合并 1：启用 0：禁用
-#endif
 //}
-
 
 
 /*
@@ -64,15 +59,14 @@
 */
 
 
-
-typedef u8	_MemoryUnit;
+typedef uint8_t	_MemoryUnit;//内存池
 
 extern _MemoryUnit*    	MemoryNextAddr;//内存新地址
 extern _MemoryUnit 		MemoryPool[MemTank_Max];//内存池
 
 //内存块结构{
-typedef u8 	_MemoryFlag;
-typedef u16 _MemoryLength;
+typedef uint8_t 	_MemoryFlag;
+typedef uint16_t _MemoryLength;
 
 typedef  struct
 { 
@@ -81,7 +75,6 @@ typedef  struct
 
 }MemoryStruct;
 //}
-
 
 /*
                                                   <函数声明区>
@@ -117,7 +110,7 @@ osErrorValue  osMemoryInit(void);
  *@注    释: 无
 
 */
-void* osMemoryMalloc(u32 MemSize);
+void* osMemoryMalloc(uint32_t MemSize);
 /*
 
  *@函数名称: osMemoryReset
@@ -134,7 +127,7 @@ void* osMemoryMalloc(u32 MemSize);
  *@注    释: 无
 
 */
-void* osMemoryReset(void* addr,u8 data);
+void* osMemoryReset(void* addr,uint8_t data);
 /*
 
  *@函数名称: osMemoryFree
@@ -166,7 +159,7 @@ osErrorValue osMemoryFree(void* addr);
  *@注    释: 无
 
 */
-u32 osMemoryGetFreeValue(void);
+uint32_t osMemoryGetFreeValue(void);
 /*
 
  *@函数名称: osMemoryGetPassValue
@@ -182,7 +175,7 @@ u32 osMemoryGetFreeValue(void);
  *@注    释: 无
 
 */
-u32 osMemoryGetPassValue(void);
+uint32_t osMemoryGetPassValue(void);
 /*
 
  *@函数名称: osMemoryGetAllValue
@@ -198,7 +191,7 @@ u32 osMemoryGetPassValue(void);
  *@注    释: 无
 
 */
-u32 osMemoryGetAllValue(void);
+uint32_t osMemoryGetAllValue(void);
 /*
 
  *@函数名称: osMemorySum

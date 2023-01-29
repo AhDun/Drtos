@@ -106,7 +106,7 @@ osErrorValue osClockInit(void)
 void osClockTimePulse(void)
 {
 	/*本函数已在中断响应入口中，下面是这个函数的副本*/
-	u32 _tr0;//变量初始化
+	uint32_t _tr0;//变量初始化
 
 	#if (osClockTimePeriod < osClockTimePeriodStandard) //
 	if(++osTime.CTPV >= (osClockTimePeriodStandard /osClockTimePeriod)){

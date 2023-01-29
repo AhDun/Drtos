@@ -31,8 +31,8 @@
                                                   <函数区>
 */
 
-//const u32 NVIC_PendSV = 0xE000ED04;//PendSV
-//const u32 NVIC_PendSV_SET = 0x10000000;
+//const uint32_t NVIC_PendSV = 0xE000ED04;//PendSV
+//const uint32_t NVIC_PendSV_SET = 0x10000000;
 
 /*
 
@@ -42,14 +42,14 @@
 
  *@函数功能: 任务栈初始化
 
- *@输入参数: u32 tta(任务传参) ,u32 *tsa(任务开始地址),u32 *eca(任务结束回调地址),u32 *tsas(任务栈地址)
+ *@输入参数: uint32_t tta(任务传参) ,uint32_t *tsa(任务开始地址),uint32_t *eca(任务结束回调地址),uint32_t *tsas(任务栈地址)
 
  *@返 回 值: 无
 
  *@注    释: 无
 
 */
-__asm void osTASK_Stack_Init(u32* tpp,u32* tsa,u32* eca,u32* tsas)
+__asm void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
 						  //R0      ,R1      ,R2      ,R3
 						  //C编译器函数各个传参对应的寄存器
 {	
@@ -110,14 +110,14 @@ __asm void osTASK_Stack_Init(u32* tpp,u32* tsa,u32* eca,u32* tsas)
 
  *@函数功能: 启动第一个任务
 
- *@输入参数: u32 *tsas(任务栈地址)
+ *@输入参数: uint32_t *tsas(任务栈地址)
 
  *@返 回 值: 无
 
  *@注   释: 无
 
 */
-__asm void osTASK_START(u32* tsas)
+__asm void osTASK_START(uint32_t* tsas)
 								//R0
 								//C编译器函数各个传参对应的寄存器
 {

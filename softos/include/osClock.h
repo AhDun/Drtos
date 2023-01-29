@@ -38,12 +38,12 @@
 */
 
 #if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
-typedef u32 _TotalSystemRunningTime;//系统运行时间
-typedef u32 _TaskISRRunningTime;//系统运行时间
+typedef uint32_t _TotalSystemRunningTime;//系统运行时间
+typedef uint32_t _TaskISRRunningTime;//系统运行时间
 #endif
-typedef	u32	_TaskTimeWheelMargin;//任务轮片时间
+typedef	uint32_t	_TaskTimeWheelMargin;//任务轮片时间
 #if (osClockTimePeriod < osClockTimePeriodStandard)
-typedef u32 _ClockTimePeriodValue; //时间周期计数
+typedef uint32_t _ClockTimePeriodValue; //时间周期计数
 #endif
 
 //系统时间{
@@ -61,11 +61,11 @@ typedef struct
 //}
 
 #if (osPerformanceStatistics_Enable > 0)
-typedef  u8  	_CPUTaskOccupy;//
-typedef  u8  	_CPUISROccupy;//
-typedef	 u8 	_CPUSwitchOccupy;
-typedef		u32		_TaskSwitchConut;//任务调度次数
-typedef		u8		_TaskSwitchSpeedUs;//任务切换速度测试
+typedef  uint8_t  	_CPUTaskOccupy;//
+typedef  uint8_t  	_CPUISROccupy;//
+typedef	 uint8_t 	_CPUSwitchOccupy;
+typedef		uint32_t		_TaskSwitchConut;//任务调度次数
+typedef		uint8_t		_TaskSwitchSpeedUs;//任务切换速度测试
 
 //性能统计{
 typedef struct

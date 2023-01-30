@@ -176,7 +176,7 @@ typedef 	uint32_t 	_TaskTimeWheel;//任务时间轮片
 #if _TaskPriorityLevelMax <= 126 && _TaskPriorityLevelMin >= -127
 	typedef 	int8_t 		_TaskPriorityLevel;//任务优先级
 #endif
-typedef		uint32_t		_PostForm;
+typedef		uint32_t		_PostFormT;
 typedef 	uint32_t 	_TaskAddr;
 typedef		uint32_t		_TaskRealSP;
 typedef		uint32_t		_TaskTimeFlag;
@@ -199,7 +199,7 @@ typedef struct
 	_TaskPriorityLevel	TPLb;   //任务备用优先级
 #endif
 //#ifdef osPost_Enable
-	_PostForm*			PF;		//任务邮箱
+	_PostFormT			PF;		//任务邮箱
 //#endif
 	_TaskTimeWheel 		TTW;	//任务时间轮片
 	_TaskPriorityLevel 	TPL;	//任务优先级

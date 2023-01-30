@@ -43,10 +43,10 @@ typedef		uint32_t		 _PostBody;//邮件主体
 //邮箱表单{
 typedef struct 
 {
-	_NextAddr*  DownAddr;//下一个邮件的地址
+	_NextAddr	  DownAddr;//下一个邮件的地址
 	_PostBody*				PB;//邮件主体
 
-}PostForm;
+}_PostForm;
 //}
 
 /*

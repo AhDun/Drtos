@@ -225,7 +225,7 @@ TaskInfoTable* osTaskLogin(
 	TIT -> TSS = TSS;//写入任务栈长度
     TIT -> TPP = TPP;//写入任务传参
 
-	TIT	-> PF = (uint32_t*)NULL_Value;//任务邮箱消息设为零
+	TIT	-> PF = NULL;//任务邮箱消息设为零
 
 	#if (osClockTimePeriod > osClockTimePeriodStandard)//当时钟周期大于1000时，进行转换
 	TTW = TTW / (osClockTimePeriod / osClockTimePeriodStandard);

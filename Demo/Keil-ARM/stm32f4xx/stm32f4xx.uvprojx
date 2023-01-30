@@ -403,49 +403,44 @@
           <GroupName>OS</GroupName>
           <Files>
             <File>
-              <FileName>osConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osConfig.h</FilePath>
-            </File>
-            <File>
               <FileName>osClock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\osClock.c</FilePath>
-            </File>
-            <File>
-              <FileName>osCPU.asm</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\..\softos\osCPU.asm</FilePath>
+              <FilePath>..\..\..\softos\osClock.c</FilePath>
             </File>
             <File>
               <FileName>osCPU.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\osCPU.c</FilePath>
+              <FilePath>..\..\..\softos\osCPU.c</FilePath>
             </File>
             <File>
               <FileName>osMemory.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\osMemory.c</FilePath>
+              <FilePath>..\..\..\softos\osMemory.c</FilePath>
             </File>
             <File>
               <FileName>osPost.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\osPost.c</FilePath>
+              <FilePath>..\..\..\softos\osPost.c</FilePath>
             </File>
             <File>
               <FileName>osSignal.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\osSignal.c</FilePath>
+              <FilePath>..\..\..\softos\osSignal.c</FilePath>
             </File>
             <File>
               <FileName>osTask.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\osTask.c</FilePath>
+              <FilePath>..\..\..\softos\osTask.c</FilePath>
             </File>
             <File>
               <FileName>osClock.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\softos\include\osClock.h</FilePath>
+            </File>
+            <File>
+              <FileName>osConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\softos\include\osConfig.h</FilePath>
             </File>
             <File>
               <FileName>osCPU.h</FileName>
@@ -471,6 +466,11 @@
               <FileName>osTask.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\softos\include\osTask.h</FilePath>
+            </File>
+            <File>
+              <FileName>osCPU.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\softos\osCPU.asm</FilePath>
             </File>
           </Files>
         </Group>

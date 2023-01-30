@@ -61,7 +61,7 @@
 typedef		uint32_t		_TaskInfo;
 typedef struct
 {
-	_NextAddr*  DownAddr;//下一个表的地址
+	_NextAddr  DownAddr;//下一个表的地址
 	_TaskInfo*	TaskInfo;//任务句柄
 }SemaphoreToken;
 //}
@@ -73,7 +73,7 @@ typedef struct
 {
     _SemaphoreValue 	 SV;//信号值
     _SemaphoreType   	 ST;//信号的类型
-	SemaphoreToken*		 SP;//信号量令牌链头
+	_NextAddr		 	 SP;//信号量令牌链头
 }SemaphoreTable;
 //}
 

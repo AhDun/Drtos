@@ -95,7 +95,7 @@ void Task2_Func(void)
 			sprint((char *)buf,"%s  %d%ms  %d ",TL[a].TITA ->TN,TL[a].TITA -> TOR,TL[a].TITA -> TPL);
 			LCD_ShowString(10,270+(a*25),tftlcd_data.width,tftlcd_data.height,16,buf);
 		}
-		osTaskMonitor();
+		//osTaskMonitor();
 		osTaskDelayMs(1000);
 	}
 }

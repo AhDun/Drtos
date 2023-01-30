@@ -46,37 +46,32 @@
 */
 osErrorValue osPostSend(void* PB,TaskInfoTable* TIT)
 {
-	PostForm* PF;
+	_PostForm* PostForm;
 
-	if(TIT -> TI >= TST.TLMA){//如果写入任务ID不能大于任务活动量,否则返回错误
-		return (Error);//出现错误,返回Error
+	PostForm = osMemoryMalloc(sizeof(_PostForm));//申请内存
+	if(PostForm == NULL){//如果返回为空,说明申请失败
+		#if (osPostDebugError_Enable > 0)
+		osPostDebugError("发送邮件时申请内存失败 %s\n",RunTask_TIT -> TN);
+		#endif
+		return (Error);//返回错误
 	}else{
-		PF = osMemoryMalloc(sizeof(PostForm));//申请内存
-		if(PF == NULL){//如果返回为空,说明申请失败
-			#if (osPostDebugError_Enable > 0)
-			osPostDebugError("发送邮件时申请内存失败 %s\n",RunTask_TIT -> TN);
-			#endif
-			return (Error);//返回错误
-		}else{
-			PF -> PB = PB;
-			PF -> DownAddr = NULL;
+		PostForm -> PB = PB;
+		PostForm -> DownAddr = NULL;
 
-			uLinkListAdd(&TIT -> PF,&PF -> DownAddr);
-		}
-		if(TIT -> TPL <  RunTask_TIT -> TPL && TIT -> TC == Task_State_Up_PT){//如果这个任务高于当前工作运行任务栏的优先级，就占用
-			//TL[_tr0].TITA -> TC &= TIT_Task_State_TC_RST;//清除这个任务的状态位
+		uLinkListTailWrtie(&TIT -> PF,(uint32_t*)PostForm);
+	}
+	if(TIT -> TC == Task_State_Up_PT){
+		if(TIT -> TPL <  RunTask_TIT -> TPL){//如果这个任务高于当前工作运行任务栏的优先级，就占用
 			TIT -> TC = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
-			//RunTask_TIT -> TC &= TIT_Task_State_TC_RST;//清除正在运行任务的状态位
 			RunTask_TIT -> TC = Task_State_Up_TD;//将正在运行任务的状态设为轮片挂起(挂起态)
 			if(TST.TSS == TaskSwitch_Ready){
 				TST. TDN = TIT -> TI;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
 				osTaskSwitch_Enable();//触发任务切换
 			} 
-		}else if(TIT -> TC == Task_State_Up_PT){
+		}else{
 			TIT -> TC = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
 		}
 	}
-	//TIT -> TC = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
 	return (OK);//发送成功，返回OK
 }
 
@@ -98,19 +93,17 @@ osErrorValue osPostSend(void* PB,TaskInfoTable* TIT)
 */
 uint32_t* osPostRead(void)
 {
-	PostForm* PF;
+	_PostForm* PostForm;
 	uint32_t*	Buf;
 
 	if(RunTask_TIT -> PF != NULL){
 		#if (osPostHead > 0)
-		PF = (PostForm*)RunTask_TIT -> PF;
-		Buf = PF -> PB;
-		RunTask_TIT -> PF = PF -> DownAddr;
+		PostForm = (_PostForm*)uLinkListHeadRead(&RunTask_TIT -> PF);
 		#else
-		PF  =  uLinkListReadEndAndRemvoe(&RunTask_TIT -> PF);
-		Buf = PF -> PB;
+		PostForm  =  (_PostForm*)uLinkListTailRead(&RunTask_TIT -> PF);
 		#endif
-		if(osMemoryFree(PF) == Error){
+		Buf = PostForm -> PB;
+		if(osMemoryFree(PostForm) != OK){
 			#if (osPostDebugError_Enable > 0)
 			osPostDebugError("读取邮件时释放内存失败 %s\n",RunTask_TIT -> TN);
 			#endif

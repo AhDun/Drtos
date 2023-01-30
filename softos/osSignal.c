@@ -160,7 +160,7 @@ static osErrorValue osSignalApplyToken(SemaphoreTable* ST)
 	}else{
 		SemaphoreToken_Buf -> DownAddr = NULL;
 		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTask_TIT;
-		ST -> SP = (SemaphoreToken*)SemaphoreToken_Buf;
+		ST -> SP = (uint32_t)SemaphoreToken_Buf;
 		return (OK);
 	}
 }
@@ -184,8 +184,9 @@ static osErrorValue osSignalApplyToken(SemaphoreTable* ST)
 
 static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 {
+	_NextAddr* NextAddr_Buf;
+	_NextAddr NextAddr_Buf1;
 	SemaphoreToken* SemaphoreToken_Buf1;
-	SemaphoreToken* SemaphoreToken_Buf2;
 	TaskInfoTable*	TaskInfoTable_Buf;
 	SemaphoreToken* SemaphoreToken_Buf = osMemoryMalloc(sizeof(SemaphoreToken));//为信号量结构体申请内存
 	if(SemaphoreToken_Buf == NULL){
@@ -194,36 +195,32 @@ static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 		#endif
 		return (Error);
 	}else{
-
 		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTask_TIT;
 		SemaphoreToken_Buf -> DownAddr = NULL;
-
-		SemaphoreToken_Buf1 = (SemaphoreToken*)ST -> SP;
-		SemaphoreToken_Buf2 = NULL;
-		while(1){
-			if(SemaphoreToken_Buf1 -> DownAddr == NULL){
-				SemaphoreToken_Buf1 -> DownAddr = (_NextAddr*)SemaphoreToken_Buf;
-				RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
-				osTaskSwitch_Enable();//触发异常,进行任务切换
-				return (OK);
-			}
+	
+		NextAddr_Buf = &ST -> SP;
+		
+		while(*NextAddr_Buf != NULL){
+			SemaphoreToken_Buf1 = (SemaphoreToken*)*NextAddr_Buf;
 			TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf1 -> TaskInfo;
 			if(RunTask_TIT -> TPL < TaskInfoTable_Buf -> TPL){
-				if(SemaphoreToken_Buf2 == NULL){//
-					SemaphoreToken_Buf -> DownAddr = (_NextAddr*)ST -> SP;
-					ST -> SP = (SemaphoreToken*)SemaphoreToken_Buf;
-				}else{
-					SemaphoreToken_Buf -> DownAddr = (_NextAddr*)SemaphoreToken_Buf1;
-					SemaphoreToken_Buf2 -> DownAddr = (_NextAddr*)SemaphoreToken_Buf;
+				NextAddr_Buf1 = (_NextAddr)*NextAddr_Buf;
+				*NextAddr_Buf = (_NextAddr)SemaphoreToken_Buf;
+				SemaphoreToken_Buf -> DownAddr = NextAddr_Buf1;
+				if(NextAddr_Buf == &ST -> SP){
+					TaskInfoTable_Buf -> TC = Task_State_Up_SI;
+					return (OK);
 				}
 				RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
 				osTaskSwitch_Enable();//触发异常,进行任务切换
 				return (OK);
-			}else{
-				SemaphoreToken_Buf2 = SemaphoreToken_Buf1;//备份当前令牌
-				SemaphoreToken_Buf1 = (SemaphoreToken*)SemaphoreToken_Buf1 -> DownAddr;//加载下一个令牌
 			}
+			NextAddr_Buf = (_NextAddr*)*NextAddr_Buf;
 		}
+		*NextAddr_Buf = (_NextAddr)SemaphoreToken_Buf;
+		RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
+		osTaskSwitch_Enable();//触发异常,进行任务切换
+		return(OK);
 	}
 }
 
@@ -321,10 +318,9 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 				return(Error);
 	}
 	if(ST -> SP != NULL){
-		SemaphoreToken_Buf = (SemaphoreToken*)ST -> SP;
+		SemaphoreToken_Buf = (SemaphoreToken*)uLinkListHeadRead(&ST -> SP);
 		TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf  -> TaskInfo;
 		TaskInfoTable_Buf -> TC = Task_State_Up_IN;  //主动挂起(挂起态)
-		ST -> SP = (SemaphoreToken*)SemaphoreToken_Buf -> DownAddr;
 		if(osMemoryFree(SemaphoreToken_Buf) != OK){
 			#if (osSignalDebugError_Enable > 0)
 			osSignalDebugError("释放信号量时释放内存错误 %s\n",RunTask_TIT -> TN);

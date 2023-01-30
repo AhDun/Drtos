@@ -31,22 +31,8 @@
                                                   <自定数据类型声明区>
 */
 typedef	int32_t		_LinkListXError;
-typedef	uint8_t		_xLink;
+
 typedef	uint32_t		_NextAddr;
-typedef	uint32_t		_Body;
-typedef	struct
-{
-	_NextAddr*  DownAddr;//下一个表的地址
-	_Body*		Body;//表内容
-
-}_uList;//单向链表
-typedef	struct
-{
-	_NextAddr*  DownAddr;//下一个表的地址
-	_NextAddr*	UpAddr;//上一个表的地址
-	_Body*		Body;//表内容
-
-}_mList;//双向链表
 
 
 /*
@@ -56,97 +42,74 @@ typedef	struct
 /*
                                                   <函数声明区>
 */
-
 /*
 
- *@函数名称: uLinkListAdd
+ *@函数名称: uLinkListTailWrtie
 
  *@函数版本: 1.0.0
 
- *@函数功能: 单向链表增加
+ *@函数功能: 单向链表从尾写入
 
- *@输入参数: LinkListHeadAddr	 	链表链头部的地址
-			 AdduList			 	要添加的链表的地址
-				
+ *@输入参数: 无
 
- *@返 回 值: _LinkListXError		0.成功添加	1.添加时发生错误	
+ *@返 回 值: 无
 
- *@注    释: 无
+ *@注   释: 无
 
 */
-
-_LinkListXError uLinkListAdd(void* LinkListHeadAddr,void*  AdduList);
+_LinkListXError uLinkListTailWrtie(uint32_t* LinkListHeadAddr,uint32_t*  uListx);
 /*
 
- *@函数名称: uLinkListRemvoe
+ *@函数名称: uLinkListHeadWrtie
 
  *@函数版本: 1.0.0
 
- *@函数功能: 单向链表删除
+ *@函数功能: 单向链表从头写入
 
- *@输入参数: LinkListHeadAddr	 	链表链头部的地址
-			 ReuList			 	要删除的链表的地址
+ *@输入参数: 无
 
- *@返 回 值: _LinkListXError		0.删除添加	1.删除时发生错误
+ *@返 回 值: -1:发生错误 / 0:发送成功
 
- *@注    释: 无
+ *@注   释: 无
 
 */
-_LinkListXError uLinkListRemvoe(void* LinkListHeadAddr,void*  ReuList);
+_LinkListXError uLinkListHeadWrtie(uint32_t* LinkListHeadAddr,uint32_t*  uListx);
 /*
 
- *@函数名称: uLinkListHeadRemvoe
+ *@函数名称: uLinkListTailRead
 
  *@函数版本: 1.0.0
 
- *@函数功能: 单向头部链表删除
+ *@函数功能: 单向链表从尾读取
 
- *@输入参数: LinkListHeadAddr	 	链表链头部的地址
+ *@输入参数: 无
 
- *@返 回 值: _LinkListXError		0.删除添加	1.删除时发生错误
+ *@返 回 值: -1:发生错误 / 0:发送成功
 
- *@注    释: 无
+ *@注   释: 无
 
 */
-_LinkListXError uLinkListHeadRemvoe(void* LinkListHeadAddr);
+uint32_t* uLinkListTailRead(uint32_t* LinkListHeadAddr);
 /*
 
- *@函数名称: uLinkListReadEnd
+ *@函数名称: uLinkListHeadRead
 
  *@函数版本: 1.0.0
 
- *@函数功能: 单向尾部链表删除
+ *@函数功能: 单向链表从头读取
 
- *@输入参数: 	LinkListHeadAddr	链表头部
+ *@输入参数: 无
 
- *@返 回 值: 	返回尾部链表的地址
+ *@返 回 值: -1:发生错误 / 0:发送成功
 
- *@注    释: 无
-
-*/
-void* uLinkListReadEnd(void* LinkListHeadAddr);
-/*
-
- *@函数名称: uLinkListAdd
-
- *@函数版本: 1.0.0
-
- *@函数功能: 单向链表增加
-
- *@输入参数: LinkListHeadAddr	链表头部
-
- *@返 回 值: 返回尾部链表的地址
-
- *@注    释: 无
+ *@注   释: 无
 
 */
-void* uLinkListReadEndAndRemvoe(void* LinkListHeadAddr);
-
+uint32_t* uLinkListHeadRead(uint32_t* LinkListHeadAddr);
 
 /*
                                                   <引用文件区>
 */
-#include "osConfig.h"
 
 #endif
 /*

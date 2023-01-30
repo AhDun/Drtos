@@ -39,18 +39,52 @@
 
 */
 
-int main(int argc, char *argv[])
+int main(void)
 {
 /*--------------------------------------demo---------------------------------------------------------*/
 	u32 _tr0;
+	SemaphoreTable *p1;
+
+//	uint32_t p1 = 0;
+//	osTIME p2;
+//	uint32_t p3;
+//	uint32_t p4;
+//	uint32_t p5;
+//	uint32_t p6;
+//	uint32_t p7;
+//	uint32_t p8;
+
+//	uLinkListHeadWrtie(&p1,&p2);
+//	uLinkListHeadWrtie(&p1,&p3);
+//	uLinkListHeadWrtie(&p1,&p4);
+
+//	p8 = uLinkListHeadRead(&p1);
+//	p8 = uLinkListHeadRead(&p1);
+//	p8 = uLinkListHeadRead(&p1);
+//	p8 = uLinkListHeadRead(&p1);
+
 //	SemaphoreTable* timebz1;
 
 	osInit();
 
+//	p1 = osSignalLogin(Signal_Binary);
+
+//	osSignalUseWait(p1);
+//	osSignalUseWait(p1);
+//	osSignalUseWait(p1);
+//	osSignalUseWait(p1);
+
+//	osSignalFree(p1);
+//	osSignalFree(p1);
+//	osSignalFree(p1);
+//	osSignalFree(p1);
+//	osSignalFree(p1);
+
+
 
 	//osMemoryMalloc(25000);
 
-	print("%X",osTaskLogin(
+	print("%X\n",osTaskLogin(
 	"RTC", 			                    //任务名称
 	Task1_Func,			            //任务地址
 	Task1_Stack_size,		                    //任务栈长度
@@ -92,7 +126,7 @@ int main(int argc, char *argv[])
 	Task_Set_Default                                    
 	);
 
-
+	osTaskDelayMs(1000);
 	//osTaskLogout("LED2");
 
 	while(1){

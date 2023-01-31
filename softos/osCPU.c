@@ -168,7 +168,7 @@ __asm void PendSV_Handler(void)
 {
 	PRESERVE8
 
-	extern RunTask_TIT
+	extern RunTaskHandle
 	extern osTaskNext
 
 	CPSID   I			//禁用所有中断
@@ -182,7 +182,7 @@ __asm void PendSV_Handler(void)
 
     STMDB R1!,	{R4-R11,LR}	//压栈R4-R11
 
-	LDR   R0,	=RunTask_TIT
+	LDR   R0,	=RunTaskHandle
 	LDR	  R0,	[R0]
     STR   R1,   [R0]	
 	
@@ -191,7 +191,7 @@ __asm void PendSV_Handler(void)
 	BL.W	osTaskNext
 	CPSID   I			//禁用所有中断
 
-	LDR   R0,	=RunTask_TIT
+	LDR   R0,	=RunTaskHandle
 	LDR	  R0,	[R0]
 	LDR   R1,   [R0]	//以R0寄存器中的值做指针取值到R0寄存器中
 

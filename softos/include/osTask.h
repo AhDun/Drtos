@@ -153,14 +153,13 @@
 #define osTaskRunError_Enable 1 //任务运行时发生致命错误 1:开启Debug输出 0:关闭Debug输出
 
 #define osTaskEnterISR()			TST.TISRF += 1;//进入 中断
-#define osTaskExitISR()				TST.TISRF -= 1;//
+#define osTaskExitISR()				TST.TISRF -= 1;//退出 中断
 
 
 /*
                                                   数据类型别名声明区
 */
 
-typedef     uint8_t		_Task_Set_Pv;//
 
 
 //任务表{
@@ -169,7 +168,6 @@ typedef     uint8_t		_Task_Set_Pv;//
 #endif
 typedef 	uint8_t 		_TaskName;//任务名称
 typedef 	uint8_t 		_TaskConfig;//任务控制量
-typedef 	uint32_t 	_TaskHandle;//任务栈地址
 typedef 	uint32_t 	_TaskStackSize;//任务栈长度
 typedef 	uint32_t 	_TaskSemaphore;//任务信号量
 typedef 	uint32_t 	_TaskTimeWheel;//任务时间轮片
@@ -189,34 +187,34 @@ typedef     uint32_t     _TaskParameterPass;//任务传参
 
 typedef struct
 {
-	_TaskRealSP			TRS;	//任务实时栈指针
-	_TaskRealSP			TRSb;	//任务实时栈指针
-	_TaskID				TI;		//任务ID
-	_TaskName*			TN; 	//任务名称
-	_TaskConfig 		TC;  	//任务控制量	
+	_TaskRealSP			RealSP;	//任务实时栈指针
+	_TaskRealSP			RealSPb;	//任务实时栈指针
+	_TaskID				ID;		//任务ID
+	_TaskName*			Name; 	//任务名称
+	_TaskConfig 		Config;  	//任务控制量	
 #ifdef osSignalMutual_Enable
-	_TaskPriorityLevel	TPLb;   //任务备用优先级
+	_TaskPriorityLevel	PriorityLevelb;   //任务备用优先级
 #endif
 //#ifdef osPost_Enable
 	_PostFormT			PF;		//任务邮箱
 //#endif
-	_TaskTimeWheel 		TTW;	//任务时间轮片
-	_TaskPriorityLevel 	TPL;	//任务优先级
-	_TaskAddr*			TA;		//任务地址
-	_TaskTimeFlag		TTF;	//任务时间标志
+	_TaskTimeWheel 		TaskTimeWheel;	//任务时间轮片
+	_TaskPriorityLevel 	PriorityLevel;	//任务优先级
+	_TaskAddr*			Addr;		//任务地址
+	_TaskTimeFlag		TimeFlag;	//任务时间标志
 #if (osPerformanceStatistics_Enable > 0) //开启了性能统计
-    _TaskOccupyTime      TOT;    //任务占用时长
-    _TaskOccupyRatio     TOR;    //任务占用比
+    _TaskOccupyTime      OccupyTime;    //任务占用时长
+    _TaskOccupyRatio     OccupyRatio;    //任务占用比
 #endif
-    _TaskParameterPass*  TPP;    //任务传参					
-} TaskInfoTable;
+    _TaskParameterPass*  ParameterPass;    //任务传参					
+} _TaskHandle;
 //}
 
 //任务轮询表{
 typedef struct
 {
-	TaskInfoTable*		TITA;	  //任务信息表 地址(任务句柄)
-} TaskList;
+	_TaskHandle*		TaskHandle;	  //任务信息表 地址(任务句柄)
+} _TaskList;
 //}
 
 //任务调度状态表{
@@ -232,17 +230,15 @@ typedef struct
 	_TaskISRFlag				TISRF;//中断状态
 
     
-} TaskDispatchStateTable;
+}_TaskDispatchStateTable;
 //}
 
 /*
                                                   <数据声明区>
 */
-extern uint32_t NULL_Value;//一个空值
-extern TaskInfoTable*	RunTask_TIT;//当前正在运行的任务表指针
-
-extern TaskList TL[TaskListLength];//任务轮询表
-extern TaskDispatchStateTable TST;//任务调度状态表
+extern _TaskHandle*	RunTaskHandle;//当前正在运行的任务表指针
+extern _TaskList TaskList[TaskListLength];//任务轮询表
+extern _TaskDispatchStateTable TST;//任务调度状态表
 
 
 /*
@@ -284,7 +280,7 @@ osErrorValue osTaskInit(void);
 			 
  *@注    释: 无
 */
-TaskInfoTable* osTaskLogin(
+_TaskHandle* osTaskLogin(
 	_TaskName *TN,
 	void*  TA,	
 	_TaskStackSize  TSS,
@@ -294,9 +290,9 @@ TaskInfoTable* osTaskLogin(
     _TaskConfig  TC
 );
 
-TaskInfoTable* osTaskLogin_Static(
+_TaskHandle* osTaskLogin_Static(
 
-	TaskInfoTable* TIT,
+	_TaskHandle* TaskHandle,
 	_TaskName *TN,
 	void*  TA,
 	_TaskStackSize  TSS,
@@ -310,9 +306,9 @@ TaskInfoTable* osTaskLogin_Static(
 
 #if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
 //osErrorValue osTaskLogout(_TaskName *TN);
-osErrorValue osTaskLogout_Write(TaskInfoTable* TIT);
+osErrorValue osTaskLogout_Write(_TaskHandle* TaskHandle);
 #else 							//不启用任务栈自动分配
-osErrorValue	osTaskLogout(TaskInfoTable* TIT);
+osErrorValue	osTaskLogout(_TaskHandle* TaskHandle);
 #endif
 /*
 
@@ -324,11 +320,11 @@ osErrorValue	osTaskLogout(TaskInfoTable* TIT);
 
  *@输入参数: *TN	-	任务名称	
 
- *@返 回 值: TaskInfoTable* - 任务表地址
+ *@返 回 值: _TaskHandle* - 任务表地址
 
  *@注    释: 无
 */
-TaskInfoTable* osTaskNameToTable(_TaskName *TN);
+_TaskHandle* osTaskNameToTable(_TaskName *TN);
 /*
 
  *@函数名称: osTaskNext
@@ -394,7 +390,7 @@ osErrorValue osTaskDelayUs(uint32_t us);
 // *@注    释: 无
 
 //*/
-//extern osErrorValue osTaskISR(TaskInfoTable* TIT);
+//extern osErrorValue osTaskISR(_TaskHandle* TaskHandle);
 /*
 
  *@函数名称: osTaskAddrReplace
@@ -410,7 +406,7 @@ osErrorValue osTaskDelayUs(uint32_t us);
  *@注    释: 无
 
 */
-osErrorValue osTaskSet(TaskInfoTable* TIT,_Task_Set_Pv Pv);
+osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv);
 /*
 
  *@函数名称: osTaskAddrReplace
@@ -426,7 +422,7 @@ osErrorValue osTaskSet(TaskInfoTable* TIT,_Task_Set_Pv Pv);
  *@注    释: 无
 
 */
-osErrorValue osTaskAddrReplace(TaskInfoTable* TIT,void* NewTA);
+osErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA);
 /*
 
  *@函数名称: osTaskExit

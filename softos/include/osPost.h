@@ -61,14 +61,14 @@ typedef struct
  *@函数功能: 初始化邮箱
 
  *@输入参数: PB - 邮件内容
-			 TIT - 目标任务的任务表地址
+			 TaskHandle - 目标任务的任务表地址
 
  *@返 回 值:  函数错误返回值 (0:表示初始化成功，-1:表示初始化失败)
 
  *@注   释: 无
 
 */
-osErrorValue osPostSend(void* PB,TaskInfoTable* TIT);
+osErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle);
 /*
 
  *@函数名称: osPostRead

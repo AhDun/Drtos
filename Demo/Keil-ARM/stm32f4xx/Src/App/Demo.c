@@ -92,7 +92,7 @@ void Task2_Func(void)
         for(a = 0;a < TST.TLMA;a++){
 
 			osMemoryReset(buf,' ');
-			sprint((char *)buf,"%s  %d%ms  %d ",TL[a].TITA ->TN,TL[a].TITA -> TOR,TL[a].TITA -> TPL);
+			sprint((char *)buf,"%s  %d%ms  %d ",TaskList[a].TaskHandle -> Name,TaskList[a].TaskHandle -> OccupyRatio,TaskList[a].TaskHandle -> PriorityLevel);
 			LCD_ShowString(10,270+(a*25),tftlcd_data.width,tftlcd_data.height,16,buf);
 		}
 		//osTaskMonitor();

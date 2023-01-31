@@ -68,7 +68,7 @@ SemaphoreTable* osSignalLogin(_SemaphoreType SP)
 		SemaphoreTable* ST = osMemoryMalloc(sizeof(SemaphoreTable));//为信号量结构体申请内存
 		if(ST == NULL){//如果内存申请函数返回为零,说明申请失败
 			#if (osSignalDebugError_Enable > 0)
-			osSignalDebugError("注册信号量时内存申请失败 %s\n",RunTask_TIT -> TN);
+			osSignalDebugError("注册信号量时内存申请失败 %s\n",RunTaskHandle -> Name);
 			#endif
 			return (NULL);//返回空,表示错误
 		}
@@ -77,7 +77,7 @@ SemaphoreTable* osSignalLogin(_SemaphoreType SP)
 			ST -> ST = SP;//写入信号类型
 		}else{
 			#if (osSignalDebugError_Enable > 0)
-			osSignalDebugError("注册信号量时类型错误 %s\n",RunTask_TIT -> TN);
+			osSignalDebugError("注册信号量时类型错误 %s\n",RunTaskHandle -> Name);
 			#endif
 			return (NULL);
 		}
@@ -126,7 +126,7 @@ osErrorValue osSignalLogin(SemaphoreTable* ST,_SemaphoreType SP)
 #endif
         default:
 				#if (osSignalDebugError_Enable > 0)
-				osSignalDebugError("注册信号量时类型错误 %s\n",RunTask_TIT -> TN);
+				osSignalDebugError("注册信号量时类型错误 %s\n",RunTaskHandle -> Name);
 				#endif
 				return (Error);//break;
     }
@@ -154,12 +154,12 @@ static osErrorValue osSignalApplyToken(SemaphoreTable* ST)
 	SemaphoreToken* SemaphoreToken_Buf = osMemoryMalloc(sizeof(SemaphoreToken));//为信号量结构体申请内存
 	if(SemaphoreToken_Buf == NULL){
 		#if (osSignalDebugError_Enable > 0)
-		osSignalDebugError("申请占用信号量令牌时内存申请失败 %s\n",RunTask_TIT -> TN);
+		osSignalDebugError("申请占用信号量令牌时内存申请失败 %s\n",RunTaskHandle -> Name);
 		#endif
 		return (Error);
 	}else{
 		SemaphoreToken_Buf -> DownAddr = NULL;
-		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTask_TIT;
+		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTaskHandle;
 		ST -> SP = (uint32_t)SemaphoreToken_Buf;
 		return (OK);
 	}
@@ -187,38 +187,38 @@ static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 	_NextAddr* NextAddr_Buf;
 	_NextAddr NextAddr_Buf1;
 	SemaphoreToken* SemaphoreToken_Buf1;
-	TaskInfoTable*	TaskInfoTable_Buf;
+	_TaskHandle*	TaskInfoTable_Buf;
 	SemaphoreToken* SemaphoreToken_Buf = osMemoryMalloc(sizeof(SemaphoreToken));//为信号量结构体申请内存
 	if(SemaphoreToken_Buf == NULL){
 		#if (osSignalDebugError_Enable > 0)
-		osSignalDebugError("申请等待信号量令牌时内存申请失败 %s\n",RunTask_TIT -> TN);
+		osSignalDebugError("申请等待信号量令牌时内存申请失败 %s\n",RunTaskHandle -> Name);
 		#endif
 		return (Error);
 	}else{
-		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTask_TIT;
+		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTaskHandle;
 		SemaphoreToken_Buf -> DownAddr = NULL;
 	
 		NextAddr_Buf = &ST -> SP;
 		
 		while(*NextAddr_Buf != NULL){
 			SemaphoreToken_Buf1 = (SemaphoreToken*)*NextAddr_Buf;
-			TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf1 -> TaskInfo;
-			if(RunTask_TIT -> TPL < TaskInfoTable_Buf -> TPL){
+			TaskInfoTable_Buf = (_TaskHandle*)SemaphoreToken_Buf1 -> TaskInfo;
+			if(RunTaskHandle -> PriorityLevel < TaskInfoTable_Buf -> PriorityLevel){
 				NextAddr_Buf1 = (_NextAddr)*NextAddr_Buf;
 				*NextAddr_Buf = (_NextAddr)SemaphoreToken_Buf;
 				SemaphoreToken_Buf -> DownAddr = NextAddr_Buf1;
 				if(NextAddr_Buf == &ST -> SP){
-					TaskInfoTable_Buf -> TC = Task_State_Up_SI;
+					TaskInfoTable_Buf -> Config = Task_State_Up_SI;
 					return (OK);
 				}
-				RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
+				RunTaskHandle -> Config = Task_State_Up_SI;  //修改为信号挂起(等待态)
 				osTaskSwitch_Enable();//触发异常,进行任务切换
 				return (OK);
 			}
 			NextAddr_Buf = (_NextAddr*)*NextAddr_Buf;
 		}
 		*NextAddr_Buf = (_NextAddr)SemaphoreToken_Buf;
-		RunTask_TIT -> TC = Task_State_Up_SI;  //修改为信号挂起(等待态)
+		RunTaskHandle -> Config = Task_State_Up_SI;  //修改为信号挂起(等待态)
 		osTaskSwitch_Enable();//触发异常,进行任务切换
 		return(OK);
 	}
@@ -228,7 +228,7 @@ static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 osErrorValue osSignalUseWait(SemaphoreTable* ST)
 {
 #if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
-	TaskInfoTable* TIT;
+	_TaskHandle* TaskHandle;
 	SemaphoreToken* SemaphoreToken_Buf;
 	switch(ST ->ST){
 #ifdef osSignalBinary_Enable 
@@ -244,9 +244,9 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 		case Signal_Mutual:
 							if(ST -> SP != NULL){
 								SemaphoreToken_Buf = (SemaphoreToken*)ST -> SP;
-								TIT = (TaskInfoTable*)SemaphoreToken_Buf -> TaskInfo;
-								if(RunTask_TIT -> TPL < TIT -> TPL){
-									TIT -> TPL = RunTask_TIT -> TPL;//
+								TaskHandle = (_TaskHandle*)SemaphoreToken_Buf -> TaskInfo;
+								if(RunTaskHandle -> PriorityLevel < TaskHandle -> PriorityLevel){
+									TaskHandle -> PriorityLevel = RunTaskHandle -> PriorityLevel;//
 								}
 								return osSignalWaitToken(ST);
 							}else{
@@ -268,7 +268,7 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 #endif
 		default:
 				#if (osSignalDebugError_Enable > 0)
-				osSignalDebugError("占用信号量时输入类型错误 %s\n",RunTask_TIT -> TN);
+				osSignalDebugError("占用信号量时输入类型错误 %s\n",RunTaskHandle -> Name);
 				#endif
 				return(Error);
 	}
@@ -294,7 +294,7 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 {
 #if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
 	SemaphoreToken* SemaphoreToken_Buf;
-	TaskInfoTable*	TaskInfoTable_Buf;
+	_TaskHandle*	TaskInfoTable_Buf;
 
 	switch(ST ->ST){
 #ifdef osSignalBinary_Enable
@@ -303,7 +303,7 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 #endif
 #ifdef osSignalMutual_Enable
 		case Signal_Mutual:
-							RunTask_TIT -> TPL = RunTask_TIT -> TPLb;
+							RunTaskHandle -> PriorityLevel = RunTaskHandle -> PriorityLevelb;
 							break;
 #endif
 #ifdef osSignalCount_Enable
@@ -313,27 +313,27 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 #endif
 		default:
 				#if (osSignalDebugError_Enable > 0)
-				osSignalDebugError("释放信号量时类型错误 %s\n",RunTask_TIT -> TN);
+				osSignalDebugError("释放信号量时类型错误 %s\n",RunTaskHandle -> Name);
 				#endif
 				return(Error);
 	}
 	if(ST -> SP != NULL){
 		SemaphoreToken_Buf = (SemaphoreToken*)uLinkListHeadRead(&ST -> SP);
-		TaskInfoTable_Buf = (TaskInfoTable*)SemaphoreToken_Buf  -> TaskInfo;
-		TaskInfoTable_Buf -> TC = Task_State_Up_IN;  //主动挂起(挂起态)
+		TaskInfoTable_Buf = (_TaskHandle*)SemaphoreToken_Buf  -> TaskInfo;
+		TaskInfoTable_Buf -> Config = Task_State_Up_IN;  //主动挂起(挂起态)
 		if(osMemoryFree(SemaphoreToken_Buf) != OK){
 			#if (osSignalDebugError_Enable > 0)
-			osSignalDebugError("释放信号量时释放内存错误 %s\n",RunTask_TIT -> TN);
+			osSignalDebugError("释放信号量时释放内存错误 %s\n",RunTaskHandle -> Name);
 			#endif
 			return (Error);
 		}
-		if(TaskInfoTable_Buf -> TPL < RunTask_TIT -> TPL){
+		if(TaskInfoTable_Buf -> PriorityLevel < RunTaskHandle -> PriorityLevel){
 			osTaskSwitch_Enable();//触发异常,进行任务切换
 		}
 		return (OK);
 	}else{
 		#if (osSignalDebugError_Enable > 0)
-		osSignalDebugError("释放信号量时已经为空 %s\n",RunTask_TIT -> TN);
+		osSignalDebugError("释放信号量时已经为空 %s\n",RunTaskHandle -> Name);
 		#endif
 		return (Error);
 	}
@@ -365,7 +365,7 @@ osErrorValue osSignalLogout(SemaphoreTable* ST)
 
 	if(osMemoryFree((uint8_t*)ST) == Error){//需要把信号量的所占内存释放
 		#if (osSignalDebugError_Enable > 0)
-		osSignalDebugError("注销信号量时释放内存错误 %s\n",RunTask_TIT -> TN);
+		osSignalDebugError("注销信号量时释放内存错误 %s\n",RunTaskHandle -> Name);
 		#endif
 		return (Error);//释放内存时,发生错误,返回错误
 	}

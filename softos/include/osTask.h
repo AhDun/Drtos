@@ -116,9 +116,6 @@
 	#define osProtect_ENABLE() 				INTX_DISABLE()//进入临界保护
 #endif
 #define osTaskSwitch_Enable() 			do{TaskSwitchState.SwitchState = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
-#if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
-#define osTaskLogout(TN) 	osTaskLogout_Write(osTaskNameToTable(TN))
-#endif
 
 #define osTaskErrorDebug 		osDebugError
 
@@ -147,7 +144,9 @@ typedef		uint32_t	_PostFormT;
 typedef 	uint32_t 	_TaskAddr;
 typedef		uint32_t	_TaskRealSP;
 typedef		uint32_t	_TaskTimeFlag;
+#if (osTaskParameterPass_Enable > 0)
 typedef     uint32_t     _TaskParameterPass;//任务传参
+#endif
 #if (osPerformanceStatistics_Enable > 0) //开启了性能统计
 typedef     uint16_t     _TaskOccupyTime;//任务占用时长
 typedef     uint16_t      _TaskOccupyRatio;//任务占用比
@@ -171,10 +170,13 @@ typedef struct
 	_TaskPriorityLevel 	PriorityLevel;	//任务优先级
 	_TaskAddr*			Addr;		//任务地址
 	_TaskTimeFlag		TimeFlag;	//任务时间标志
+#if (osTaskParameterPass_Enable > 0)
+	_TaskParameterPass*  ParameterPass;    //任务传参	
+#endif
+
 #if (osPerformanceStatistics_Enable > 0) //开启了性能统计
     _TaskOccupyTime      OccupyTime;    //任务占用时长
     _TaskOccupyRatio     OccupyRatio;    //任务占用比
-	_TaskParameterPass*  ParameterPass;    //任务传参	
 #endif				
 } _TaskHandle;
 //}
@@ -208,6 +210,8 @@ typedef struct
 extern _TaskHandle*	RunTaskHandle;//当前正在运行的任务表指针
 extern _TaskList TaskList[TaskListLength];//任务轮询表
 extern _TaskSwitchState TaskSwitchState;//任务调度状态表
+
+extern _TaskHandle*	TaskHandle_Main;
 
 
 /*
@@ -255,7 +259,9 @@ _TaskHandle* osTaskLogin(
 	_TaskStackSize  TSS,
 	_TaskTimeWheel  TTW,
 	_TaskPriorityLevel  TPL,
+	#if (osTaskParameterPass_Enable > 0)
     void*  TPP, 
+	#endif
     _TaskConfig  TC
 );
 
@@ -267,33 +273,15 @@ _TaskHandle* osTaskLogin_Static(
 	_TaskStackSize  TSS,
 	_TaskTimeWheel  TTW,
 	_TaskPriorityLevel  TPL,
+	#if (osTaskParameterPass_Enable > 0)
     void*  TPP, 
+	#endif
     _TaskConfig  TC
 );
+osErrorValue  osTaskLogout(_TaskHandle* TaskHandle);
 
+osErrorValue	osTaskLogout_Static(_TaskHandle* TaskHandle);
 
-
-#if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
-//osErrorValue osTaskLogout(_TaskName *TN);
-osErrorValue osTaskLogout_Write(_TaskHandle* TaskHandle);
-#else 							//不启用任务栈自动分配
-osErrorValue	osTaskLogout(_TaskHandle* TaskHandle);
-#endif
-/*
-
- *@函数名称: osTaskNameToTable
-
- *@函数版本: 1.0.0
-
- *@函数功能: 根据任务名称查询任务表地址
-
- *@输入参数: *TN	-	任务名称	
-
- *@返 回 值: _TaskHandle* - 任务表地址
-
- *@注    释: 无
-*/
-_TaskHandle* osTaskNameToTable(_TaskName *TN);
 /*
 
  *@函数名称: osTaskNext

@@ -84,19 +84,19 @@ int main(void)
 
 	//osMemoryMalloc(25000);
 
-	print("%X\n",osTaskLogin(
+	TaskHandle_Task1 = osTaskLogin(
 	"RTC", 			                    //任务名称
 	Task1_Func,			            //任务地址
 	Task1_Stack_size,		                    //任务栈长度
 	50,		                            //任务时间轮片
 	-2,	                                    //任务优先级
 	"Hello Task1\n",									//任务传参   
-	Task_Set_Default));
+	Task_Set_Default);
 
 	print("%s\n",osPostReadWait());
 
 
-	osTaskLogin(    
+	TaskHandle_Task2 = osTaskLogin(    
 	"TaskList", 			                    //任务名称
 	Task2_Func,			            //任务地址
 	Task2_Stack_size,		                    //任务栈长度
@@ -106,7 +106,7 @@ int main(void)
 	Task_Set_Default
 	); 
 
-	osTaskLogin( 
+	TaskHandle_Task3 = osTaskLogin( 
 	"LED1", 			                        //任务名称
 	Task3_Func,			                //任务地址
 	Task3_Stack_size,		                        //任务栈长度
@@ -116,7 +116,7 @@ int main(void)
 	Task_Set_Default                                    
 	);
 
-	osTaskLogin( 
+	TaskHandle_Task4 = osTaskLogin( 
 	"LED2", 			                        //任务名称
 	Task4_Func,			                //任务地址
 	Task4_Stack_size,		                        //任务栈长度
@@ -126,13 +126,12 @@ int main(void)
 	Task_Set_Default                                    
 	);
 
-
-	//osTaskLogout("LED2");
+	osTaskLogout(TaskHandle_Task4);
 
 	while(1){
-		osTaskDelayMs(1000);
+		osTaskDelayMs(10);
 		for(_tr0 = 0;_tr0 < 100;_tr0++){
-			osPostSend((u32*)"hello",osTaskNameToTable("Main"));
+			osPostSend((u32*)"hello",TaskHandle_Main);
 		}
 		for(_tr0 = 0;_tr0 < 100;_tr0++){
 			osPostReadWait();

@@ -20,12 +20,13 @@
 */
 #include "Main.h"
 #include "osMemory.h"
+#include "sram.h"
 
 /*
                                                   <数据初始区>
 */
 
-uint8_t a[MemTank_Max];
+uint8_t a[MemTank_Max] __attribute__((at(0x10000000)));
 
 _MemoryInfo 	Memory1 = {&a[0],&a[MemTank_Max],&a[0]};
 
@@ -33,10 +34,14 @@ _MemoryInfoHandle	MemoryInfoHandle;
 /*
                                                   <函数区>
 */
+
+
+
 osErrorValue  osMemoryInit(void)
 {
 	uint32_t addr;
-	
+
+
 	MemoryInfoHandle = &Memory1; 
 
 	for(addr = 0;(MemoryInfoHandle -> HeadAddr + addr) < MemoryInfoHandle -> TailAddr;addr++){
@@ -91,10 +96,8 @@ void* osMemoryMalloc(uint32_t MemSize)
 				}
 				Length += _MemoryStruct -> MemoryLength;
 				if( Length >= MemSize){
-					if((Length - MemSize) > 4){//进行切块操作
-						MemoryAddr1 = MemoryAddr2;
-						MemoryAddr1 += MemSize;//根据要申请长度,向下偏移
-						_MemoryStruct = (MemoryStruct*)MemoryAddr1;	
+					if((Length - MemSize) > sizeof(MemoryStruct)){//进行切块操作
+						_MemoryStruct = (MemoryStruct*)(MemoryAddr2 + MemSize);	
 						_MemoryStruct -> MemoryFlag = Memory_Free;//设为释放态
 						_MemoryStruct -> MemoryLength = Length - MemSize;//输入块长度
 
@@ -185,7 +188,7 @@ void* osMemoryReset(void* addr,uint8_t data)
 osErrorValue osMemoryFree(void* addr)
 {
 	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)addr - sizeof(MemoryStruct));
-	MemoryStruct* _MemoryStruct2 = _MemoryStruct1 + _MemoryStruct1 -> MemoryLength;;
+	MemoryStruct* _MemoryStruct2 = (MemoryStruct*)((uint8_t*)addr - sizeof(MemoryStruct) + _MemoryStruct1 -> MemoryLength);
 	#if (MemoryProtect_Enable > 0)//开启了内存保护配置
 		#if (osCriticalToProtect_Enable > 0)//启用了临界保护
 		osProtect_ENABLE();//进入临界保护
@@ -204,7 +207,7 @@ osErrorValue osMemoryFree(void* addr)
 			#endif
 		#endif
 		return (Error - 1);//返回错误
-	}else if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free || (_MemoryUnit*)_MemoryStruct2 >= MemoryInfoHandle -> NextAddr){
+	}else if( (_MemoryUnit*)_MemoryStruct2 >= MemoryInfoHandle -> NextAddr || _MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free){
 			 //检查这个要释放的块,所指向下一个块的状态是否为释放态或占用态,再或者这个要释放的块的尾地址大于新地址,这个块才可以被释放
 		_MemoryStruct1 -> MemoryFlag = Memory_Free;//设为释放态
 		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
@@ -217,7 +220,7 @@ osErrorValue osMemoryFree(void* addr)
 	}
 	else{
 		#if (osMemoryDebug_Enable > 0)
-		osMemoryErrorDebug("内存释放失败! 内存地址不正确 %X\n",addr);
+		osMemoryErrorDebug("内存释放失败! 内存地址不正确 %X,%d\n",addr,_MemoryStruct2 -> MemoryLength );
 		#endif
 		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
 			#if (osCriticalToProtect_Enable > 0)//启用了临界保护

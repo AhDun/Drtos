@@ -188,12 +188,14 @@ __asm void PendSV_Handler(void)
 	
 
 	CPSIE   I
+
 	BL.W	osTaskNext
+
 	CPSID   I			//禁用所有中断
 
 	LDR   R0,	=RunTaskHandle
 	LDR	  R0,	[R0]
-	LDR   R1,   [R0]	//以R0寄存器中的值做指针取值到R0寄存器中
+	LDR   R1,   [R0]	
 
 	LDMIA R1! ,{R4-R11,LR}	//弹栈R4-R11
 #if (osFPU_Enable > 0) //启用了FPU
@@ -208,6 +210,7 @@ __asm void PendSV_Handler(void)
     BX	  LR
 	NOP
 }
+
 /*
                                                   FILE-END
 */

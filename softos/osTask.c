@@ -27,6 +27,8 @@ _TaskSwitchState TaskSwitchState;//任务调度状态表
 _TaskHandle*	RunTaskHandle;//当前正在运行任务的信息表
 _TaskList TaskList[TaskListLength];//任务轮询表
 
+_TaskHandle*	TaskHandle_Main;
+
 /*
                                                   <函数区>
 */
@@ -57,7 +59,8 @@ osErrorValue osTaskInit(void)
 	TaskSwitchState.ISRFlag = 0;
 	TaskSwitchState.SwitchState = TaskSwitch_Ready;
     /***********************************系统任务初始化**********************************/
-	if(osTaskLogin("Main",(void*)0,Default_Stack_Size,TaskTimeWheelDefault,0,(void*)0,Task_Set_Default ) == NULL){
+	TaskHandle_Main = osTaskLogin("Main",(void*)0,Default_Stack_Size,TaskTimeWheelDefault,0,(void*)0,Task_Set_Default ); 
+	if(TaskHandle_Main == NULL){
 
 		#if (osTaskDebug_Enable > 0)
 		osTaskErrorDebug("Main 任务创建失败\n");
@@ -101,7 +104,9 @@ _TaskHandle* osTaskLogin(
 	_TaskStackSize  TSS,//任务栈长度
 	_TaskTimeWheel  TTW,//任务时间轮片
 	_TaskPriorityLevel  TPL,//任务优先级
+	#if (osTaskParameterPass_Enable > 0)
     void*  TPP, //任务传参
+	#endif
     _TaskConfig  TC//任务配置
 )
 {
@@ -146,7 +151,9 @@ _TaskHandle* osTaskLogin_Static(
 	_TaskStackSize  TSS,//任务栈长度
 	_TaskTimeWheel  TTW,//任务时间轮片
 	_TaskPriorityLevel  TPL,//任务优先级
+	#if (osTaskParameterPass_Enable > 0)
     void*  TPP, //任务传参
+	#endif
     _TaskConfig  TC//任务配置
 )
 {
@@ -244,41 +251,24 @@ _TaskHandle* osTaskLogin_Static(
 	return (TaskHandle);//返回
 }
 	
+osErrorValue  osTaskLogout(_TaskHandle* TaskHandle)
+{
 
-#if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
-/*
+	if(osTaskLogout_Static(TaskHandle) != OK){
+		#if (osTaskDebug_Enable > 0)
+		osTaskErrorDebug("释放任务: 内存注销失败\n");
+		#endif
+		return (Error);//发生错误，返回错误
+	}
+	if(osMemoryFree(TaskHandle) != OK){
+		#if (osTaskDebug_Enable > 0)
+		osTaskErrorDebug("释放任务: 内存释放失败\n");
+		#endif
+		return (Error);//发生错误，返回错误
+	}
+	return (OK);//无异常，返回OK
 
- *@函数名称: osTaskLogout
-
- *@函数版本: 1.0.0
-
- *@函数功能: 任务注销
-
- *@输入参数: _TaskName *TN //任务名称	
-
- *@返 回 值: -1:注销错误，0: 注销成功
-
- *@注    释: 在启用任务栈自动分配的情况下调用的任务注销函数
-
-*/
-//osErrorValue osTaskLogout(_TaskName *TN)
-/*
-
- *@函数名称: osTaskLogout_Write
-
- *@函数版本: 1.0.0
-
- *@函数功能: 任务写入注销写入
-
- *@输入参数: _TaskHandle* TaskHandle //任务信息表指针
-
- *@返 回 值: -1:注销错误，0: 注销成功
-
- *@注    释: 在启用任务栈自动分配的情况下的任务内部
-
-*/
-osErrorValue osTaskLogout_Write(_TaskHandle* TaskHandle)
-#else 
+}
 /*
 
  *@函数名称: osTaskLogout
@@ -294,14 +284,12 @@ osErrorValue osTaskLogout_Write(_TaskHandle* TaskHandle)
  *@注    释: 在不启用任务栈自动分配的情况下调用的任务注销函数
 
 */
-osErrorValue	osTaskLogout(_TaskHandle* TaskHandle)
-#endif
+osErrorValue  osTaskLogout_Static(_TaskHandle* TaskHandle)
 {
 	int32_t _tr0,_tr1;//定义变量
     #if (osCriticalToProtect_Enable > 0)//启用了临界保护
 	osProtect_ENABLE();//进入保护
     #endif
-	//TaskHandle -> Config &= TIT_Task_State_TC_RST;//清除任务的状态位
 	for(_tr0 = 0;_tr0 < TaskListLength;_tr0++){//根据任务轮询表长度，进行遍历
 		if(TaskList[_tr0].TaskHandle == TaskHandle){//如果当前任务ID与任务轮询表当前所指向的任务ID相同，就进入
 			break;//退出当前循环
@@ -344,34 +332,6 @@ osErrorValue	osTaskLogout(_TaskHandle* TaskHandle)
 	return (OK);//无异常，返回OK
 }
 
-/*
-
- *@函数名称: osTaskNameToTable
-
- *@函数版本: 1.0.0
-
- *@函数功能: 根据任务名称查询句柄
-
- *@输入参数: _TaskName *TN	- 任务名称
-
- *@返 回 值: 0:查询错误，x: 任务句柄
-
- *@注    释: 无
-
-*/
-_TaskHandle* osTaskNameToTable(_TaskName *TN)
-{
-	uint32_t _var0;
-	for(_var0 = 0;_var0 < TaskSwitchState.TaskListMax;_var0++){//根据任务最大活动量，进行遍历
-		if(StrComp((int8_t*)TN,(int8_t*)TaskList[_var0].TaskHandle -> Name)){//
-			return (TaskList[_var0].TaskHandle);//返回任务ID
-		}
-	}
-	#if (osTaskDebug_Enable > 0)
-	osTaskErrorDebug("查询任务时没有找到对应的任务句柄 %s\n",TN);
-	#endif
-	return (NULL);//没有对应的任务ID,返回错误
-}
 /*
 
  *@函数名称: osTaskTime_Choke_ms
@@ -520,22 +480,18 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 	if(TaskHandle != 0){//非自身
 		switch(Pv){
 			case Task_Set_Pause://暂停任务
-									//TaskHandle -> Config &= TIT_Task_State_TC_RST;//置位状态位
 									TaskHandle -> Config = Task_State_DI;//设为禁用态
 									return (OK);//返回OK
 
 			case Task_Set_Cont://继续任务
-									//TaskHandle -> Config &= TIT_Task_State_TC_RST;//置位状态位
 									TaskHandle -> Config = Task_State_Up_IN;//设为挂起态
 									return (OK);//返回OK
 
-			case Task_Set_Reboot://重启任务
-									//TaskHandle -> Config &= TIT_Task_State_TC_RST;//置位状态位									
+			case Task_Set_Reboot://重启任务									
 									TaskHandle -> Config = Task_State_RB;//
 									return (OK);//返回OK
 			case Task_Set_Start://立即启动任务
 									while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
-									//TaskHandle -> Config &= TIT_Task_State_TC_RST;//置位状态位
 									TaskHandle -> Config = Task_State_Up_IN;//主动挂起(挂起态)
 									TaskSwitchState.DispatchNum = TaskHandle -> ID;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
 									osTaskSwitch_Enable();
@@ -548,7 +504,6 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 	}else{//自身
 		switch(Pv){
 			case Task_Set_Pause://暂停任务
-									//TaskHandle -> Config &= TIT_Task_State_TC_RST;//置位状态位
 									while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
 									RunTaskHandle -> Config = Task_State_DI;//设为禁用态
 									osTaskSwitch_Enable();//触发任务切换
@@ -558,7 +513,6 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 									return (OK);//返回OK
 
 			case Task_Set_Reboot://重启任务
-									//TaskHandle -> Config &= TIT_Task_State_TC_RST;//置位状态位
 									while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
 									RunTaskHandle -> Config = Task_State_RB;//
 									osTaskSwitch_Enable();//触发任务切换
@@ -566,8 +520,7 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 			case Task_Set_Start://立即启动任务
 									return (OK);//返回OK
 			case Task_Set_Up://挂起任务
-								while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
-								//RunTaskHandle -> Config &= TIT_Task_State_TC_RST;
+								while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态								
 								RunTaskHandle -> Config = Task_State_Up_IN;
 								osTaskSwitch_Enable();//触发任务切换
 								return (OK);
@@ -597,7 +550,6 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 */
 osErrorValue osTaskExit(void)
 {
-	//RunTaskHandle -> Config &= TIT_Task_State_TC_RST;//置位状态位
 	while(true){
 		RunTaskHandle -> Config = Task_State_ST;//设为终止态
 		osTaskSwitch_Enable();//触发任务切换

@@ -10,6 +10,12 @@
 
 _Signal* s1;
 
+_TaskHandle*	TaskHandle_Task1;
+_TaskHandle*	TaskHandle_Task2;
+_TaskHandle*	TaskHandle_Task3;
+_TaskHandle*	TaskHandle_Task4;
+
+
 
 void ADC_Temp_Init(void);
 u16 Get_ADC_Temp_Value(u8 ch,u8 times);
@@ -24,7 +30,7 @@ void Task1_Func(char* a)
 	u8* buf = osMemoryMalloc(20);
 	TFTLCD_Init();			//LCD≥ı ºªØ
 	print(a);
-	osPostSend((u32*)"hello Main",osTaskNameToTable("Main"));
+	osPostSend((u32*)"hello Main",TaskHandle_Main);
 	print("%s",osPostReadWait());
 	print("%s",osPostReadWait());
 //	osSignalFree(s1);
@@ -60,8 +66,8 @@ void Task2_Func(void)
     //osTaskPause();
 //	s1 = osSignalLogin(Signal_Mutual);
 
-	osPostSend((u32*)"Hello",osTaskNameToTable("RTC"));
-	osPostSend((u32*)"World",osTaskNameToTable("RTC"));
+	osPostSend((u32*)"Hello",TaskHandle_Task1);
+	osPostSend((u32*)"World",TaskHandle_Task1);
 //	osSignalApply_Wait(s1);
 
 

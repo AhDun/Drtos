@@ -127,9 +127,6 @@
 #define osFPU_Enable                    0//启用FPU硬件   1：启用 0：禁用
 #endif
 
-#define osTaskAutoStack_Enable			1//任务栈自动分配   1：启用 0：禁用
-		/*启用后会为任务栈自动分配内存*/
-
 #define osSignalAutoApply_Enable		1//信号量自动分配   1：启用 0：禁用
 		/*启用后会为信号量自动分配内存*/
 
@@ -143,6 +140,9 @@
 #define osClockTimePeriodStandard			1000 //系统时间基准周期，单位us
 
 #define	osTaskErrorSet					0//任务运行时发生致命错误后处理 1：重启这个任务 0：暂停这个任务
+
+
+#define osTaskParameterPass_Enable 		1//启动时测试任务切换速度 1：启用 0：禁用
 
 //}
 

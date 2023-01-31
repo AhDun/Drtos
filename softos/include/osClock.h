@@ -31,7 +31,7 @@
 
 #define TaskOccupyRatioSamplingTime 		1000 //任务统计时间，单位ms
 
-#define osClockGetTimePulse()	osTime. TSRT
+#define osClockGetTimePulse()		osTime.TSRT
 
 /*
                                                   <数据声明区>

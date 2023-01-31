@@ -25,7 +25,10 @@
 #define LED1 PFout(9)  	
 #define LED2 PFout(10) 
 
-
+extern _TaskHandle*	TaskHandle_Task1;
+extern _TaskHandle*	TaskHandle_Task2;
+extern _TaskHandle*	TaskHandle_Task3;
+extern _TaskHandle*	TaskHandle_Task4;
 
 void LED_Init(void);
 void Task1_Func(char* a);

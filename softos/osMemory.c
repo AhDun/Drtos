@@ -25,19 +25,22 @@
                                                   <数据初始区>
 */
 
+uint8_t a[MemTank_Max];
 
-_MemoryUnit*    MemoryNextAddr;//内存新地址
-_MemoryUnit 	MemoryPool[MemTank_Max];//内存池
+_MemoryInfo 	Memory1 = {&a[0],&a[MemTank_Max],&a[0]};
 
+_MemoryInfoHandle	MemoryInfoHandle;
 /*
                                                   <函数区>
 */
 osErrorValue  osMemoryInit(void)
 {
 	uint32_t addr;
-	MemoryNextAddr = &MemoryPool[0];//初始化内存地址
-	for(addr = 0;addr < MemTank_Max;addr++){
-		MemoryPool[addr] = 0x00;
+	
+	MemoryInfoHandle = &Memory1; 
+
+	for(addr = 0;(MemoryInfoHandle -> HeadAddr + addr) < MemoryInfoHandle -> TailAddr;addr++){
+		*(MemoryInfoHandle -> HeadAddr + addr) = 0x00;
 	}
 	return (OK);
 }
@@ -61,24 +64,24 @@ void* osMemoryMalloc(uint32_t MemSize)
 	#endif
 
 	MemSize += sizeof(MemoryStruct);
-	if((MemoryNextAddr  + MemSize) <= (&MemoryPool[MemTank_Max])){//检查内存池是否已满
+	if((MemoryInfoHandle -> NextAddr  + MemSize) <= MemoryInfoHandle -> TailAddr){//检查内存池是否已满
 
-		_MemoryStruct = (MemoryStruct*)MemoryNextAddr;
+		_MemoryStruct = (MemoryStruct*)MemoryInfoHandle -> NextAddr;
 		_MemoryStruct -> MemoryFlag = Memory_Occupy;//设为占用态
 		_MemoryStruct -> MemoryLength = (_MemoryLength)MemSize;//输入块长度
 		
-		MemoryNewAddr = (void *)(MemoryNextAddr + sizeof(MemoryStruct));
-		MemoryNextAddr = (uint8_t* )( MemoryNextAddr + MemSize);
+		MemoryNewAddr = (void *)(MemoryInfoHandle -> NextAddr + sizeof(MemoryStruct));
+		MemoryInfoHandle -> NextAddr = (uint8_t* )( MemoryInfoHandle -> NextAddr + MemSize);
 		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
 			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
 			osProtect_DISABLE();//退出临界保护
 			#endif
 		#endif
-		return osMemoryReset(MemoryNewAddr,0x00);//返回申请到地址并进行内存复位操作
+		return MemoryNewAddr;//返回申请到地址并进行内存复位操作
 		 
 	}else{//内存池已满
 		Length = 0;
-		MemoryAddr1 = &MemoryPool[Head];//获取内存池头部地址
+		MemoryAddr1 = MemoryInfoHandle -> HeadAddr;//获取内存池头部地址
 		MemoryAddr2 = NULL;
 		do{
 			_MemoryStruct = (MemoryStruct*)MemoryAddr1;
@@ -105,28 +108,26 @@ void* osMemoryMalloc(uint32_t MemSize)
 						osProtect_DISABLE();//退出临界保护
 						#endif
 					#endif
-					return osMemoryReset(MemoryAddr2 + sizeof(MemoryStruct),0x00);//返回申请到地址并进行内存复位操作
+					return MemoryAddr2 + sizeof(MemoryStruct);//返回申请到地址并进行内存复位操作
 				}
 				
 			}else if(_MemoryStruct -> MemoryFlag == Memory_Occupy){//这块内存被占用
 				Length = 0;
-			}else{//发生了意料之外的情况
-				Length = 0;
 			}
 			MemoryAddr1 += _MemoryStruct -> MemoryLength;
-		}while(MemoryAddr1 < MemoryNextAddr);//
-		if((Length + ( &MemoryPool[MemTank_Max] - MemoryNextAddr)) >= MemSize){
+		}while(MemoryAddr1 < MemoryInfoHandle -> NextAddr);//
+		if((Length + ( MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> NextAddr)) >= MemSize){
 			_MemoryStruct = (MemoryStruct*)MemoryAddr2;
 			_MemoryStruct -> MemoryLength  = (_MemoryLength)MemSize;
 			_MemoryStruct -> MemoryFlag = Memory_Occupy;//设为占用态
 
-			MemoryNextAddr += MemSize;
+			MemoryInfoHandle -> NextAddr += MemSize;
 			#if (MemoryProtect_Enable > 0)//开启了内存保护配置
 				#if (osCriticalToProtect_Enable > 0)//启用了临界保护
 				osProtect_DISABLE();//退出临界保护
 				#endif
 			#endif
-			return osMemoryReset(MemoryAddr2 + sizeof(MemoryStruct),0x00); //返回申请到地址并进行内存复位操作
+			return MemoryAddr2 + sizeof(MemoryStruct); //返回申请到地址并进行内存复位操作
 		}
 		#if (osMemoryDebug_Enable > 0)//开启了内存保护配置
 		osMemoryErrorDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
@@ -203,7 +204,7 @@ osErrorValue osMemoryFree(void* addr)
 			#endif
 		#endif
 		return (Error - 1);//返回错误
-	}else if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free || (_MemoryUnit*)_MemoryStruct2 >= MemoryNextAddr){
+	}else if(_MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free || (_MemoryUnit*)_MemoryStruct2 >= MemoryInfoHandle -> NextAddr){
 			 //检查这个要释放的块,所指向下一个块的状态是否为释放态或占用态,再或者这个要释放的块的尾地址大于新地址,这个块才可以被释放
 		_MemoryStruct1 -> MemoryFlag = Memory_Free;//设为释放态
 		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
@@ -211,6 +212,7 @@ osErrorValue osMemoryFree(void* addr)
 			osProtect_DISABLE();//退出临界保护
 			#endif
 		#endif
+		osMemoryReset(addr,0x00);
 		return (OK);//返回正常
 	}
 	else{
@@ -229,27 +231,27 @@ osErrorValue osMemoryFree(void* addr)
 
 uint32_t osMemoryGetFreeValue(void)
 {
-	_MemoryUnit* MemoryAddr = &MemoryPool[Head];
+	_MemoryUnit* MemoryAddr = MemoryInfoHandle -> HeadAddr;
 	MemoryStruct* _MemoryStruct;
 	uint32_t Vaule = 0;
-	while(MemoryAddr < MemoryNextAddr){
+	while(MemoryAddr < MemoryInfoHandle -> NextAddr){
 		_MemoryStruct = (MemoryStruct*)MemoryAddr;
 		if(_MemoryStruct -> MemoryFlag == Memory_Free){
 			Vaule += _MemoryStruct -> MemoryLength;
 		}
 		MemoryAddr += _MemoryStruct -> MemoryLength;
 	}
-	Vaule += (&MemoryPool[MemTank_Max] - MemoryNextAddr);
+	Vaule += (MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> NextAddr);
 	return (Vaule >= sizeof(MemoryStruct)? Vaule - sizeof(MemoryStruct) : NULL);
 }
 
 uint32_t osMemoryGetPassValue(void)
 {
-	_MemoryUnit* MemoryAddr = &MemoryPool[Head];
+	_MemoryUnit* MemoryAddr = MemoryInfoHandle -> HeadAddr;
 	MemoryStruct* _MemoryStruct;
 	uint32_t Vaule = 0;
 	int32_t Length = 0;
-	while(MemoryAddr < MemoryNextAddr){
+	while(MemoryAddr < MemoryInfoHandle -> NextAddr){
 		_MemoryStruct = (MemoryStruct*)MemoryAddr;
 		if(_MemoryStruct -> MemoryFlag == Memory_Free){
 			Length += _MemoryStruct -> MemoryLength;
@@ -261,23 +263,23 @@ uint32_t osMemoryGetPassValue(void)
 		}
 		MemoryAddr += _MemoryStruct -> MemoryLength;
 	}
-	if((&MemoryPool[MemTank_Max] - MemoryNextAddr) > Vaule){
-		Vaule = &MemoryPool[MemTank_Max] - MemoryNextAddr;
+	if((MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> NextAddr) > Vaule){
+		Vaule = MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> NextAddr;
 	}
 	return (Vaule >= sizeof(MemoryStruct)? Vaule - sizeof(MemoryStruct) : NULL);
 }
 
 uint32_t osMemoryGetAllValue(void)
 {
-	return (&MemoryPool[MemTank_Max] - &MemoryPool[Head]);
+	return MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> HeadAddr;
 }
 
 osErrorValue osMemorySum(void)
 {
-	_MemoryUnit* MemoryAddr = &MemoryPool[Head];
+	_MemoryUnit* MemoryAddr = MemoryInfoHandle -> HeadAddr;
 	MemoryStruct* _MemoryStruct;
 	uint32_t Count = 0;
-	while(MemoryAddr < MemoryNextAddr){
+	while(MemoryAddr < MemoryInfoHandle -> NextAddr){
 		_MemoryStruct = (MemoryStruct*)MemoryAddr;
 		if(_MemoryStruct -> MemoryFlag == Memory_Occupy || _MemoryStruct -> MemoryFlag == Memory_Free){
 			Count += 1;

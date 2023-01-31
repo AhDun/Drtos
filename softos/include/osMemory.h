@@ -59,14 +59,25 @@
 */
 
 
-typedef uint8_t	_MemoryUnit;//内存池
+typedef uint8_t	_MemoryUnit;//
 
-extern _MemoryUnit*    	MemoryNextAddr;//内存新地址
-extern _MemoryUnit 		MemoryPool[MemTank_Max];//内存池
+//内存信息块{
+typedef _MemoryUnit 	_MemoryPoolAddr;
+typedef uint32_t 		_MemoryPoolLength;
+typedef _MemoryUnit 	_MemoryNextAddr;
+typedef  struct
+{ 
+	_MemoryPoolAddr*			HeadAddr;//内存头地址
+	const _MemoryPoolAddr*			TailAddr;//内存尾地址
+	_MemoryNextAddr*			NextAddr;//内存
+
+}_MemoryInfo;
+//}
+typedef	_MemoryInfo*	_MemoryInfoHandle;
 
 //内存块结构{
 typedef uint8_t 	_MemoryFlag;
-typedef uint16_t _MemoryLength;
+typedef uint16_t 	_MemoryLength;
 
 typedef  struct
 { 

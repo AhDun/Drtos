@@ -126,35 +126,10 @@ int main(void)
 	Task_Set_Default                                    
 	);
 
-	osTaskDelayMs(1000);
+
 	//osTaskLogout("LED2");
 
 	while(1){
-//		for(_tr0 = 0;_tr0 < TST.TLMA;_tr0++){
-//			print("任务<%s>的使用量为:占用时长:%dms | 任务优先级:%d | 任务状态:",TL[_tr0].TITA -> TN,TL[_tr0].TITA -> TOT,TL[_tr0].TITA -> TPL);
-//			if(TL[_tr0].TITA != RunTask_TIT || TST.TSS != TaskSwitch_Ready){
-//				switch(TL[_tr0].TITA -> TC){
-//					case Task_State_Up_TD:print("轮片挂起\n");break;
-//					case Task_State_Up_IN:print("主动挂起\n");break;
-//					case Task_State_Up_DT:print("延时挂起\n");break;
-//					case Task_State_Up_SI:print("信号挂起\n");break;
-//					case Task_State_Up_PT:print("邮件挂起\n");break;
-//					case Task_State_DI:print("禁用态\n");break;
-//					case Task_State_ST:print("终止态\n");break;
-//					case Task_State_RB:print("重启态\n");break;
-//					case Task_State_OP:print("运行态\n");break;
-//					case Task_State_Up:print("挂起态\n");break;
-//				}
-//			}
-//			else{
-//				print("正在运行\n");
-//			}	
-//		}
-//		print("任务总使用量:%d%% | ",PS.CO);
-//		print("任务调度次数:%d | 预计耗时:%dus\n",TST.TSC,TST.TSC*TST.TSSU);
-//		TST.TSC = 0;
-//		print("内存总量:%d字节 | 内存余量:%d字节\n",osMemoryAllSize(),osMemoryMaxMallocValue());
-//		tprint("系统已运行: %d天 %h小时 %m分钟 %s秒\n",osTime. TSRT);
 		osTaskDelayMs(1000);
 		for(_tr0 = 0;_tr0 < 100;_tr0++){
 			osPostSend((u32*)"hello",osTaskNameToTable("Main"));

@@ -177,7 +177,7 @@ typedef 	uint32_t 	_TaskTimeWheel;//任务时间轮片
 	typedef 	int8_t 		_TaskPriorityLevel;//任务优先级
 #endif
 typedef		uint32_t		_PostFormT;
-typedef 	uint32_t 	_TaskAddr;
+typedef 	uint32_t 		_TaskAddr;
 typedef		uint32_t		_TaskRealSP;
 typedef		uint32_t		_TaskTimeFlag;
 #if (osPerformanceStatistics_Enable > 0) //开启了性能统计
@@ -190,11 +190,10 @@ typedef     uint32_t     _TaskParameterPass;//任务传参
 typedef struct
 {
 	_TaskRealSP			TRS;	//任务实时栈指针
+	_TaskRealSP			TRSb;	//任务实时栈指针
 	_TaskID				TI;		//任务ID
 	_TaskName*			TN; 	//任务名称
 	_TaskConfig 		TC;  	//任务控制量	
-	_TaskHandle* 		TH;  	//任务栈地址
-	_TaskStackSize 		TSS;   	//任务栈长度
 #ifdef osSignalMutual_Enable
 	_TaskPriorityLevel	TPLb;   //任务备用优先级
 #endif
@@ -265,7 +264,6 @@ extern TaskDispatchStateTable TST;//任务调度状态表
 */
 osErrorValue osTaskInit(void);	
 
-#if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
 /*
 
  *@函数名称: osTaskNameToTable
@@ -296,16 +294,11 @@ TaskInfoTable* osTaskLogin(
     _TaskConfig  TC
 );
 
-TaskInfoTable* osTaskRegister_Write(
-#else //不启用任务栈自动分配
+TaskInfoTable* osTaskLogin_Static(
 
-TaskInfoTable* osTaskLogin(
-
-#endif 
 	TaskInfoTable* TIT,
 	_TaskName *TN,
 	void*  TA,
-	_TaskHandle* TH,
 	_TaskStackSize  TSS,
 	_TaskTimeWheel  TTW,
 	_TaskPriorityLevel  TPL,

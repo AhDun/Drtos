@@ -58,7 +58,6 @@ osErrorValue osTaskInit(void)
 	TST.TISRF = 0;
 	TST.TSS = TaskSwitch_Ready;
     /***********************************系统任务初始化**********************************/
-#if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
 	if(osTaskLogin("Main",(void*)0,Default_Stack_Size,TaskTimeWheelDefault,0,(void*)0,Task_Set_Default ) == NULL){
 
 		#if (osTaskDebug_Enable > 0)
@@ -66,24 +65,6 @@ osErrorValue osTaskInit(void)
 		#endif
 		return (Error);//返回Error
 	}
-#else
-	if(osTaskLogin( 
-	&Main_TaskInfoTable, 	//任务表
-	"Main",					//任务名称
-	(void*)0,				//任务地址
-	Main_Stack,				//任务栈地址
-	Default_Stack_Size,		//任务栈长度
-	TaskTimeWheelDefault,	//任务时间轮片
-	0,						//任务优先级
-    (void*)0,				//任务传参   
-    Task_Set_Default    	//任务配置
-	) == Error){
-		#if (osTaskDebug_Enable > 0)
-		osTaskErrorDebug("Main 任务创建失败\n");
-		#endif
-		return (Error);//返回Error
-	}
-#endif
 
 	TST. TDN = NULL;    
 	RunTask_TIT = TL[TST. TDN].TITA;//将即将运行的任务信息表的指针传送给正在运行任务表
@@ -115,7 +96,6 @@ osErrorValue osTaskInit(void)
 */	
 
 
-#if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
 TaskInfoTable* osTaskLogin(
 	_TaskName *TN,//任务名称
 	void*  TA,//任务地址	
@@ -126,36 +106,19 @@ TaskInfoTable* osTaskLogin(
     _TaskConfig  TC//任务配置
 )
 {
-	void* TIT;
-	void* TH;
-	TaskInfoTable* TaskInfoTable_Buf;
-
-	TIT = osMemoryMalloc(sizeof(TaskInfoTable));//为任务表分配内存
-	if(TIT == NULL){//如果为空，就说明内存分配失败
+	uint8_t* Addr1;
+	Addr1 = osMemoryMalloc(sizeof(TaskInfoTable) + TSS);//为任务表分配内存
+	if(Addr1 == NULL){//如果为空，就说明内存分配失败
 		#if (osTaskDebug_Enable > 0)
-		osTaskErrorDebug("注册任务时,任务表分配内存失败 %s\n",TN);
+		osTaskErrorDebug("注册任务时,任务分配内存失败 %s\n",TN);
 		#endif
 		return (NULL);//返回错误
 	}
-	TH = osMemoryMalloc(TSS);//为任务栈分配内存
-	if(TH == NULL){//如果为空，就说明内存分配失败
-		#if (osTaskDebug_Enable > 0)
-		osTaskErrorDebug("注册任务时,任务栈分配内存失败 %s\n",TN);
-		#endif
-		return (NULL);//返回错误
-	}
-	TaskInfoTable_Buf = osTaskRegister_Write(TIT,TN,TA,TH,TSS,TTW,TPL,TPP, TC);//这个时候内存分配完成，就进行进行普通注册
-	if(TaskInfoTable_Buf == NULL){//如果为错误值，就说明内存分配失败
-		#if (osTaskDebug_Enable > 0)
-		osTaskErrorDebug("注册任务时,任务注册失败 %s\n",TN);
-		#endif
-		return (NULL);//返回错误
-	}
-	return (TaskInfoTable_Buf);//
+	return osTaskLogin_Static((TaskInfoTable*)Addr1,TN,TA,TSS,TTW,TPL,TPP, TC);//这个时候内存分配完成，就进行进行普通注册
 }
 /*
 
- *@函数名称: osTaskRegister_Write（启用自动栈分配时） / osTaskLogin（没有启用自动栈分配时）
+ *@函数名称: 
 
  *@函数版本: 1.0.0
 
@@ -177,14 +140,11 @@ TaskInfoTable* osTaskLogin(
  *@注    释: 例如:
 
 */
-TaskInfoTable* osTaskRegister_Write(
-#else 
-TaskInfoTable* osTaskLogin(
-#endif 
+TaskInfoTable* osTaskLogin_Static(
+ 
 	TaskInfoTable* TIT,//任务表
 	_TaskName *TN,//任务名称
 	void*  TA,//任务地址
-	_TaskHandle* TH,//任务句柄	
 	_TaskStackSize  TSS,//任务栈长度
 	_TaskTimeWheel  TTW,//任务时间轮片
 	_TaskPriorityLevel  TPL,//任务优先级
@@ -193,6 +153,7 @@ TaskInfoTable* osTaskLogin(
 )
 {
 	int32_t _tr0,_tr1;
+	uint8_t* StackAddr = (uint8_t*)TIT + sizeof(TaskInfoTable);
 #if (osCriticalToProtect_Enable > 0)//启用了临界保护
 	osProtect_ENABLE();//进入保护
 #endif
@@ -220,10 +181,19 @@ TaskInfoTable* osTaskLogin(
     TIT -> TI = (_TaskID)TST.TLMA;//写入任务ID
 	TIT -> TN = TN;//写入任务名称
 	TIT -> TA = TA;////写入任务地址
-	TIT -> TH = (uint32_t*)(((uint32_t)TH)+ (TSS - 1));//写入任务句柄
-    TIT -> TRS = (uint32_t)(((uint32_t)TH)+ (TSS - 1));//写入任务实时栈指针
-	TIT -> TSS = TSS;//写入任务栈长度
+	TSS -= 1;
+    TIT -> TRSb = TIT -> TRS = (uint32_t)((uint32_t)StackAddr + TSS);//写入任务实时栈指针
     TIT -> TPP = TPP;//写入任务传参
+	TIT -> TPL = TPL;//写入任务优先级
+	TIT -> TPLb = TPL;//写入任务备用优先级
+
+
+	if(TC == Task_Set_Default){//如果任务选择了"禁用任务"选项，则生效
+        TIT -> TC = Task_State_RB;//将任务设为创建态
+    }
+    else{
+        osTaskSet(TIT,TC);
+    }
 
 	TIT	-> PF = NULL;//任务邮箱消息设为零
 
@@ -237,8 +207,7 @@ TaskInfoTable* osTaskLogin(
     else{//否则，则使用默认值
         TIT -> TTW = TaskTimeWheelDefault;//写入默认值时间轮片
     }
-	TIT -> TPL = TPL;//写入任务优先级
-	TIT -> TPLb = TPL;//写入任务备用优先级
+
 
 	if(TST.TLMA > (TaskListLength - 1)){//检查任务轮询表指针是否大于任务轮询表的长度，如果大于则进入
 #if (osCriticalToProtect_Enable > 0)//启用了临界保护
@@ -271,15 +240,7 @@ TaskInfoTable* osTaskLogin(
 		TL[_tr0].TITA -> TI = _tr0;
 	}
 
-	if(TC == Task_Set_Default){//如果任务选择了"禁用任务"选项，则生效
-        //TIT -> TC &= TIT_Task_State_TC_RST;//清除任务的确状态位
-        TIT -> TC = Task_State_RB;//将任务设为创建态
-    }
-    else{
-        //TIT -> TC &= TIT_Task_State_TC_RST;//清除任务的确状态位
-        osTaskSet(TIT,TC);
-    }
-    //osTASK_Stack_Init(TIT ->TPP,(void* )TIT -> TA,(void* )osTaskExit,&TIT -> TRS);//启动任务
+
 #if (osCriticalToProtect_Enable > 0)//启用了临界保护
 	osProtect_DISABLE();//退出保护
 #endif
@@ -521,7 +482,7 @@ void osTaskNext(void)
 		for(;TST. TDN < TST.TLMA;TST. TDN++){//进行遍历
 			switch(TL[TST. TDN].TITA -> TC){//进行状态码分离操作，并传输给switch语句
 					case Task_State_RB:
-										TL[TST. TDN].TITA -> TRS = (_TaskRealSP)(TL[TST. TDN].TITA -> TH);
+										TL[TST. TDN].TITA -> TRS = TL[TST. TDN].TITA -> TRSb;
 										osTASK_Stack_Init(TL[TST. TDN].TITA ->TPP,(void* )TL[TST. TDN].TITA -> TA,(void* )osTaskExit,&TL[TST. TDN].TITA -> TRS);//启动任务
 					case Task_State_Up_IN://这个任务是主动挂起(挂起态)
 					case Task_State_Up_TD://这个任务是轮片挂起(挂起态)	
@@ -707,7 +668,7 @@ osErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
 		else{
 			osTaskErrorDebug("非空\n");
 		}
-		osTaskErrorDebug("任务栈总大小:%d字节\n任务栈剩余:%d字节\n",(RunTask_TIT -> TSS - 1),psp - ((uint32_t)RunTask_TIT -> TH - ((RunTask_TIT -> TSS - 1))));
+		osTaskErrorDebug("任务栈总大小:%d字节\n任务栈剩余:%d字节\n",(1),psp - ((uint32_t)RunTask_TIT -> TRSb - (1)));
 		osTaskErrorDebug("任务异常处:%X\n",pc);
 		osTaskErrorDebug("内存总量:%d字节\n内存余量:%d字节",osMemoryGetAllValue(),osMemoryGetFreeValue());
 	}

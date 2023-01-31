@@ -46,16 +46,16 @@
 */
 osErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 {
-	_PostForm* PostForm;
+	_Post* PostForm;
 
-	PostForm = osMemoryMalloc(sizeof(_PostForm));//申请内存
+	PostForm = osMemoryMalloc(sizeof(_Post));//申请内存
 	if(PostForm == NULL){//如果返回为空,说明申请失败
 		#if (osPostDebugError_Enable > 0)
 		osPostDebugError("发送邮件时申请内存失败 %s\n",RunTaskHandle -> Name);
 		#endif
 		return (Error);//返回错误
 	}else{
-		PostForm -> PB = PB;
+		PostForm -> Body = PB;
 		PostForm -> DownAddr = NULL;
 
 		uLinkListTailWrtie(&TaskHandle -> PF,(uint32_t*)PostForm);
@@ -64,8 +64,8 @@ osErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 		if(TaskHandle -> PriorityLevel <  RunTaskHandle -> PriorityLevel){//如果这个任务高于当前工作运行任务栏的优先级，就占用
 			TaskHandle -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
 			RunTaskHandle -> Config = Task_State_Up_TD;//将正在运行任务的状态设为轮片挂起(挂起态)
-			if(TST.TSS == TaskSwitch_Ready){
-				TST. TDN = TaskHandle -> ID;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
+			if(TaskSwitchState.SwitchState == TaskSwitch_Ready){
+				TaskSwitchState.DispatchNum = TaskHandle -> ID;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
 				osTaskSwitch_Enable();//触发任务切换
 			} 
 		}else{
@@ -93,16 +93,16 @@ osErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 */
 uint32_t* osPostRead(void)
 {
-	_PostForm* PostForm;
+	_Post* PostForm;
 	uint32_t*	Buf;
 
 	if(RunTaskHandle -> PF != NULL){
 		#if (osPostHead > 0)
-		PostForm = (_PostForm*)uLinkListHeadRead(&RunTaskHandle -> PF);
+		PostForm = (_Post*)uLinkListHeadRead(&RunTaskHandle -> PF);
 		#else
-		PostForm  =  (_PostForm*)uLinkListTailRead(&RunTaskHandle -> PF);
+		PostForm  =  (_Post*)uLinkListTailRead(&RunTaskHandle -> PF);
 		#endif
-		Buf = PostForm -> PB;
+		Buf = PostForm -> Body;
 		if(osMemoryFree(PostForm) != OK){
 			#if (osPostDebugError_Enable > 0)
 			osPostDebugError("读取邮件时释放内存失败 %s\n",RunTaskHandle -> Name);
@@ -133,7 +133,7 @@ uint32_t* osPostRead(void)
 uint32_t* osPostReadWait(void)
 {
 	if(RunTaskHandle -> PF == 0){//没有邮件,进行等待
-		while(TST.TSS != TaskSwitch_Ready);//查询任务可切换态,如果是不可切换,无限循环,直到可切换态
+		while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询任务可切换态,如果是不可切换,无限循环,直到可切换态
 		//RunTaskHandle -> Config &= TIT_Task_State_TC_RST;//任务的状态位复位
 		RunTaskHandle -> Config = Task_State_Up_PT;//修改为邮件挂起(等待态)
 		osTaskSwitch_Enable();//触发异常,进行任务切换

@@ -4,8 +4,8 @@
 #include "main.h"
 #include "osConfig.h"
 
-extern SemaphoreTable* s1;
-extern SemaphoreTable* timebz;
+extern _Signal* s1;
+extern _Signal* timebz;
 
 
 u8 RTC_Config(void);						//RTC≥ı ºªØ

@@ -115,7 +115,7 @@ INTX_ENABLE
 ;	MOV   R2,   SP
 ;	MRS	  R3,	  PSP
 ;	MOV   SP,   R3
-;	TST		LR, #0x10
+;	TaskSwitchState		LR, #0x10
 ;	IT		EQ
 ;	VSTMDBEQ SP!,{S16-S31}
 ;	PUSH	{R4-R11}
@@ -125,7 +125,7 @@ INTX_ENABLE
 ;	LDR   R0, [R0]
 ;	LDR   SP,   [R0]
 ;	POP 	{R4-R11}
-;	TST		LR, #0x10
+;	TaskSwitchState		LR, #0x10
 ;	IT		EQ
 ;	VLDMIAEQ SP!, {S16-S31} 
 ;	MOV   R1,   SP

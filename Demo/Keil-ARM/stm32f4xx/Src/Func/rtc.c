@@ -4,7 +4,7 @@
 #include "usart.h"
 
 
-SemaphoreTable* timebz;
+_Signal* timebz;
 
 
 //RTC ±º‰…Ë÷√
@@ -174,7 +174,7 @@ void RTC_Alarm_IRQHandler(void)
 }
 
 
-//SemaphoreTable LEDINITS;
+//_Signal LEDINITS;
 u8 buf[40];
 RTC_TimeTypeDef RTC_TimeStruct;
 RTC_DateTypeDef RTC_DateStruct;

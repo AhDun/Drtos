@@ -61,19 +61,18 @@ typedef struct
 //}
 
 #if (osPerformanceStatistics_Enable > 0)
-typedef  uint8_t  	_CPUTaskOccupy;//
-typedef  uint8_t  	_CPUISROccupy;//
-typedef	 uint8_t 	_CPUSwitchOccupy;
-typedef		uint32_t		_TaskSwitchConut;//任务调度次数
-typedef		uint8_t		_TaskSwitchSpeedUs;//任务切换速度测试
-
+typedef  uint8_t  	_CPUTaskOccupy;//任务占用比
+typedef  uint8_t  	_CPUISROccupy;//中断占用比
+typedef	 uint8_t 	_CPUSwitchOccupy;//切换占用比
+typedef	 uint32_t	_TaskSwitchConut;//任务调度次数
+typedef	 uint8_t	_TaskSwitchSpeedUs;//任务切换速度测试
 //性能统计{
 typedef struct
 {
  
-	_CPUTaskOccupy  	CTO;//
-	_CPUISROccupy		CISRO;//
-	_CPUSwitchOccupy	CSO;//
+	_CPUTaskOccupy  	CTO;//任务占用比
+	_CPUISROccupy		CISRO;//中断占用比
+	_CPUSwitchOccupy	CSO;//切换占用比
 	_TaskSwitchConut	TSC;//任务调度次数
 	_TaskSwitchConut	TSCb;//任务调度次数
 	_TaskSwitchSpeedUs	TSSU;//任务切换速度测试
@@ -83,6 +82,7 @@ typedef struct
 #endif
 
 extern _PerformanceStatistics PS;//性能统计
+
 extern osTIME osTime;
 /*
                                                   <函数声明区>

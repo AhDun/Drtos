@@ -43,7 +43,7 @@ int main(void)
 {
 /*--------------------------------------demo---------------------------------------------------------*/
 	u32 _tr0;
-	SemaphoreTable *p1;
+	_Signal *p1;
 
 //	uint32_t p1 = 0;
 //	osTIME p2;
@@ -63,7 +63,7 @@ int main(void)
 //	p8 = uLinkListHeadRead(&p1);
 //	p8 = uLinkListHeadRead(&p1);
 
-//	SemaphoreTable* timebz1;
+//	_Signal* timebz1;
 
 	osInit();
 

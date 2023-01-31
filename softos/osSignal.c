@@ -54,7 +54,7 @@
 
  *@函数功能: 注册信号量
 
- *@输入参数: _SemaphoreType SP(信号量的类型)
+ *@输入参数: _SignalType SP(信号量的类型)
 
  *@返 回 值: 无
 
@@ -62,26 +62,26 @@
 
 */
 #if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
-SemaphoreTable* osSignalLogin(_SemaphoreType SP)
+_Signal* osSignalLogin(_SignalType SP)
 {
 	#if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
-		SemaphoreTable* ST = osMemoryMalloc(sizeof(SemaphoreTable));//为信号量结构体申请内存
+		_Signal* ST = osMemoryMalloc(sizeof(_Signal));//为信号量结构体申请内存
 		if(ST == NULL){//如果内存申请函数返回为零,说明申请失败
 			#if (osSignalDebugError_Enable > 0)
 			osSignalDebugError("注册信号量时内存申请失败 %s\n",RunTaskHandle -> Name);
 			#endif
 			return (NULL);//返回空,表示错误
 		}
-		ST -> SV = 0;//将信号值设为零
+		ST -> Value = 0;//将信号值设为零
 		if(SP == Signal_Mutual || SP == Signal_Binary || SP == Signal_Count){
-			ST -> ST = SP;//写入信号类型
+			ST -> Type = SP;//写入信号类型
 		}else{
 			#if (osSignalDebugError_Enable > 0)
 			osSignalDebugError("注册信号量时类型错误 %s\n",RunTaskHandle -> Name);
 			#endif
 			return (NULL);
 		}
-		ST -> SP = NULL;
+		ST -> NextAddr = NULL;
 		return (ST);
 	#else
 		return (NULL);
@@ -103,7 +103,7 @@ SemaphoreTable* osSignalLogin(_SemaphoreType SP)
  *@注    释: 无
 
 */
-osErrorValue osSignalLogin(SemaphoreTable* ST,_SemaphoreType SP)
+osErrorValue osSignalLogin(_Signal* ST,_SignalType SP)
 {
     switch(SP){
 #ifdef osSignalMutual_Enable 
@@ -141,7 +141,7 @@ osErrorValue osSignalLogin(SemaphoreTable* ST,_SemaphoreType SP)
 
  *@函数功能: 信号量请求
 
- *@输入参数: SemaphoreTable* ST(信号量结构体)
+ *@输入参数: _Signal* ST(信号量结构体)
 
  *@返 回 值: -1:发生错误 / 0:请求成功
 
@@ -149,9 +149,9 @@ osErrorValue osSignalLogin(SemaphoreTable* ST,_SemaphoreType SP)
 
 */
 
-static osErrorValue osSignalApplyToken(SemaphoreTable* ST)
+static osErrorValue osSignalApplyToken(_Signal* ST)
 {
-	SemaphoreToken* SemaphoreToken_Buf = osMemoryMalloc(sizeof(SemaphoreToken));//为信号量结构体申请内存
+	_SignalToken* SemaphoreToken_Buf = osMemoryMalloc(sizeof(_SignalToken));//为信号量结构体申请内存
 	if(SemaphoreToken_Buf == NULL){
 		#if (osSignalDebugError_Enable > 0)
 		osSignalDebugError("申请占用信号量令牌时内存申请失败 %s\n",RunTaskHandle -> Name);
@@ -160,7 +160,7 @@ static osErrorValue osSignalApplyToken(SemaphoreTable* ST)
 	}else{
 		SemaphoreToken_Buf -> DownAddr = NULL;
 		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTaskHandle;
-		ST -> SP = (uint32_t)SemaphoreToken_Buf;
+		ST -> NextAddr = (uint32_t)SemaphoreToken_Buf;
 		return (OK);
 	}
 }
@@ -174,7 +174,7 @@ static osErrorValue osSignalApplyToken(SemaphoreTable* ST)
 
  *@函数功能: 信号量请求
 
- *@输入参数: SemaphoreTable* ST(信号量结构体)
+ *@输入参数: _Signal* ST(信号量结构体)
 
  *@返 回 值: -1:发生错误 / 0:请求成功
 
@@ -182,13 +182,13 @@ static osErrorValue osSignalApplyToken(SemaphoreTable* ST)
 
 */
 
-static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
+static osErrorValue osSignalWaitToken(_Signal* ST)
 {
 	_NextAddr* NextAddr_Buf;
 	_NextAddr NextAddr_Buf1;
-	SemaphoreToken* SemaphoreToken_Buf1;
+	_SignalToken* SemaphoreToken_Buf1;
 	_TaskHandle*	TaskInfoTable_Buf;
-	SemaphoreToken* SemaphoreToken_Buf = osMemoryMalloc(sizeof(SemaphoreToken));//为信号量结构体申请内存
+	_SignalToken* SemaphoreToken_Buf = osMemoryMalloc(sizeof(_SignalToken));//为信号量结构体申请内存
 	if(SemaphoreToken_Buf == NULL){
 		#if (osSignalDebugError_Enable > 0)
 		osSignalDebugError("申请等待信号量令牌时内存申请失败 %s\n",RunTaskHandle -> Name);
@@ -198,16 +198,16 @@ static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 		SemaphoreToken_Buf -> TaskInfo = (_TaskInfo*)RunTaskHandle;
 		SemaphoreToken_Buf -> DownAddr = NULL;
 	
-		NextAddr_Buf = &ST -> SP;
+		NextAddr_Buf = &ST -> NextAddr;
 		
 		while(*NextAddr_Buf != NULL){
-			SemaphoreToken_Buf1 = (SemaphoreToken*)*NextAddr_Buf;
+			SemaphoreToken_Buf1 = (_SignalToken*)*NextAddr_Buf;
 			TaskInfoTable_Buf = (_TaskHandle*)SemaphoreToken_Buf1 -> TaskInfo;
 			if(RunTaskHandle -> PriorityLevel < TaskInfoTable_Buf -> PriorityLevel){
 				NextAddr_Buf1 = (_NextAddr)*NextAddr_Buf;
 				*NextAddr_Buf = (_NextAddr)SemaphoreToken_Buf;
 				SemaphoreToken_Buf -> DownAddr = NextAddr_Buf1;
-				if(NextAddr_Buf == &ST -> SP){
+				if(NextAddr_Buf == &ST -> NextAddr){
 					TaskInfoTable_Buf -> Config = Task_State_Up_SI;
 					return (OK);
 				}
@@ -225,15 +225,15 @@ static osErrorValue osSignalWaitToken(SemaphoreTable* ST)
 }
 
 
-osErrorValue osSignalUseWait(SemaphoreTable* ST)
+osErrorValue osSignalUseWait(_Signal* ST)
 {
 #if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
 	_TaskHandle* TaskHandle;
-	SemaphoreToken* SemaphoreToken_Buf;
-	switch(ST ->ST){
+	_SignalToken* SemaphoreToken_Buf;
+	switch(ST -> Type){
 #ifdef osSignalBinary_Enable 
 		case Signal_Binary:	
-							if(ST -> SP != NULL){
+							if(ST -> NextAddr != NULL){
 								return osSignalWaitToken(ST);
 
 							}else{
@@ -242,8 +242,8 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 #endif
 #ifdef osSignalMutual_Enable 
 		case Signal_Mutual:
-							if(ST -> SP != NULL){
-								SemaphoreToken_Buf = (SemaphoreToken*)ST -> SP;
+							if(ST -> NextAddr != NULL){
+								SemaphoreToken_Buf = (_SignalToken*)ST -> NextAddr;
 								TaskHandle = (_TaskHandle*)SemaphoreToken_Buf -> TaskInfo;
 								if(RunTaskHandle -> PriorityLevel < TaskHandle -> PriorityLevel){
 									TaskHandle -> PriorityLevel = RunTaskHandle -> PriorityLevel;//
@@ -255,11 +255,11 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 #endif
 #ifdef osSignalCount_Enable
 		case Signal_Count:
-							if(ST -> SV > 0){
-								ST -> SV =  ST -> SV - 1;
+							if(ST -> Value > 0){
+								ST -> Value =  ST -> Value - 1;
 								return (OK);	
 							}else{
-								if(ST -> SP != NULL){
+								if(ST -> NextAddr != NULL){
 									return osSignalWaitToken(ST);
 								}else{
 									return osSignalApplyToken(ST);
@@ -283,20 +283,20 @@ osErrorValue osSignalUseWait(SemaphoreTable* ST)
 
  *@函数功能: 释放信号量
 
- *@输入参数: SemaphoreTable* ST(信号量结构体)
+ *@输入参数: _Signal* ST(信号量结构体)
 
  *@返 回 值: 无
 
  *@注    释: 无
 
 */
-osErrorValue osSignalFree(SemaphoreTable* ST)
+osErrorValue osSignalFree(_Signal* ST)
 {
 #if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
-	SemaphoreToken* SemaphoreToken_Buf;
+	_SignalToken* SemaphoreToken_Buf;
 	_TaskHandle*	TaskInfoTable_Buf;
 
-	switch(ST ->ST){
+	switch(ST -> Type){
 #ifdef osSignalBinary_Enable
 		case Signal_Binary:
 							break;
@@ -308,7 +308,7 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 #endif
 #ifdef osSignalCount_Enable
 		case Signal_Count:
-							ST -> SV = ST -> SV + 1;
+							ST -> Value = ST -> Value + 1;
 							break;
 #endif
 		default:
@@ -317,8 +317,8 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 				#endif
 				return(Error);
 	}
-	if(ST -> SP != NULL){
-		SemaphoreToken_Buf = (SemaphoreToken*)uLinkListHeadRead(&ST -> SP);
+	if(ST -> NextAddr != NULL){
+		SemaphoreToken_Buf = (_SignalToken*)uLinkListHeadRead(&ST -> NextAddr);
 		TaskInfoTable_Buf = (_TaskHandle*)SemaphoreToken_Buf  -> TaskInfo;
 		TaskInfoTable_Buf -> Config = Task_State_Up_IN;  //主动挂起(挂起态)
 		if(osMemoryFree(SemaphoreToken_Buf) != OK){
@@ -348,19 +348,17 @@ osErrorValue osSignalFree(SemaphoreTable* ST)
 
  *@函数功能: 信号量注销
 
- *@输入参数: SemaphoreTable* ST(信号量结构体)
+ *@输入参数: _Signal* ST(信号量结构体)
 
  *@返 回 值: 无
 
  *@注    释: 无
 
 */
-osErrorValue osSignalLogout(SemaphoreTable* ST)
+osErrorValue osSignalLogout(_Signal* ST)
 {
 	#if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
-	ST -> SV = 0;//将信号值设为零
-	ST -> ST = 0;//写入信号类型
-	ST -> SP = 0;
+	ST -> NextAddr =  ST -> Type =  ST -> Value = 0;
 	#if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
 
 	if(osMemoryFree((uint8_t*)ST) == Error){//需要把信号量的所占内存释放

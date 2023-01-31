@@ -28,27 +28,6 @@
 
 #define TaskListLength 		osMaximumTask 	//任务轮询表长度，这个意味着最大的任务量
 
-#if TaskListLength <= 255 //当任务量小于255时
-
-
-//---------------------任务优先级--------------------
-	#define _TaskPriorityLevelMin   	-127		//任务最小优先级 
-	#define _TaskPriorityLevelMax 		126		//任务最大优先级
-	/*
-	任务的优先级: 
-	-127~126
-	*/
-//任务ID范围{
-	#define _TaskIDMin 					0u		//任务ID最小值
-	#define _TaskIDMax 					253u	//任务ID最大值
-	/*
-		任务ID的范围: 0~253
-		最大的任务量: 254个
-	*/
-//}
-#endif
-
-#define TaskList_NULLValue	0u	    //任务轮询表空值
 
 //任务状态{
 #define Task_State_Up_TD  0x05u//轮片挂起(挂起态)
@@ -136,14 +115,10 @@
 	#define osProtect_DISABLE() 			INTX_ENABLE()//退出临界保护
 	#define osProtect_ENABLE() 				INTX_DISABLE()//进入临界保护
 #endif
-#define osTaskSwitch_Enable() 			do{TST.TSS = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
+#define osTaskSwitch_Enable() 			do{TaskSwitchState.SwitchState = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
 #if (osTaskAutoStack_Enable > 0)//启用任务栈自动分配
 #define osTaskLogout(TN) 	osTaskLogout_Write(osTaskNameToTable(TN))
 #endif
-
-//#define osTaskSwitch_Strong_Enable() 	CPU_SVC()//触发强制任务切换
-
-//#define osTaskDebug(a,b) print("\nosTask: %s:%s\n",a,b)//DeBug输出函数
 
 #define osTaskErrorDebug 		osDebugError
 
@@ -152,37 +127,31 @@
 
 #define osTaskRunError_Enable 1 //任务运行时发生致命错误 1:开启Debug输出 0:关闭Debug输出
 
-#define osTaskEnterISR()			TST.TISRF += 1;//进入 中断
-#define osTaskExitISR()				TST.TISRF -= 1;//退出 中断
+#define osTaskEnterISR()			TaskSwitchState.ISRFlag += 1;//进入 中断
+
+#define osTaskExitISR()				TaskSwitchState.ISRFlag -= 1;//退出 中断
 
 
 /*
                                                   数据类型别名声明区
 */
 
-
-
-//任务表{
-#if _TaskIDMax<= 253
-	typedef 	uint8_t 	_TaskID;//任务ID
-#endif
-typedef 	uint8_t 		_TaskName;//任务名称
-typedef 	uint8_t 		_TaskConfig;//任务控制量
+typedef 	uint8_t 	_TaskID;//任务ID
+typedef 	uint8_t 	_TaskName;//任务名称
+typedef 	uint8_t 	_TaskConfig;//任务控制量
 typedef 	uint32_t 	_TaskStackSize;//任务栈长度
 typedef 	uint32_t 	_TaskSemaphore;//任务信号量
 typedef 	uint32_t 	_TaskTimeWheel;//任务时间轮片
-#if _TaskPriorityLevelMax <= 126 && _TaskPriorityLevelMin >= -127
-	typedef 	int8_t 		_TaskPriorityLevel;//任务优先级
-#endif
-typedef		uint32_t		_PostFormT;
-typedef 	uint32_t 		_TaskAddr;
-typedef		uint32_t		_TaskRealSP;
-typedef		uint32_t		_TaskTimeFlag;
+typedef 	int8_t 		_TaskPriorityLevel;//任务优先级
+typedef		uint32_t	_PostFormT;
+typedef 	uint32_t 	_TaskAddr;
+typedef		uint32_t	_TaskRealSP;
+typedef		uint32_t	_TaskTimeFlag;
+typedef     uint32_t     _TaskParameterPass;//任务传参
 #if (osPerformanceStatistics_Enable > 0) //开启了性能统计
 typedef     uint16_t     _TaskOccupyTime;//任务占用时长
 typedef     uint16_t      _TaskOccupyRatio;//任务占用比
 #endif
-typedef     uint32_t     _TaskParameterPass;//任务传参
 
 
 typedef struct
@@ -205,8 +174,8 @@ typedef struct
 #if (osPerformanceStatistics_Enable > 0) //开启了性能统计
     _TaskOccupyTime      OccupyTime;    //任务占用时长
     _TaskOccupyRatio     OccupyRatio;    //任务占用比
-#endif
-    _TaskParameterPass*  ParameterPass;    //任务传参					
+	_TaskParameterPass*  ParameterPass;    //任务传参	
+#endif				
 } _TaskHandle;
 //}
 
@@ -220,17 +189,17 @@ typedef struct
 //任务调度状态表{
 typedef		uint8_t		_TaskListMaximumActivity;//任务最大活动量
 typedef 	uint8_t		_TaskDispatchNum;//任务调度状态
-typedef     uint8_t      _TaskSwitchState;//任务调度计数
+typedef     uint8_t      _SwitchState;//任务调度计数
 typedef		uint8_t		_TaskISRFlag;
 typedef struct
 {
-	_TaskSwitchState	    TSS;//任务调度状态
-	_TaskDispatchNum		TDN;//任务调度计数
-    _TaskListMaximumActivity	TLMA;//任务最大活动量
-	_TaskISRFlag				TISRF;//中断状态
+	_SwitchState	    		SwitchState;//任务调度状态
+	_TaskDispatchNum			DispatchNum;//任务调度计数
+    _TaskListMaximumActivity	TaskListMax;//任务最大活动量
+	_TaskISRFlag				ISRFlag;//中断状态
 
     
-}_TaskDispatchStateTable;
+}_TaskSwitchState;
 //}
 
 /*
@@ -238,7 +207,7 @@ typedef struct
 */
 extern _TaskHandle*	RunTaskHandle;//当前正在运行的任务表指针
 extern _TaskList TaskList[TaskListLength];//任务轮询表
-extern _TaskDispatchStateTable TST;//任务调度状态表
+extern _TaskSwitchState TaskSwitchState;//任务调度状态表
 
 
 /*

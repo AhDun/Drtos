@@ -63,18 +63,18 @@ typedef struct
 {
 	_NextAddr  DownAddr;//下一个表的地址
 	_TaskInfo*	TaskInfo;//任务句柄
-}SemaphoreToken;
+}_SignalToken;
 //}
 
 //信号量{
-typedef     uint8_t     _SemaphoreValue;
-typedef     uint8_t      _SemaphoreType;
+typedef     uint8_t     _SignalValue;
+typedef     uint8_t     _SignalType;
 typedef struct
 {
-    _SemaphoreValue 	 SV;//信号值
-    _SemaphoreType   	 ST;//信号的类型
-	_NextAddr		 	 SP;//信号量令牌链头
-}SemaphoreTable;
+    _SignalValue 	 Value;//信号值
+    _SignalType   	 Type;//信号的类型
+	_NextAddr		 NextAddr;//信号量令牌链头
+}_Signal;
 //}
 
 /*
@@ -94,20 +94,20 @@ typedef struct
 
  *@函数功能: 信号量注册
 
- *@输入参数: SemaphoreTable* ST(信号量结构体)
+ *@输入参数: _Signal* ST(信号量结构体)
 
  *@返 回 值: 无
 
  *@注    释: 无
 
 */
-SemaphoreTable* osSignalLogin(_SemaphoreType SP);
+_Signal* osSignalLogin(_SignalType SP);
 #else
-osErrorValue osSignalLogin(SemaphoreTable* ST,_SemaphoreType SP);
+osErrorValue osSignalLogin(_Signal* ST,_SignalType SP);
 #endif
 
-osErrorValue osSignalUseWait(SemaphoreTable* ST);
-osErrorValue osSignalFree(SemaphoreTable* ST);
+osErrorValue osSignalUseWait(_Signal* ST);
+osErrorValue osSignalFree(_Signal* ST);
 
 /*
                                                   FILE-END

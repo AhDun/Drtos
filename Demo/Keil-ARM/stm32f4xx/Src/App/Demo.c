@@ -8,7 +8,7 @@
 #include "math.h"
 
 
-SemaphoreTable* s1;
+_Signal* s1;
 
 
 void ADC_Temp_Init(void);
@@ -72,7 +72,7 @@ void Task2_Func(void)
 	while(1){
 		FRONT_COLOR=GBLUE;
 
-//		sprint((char *)buf,"TaskCount: %d TaskSwitchTime: %dus",TST.TSC,TST.TSC*TST.TSSU);
+//		sprint((char *)buf,"TaskCount: %d TaskSwitchTime: %dus",TaskSwitchState.TSC,TaskSwitchState.TSC*TaskSwitchState.TSSU);
 //		LCD_ShowString(10,120,tftlcd_data.width,tftlcd_data.height,16,buf);
 //		for(b = 0; b < 50;b++){
 //				buf[b] = ' ';
@@ -89,13 +89,13 @@ void Task2_Func(void)
 		LCD_ShowString(10,180,tftlcd_data.width,tftlcd_data.height,16,buf);
 		LCD_ShowString(10,210,tftlcd_data.width,tftlcd_data.height,16,"------------TaskList--------------");
 		LCD_ShowString(10,240,tftlcd_data.width,tftlcd_data.height,16,"Name  CPU  Class ");
-        for(a = 0;a < TST.TLMA;a++){
+        for(a = 0;a < TaskSwitchState.TaskListMax;a++){
 
 			osMemoryReset(buf,' ');
 			sprint((char *)buf,"%s  %d%ms  %d ",TaskList[a].TaskHandle -> Name,TaskList[a].TaskHandle -> OccupyRatio,TaskList[a].TaskHandle -> PriorityLevel);
 			LCD_ShowString(10,270+(a*25),tftlcd_data.width,tftlcd_data.height,16,buf);
 		}
-		//osTaskMonitor();
+		osTaskMonitor();
 		osTaskDelayMs(1000);
 	}
 }

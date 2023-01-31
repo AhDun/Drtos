@@ -23,7 +23,7 @@
 /*
                                                   <数据初始区>
 */
-_TaskDispatchStateTable TST;//任务调度状态表
+_TaskSwitchState TaskSwitchState;//任务调度状态表
 _TaskHandle*	RunTaskHandle;//当前正在运行任务的信息表
 _TaskList TaskList[TaskListLength];//任务轮询表
 
@@ -49,13 +49,13 @@ osErrorValue osTaskInit(void)
 {
     uint32_t _tr0;
     /***********************************任务轮询表初始化*********************************/
-    TST.TLMA = NULL;
+    TaskSwitchState.TaskListMax = NULL;
     for(_tr0 = 0;_tr0 < TaskListLength;_tr0++){
-        TaskList[_tr0].TaskHandle = (_TaskHandle*)TaskList_NULLValue;
+        TaskList[_tr0].TaskHandle = (_TaskHandle*)NULL;
     }
 
-	TST.TISRF = 0;
-	TST.TSS = TaskSwitch_Ready;
+	TaskSwitchState.ISRFlag = 0;
+	TaskSwitchState.SwitchState = TaskSwitch_Ready;
     /***********************************系统任务初始化**********************************/
 	if(osTaskLogin("Main",(void*)0,Default_Stack_Size,TaskTimeWheelDefault,0,(void*)0,Task_Set_Default ) == NULL){
 
@@ -65,9 +65,9 @@ osErrorValue osTaskInit(void)
 		return (Error);//返回Error
 	}
 
-	TST. TDN = NULL;    
-	RunTaskHandle = TaskList[TST. TDN].TaskHandle;//将即将运行的任务信息表的指针传送给正在运行任务表
-	TST. TDN = TST. TDN + 1;//轮盘指针向后移一位     
+	TaskSwitchState.DispatchNum = NULL;    
+	RunTaskHandle = TaskList[TaskSwitchState.DispatchNum].TaskHandle;//将即将运行的任务信息表的指针传送给正在运行任务表
+	TaskSwitchState.DispatchNum = TaskSwitchState.DispatchNum + 1;//轮盘指针向后移一位     
 	osTime.TTWM = RunTaskHandle -> TaskTimeWheel;//将当前任务的时间轮片写入到时间记录器
 	osTASK_START(&RunTaskHandle -> RealSP);//启动第一个任务
     return (OK);//返回OK
@@ -176,7 +176,7 @@ _TaskHandle* osTaskLogin_Static(
 		return (NULL);//返回错误
 	}
 #endif
-    TaskHandle -> ID = (_TaskID)TST.TLMA;//写入任务ID
+    TaskHandle -> ID = (_TaskID)TaskSwitchState.TaskListMax;//写入任务ID
 	TaskHandle -> Name = TN;//写入任务名称
 	TaskHandle -> Addr = TA;////写入任务地址
 	TSS -= 1;
@@ -206,7 +206,7 @@ _TaskHandle* osTaskLogin_Static(
     }
 
 
-	if(TST.TLMA > (TaskListLength - 1)){//检查任务轮询表指针是否大于任务轮询表的长度，如果大于则进入
+	if(TaskSwitchState.TaskListMax > (TaskListLength - 1)){//检查任务轮询表指针是否大于任务轮询表的长度，如果大于则进入
 #if (osCriticalToProtect_Enable > 0)//启用了临界保护
 		osProtect_DISABLE();//退出保护
 #endif
@@ -215,13 +215,13 @@ _TaskHandle* osTaskLogin_Static(
 		#endif
 		return (NULL);//返回错误
 	}
-	for(_tr0 = 0;_tr0 < TST.TLMA;_tr0++){//对任务轮询表进行正向遍历
-		if(TaskList[_tr0].TaskHandle -> PriorityLevel > TPL || TaskList[_tr0].TaskHandle == (_TaskHandle*)TaskList_NULLValue){//如果当前任务优先级大于表中任务任务的优先级，或者，当前指针指向的表为空，则进入
+	for(_tr0 = 0;_tr0 < TaskSwitchState.TaskListMax;_tr0++){//对任务轮询表进行正向遍历
+		if(TaskList[_tr0].TaskHandle -> PriorityLevel > TPL || TaskList[_tr0].TaskHandle == (_TaskHandle*)NULL){//如果当前任务优先级大于表中任务任务的优先级，或者，当前指针指向的表为空，则进入
 			break;//退出循环
 		}
 	}
-	for(_tr1 = TST.TLMA - 1;_tr1 >= 0; _tr1--){//对任务轮询表进行反向遍历
-		if(TaskList[_tr1].TaskHandle !=  (_TaskHandle*)TaskList_NULLValue){//如果当前指针指向的表为了空，则进入
+	for(_tr1 = TaskSwitchState.TaskListMax - 1;_tr1 >= 0; _tr1--){//对任务轮询表进行反向遍历
+		if(TaskList[_tr1].TaskHandle !=  (_TaskHandle*)NULL){//如果当前指针指向的表为了空，则进入
 			break;//退出循环
 		}
 	}
@@ -231,9 +231,9 @@ _TaskHandle* osTaskLogin_Static(
 	}
 	TaskList[_tr0].TaskHandle = TaskHandle;//将当前任务写入表中
 
-	TST.TLMA++;//表指针加一 
+	TaskSwitchState.TaskListMax++;//表指针加一 
 
-	for(_tr0 = NULL;_tr0 < TST.TLMA;_tr0++){//重新计算任务ID
+	for(_tr0 = NULL;_tr0 < TaskSwitchState.TaskListMax;_tr0++){//重新计算任务ID
 		TaskList[_tr0].TaskHandle -> ID = _tr0;
 	}
 
@@ -307,7 +307,7 @@ osErrorValue	osTaskLogout(_TaskHandle* TaskHandle)
 			break;//退出当前循环
 		}
 	}
-	if(_tr0 == TaskListLength || TST.TLMA == 0){//如果_tr0的值是任务轮询表长度，或者任务最大活动量为零时，就进入
+	if(_tr0 == TaskListLength || TaskSwitchState.TaskListMax == 0){//如果_tr0的值是任务轮询表长度，或者任务最大活动量为零时，就进入
 		#if (osCriticalToProtect_Enable > 0)//启用了临界保护
 		osProtect_DISABLE();//退出保护
 		#endif
@@ -316,8 +316,8 @@ osErrorValue	osTaskLogout(_TaskHandle* TaskHandle)
 		#endif
 		return (Error);//发生错误，返回错误
 	}
-	for(_tr1 = TST.TLMA;_tr1 >= 0; _tr1--){//根据任务最大活动量，进行遍历
-		if(TaskList[_tr1].TaskHandle !=  (_TaskHandle*)TaskList_NULLValue){//如果当前任务表的指针为空，就进入
+	for(_tr1 = TaskSwitchState.TaskListMax;_tr1 >= 0; _tr1--){//根据任务最大活动量，进行遍历
+		if(TaskList[_tr1].TaskHandle !=  (_TaskHandle*)NULL){//如果当前任务表的指针为空，就进入
 			break;//退出当前循环
 		}
 	}
@@ -331,10 +331,10 @@ osErrorValue	osTaskLogout(_TaskHandle* TaskHandle)
 		TaskList[_tr0].TaskHandle = TaskList[_tr0 + 1].TaskHandle ;//进行数组前移
 		//指向对应的任务ID的下标指向的数组中值会被后一项的数组的值覆盖掉
 	}
-	TaskList[_tr1].TaskHandle = (_TaskHandle*)TaskList_NULLValue ;//将任务轮询表的尾端清零
-	TST.TLMA--;//任务最大活动量减一
+	TaskList[_tr1].TaskHandle = (_TaskHandle*)NULL ;//将任务轮询表的尾端清零
+	TaskSwitchState.TaskListMax--;//任务最大活动量减一
 	
-	for(_tr0 = NULL;_tr0 < TST.TLMA;_tr0++){//重新计算任务ID
+	for(_tr0 = NULL;_tr0 < TaskSwitchState.TaskListMax;_tr0++){//重新计算任务ID
 		TaskList[_tr0].TaskHandle -> ID = _tr0;
 	}
 
@@ -362,7 +362,7 @@ osErrorValue	osTaskLogout(_TaskHandle* TaskHandle)
 _TaskHandle* osTaskNameToTable(_TaskName *TN)
 {
 	uint32_t _var0;
-	for(_var0 = 0;_var0 < TST.TLMA;_var0++){//根据任务最大活动量，进行遍历
+	for(_var0 = 0;_var0 < TaskSwitchState.TaskListMax;_var0++){//根据任务最大活动量，进行遍历
 		if(StrComp((int8_t*)TN,(int8_t*)TaskList[_var0].TaskHandle -> Name)){//
 			return (TaskList[_var0].TaskHandle);//返回任务ID
 		}
@@ -393,7 +393,7 @@ osErrorValue osTaskDelayMs(uint32_t ms)
 		#if (osClockTimePeriod > osClockTimePeriodStandard)
 		ms = ms /(osClockTimePeriod / osClockTimePeriodStandard);	
 		#endif
-		while(TST.TSS != TaskSwitch_Ready);//检查查询CPU是否已经被设为悬起态
+		while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//检查查询CPU是否已经被设为悬起态
 		//如果悬起了，就会返回真值，就while循环，直到未来悬起
 		//RunTaskHandle -> Config &= TIT_Task_State_TC_RST;//清除正在运行任务的状态位
 		RunTaskHandle -> Config = Task_State_Up_DT;//将正在运行任务的状态设为延时挂起(等待态)
@@ -420,8 +420,7 @@ osErrorValue osTaskDelayMs(uint32_t ms)
 osErrorValue osTaskDelayUs(uint32_t us)
 {
 	osTime.TTWM = osTime.TTWM + 1;
-	osTaskTimeUs(
-);
+	osTaskTimeUs();
 	return (OK);
 }
 
@@ -474,21 +473,21 @@ osErrorValue osTaskSwitch_State(void)
 */	
 void osTaskNext(void)
 {  
-    TST.TSS = TaskSwitch_Run;
+    TaskSwitchState.SwitchState = TaskSwitch_Run;
     //osTASK_HANGUP(&RunTaskHandle -> RealSP);//通过当前运行任务的栈指针,挂起当前的任务
     while(1){//启动下一个任务
-		for(;TST. TDN < TST.TLMA;TST. TDN++){//进行遍历
-			switch(TaskList[TST. TDN].TaskHandle -> Config){//进行状态码分离操作，并传输给switch语句
+		for(;TaskSwitchState.DispatchNum < TaskSwitchState.TaskListMax;TaskSwitchState.DispatchNum++){//进行遍历
+			switch(TaskList[TaskSwitchState.DispatchNum].TaskHandle -> Config){//进行状态码分离操作，并传输给switch语句
 					case Task_State_RB:
-										TaskList[TST. TDN].TaskHandle -> RealSP = TaskList[TST. TDN].TaskHandle -> RealSPb;
-										osTASK_Stack_Init(TaskList[TST. TDN].TaskHandle -> ParameterPass,(void* )TaskList[TST. TDN].TaskHandle -> Addr,(void* )osTaskExit,&TaskList[TST. TDN].TaskHandle -> RealSP);//启动任务
+										TaskList[TaskSwitchState.DispatchNum].TaskHandle -> RealSP = TaskList[TaskSwitchState.DispatchNum].TaskHandle -> RealSPb;
+										osTASK_Stack_Init(TaskList[TaskSwitchState.DispatchNum].TaskHandle -> ParameterPass,(void* )TaskList[TaskSwitchState.DispatchNum].TaskHandle -> Addr,(void* )osTaskExit,&TaskList[TaskSwitchState.DispatchNum].TaskHandle -> RealSP);//启动任务
 					case Task_State_Up_IN://这个任务是主动挂起(挂起态)
 					case Task_State_Up_TD://这个任务是轮片挂起(挂起态)	
 					case Task_State_RE:	  //这个任务就绪了
-										RunTaskHandle = TaskList[TST. TDN].TaskHandle;//将即将运行的任务信息表的指针传送给正在运行任务表
-										TST. TDN = TST. TDN + 1;//轮盘指针向后移一位  
+										RunTaskHandle = TaskList[TaskSwitchState.DispatchNum].TaskHandle;//将即将运行的任务信息表的指针传送给正在运行任务表
+										TaskSwitchState.DispatchNum = TaskSwitchState.DispatchNum + 1;//轮盘指针向后移一位  
 										osTime.TTWM = RunTaskHandle -> TaskTimeWheel;//将当前任务的时间轮片写入到时间记录器
-										TST.TSS = TaskSwitch_Ready;//将调度状态设为"未调度"
+										TaskSwitchState.SwitchState = TaskSwitch_Ready;//将调度状态设为"未调度"
 										#if (osPerformanceStatistics_Enable > 0)
 										PS.TSC += 1;
 										#endif
@@ -497,7 +496,7 @@ void osTaskNext(void)
 					default:break;//意料之外!
 				}
 		}
-		TST.TDN = NULL;//清空任务调度计数
+		TaskSwitchState.DispatchNum = NULL;//清空任务调度计数
     }
 }
 /*
@@ -535,10 +534,10 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 									TaskHandle -> Config = Task_State_RB;//
 									return (OK);//返回OK
 			case Task_Set_Start://立即启动任务
-									while(TST.TSS != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
+									while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
 									//TaskHandle -> Config &= TIT_Task_State_TC_RST;//置位状态位
 									TaskHandle -> Config = Task_State_Up_IN;//主动挂起(挂起态)
-									TST. TDN = TaskHandle -> ID;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
+									TaskSwitchState.DispatchNum = TaskHandle -> ID;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
 									osTaskSwitch_Enable();
 									return (OK);//返回OK
 			case Task_Set_Up://挂起任务
@@ -550,7 +549,7 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 		switch(Pv){
 			case Task_Set_Pause://暂停任务
 									//TaskHandle -> Config &= TIT_Task_State_TC_RST;//置位状态位
-									while(TST.TSS != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
+									while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
 									RunTaskHandle -> Config = Task_State_DI;//设为禁用态
 									osTaskSwitch_Enable();//触发任务切换
 									return (OK);//返回OK
@@ -560,14 +559,14 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 
 			case Task_Set_Reboot://重启任务
 									//TaskHandle -> Config &= TIT_Task_State_TC_RST;//置位状态位
-									while(TST.TSS != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
+									while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
 									RunTaskHandle -> Config = Task_State_RB;//
 									osTaskSwitch_Enable();//触发任务切换
 									return (OK);//返回OK
 			case Task_Set_Start://立即启动任务
 									return (OK);//返回OK
 			case Task_Set_Up://挂起任务
-								while(TST.TSS != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
+								while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
 								//RunTaskHandle -> Config &= TIT_Task_State_TC_RST;
 								RunTaskHandle -> Config = Task_State_Up_IN;
 								osTaskSwitch_Enable();//触发任务切换
@@ -623,7 +622,7 @@ osErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA)
 {
 	if(TaskHandle == 0){
 		RunTaskHandle -> Addr = NewTA;
-		while(TST.TSS != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
+		while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
 		RunTaskHandle -> Config = Task_State_RB;//
 		osTaskSwitch_Enable();//触发任务切换
 		return (OK);//返回OK
@@ -717,9 +716,9 @@ osErrorValue osTaskMonitor(void)
 
 {
 	uint8_t _tr0;
-	for(_tr0 = NULL;_tr0 < TST.TLMA;_tr0++){//对每一个任务进行遍历
+	for(_tr0 = NULL;_tr0 < TaskSwitchState.TaskListMax;_tr0++){//对每一个任务进行遍历
 		print("任务<%s>的使用量为:占用时长:%dms | 任务优先级:%d | 任务状态:",TaskList[_tr0].TaskHandle -> Name,TaskList[_tr0].TaskHandle -> OccupyRatio,TaskList[_tr0].TaskHandle -> PriorityLevel);
-		if(TaskList[_tr0].TaskHandle != RunTaskHandle || TST.TSS != TaskSwitch_Ready){
+		if(TaskList[_tr0].TaskHandle != RunTaskHandle || TaskSwitchState.SwitchState != TaskSwitch_Ready){
 			switch(TaskList[_tr0].TaskHandle -> Config){
 				case Task_State_Up_TD:print("轮片挂起\n");break;
 				case Task_State_Up_IN:print("主动挂起\n");break;

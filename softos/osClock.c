@@ -122,15 +122,15 @@ void osClockTimePulse(void)
 	#endif
      /*----------------------------------统计---------------------------------------*/
 	#if (osPerformanceStatistics_Enable > 0) //开启了性能统计
-	if(TST.TISRF > NULL){
+	if(TaskSwitchState.ISRFlag > NULL){
 		osTime.TISRRT++;
 	}
-	else if(TST.TSS == TaskSwitch_Ready){//任务调度状态为未调度，进行计时
+	else if(TaskSwitchState.SwitchState == TaskSwitch_Ready){//任务调度状态为未调度，进行计时
         RunTaskHandle -> OccupyTime++;//任务占用时长计数
     }
     if(osTime. TSRT % TaskOccupyRatioSamplingTime == 0){//系统每过一定时长，就进行占用比例统计
         PS.CTO = 0;//CPU占用量设为0
-        for(_tr0 = NULL;_tr0 < TST.TLMA;_tr0++){//对每一个任务进行遍历
+        for(_tr0 = NULL;_tr0 < TaskSwitchState.TaskListMax;_tr0++){//对每一个任务进行遍历
             //TaskList[_tr0].TaskHandle -> OccupyRatio = TaskList[_tr0].TaskHandle -> OccupyTime / (TaskOccupyRatioSamplingTime / 100);//计算这个任务占用比
 			TaskList[_tr0].TaskHandle -> OccupyRatio = TaskList[_tr0].TaskHandle -> OccupyTime;//计算这个任务占用比
 			//计算公式：占用比 = 单位时间内的占用时长 / (单位时间 / 100)
@@ -148,13 +148,13 @@ void osClockTimePulse(void)
     }
 	#endif
     /*----------------------------------轮片---------------------------------------*/
-    if(osTime.TTWM > 0 && TST.TSS == TaskSwitch_Ready && TST.TISRF == NULL){ //时间轮片
+    if(osTime.TTWM > 0 && TaskSwitchState.SwitchState == TaskSwitch_Ready && TaskSwitchState.ISRFlag == NULL){ //时间轮片
 	   //当前正在运行的任务的轮片时间大于0并且调度状态为未调度状态
         osTime.TTWM--;//当前正在运行的任务的轮片时间减一
         if(osTime.TTWM == 0){//当目前正在运行的任务的轮片时间为零时
             //RunTaskHandle -> Config &= TIT_Task_State_TC_RST;//清除正在运行的任务的状态位
             RunTaskHandle -> Config = Task_State_Up_TD;//将正在运行的任务的状态设为位轮片挂起(挂起态)
-            if(TST.TSS == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
+            if(TaskSwitchState.SwitchState == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
                 osTaskSwitch_Enable();//触发任务切换
             }
             else{//如果已经悬起了
@@ -163,12 +163,12 @@ void osClockTimePulse(void)
              
         }
     }
-    for(_tr0 = NULL;_tr0 < TST.TLMA;_tr0++){//根据任务最大活动量，进行遍历
+    for(_tr0 = NULL;_tr0 < TaskSwitchState.TaskListMax;_tr0++){//根据任务最大活动量，进行遍历
 		/*----------------------------------延时---------------------------------------*/
         if((TaskList[_tr0].TaskHandle -> Config) == Task_State_Up_DT){//这个任务是延时挂起(等待态)，才进入
             TaskList[_tr0].TaskHandle -> TimeFlag--;//把这个任务时间标志中内容减一
             if(TaskList[_tr0].TaskHandle -> TimeFlag == 0){	//当这个任务时间标志中内容为零时
-                if(TST.TSS != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)
+                if(TaskSwitchState.SwitchState != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)
                     //TaskList[_tr0].TaskHandle  -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
                     TaskList[_tr0].TaskHandle  -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
                 }
@@ -177,8 +177,8 @@ void osClockTimePulse(void)
                     TaskList[_tr0].TaskHandle -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
                     //RunTaskHandle -> Config &= TIT_Task_State_TC_RST;//清除正在运行任务的状态位
                     RunTaskHandle -> Config = Task_State_Up_TD;//将正在运行任务的状态设为轮片挂起(挂起态)
-                    if(TST.TSS == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
-                        TST. TDN = _tr0;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
+                    if(TaskSwitchState.SwitchState == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
+                        TaskSwitchState.DispatchNum = _tr0;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
                         osTaskSwitch_Enable(); //触发任务切换
                     }
                     else{//如果已经悬起了

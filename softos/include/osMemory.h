@@ -49,6 +49,8 @@
 
 #define osMemoryFreeReset_Enable 1 //释放内存时复位内存 1:开启 0:关闭
 
+#define osMemoryFreeTest_Enable 1 //释放内存时检查内存 1:开启 0:关闭
+
 #define osMemoryErrorDebug osDebugError//DeBug输出函数
 
 #define osMemoryDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
@@ -72,7 +74,7 @@ typedef _MemoryUnit 	_MemoryNextAddr;
 typedef  struct
 { 
 	_MemoryPoolAddr*			HeadAddr;//内存头地址
-	const _MemoryPoolAddr*			TailAddr;//内存尾地址
+	const _MemoryPoolAddr*		TailAddr;//内存尾地址
 	_MemoryNextAddr*			NextAddr;//内存
 
 }_MemoryInfo;

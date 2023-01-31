@@ -617,7 +617,7 @@ osErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
 		else{
 			osTaskErrorDebug("非空\n");
 		}
-		osTaskErrorDebug("任务栈总大小:%d字节\n任务栈剩余:%d字节\n",(1),psp - ((uint32_t)RunTaskHandle -> RealSPb - (1)));
+		osTaskErrorDebug("任务栈总大小:%d字节\n任务栈剩余:%d字节\n",(uint32_t)RunTaskHandle -> RealSPb - (uint32_t)RunTaskHandle -  sizeof(_TaskHandle),(uint32_t)RunTaskHandle -> RealSPb - psp);
 		osTaskErrorDebug("任务异常处:%X\n",pc);
 		osTaskErrorDebug("内存总量:%d字节\n内存余量:%d字节",osMemoryGetAllValue(),osMemoryGetFreeValue());
 	}

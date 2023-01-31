@@ -44,8 +44,8 @@ int main(void)
 /*--------------------------------------demo---------------------------------------------------------*/
 	u32 _tr0;
 
-	osInit();
 
+	osInit();
 	//osMemoryMalloc(25000);
 
 	TaskHandle_Task1 = osTaskLogin(
@@ -89,23 +89,23 @@ int main(void)
 	"Hello",									//任务传参
 	Task_Set_Default                                    
 	);
-
+	
 	//osTaskLogout(TaskHandle_Task4);
 
-	while(1){
-		osTaskDelayMs(1000);
-		for(_tr0 = 0;_tr0 < 500;_tr0++){
-			osPostSend((u32*)"hello",TaskHandle_Main);
-		}
-		osTaskDelayMs(1000);
-		for(_tr0 = 0;_tr0 < 500;_tr0++){
-			osPostReadWait();
-		}
-//		for(_tr0 = 10;_tr0 < MemTank_Max;_tr0++){
-//			MemoryPool[_tr0] = _tr0;
-//			osTaskDelayMs(10);
+//	while(1){
+//		osTaskDelayMs(1000);
+//		for(_tr0 = 0;_tr0 < 500;_tr0++){
+//			osPostSend((u32*)"hello",TaskHandle_Main);
 //		}
-	}
+//		osTaskDelayMs(1000);
+//		for(_tr0 = 0;_tr0 < 500;_tr0++){
+//			osPostReadWait();
+//		}
+////		for(_tr0 = 10;_tr0 < MemTank_Max;_tr0++){
+////			MemoryPool[_tr0] = _tr0;
+////			osTaskDelayMs(10);
+////		}
+//	}
 /*---------------------------------------------------------------------------------------------------*/
 }
 

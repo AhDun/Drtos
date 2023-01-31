@@ -172,6 +172,7 @@ void* osMemoryReset(void* addr,uint8_t data)
 osErrorValue osMemoryFree(void* addr)
 {
 	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)addr - sizeof(MemoryStruct));
+	#if( osMemoryFreeTest_Enable > 0)
 	MemoryStruct* _MemoryStruct2 = (MemoryStruct*)((uint8_t*)addr - sizeof(MemoryStruct) + _MemoryStruct1 -> MemoryLength);
 	#if (MemoryProtect_Enable > 0)//开启了内存保护配置
 		#if (osCriticalToProtect_Enable > 0)//启用了临界保护
@@ -215,6 +216,13 @@ osErrorValue osMemoryFree(void* addr)
 		#endif
 		return (Error);//返回错误
 	}
+	#else
+	_MemoryStruct1 -> MemoryFlag = Memory_Free;//设为释放态
+	#if (osMemoryFreeReset_Enable > 0)
+	osMemoryReset(addr,0x00);
+	#endif
+	return (OK);//返回正常
+	#endif
 	
 }
 

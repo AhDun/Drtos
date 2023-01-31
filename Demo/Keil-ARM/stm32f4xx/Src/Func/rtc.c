@@ -188,6 +188,8 @@ void RTC_WKUP_IRQHandler(void)
 		RTC_ClearFlag(RTC_FLAG_WUTF);	//清除中断标志
 
 		osSignalFree(timebz);
+		osSignalFree(timebz);
+		osSignalFree(timebz);
 
 		/*RTC_GetTime(RTC_Format_BIN,&RTC_TimeStruct);
 		sprintf((char *)buf,"Time: %.2d:%.2d:%.2d",RTC_TimeStruct.RTC_Hours,RTC_TimeStruct.RTC_Minutes,RTC_TimeStruct.RTC_Seconds);

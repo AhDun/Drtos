@@ -45,6 +45,10 @@
 								//启用保护申请内存与释放内存所用的时长将会增加
 								//内存保护也不一定保证内存块一定不会发生错误!!!,只会降低内存发生错误的概率
 
+#define osMemoryInitReset_Enable 1 //初始化内存时复位内存 1:开启 0:关闭
+
+#define osMemoryFreeReset_Enable 1 //释放内存时复位内存 1:开启 0:关闭
+
 #define osMemoryErrorDebug osDebugError//DeBug输出函数
 
 #define osMemoryDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出

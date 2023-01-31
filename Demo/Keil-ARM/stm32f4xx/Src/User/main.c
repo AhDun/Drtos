@@ -43,44 +43,8 @@ int main(void)
 {
 /*--------------------------------------demo---------------------------------------------------------*/
 	u32 _tr0;
-	_Signal *p1;
-
-//	uint32_t p1 = 0;
-//	osTIME p2;
-//	uint32_t p3;
-//	uint32_t p4;
-//	uint32_t p5;
-//	uint32_t p6;
-//	uint32_t p7;
-//	uint32_t p8;
-
-//	uLinkListHeadWrtie(&p1,&p2);
-//	uLinkListHeadWrtie(&p1,&p3);
-//	uLinkListHeadWrtie(&p1,&p4);
-
-//	p8 = uLinkListHeadRead(&p1);
-//	p8 = uLinkListHeadRead(&p1);
-//	p8 = uLinkListHeadRead(&p1);
-//	p8 = uLinkListHeadRead(&p1);
-
-//	_Signal* timebz1;
 
 	osInit();
-
-//	p1 = osSignalLogin(Signal_Binary);
-
-//	osSignalUseWait(p1);
-//	osSignalUseWait(p1);
-//	osSignalUseWait(p1);
-//	osSignalUseWait(p1);
-
-//	osSignalFree(p1);
-//	osSignalFree(p1);
-//	osSignalFree(p1);
-//	osSignalFree(p1);
-//	osSignalFree(p1);
-
-
 
 	//osMemoryMalloc(25000);
 
@@ -126,14 +90,15 @@ int main(void)
 	Task_Set_Default                                    
 	);
 
-	osTaskLogout(TaskHandle_Task4);
+	//osTaskLogout(TaskHandle_Task4);
 
 	while(1){
-		osTaskDelayMs(10);
-		for(_tr0 = 0;_tr0 < 100;_tr0++){
+		osTaskDelayMs(1000);
+		for(_tr0 = 0;_tr0 < 500;_tr0++){
 			osPostSend((u32*)"hello",TaskHandle_Main);
 		}
-		for(_tr0 = 0;_tr0 < 100;_tr0++){
+		osTaskDelayMs(1000);
+		for(_tr0 = 0;_tr0 < 500;_tr0++){
 			osPostReadWait();
 		}
 //		for(_tr0 = 10;_tr0 < MemTank_Max;_tr0++){

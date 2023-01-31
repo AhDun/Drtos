@@ -29,6 +29,7 @@ extern _TaskHandle*	TaskHandle_Task1;
 extern _TaskHandle*	TaskHandle_Task2;
 extern _TaskHandle*	TaskHandle_Task3;
 extern _TaskHandle*	TaskHandle_Task4;
+extern _Signal* timebz;
 
 void LED_Init(void);
 void Task1_Func(char* a);

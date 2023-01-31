@@ -307,8 +307,11 @@ osErrorValue osSignalFree(_Signal* ST)
 							break;
 #endif
 #ifdef osSignalCount_Enable
-		case Signal_Count:
-							ST -> Value = ST -> Value + 1;
+		case Signal_Count:	
+							if(ST -> NextAddr == NULL){
+								ST -> Value = ST -> Value + 1;
+								return (OK);
+							}
 							break;
 #endif
 		default:

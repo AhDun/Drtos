@@ -26,9 +26,9 @@
                                                   <数据初始区>
 */
 
-uint8_t a[MemTank_Max] __attribute__((at(0x10000000)));
+uint8_t CCRAM[MemTank_Max] __attribute__((at(0x10000000)));
 
-_MemoryInfo 	Memory1 = {&a[0],&a[MemTank_Max],&a[0]};
+_MemoryInfo 	Memory_CCRAM = {&CCRAM[0],&CCRAM[MemTank_Max],&CCRAM[0]};
 
 _MemoryInfoHandle	MemoryInfoHandle;
 /*
@@ -40,13 +40,12 @@ _MemoryInfoHandle	MemoryInfoHandle;
 osErrorValue  osMemoryInit(void)
 {
 	uint32_t addr;
-
-
-	MemoryInfoHandle = &Memory1; 
-
+	MemoryInfoHandle = &Memory_CCRAM; 
+	#if (osMemoryInitReset_Enable > 0)
 	for(addr = 0;(MemoryInfoHandle -> HeadAddr + addr) < MemoryInfoHandle -> TailAddr;addr++){
 		*(MemoryInfoHandle -> HeadAddr + addr) = 0x00;
 	}
+	#endif
 	return (OK);
 }
 
@@ -152,9 +151,6 @@ void* osMemoryReset(void* addr,uint8_t data)
 	_MemoryUnit* addr_Buf = (_MemoryUnit*)addr;
 
 	#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-		#if (osCriticalToProtect_Enable > 0)//启用了临界保护
-		osProtect_ENABLE();//进入临界保护
-		#endif
 		if(osMemorySum() == Error){
 			return (NULL);
 		}
@@ -164,23 +160,11 @@ void* osMemoryReset(void* addr,uint8_t data)
 			*addr_Buf =  data;
 			addr_Buf++;
 		}
-		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
-			osProtect_DISABLE();//退出临界保护
-			#endif
-		#endif
 		return addr;
 	}
 	else{
-		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
-			osProtect_DISABLE();//退出临界保护
-			#endif
-		#endif
 		return (NULL);
 	}
-
-	
 
 }
 
@@ -215,7 +199,9 @@ osErrorValue osMemoryFree(void* addr)
 			osProtect_DISABLE();//退出临界保护
 			#endif
 		#endif
+		#if (osMemoryFreeReset_Enable > 0)
 		osMemoryReset(addr,0x00);
+		#endif
 		return (OK);//返回正常
 	}
 	else{

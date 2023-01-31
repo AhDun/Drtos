@@ -36,22 +36,21 @@ void Task1_Func(char* a)
 //	osSignalFree(s1);
 	LCD_Clear(BLACK);
 	FRONT_COLOR=YELLOW;
-	BACK_COLOR=BLACK;
+	BACK_COLOR=BRED;
 	LCD_ShowString(10,10,tftlcd_data.width,tftlcd_data.height,16,"softos Demo");
 	RTC_Config();
 	RTC_Set_WakeUp(RTC_WakeUpClock_CK_SPRE_16bits,0);//配置WAKE UP中断,1秒钟中断一次
-	timebz = osSignalLogin(Signal_Binary);
-	osSignalUseWait(timebz);
+	timebz = osSignalLogin(Signal_Count);
 	while(1) 
 	{
+		osSignalUseWait(timebz);
         RTC_GetTime(RTC_Format_BIN,&RTC_TimeStruct);
 		osMemoryReset(buf,' ');
         sprint((char *)buf,"RTC:%2d:%2d:%2d",RTC_TimeStruct.RTC_Hours,RTC_TimeStruct.RTC_Minutes,RTC_TimeStruct.RTC_Seconds);
-		FRONT_COLOR=YELLOW;
+		FRONT_COLOR=GRAYBLUE;
 		BACK_COLOR=BLACK;
 		LCD_ShowString(10,90,tftlcd_data.width,tftlcd_data.height,16,buf);	
-
-		osSignalUseWait(timebz);
+		
 	}
 	
 }
@@ -70,13 +69,9 @@ void Task2_Func(void)
 	osPostSend((u32*)"World",TaskHandle_Task1);
 //	osSignalApply_Wait(s1);
 
-
-    FRONT_COLOR=YELLOW;
     LCD_ShowString(10,30,tftlcd_data.width,tftlcd_data.height,16,"STM32F407ZGT6@168MHz");
-    FRONT_COLOR=GBLUE;
     LCD_ShowString(10,60,tftlcd_data.width,tftlcd_data.height,16,osNameVersionNumberS);
 	while(1){
-		FRONT_COLOR=GBLUE;
 
 //		sprint((char *)buf,"TaskCount: %d TaskSwitchTime: %dus",TaskSwitchState.TSC,TaskSwitchState.TSC*TaskSwitchState.TSSU);
 //		LCD_ShowString(10,120,tftlcd_data.width,tftlcd_data.height,16,buf);
@@ -102,7 +97,7 @@ void Task2_Func(void)
 			LCD_ShowString(10,270+(a*25),tftlcd_data.width,tftlcd_data.height,16,buf);
 		}
 		osTaskMonitor();
-		osTaskDelayMs(1000);
+		osSignalUseWait(timebz);
 	}
 }
 

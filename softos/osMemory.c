@@ -49,7 +49,50 @@ osErrorValue  osMemoryInit(void)
 	return (OK);
 }
 
+#if( osMemorySequence_Enable > 0)
+void* osMemoryMalloc(uint32_t MemSize)
+{
+	void*  MemoryNewAddr  = (void *)(MemoryInfoHandle -> NextAddr);
+	if((MemoryInfoHandle -> NextAddr  + MemSize) <= MemoryInfoHandle -> TailAddr){//检查内存池是否已满
+		MemoryInfoHandle -> NextAddr = (uint8_t* )( MemoryInfoHandle -> NextAddr + MemSize);
+	}else{
+		#if (osMemoryDebug_Enable > 0)//开启了内存保护配置
+		osMemoryErrorDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
+		#endif
+		return (NULL);
+	}
 
+	return (MemoryNewAddr);
+}
+void* osMemoryReset(void* addr,uint8_t data)
+{
+//	while(Length--){
+//		*addr_Buf =  data;
+//		addr_Buf++;
+//	}
+	return addr;
+}
+
+uint32_t osMemoryGetFreeValue(void)
+{
+	return (MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> NextAddr);
+}
+
+uint32_t osMemoryGetPassValue(void)
+{
+	return osMemoryGetFreeValue();
+}
+osErrorValue osMemoryFree(void* addr)
+{
+	return (OK);
+}
+
+osErrorValue osMemorySum(void)
+{
+	return (100);
+}
+
+#else
 void* osMemoryMalloc(uint32_t MemSize)
 {
 	MemoryStruct* _MemoryStruct;
@@ -90,11 +133,17 @@ void* osMemoryMalloc(uint32_t MemSize)
 		do{
 			_MemoryStruct = (MemoryStruct*)MemoryAddr1;
 			if(_MemoryStruct -> MemoryFlag == Memory_Free){
+				#if( osMemoryMerge_Enable > 0)
 				if(Length == 0){//只有在长度为零时,才记录
 					MemoryAddr2 = MemoryAddr1;//记录邻头块的地址
 				}
 				Length += _MemoryStruct -> MemoryLength;
+				#else
+				MemoryAddr2 = MemoryAddr1;//记录邻头块的地址
+				Length = _MemoryStruct -> MemoryLength;
+				#endif
 				if( Length >= MemSize){
+					#if (osMemoryPart_Enable > 0)
 					if((Length - MemSize) > sizeof(MemoryStruct)){//进行切块操作
 						_MemoryStruct = (MemoryStruct*)(MemoryAddr2 + MemSize);	
 						_MemoryStruct -> MemoryFlag = Memory_Free;//设为释放态
@@ -102,6 +151,7 @@ void* osMemoryMalloc(uint32_t MemSize)
 
 						Length = MemSize;
 					}
+					#endif
 					_MemoryStruct = (MemoryStruct*)MemoryAddr2;
 					_MemoryStruct -> MemoryLength  = (_MemoryLength)Length;//输入块长度
 					_MemoryStruct -> MemoryFlag = Memory_Occupy;//设为占用态
@@ -118,6 +168,7 @@ void* osMemoryMalloc(uint32_t MemSize)
 			}
 			MemoryAddr1 += _MemoryStruct -> MemoryLength;
 		}while(MemoryAddr1 < MemoryInfoHandle -> NextAddr);//
+		#if( osMemoryMerge_Enable > 0)
 		if((Length + ( MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> NextAddr)) >= MemSize){
 			_MemoryStruct = (MemoryStruct*)MemoryAddr2;
 			_MemoryStruct -> MemoryLength  = (_MemoryLength)MemSize;
@@ -131,6 +182,7 @@ void* osMemoryMalloc(uint32_t MemSize)
 			#endif
 			return MemoryAddr2 + sizeof(MemoryStruct); //返回申请到地址并进行内存复位操作
 		}
+		#endif
 		#if (osMemoryDebug_Enable > 0)//开启了内存保护配置
 		osMemoryErrorDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
 		#endif
@@ -266,11 +318,6 @@ uint32_t osMemoryGetPassValue(void)
 	return (Vaule >= sizeof(MemoryStruct)? Vaule - sizeof(MemoryStruct) : NULL);
 }
 
-uint32_t osMemoryGetAllValue(void)
-{
-	return MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> HeadAddr;
-}
-
 osErrorValue osMemorySum(void)
 {
 	_MemoryUnit* MemoryAddr = MemoryInfoHandle -> HeadAddr;
@@ -290,7 +337,12 @@ osErrorValue osMemorySum(void)
 	}
 	return (Count);
 }
+#endif
 
+uint32_t osMemoryGetAllValue(void)
+{
+	return MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> HeadAddr;
+}
 
 
 /*

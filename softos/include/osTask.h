@@ -117,6 +117,9 @@
 #endif
 #define osTaskSwitch_Enable() 			do{TaskSwitchState.SwitchState = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
 
+#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b TaskSwitchState.SwitchState = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
+
+
 #define osTaskErrorDebug 		osDebugError
 
 #define osTaskDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出

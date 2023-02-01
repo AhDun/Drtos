@@ -209,6 +209,7 @@ __asm void PendSV_Handler(void)
 	CPSIE   I			//启用所有中断
     BX	  LR
 	NOP
+	NOP
 }
 
 /*

@@ -33,29 +33,40 @@
 
 
 //内存块标志{
-#define Memory_Occupy 	0x01 //该内存块占用中
-#define Memory_Free   	0x02 //该内存块已释放
+#define Memory_Occupy 					0x01 //该内存块占用中
+#define Memory_Free   					0x02 //该内存块已释放
 //}
 
 //内存配置{
-#define MemTank_Max 	16 * 1024 //内存池大小配置
+#define MemTank_Max 					16 * 1024 //内存池大小配置
 
 
-#define MemoryProtect_Enable 0 // 内存保护配置 	1:开启保护 0:关闭保护	
-								//启用保护申请内存与释放内存所用的时长将会增加
-								//内存保护也不一定保证内存块一定不会发生错误!!!,只会降低内存发生错误的概率
+#define MemoryProtect_Enable 			0 // 内存保护配置 	1:开启保护 0:关闭保护	
+										//启用保护申请内存与释放内存所用的时长将会增加
+										//内存保护也不一定保证内存块一定不会发生错误!!!,只会降低内存发生错误的概率
 
-#define osMemoryInitReset_Enable 1 //初始化内存时复位内存 1:开启 0:关闭
+#define osMemoryInitReset_Enable 		1 //初始化内存时复位内存 1:开启 0:关闭
 
-#define osMemoryFreeReset_Enable 1 //释放内存时复位内存 1:开启 0:关闭
+#define osMemorySequence_Enable 		0 //内存顺序分配   1：启用 0：禁用
 
-#define osMemoryFreeTest_Enable 1 //释放内存时检查内存 1:开启 0:关闭
+
+#if (osMemorySequence_Enable == 0)
+
+#define osMemoryFreeReset_Enable 		1 //释放内存时复位内存 1:开启 0:关闭
+
+#define osMemoryFreeTest_Enable 		1 //释放内存时检查内存 1:开启 0:关闭
+
+#define osMemoryPart_Enable				1 //块分割  1:开启 0:关闭
+
+#define osMemoryMerge_Enable			1 //块合并  1:开启 0:关闭
+
+#endif
+
+#define osMemoryDebug_Enable 			1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
 #define osMemoryErrorDebug osDebugError//DeBug输出函数
 
-#define osMemoryDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
-#define osMemorySequence_Enable 0 //内存顺序分配   1：启用 0：禁用
 
 //}
 
@@ -80,7 +91,7 @@ typedef  struct
 }_MemoryInfo;
 //}
 typedef	_MemoryInfo*	_MemoryInfoHandle;
-
+#if (osMemorySequence_Enable == 0)
 //内存块结构{
 typedef uint8_t 	_MemoryFlag;
 typedef uint16_t 	_MemoryLength;
@@ -91,6 +102,7 @@ typedef  struct
 	_MemoryLength	MemoryLength;//内存长度
 
 }MemoryStruct;
+#endif
 //}
 
 /*

@@ -468,9 +468,9 @@
               <FilePath>..\..\..\softos\include\osTask.h</FilePath>
             </File>
             <File>
-              <FileName>osCPU.asm</FileName>
+              <FileName>osCPU.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\softos\osCPU.asm</FilePath>
+              <FilePath>..\..\..\softos\osCPU.s</FilePath>
             </File>
           </Files>
         </Group>

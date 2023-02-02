@@ -28,6 +28,9 @@ _TaskHandle*	RunTaskHandle;//当前正在运行任务的信息表
 _TaskList TaskList[TaskListLength];//任务轮询表
 
 _TaskHandle*	TaskHandle_Main;
+_TaskHandle*	TaskHandle_SIRQ;
+
+
 
 /*
                                                   <函数区>
@@ -59,6 +62,16 @@ osErrorValue osTaskInit(void)
 	TaskSwitchState.ISRFlag = 0;
 	TaskSwitchState.SwitchState = TaskSwitch_Ready;
     /***********************************系统任务初始化**********************************/
+	
+	TaskHandle_SIRQ = osTaskLogin("SIRQ",osTaskSIRQ,Default_Stack_Size,TaskTimeWheelDefault,-127,(void*)0,Task_Set_Default); 
+	if(TaskHandle_SIRQ == NULL){
+
+		#if (osTaskDebug_Enable > 0)
+		osTaskErrorDebug("Main 任务创建失败\n");
+		#endif
+		return (Error);//返回Error
+	}
+
 	TaskHandle_Main = osTaskLogin("Main",(void*)0,Default_Stack_Size,TaskTimeWheelDefault,0,(void*)0,Task_Set_Default ); 
 	if(TaskHandle_Main == NULL){
 
@@ -68,9 +81,10 @@ osErrorValue osTaskInit(void)
 		return (Error);//返回Error
 	}
 
-	TaskSwitchState.DispatchNum = NULL;    
-	RunTaskHandle = TaskList[TaskSwitchState.DispatchNum].TaskHandle;//将即将运行的任务信息表的指针传送给正在运行任务表
-	TaskSwitchState.DispatchNum = TaskSwitchState.DispatchNum + 1;//轮盘指针向后移一位     
+
+	TaskSwitchState.DispatchNum = TaskHandle_Main -> ID; 
+	RunTaskHandle = TaskHandle_Main;//将即将运行的任务信息表的指针传送给正在运行任务表
+	TaskSwitchState.DispatchNum += 1;//轮盘指针向后移一位     
 	osTime.TTWM = RunTaskHandle -> TaskTimeWheel;//将当前任务的时间轮片写入到时间记录器
 	osTASK_START(&RunTaskHandle -> RealSP);//启动第一个任务
     return (OK);//返回OK
@@ -183,7 +197,6 @@ _TaskHandle* osTaskLogin_Static(
 		return (NULL);//返回错误
 	}
 #endif
-    TaskHandle -> ID = (_TaskID)TaskSwitchState.TaskListMax;//写入任务ID
 	TaskHandle -> Name = TN;//写入任务名称
 	TaskHandle -> Addr = TA;////写入任务地址
 	TSS -= 1;
@@ -591,7 +604,7 @@ osErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
 {
 	#if (osTaskRunError_Enable > 0)
 	uint8_t Count = 1;
-	osTaskEnterISR();
+	osTaskEnterIRQ();
 	while(Count--){
 		osTaskErrorDebug("\n\n\n名称为%s的任务发生“硬件错误”异常!!!\n",RunTaskHandle -> Name);
 		osTaskErrorDebug("任务优先级:%d\n",RunTaskHandle -> PriorityLevel);
@@ -627,7 +640,7 @@ osErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
 	#elif(osTaskErrorSet == 0)
 	osTaskSet(NULL,Task_Set_Pause);
 	#endif
-	osTaskExitISR();
+	osTaskExitIRQ();
 	return (OK);
 }
 /*
@@ -701,8 +714,41 @@ osErrorValue osTaskMonitor(void)
 	return (OK);
 }
 
+void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr)
+{
+	TaskHandle_SIRQ -> ParameterPass = (_TaskParameterPass*)SIRQList_Addr;
+	TaskHandle_SIRQ -> Config = Task_State_Up_IN;//主动挂起(挂起态)
+	RunTaskHandle -> Config = Task_State_Up_IN;//主动挂起(挂起态)
+	TaskSwitchState.DispatchNum = TaskHandle_SIRQ -> ID;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
+	osTaskSwitch_Enable();
+}
+
+osErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr)
+{
+	SIRQList_Addr[SIRQList_Addr[0] + 1] = (_TaskAddr)Addr;
+	SIRQList_Addr[0] += 1;
+	return (OK);//返回错误
+}
+
+void osTaskSIRQ(void)
+{
+	_SIRQList* SIRQList_Addr;
+	uint8_t SIRQList_Count;
+
+	while(1){
+		//RunTaskHandle -> Config = Task_State_Up_SI;//主动挂起(挂起态)
+		osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_Up_SI);
+		SIRQList_Addr = (_SIRQList*)RunTaskHandle -> ParameterPass;
+		for(SIRQList_Count = 1; SIRQList_Count <= SIRQList_Addr[0]; SIRQList_Count++){
+			Jump((uint32_t*)SIRQList_Addr[SIRQList_Count]);
+		}
+	}
+	
+}
+
 
 /*
                                                   FILE-END
 */
+
 

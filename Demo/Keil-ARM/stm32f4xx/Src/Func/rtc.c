@@ -182,14 +182,13 @@ RTC_DateTypeDef RTC_DateStruct;
 //RTC WAKE UP中断服务函数
 void RTC_WKUP_IRQHandler(void)
 {    
-	osTaskEnterISR();
+	osTaskEnterIRQ();
 	if(RTC_GetFlagStatus(RTC_FLAG_WUTF)==SET)//WK_UP中断?
 	{ 
 		RTC_ClearFlag(RTC_FLAG_WUTF);	//清除中断标志
 
-		osSignalFree(timebz);
-		osSignalFree(timebz);
-		osSignalFree(timebz);
+		osTaskSIRQ_Enable(&SIRQ_RTC[0]);
+
 
 
 
@@ -203,6 +202,6 @@ void RTC_WKUP_IRQHandler(void)
 		
 	}   
 	EXTI_ClearITPendingBit(EXTI_Line22);//清除中断线22的中断标志 
-	osTaskExitISR();								
+	osTaskExitIRQ();								
 }
  

@@ -52,6 +52,8 @@
                                                   <º¯ÊýÉùÃ÷Çø>
 */
 
+__asm void Jump(uint32_t* addr);
+
 
 void INTX_DISABLE(void);
 

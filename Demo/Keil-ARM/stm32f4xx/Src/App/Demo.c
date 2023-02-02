@@ -15,6 +15,8 @@ _TaskHandle*	TaskHandle_Task2;
 _TaskHandle*	TaskHandle_Task3;
 _TaskHandle*	TaskHandle_Task4;
 
+_SIRQList SIRQ_RTC[3];
+
 
 
 void ADC_Temp_Init(void);
@@ -166,6 +168,17 @@ void Task4_Func(u32* a)
 			}
 		}
 		
+	}
+}
+
+void RTC_Func(void)
+{
+	u32 _tr0;
+	osSignalFree(timebz);
+	osSignalFree(timebz);
+	osSignalFree(timebz);
+	for(_tr0 = 0;_tr0 < 500;_tr0++){
+		osPostSend((u32*)"hello",TaskHandle_Main);
 	}
 }
 

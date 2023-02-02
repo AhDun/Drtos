@@ -34,6 +34,13 @@
 //const uint32_t NVIC_PendSV = 0xE000ED04;//PendSV
 //const uint32_t NVIC_PendSV_SET = 0x10000000;
 
+
+__asm void Jump(uint32_t* addr)
+{
+	PUSH {R0}
+	POP	{PC}
+}
+
 /*
 
  *@º¯ÊýÃû³Æ: osTASK_Stack_Init

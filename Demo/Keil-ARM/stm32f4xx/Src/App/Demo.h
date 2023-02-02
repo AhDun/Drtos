@@ -30,6 +30,7 @@ extern _TaskHandle*	TaskHandle_Task2;
 extern _TaskHandle*	TaskHandle_Task3;
 extern _TaskHandle*	TaskHandle_Task4;
 extern _Signal* timebz;
+extern _SIRQList SIRQ_RTC[3];
 
 void LED_Init(void);
 void Task1_Func(char* a);
@@ -37,6 +38,8 @@ void Task2_Func(void);
 void Task3_Func(u32* a);
 void Task4_Func(u32* a);
 void Task5_Func(u32* a);
+
+void RTC_Func(void);
 
 
 

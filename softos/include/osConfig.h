@@ -55,6 +55,7 @@
 #define osCompileTime 		 	__TIME__//系统编译时间
 #define osCPU_Name				"STM32F407ZG"//CPU名称
 #define osCPU_Freq				168u//CPU主频
+#define osCPU_Bit				sizeof(void*)
 //}
 
 
@@ -138,6 +139,8 @@
 #define osClockTimePeriod 					1000 //系统时间周期，单位us
 
 #define osClockTimePeriodStandard			1000 //系统时间基准周期，单位us
+
+#define	SIRQListLength						10
 
 #define	osTaskErrorSet					0//任务运行时发生致命错误后处理 1：重启这个任务 0：暂停这个任务
 

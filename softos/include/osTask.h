@@ -117,7 +117,7 @@
 #endif
 #define osTaskSwitch_Enable() 			do{TaskSwitchState.SwitchState = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
 
-#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b TaskSwitchState.SwitchState = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
+#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b;TaskSwitchState.SwitchState = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
 
 
 #define osTaskErrorDebug 		osDebugError
@@ -127,9 +127,9 @@
 
 #define osTaskRunError_Enable 1 //任务运行时发生致命错误 1:开启Debug输出 0:关闭Debug输出
 
-#define osTaskEnterISR()			TaskSwitchState.ISRFlag += 1;//进入 中断
+#define osTaskEnterIRQ()			TaskSwitchState.ISRFlag += 1;//进入 中断
 
-#define osTaskExitISR()				TaskSwitchState.ISRFlag -= 1;//退出 中断
+#define osTaskExitIRQ()				TaskSwitchState.ISRFlag -= 1;//退出 中断
 
 
 /*
@@ -202,10 +202,11 @@ typedef struct
 	_TaskDispatchNum			DispatchNum;//任务调度计数
     _TaskListMaximumActivity	TaskListMax;//任务最大活动量
 	_TaskISRFlag				ISRFlag;//中断状态
-
     
 }_TaskSwitchState;
 //}
+
+typedef _TaskAddr _SIRQList;
 
 /*
                                                   <数据声明区>
@@ -215,6 +216,7 @@ extern _TaskList TaskList[TaskListLength];//任务轮询表
 extern _TaskSwitchState TaskSwitchState;//任务调度状态表
 
 extern _TaskHandle*	TaskHandle_Main;
+
 
 
 /*
@@ -407,6 +409,12 @@ osErrorValue osTaskSpeedTest(void);
 
 osErrorValue osTaskMonitor(void);
 
+
+void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr);
+
+osErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr);
+
+void osTaskSIRQ(void);
 #endif
 
 /*

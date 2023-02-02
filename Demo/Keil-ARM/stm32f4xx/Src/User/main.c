@@ -89,15 +89,13 @@ int main(void)
 	"Hello",									//任务传参
 	Task_Set_Default                                    
 	);
+
+	osTaskSIRQLogin(&SIRQ_RTC[0],RTC_Func);
 	
 	//osTaskLogout(TaskHandle_Task4);
 
 	while(1){
-		osTaskDelayMs(1000);
-		for(_tr0 = 0;_tr0 < 500;_tr0++){
-			osPostSend((u32*)"hello",TaskHandle_Main);
-		}
-		osTaskDelayMs(1000);
+		osTaskDelayMs(100);
 		for(_tr0 = 0;_tr0 < 500;_tr0++){
 			osPostReadWait();
 		}

@@ -85,7 +85,7 @@
    (+) Enable the RTC domain access (see description in the section above)
    (+) Configure the RTC Prescaler (Asynchronous and Synchronous) and RTC hour 
        format using the RTC_Init() function.
-   *
+  
  *** Time and Date configuration ***
  ===================================
  [..] 
@@ -94,7 +94,7 @@
    (+) To read the RTC Calendar, use the RTC_GetTime() and RTC_GetDate() functions.
    (+) Use the RTC_DayLightSavingConfig() function to add or sub one
        hour to the RTC Calendar.    
-   *
+  
  *** Alarm configuration ***
  ===========================
  [..]
@@ -102,7 +102,7 @@
    (+) Enable the selected RTC Alarm using the RTC_AlarmCmd() function
    (+) To read the RTC Alarm, use the RTC_GetAlarm() function.
    (+) To read the RTC alarm SubSecond, use the RTC_GetAlarmSubSecond() function.
-   *
+  
  *** RTC Wakeup configuration ***
  ================================
  [..] 
@@ -112,7 +112,7 @@
    (+) Enable the RTC WakeUp using the RTC_WakeUpCmd() function  
    (+) To read the RTC WakeUp Counter register, use the RTC_GetWakeUpCounter() 
        function.
-   *
+  
  *** Outputs configuration ***
  =============================
  [..] The RTC has 2 different outputs:
@@ -121,21 +121,21 @@
        RTC_OutputConfig() function.                
    (+) AFO_CALIB: this output is 512Hz signal or 1Hz. To output the RTC Clock on 
        RTC_AF1 pin, use the RTC_CalibOutputCmd() function.
-   *
+  
  *** Smooth digital Calibration configuration ***
  ================================================    
  [..]
    (+) Configure the RTC Original Digital Calibration Value and the corresponding
        calibration cycle period (32s,16s and 8s) using the RTC_SmoothCalibConfig() 
        function.
-   *
+  
  *** Coarse digital Calibration configuration ***
  ================================================
  [..]
    (+) Configure the RTC Coarse Calibration Value and the corresponding
        sign using the RTC_CoarseCalibConfig() function.
    (+) Enable the RTC Coarse Calibration using the RTC_CoarseCalibCmd() function  
-   *
+  
  *** TimeStamp configuration ***
  ===============================
  [..]
@@ -149,7 +149,7 @@
        or RTC_AF2 (PI8) depending on the value of TAMP1INSEL bit in 
        RTC_TAFCR register. You can use the  RTC_TamperPinSelection() function to
        select the corresponding pin.     
-   *
+  
  *** Tamper configuration ***
  ============================
  [..]
@@ -170,7 +170,7 @@
        or RTC_AF2 depending on the value of the TSINSEL bit in the RTC_TAFCR 
        register. You can use the  RTC_TimeStampPinSelection() function to select 
        the corresponding pin. 
-   *
+  
  *** Backup Data Registers configuration ***
  ===========================================
  [..]
@@ -324,8 +324,8 @@ static uint8_t RTC_Bcd2ToByte(uint8_t Value);
   * @{
   */ 
 
-/** @defgroup RTC_Group1 Initialization and Configuration functions *
- *  @brief   Initialization and Configuration functions  *
+/** @defgroup RTC_Group1 Initialization and Configuration functions
+ *  @brief   Initialization and Configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -735,8 +735,8 @@ void RTC_BypassShadowCmd(FunctionalState NewState)
   * @}
   */
 
-/** @defgroup RTC_Group2 Time and Date configuration functions *
- *  @brief   Time and Date configuration functions  *
+/** @defgroup RTC_Group2 Time and Date configuration functions
+ *  @brief   Time and Date configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -1082,8 +1082,8 @@ void RTC_GetDate(uint32_t RTC_Format, RTC_DateTypeDef* RTC_DateStruct)
   * @}
   */
 
-/** @defgroup RTC_Group3 Alarms configuration functions *
- *  @brief   Alarms (Alarm A and Alarm B) configuration functions  *
+/** @defgroup RTC_Group3 Alarms configuration functions
+ *  @brief   Alarms (Alarm A and Alarm B) configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -1463,8 +1463,8 @@ uint32_t RTC_GetAlarmSubSecond(uint32_t RTC_Alarm)
   * @}
   */
 
-/** @defgroup RTC_Group4 WakeUp Timer configuration functions *
- *  @brief   WakeUp Timer configuration functions  *
+/** @defgroup RTC_Group4 WakeUp Timer configuration functions
+ *  @brief   WakeUp Timer configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -1601,8 +1601,8 @@ ErrorStatus RTC_WakeUpCmd(FunctionalState NewState)
   * @}
   */
 
-/** @defgroup RTC_Group5 Daylight Saving configuration functions *
- *  @brief   Daylight Saving configuration functions  *
+/** @defgroup RTC_Group5 Daylight Saving configuration functions
+ *  @brief   Daylight Saving configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -1664,8 +1664,8 @@ uint32_t RTC_GetStoreOperation(void)
   * @}
   */
 
-/** @defgroup RTC_Group6 Output pin Configuration function *
- *  @brief   Output pin Configuration function  *
+/** @defgroup RTC_Group6 Output pin Configuration function
+ *  @brief   Output pin Configuration function 
  *
 @verbatim   
  ===============================================================================
@@ -1718,8 +1718,8 @@ void RTC_OutputConfig(uint32_t RTC_Output, uint32_t RTC_OutputPolarity)
   * @}
   */
 
-/** @defgroup RTC_Group7 Digital Calibration configuration functions *
- *  @brief   Coarse Calibration configuration functions  *
+/** @defgroup RTC_Group7 Digital Calibration configuration functions
+ *  @brief   Coarse Calibration configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -1953,8 +1953,8 @@ ErrorStatus RTC_SmoothCalibConfig(uint32_t RTC_SmoothCalibPeriod,
   */
 
 
-/** @defgroup RTC_Group8 TimeStamp configuration functions *
- *  @brief   TimeStamp configuration functions  *
+/** @defgroup RTC_Group8 TimeStamp configuration functions
+ *  @brief   TimeStamp configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -2077,8 +2077,8 @@ uint32_t RTC_GetTimeStampSubSecond(void)
   * @}
   */
 
-/** @defgroup RTC_Group9 Tampers configuration functions *
- *  @brief   Tampers configuration functions  *
+/** @defgroup RTC_Group9 Tampers configuration functions
+ *  @brief   Tampers configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -2280,8 +2280,8 @@ void RTC_TamperPullUpCmd(FunctionalState NewState)
   * @}
   */
 
-/** @defgroup RTC_Group10 Backup Data Registers configuration functions *
- *  @brief   Backup Data Registers configuration functions   *
+/** @defgroup RTC_Group10 Backup Data Registers configuration functions
+ *  @brief   Backup Data Registers configuration functions  
  *
 @verbatim   
  ===============================================================================
@@ -2339,9 +2339,9 @@ uint32_t RTC_ReadBackupRegister(uint32_t RTC_BKP_DR)
   * @}
   */
 
-/** @defgroup RTC_Group11 RTC Tamper and TimeStamp Pins Selection and Output Type Config configuration functions *
- *  @brief   RTC Tamper and TimeStamp Pins Selection and Output Type Config  *
- *           configuration functions   *
+/** @defgroup RTC_Group11 RTC Tamper and TimeStamp Pins Selection and Output Type Config configuration functions
+ *  @brief   RTC Tamper and TimeStamp Pins Selection and Output Type Config 
+ *           configuration functions  
  *
 @verbatim   
  ==================================================================================================
@@ -2409,8 +2409,8 @@ void RTC_OutputTypeConfig(uint32_t RTC_OutputType)
   * @}
   */
 
-/** @defgroup RTC_Group12 Shift control synchronisation functions *
- *  @brief   Shift control synchronisation functions  *
+/** @defgroup RTC_Group12 Shift control synchronisation functions
+ *  @brief   Shift control synchronisation functions 
  *
 @verbatim   
  ===============================================================================
@@ -2495,8 +2495,8 @@ ErrorStatus RTC_SynchroShiftConfig(uint32_t RTC_ShiftAdd1S, uint32_t RTC_ShiftSu
   * @}
   */
 
-/** @defgroup RTC_Group13 Interrupts and flags management functions *
- *  @brief   Interrupts and flags management functions   *
+/** @defgroup RTC_Group13 Interrupts and flags management functions
+ *  @brief   Interrupts and flags management functions  
  *
 @verbatim   
  ===============================================================================

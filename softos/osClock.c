@@ -1,39 +1,18 @@
 /*
-                                                  FILE-START
-*/
-
-/*
-
-* softos内核
-
-* 版权所有(C) 2023 AhDun 版权所有.
-
-* 本处现免费准许任何人士取得本处的副本
-
-* 本软件和相关的文档文件(以下简称“软件”)，用于处理
-
-* 本软件不受限制，包括但不限制的权利
-
-* 使用、复制、修改、合并、发布、分发、转许可和/或销售的副本软件，并允许向其提供软件的人这样做，
-
-* 须符合以下条件:
-
-* 上述版权声明及本许可声明应包括在所有
-
-* 本软件的副本或大部分。
-
-* 软件是“按原样”提供的，没有任何形式的保证，明示或
-
-* 暗示，包括但不限于适销性、适用性的保证
-
-* 用于特定目的和不侵权。在任何情况下，作者或
-
-* 版权拥有人须承担任何申索、损害赔偿或其他责任，不论是否
-
-* 在合同、侵权或其他诉讼中，由，由或在
-
-* 与软件的联系或对软件的使用或其他交易。
- *
+ * Copyright (c) 2022-2023 AhDun
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
  */
 
 /*
@@ -48,9 +27,7 @@
  *
  */
 
-/*
-                                                  <引用文件区>
-*/
+
 #include "osConfig.h"
 #include "osClock.h"
 
@@ -62,9 +39,7 @@ osTIME osTime;//系统时间
 #if (osPerformanceStatistics_Enable > 0)
 _PerformanceStatistics PS;//性能统计
 #endif
-/*
-                                                  <函数区>
-*/
+
 /*
  *
  * @函数名称: osClockInit
@@ -196,6 +171,4 @@ void osClockTimePulse(void)
 
 
 
-/*
-                                                  FILE-END
-*/
+

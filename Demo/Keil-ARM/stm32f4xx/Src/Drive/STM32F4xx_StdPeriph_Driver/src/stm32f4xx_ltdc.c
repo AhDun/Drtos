@@ -99,8 +99,8 @@
   * @{
   */
 
-/** @defgroup LTDC_Group1 Initialization and Configuration functions *
- *  @brief   Initialization and Configuration functions  *
+/** @defgroup LTDC_Group1 Initialization and Configuration functions
+ *  @brief   Initialization and Configuration functions 
  *
 @verbatim
  ===============================================================================
@@ -921,8 +921,8 @@ void LTDC_LayerPixelFormat(LTDC_Layer_TypeDef* LTDC_Layerx, uint32_t PixelFormat
   * @}
   */
 
-/** @defgroup LTDC_Group2 Interrupts and flags management functions *
- *  @brief   Interrupts and flags management functions *
+/** @defgroup LTDC_Group2 Interrupts and flags management functions
+ *  @brief   Interrupts and flags management functions
  *
 @verbatim
  ===============================================================================

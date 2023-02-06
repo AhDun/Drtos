@@ -87,7 +87,7 @@
    (#) To control the DPSM (Data Path State Machine) and send/receive 
        data to/from the card use the SDIO_DataConfig(), SDIO_GetDataCounter(), 
        SDIO_ReadData(), SDIO_WriteData() and SDIO_GetFIFOCount() functions.
-   *
+  
  *** Read Operations ***
  =======================
  [..]
@@ -107,7 +107,7 @@
    (#)  Send the selected Read command (refer to step 11).
                     
    (#) Use the SDIO flags/interrupts to check the transfer status.
-   *
+  
  *** Write Operations ***
  ========================
  [..]
@@ -246,8 +246,8 @@
   * @{
   */
 
-/** @defgroup SDIO_Group1 Initialization and Configuration functions *
- *  @brief   Initialization and Configuration functions  *
+/** @defgroup SDIO_Group1 Initialization and Configuration functions
+ *  @brief   Initialization and Configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -373,8 +373,8 @@ uint32_t SDIO_GetPowerState(void)
   * @}
   */
 
-/** @defgroup SDIO_Group2 Command path state machine (CPSM) management functions *
- *  @brief   Command path state machine (CPSM) management functions  *
+/** @defgroup SDIO_Group2 Command path state machine (CPSM) management functions
+ *  @brief   Command path state machine (CPSM) management functions 
  *
 @verbatim   
  ===============================================================================
@@ -478,8 +478,8 @@ uint32_t SDIO_GetResponse(uint32_t SDIO_RESP)
   * @}
   */
 
-/** @defgroup SDIO_Group3 Data path state machine (DPSM) management functions *
- *  @brief   Data path state machine (DPSM) management functions *
+/** @defgroup SDIO_Group3 Data path state machine (DPSM) management functions
+ *  @brief   Data path state machine (DPSM) management functions
  *
 @verbatim   
  ===============================================================================
@@ -596,8 +596,8 @@ uint32_t SDIO_GetFIFOCount(void)
   * @}
   */
 
-/** @defgroup SDIO_Group4 SDIO IO Cards mode management functions *
- *  @brief   SDIO IO Cards mode management functions *
+/** @defgroup SDIO_Group4 SDIO IO Cards mode management functions
+ *  @brief   SDIO IO Cards mode management functions
  *
 @verbatim   
  ===============================================================================
@@ -686,8 +686,8 @@ void SDIO_SendSDIOSuspendCmd(FunctionalState NewState)
   * @}
   */
 
-/** @defgroup SDIO_Group5 CE-ATA mode management functions *
- *  @brief   CE-ATA mode management functions *
+/** @defgroup SDIO_Group5 CE-ATA mode management functions
+ *  @brief   CE-ATA mode management functions
  *
 @verbatim   
  ===============================================================================
@@ -746,8 +746,8 @@ void SDIO_SendCEATACmd(FunctionalState NewState)
   * @}
   */
 
-/** @defgroup SDIO_Group6 DMA transfers management functions *
- *  @brief   DMA transfers management functions *
+/** @defgroup SDIO_Group6 DMA transfers management functions
+ *  @brief   DMA transfers management functions
  *
 @verbatim   
  ===============================================================================
@@ -778,8 +778,8 @@ void SDIO_DMACmd(FunctionalState NewState)
   * @}
   */
 
-/** @defgroup SDIO_Group7 Interrupts and flags management functions *
- *  @brief   Interrupts and flags management functions   *
+/** @defgroup SDIO_Group7 Interrupts and flags management functions
+ *  @brief   Interrupts and flags management functions  
  *
 @verbatim   
  ===============================================================================

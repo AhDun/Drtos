@@ -1,6 +1,19 @@
 /*
-                                                  FILE-START
-*/
+ * Copyright (c) 2022-2023 AhDun
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 
 #ifndef __print_H_
 #define __print_H_
@@ -17,24 +30,16 @@
  *
  */
 
-/*
-                                                  <引用文件区>
-*/
 
-/*
-                                                  <宏定义区>
-*/
+
+
 
 #define _print_lf_retain	6 //小数精度
 							  //这个数值决定了保留%f输出的小数点后几位
 
-/*
-                                                  <数据声明区>
-*/
 
-/*
-                                                  <函数声明区>
-*/
+
+
 /*
  *
  * @函数名称: pchar
@@ -255,8 +260,6 @@ void xprint(int sp,int c);
 void tprint(const char* c,unsigned int s);
 
 
-/*
-                                                  FILE-END
-*/
+
 #endif
 

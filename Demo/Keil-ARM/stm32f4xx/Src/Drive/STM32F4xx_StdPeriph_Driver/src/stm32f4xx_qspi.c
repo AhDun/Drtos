@@ -116,8 +116,8 @@
   * @{
   */
 
-/** @defgroup <PPP>_Group1 Function Group1 Name *
- *  @brief   Function group1 name description (copied from the header file)  *
+/** @defgroup <PPP>_Group1 Function Group1 Name
+ *  @brief   Function group1 name description (copied from the header file) 
  *
 @verbatim  
  ===============================================================================

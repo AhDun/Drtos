@@ -1,39 +1,26 @@
-```c++
-                         __ _            
-                        / _| |           
-              ___  ___ | |_| |_ ___  ___ 
-             / __|/ _ \|  _| __/ _ \/ __|
-             \__ \ (_) | | | || (_) \__ \
-             |___/\___/|_|  \__\___/|___/
-   softos v1.1.0
+## softos
+
+```makefile
 全中文注释、轻量RTOS
-```
-
-### 欢迎
-
-```c
-     
-  	1.感谢您softos arm的支持
-​	2.本程序使用Apache License 2.0开源协议
-​	3.本系统稳定性尚不明确，请勿用到重要的开发上！！！
-​	4.所有源码均使用GB2312编码
+感谢您softos的支持
+本程序使用Apache License 2.0开源协议
+本系统稳定性尚不明确，请勿用到重要的开发上！！！
+所有源码均使用GB2312编码
 ```
 
 ### 文件结构说明
 
-```c
+```ABAP
  
-|-- .gitignore   				git过滤文件
+|-- .gitignore   				 git过滤文件
 |-- LICENSE		 				开源协议
-|-- readme.md    				本文件
-|- Doc							文档
-  |-- AhDun.png					logo
-  |-- DHS_logo.png				logo
-  |-- DHS_logo_r.png			logo
-|- softos						系统源码
+|-- readme.md    				 本文件
+|- Doc						 	文档
+  |-- AhDun.png					 logo
+  |-- DHS_logo.png				 logo
+  |-- DHS_logo_r.png			 logo
+|- softos					    系统源码
   |-- osClock.c					系统时钟文件, 提供基本的系统时钟服务
-  |-- osCPU.s					系统CPU内核汇编文件
-  |-- osCPU.c					系统CPU内核文件 
   |-- osMemory.c				系统内存管理文件,提供内存申请、释放
   |-- osPost.c					系统邮箱文件,提供邮箱服务
   |-- osSignal.c				系统信号量文件,提供信号量服务
@@ -41,7 +28,7 @@
   |- include					头文件
     |-- osClock.h				
     |-- osConfig.h
-    |-- osCPU.h
+    |-- osLink.h
     |-- osMemory.h
     |-- osPost.h
     |-- osSignal.h
@@ -54,6 +41,10 @@
       |-- LinkList.h
       |-- print.h
       |-- str.h
+    |- link						连接文件
+      |-- M3M4F					 M3与M4F内核
+        |-- osLink.c			
+        |-- osLink.s			
 |- Template						文件模板
   |-- template.s				汇编文件模板
   |-- template.c				C源码文件模板
@@ -64,3 +55,30 @@
 ```
 
 ### 移植
+
+
+```livescript
+具体内容请参考 /softos/link/ 文件中内容
+```
+
+### 开源协议
+
+
+```c
+/*
+ * Copyright (c) 2022-2023 AhDun
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+```

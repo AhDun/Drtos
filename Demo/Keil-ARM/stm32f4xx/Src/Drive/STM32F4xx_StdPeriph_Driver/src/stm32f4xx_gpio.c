@@ -104,8 +104,8 @@
   * @{
   */ 
 
-/** @defgroup GPIO_Group1 Initialization and Configuration *
- *  @brief   Initialization and Configuration *
+/** @defgroup GPIO_Group1 Initialization and Configuration
+ *  @brief   Initialization and Configuration
  *
 @verbatim   
  ===============================================================================
@@ -299,8 +299,8 @@ void GPIO_PinLockConfig(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
   * @}
   */
 
-/** @defgroup GPIO_Group2 GPIO Read and Write *
- *  @brief   GPIO Read and Write *
+/** @defgroup GPIO_Group2 GPIO Read and Write
+ *  @brief   GPIO Read and Write
  *
 @verbatim   
  ===============================================================================
@@ -505,8 +505,8 @@ void GPIO_ToggleBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
   * @}
   */
 
-/** @defgroup GPIO_Group3 GPIO Alternate functions configuration function *
- *  @brief   GPIO Alternate functions configuration function *
+/** @defgroup GPIO_Group3 GPIO Alternate functions configuration function
+ *  @brief   GPIO Alternate functions configuration function
  *
 @verbatim   
  ===============================================================================

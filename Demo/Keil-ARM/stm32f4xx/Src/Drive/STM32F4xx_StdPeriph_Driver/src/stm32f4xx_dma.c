@@ -165,8 +165,8 @@
   * @{
   */
 
-/** @defgroup DMA_Group1 Initialization and Configuration functions *
- *  @brief   Initialization and Configuration functions *
+/** @defgroup DMA_Group1 Initialization and Configuration functions
+ *  @brief   Initialization and Configuration functions
  *
 @verbatim   
  ===============================================================================
@@ -569,8 +569,8 @@ void DMA_FlowControllerConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_Flo
   * @}
   */
 
-/** @defgroup DMA_Group2 Data Counter functions *
- *  @brief   Data Counter functions  *
+/** @defgroup DMA_Group2 Data Counter functions
+ *  @brief   Data Counter functions 
  *
 @verbatim   
  ===============================================================================
@@ -656,8 +656,8 @@ uint16_t DMA_GetCurrDataCounter(DMA_Stream_TypeDef* DMAy_Streamx)
   * @}
   */
 
-/** @defgroup DMA_Group3 Double Buffer mode functions *
- *  @brief   Double Buffer mode functions  *
+/** @defgroup DMA_Group3 Double Buffer mode functions
+ *  @brief   Double Buffer mode functions 
  *
 @verbatim   
  ===============================================================================
@@ -849,8 +849,8 @@ uint32_t DMA_GetCurrentMemoryTarget(DMA_Stream_TypeDef* DMAy_Streamx)
   * @}
   */
 
-/** @defgroup DMA_Group4 Interrupts and flags management functions *
- *  @brief   Interrupts and flags management functions  *
+/** @defgroup DMA_Group4 Interrupts and flags management functions
+ *  @brief   Interrupts and flags management functions 
  *
 @verbatim   
  ===============================================================================

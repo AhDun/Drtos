@@ -82,8 +82,8 @@
   * @{
   */
 
-/** @defgroup DMA2D_Group1 Initialization and Configuration functions *
- *  @brief   Initialization and Configuration functions  *
+/** @defgroup DMA2D_Group1 Initialization and Configuration functions
+ *  @brief   Initialization and Configuration functions 
  *
 @verbatim
  ===============================================================================
@@ -575,8 +575,8 @@ void DMA2D_LineWatermarkConfig(uint32_t DMA2D_LWatermarkConfig)
   * @}
   */
 
-/** @defgroup DMA2D_Group2 Interrupts and flags management functions *
- *  @brief   Interrupts and flags management functions *
+/** @defgroup DMA2D_Group2 Interrupts and flags management functions
+ *  @brief   Interrupts and flags management functions
  *
 @verbatim
  ===============================================================================

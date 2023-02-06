@@ -1,6 +1,19 @@
 /*
-                                                  FILE-START
-*/
+ * Copyright (c) 2022-2023 AhDun
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 #ifndef __osTaskH_
 #define __osTaskH_
 /*
@@ -15,12 +28,8 @@
  *
  */
 
-/*
-                                                  <引用文件区>
-*/
-/*
-                                                  <宏定义区>
-*/
+
+
 
 #define osTask_Enable 	//启用任务 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 
@@ -206,9 +215,7 @@ typedef struct
 
 typedef _TaskAddr _SIRQList;
 
-/*
-                                                  <数据声明区>
-*/
+
 extern _TaskHandle*	RunTaskHandle;//当前正在运行的任务表指针
 extern _TaskList TaskList[TaskListLength];//任务轮询表
 extern _TaskSwitchState TaskSwitchState;//任务调度状态表
@@ -217,9 +224,7 @@ extern _TaskHandle*	TaskHandle_Main;
 
 
 
-/*
-                                                  <函数声明区>
-*/	
+	
 /*
  *
  * @函数名称: osTaskInit
@@ -399,8 +404,6 @@ osErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr);
 void osTaskSIRQ(void);
 #endif
 
-/*
-                                                  FILE-END
-*/
+
 
 

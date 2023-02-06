@@ -1,6 +1,19 @@
 /*
-                                                  FILE-START
-*/
+ * Copyright (c) 2022-2023 AhDun
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 /*
  *
  * @文件名称: .h
@@ -12,20 +25,15 @@
  * @注    释: 无
  *
  */
-/*
-                                                  防重复编译宏配置区
-*/
+
+
 #ifndef __osSignalH_
 #define __osSignalH_
 
-/*
-                                                  <引用文件区>
-*/
+
 #include "main.h"
 #include "osConfig.h"
-/*
-                                                  <宏定义区>
-*/
+
 #define osSignal_Enable //启用队列 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 
 #define Signal_Mutual       0x01u//互斥信号量
@@ -48,13 +56,6 @@
 #define osSignalDebugError	osDebugError 
 
 
-/*
-                                                  数据类型别名声明区
-*/
-
-/*
-                                                  结构式数据类型别名声明区
-*/
 //信号量令牌{
 typedef		uint32_t		_TaskInfo;
 typedef struct
@@ -75,13 +76,9 @@ typedef struct
 }_Signal;
 //}
 
-/*
-                                                  <数据声明区>
-*/
 
-/*
-                                                  <函数声明区>
-*/
+
+
 #if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
 
 /*
@@ -105,7 +102,5 @@ osErrorValue osSignalLogin(_Signal* ST,_SignalType SP);
 osErrorValue osSignalUseWait(_Signal* ST);
 osErrorValue osSignalFree(_Signal* ST);
 
-/*
-                                                  FILE-END
-*/
+
 #endif

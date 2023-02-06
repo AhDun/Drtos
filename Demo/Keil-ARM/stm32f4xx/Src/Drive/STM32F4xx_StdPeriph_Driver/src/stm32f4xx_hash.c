@@ -16,7 +16,7 @@
  ===================================================================      
                  ##### How to use this driver #####
  ===================================================================
-             *
+            
  *** HASH operation : *** 
  ========================                 
  [..]
@@ -59,7 +59,7 @@
        HASH_SaveContext() and HASH_RestoreContext() functions.     
                 
   
-               *
+              
  *** HMAC operation : *** 
  ========================
  [..] The HMAC algorithm is used for message authentication, by 
@@ -143,8 +143,8 @@
   * @{
   */ 
 
-/** @defgroup HASH_Group1 Initialization and Configuration functions *
- *  @brief    Initialization and Configuration functions  *
+/** @defgroup HASH_Group1 Initialization and Configuration functions
+ *  @brief    Initialization and Configuration functions 
  *
 @verbatim    
  ===============================================================================
@@ -255,8 +255,8 @@ void HASH_Reset(void)
   * @}
   */
  
-/** @defgroup HASH_Group2 Message Digest generation functions *
- *  @brief    Message Digest generation functions *
+/** @defgroup HASH_Group2 Message Digest generation functions
+ *  @brief    Message Digest generation functions
  *
 @verbatim    
  ===============================================================================
@@ -359,8 +359,8 @@ void HASH_StartDigest(void)
   * @}
   */
 
-/** @defgroup HASH_Group3 Context swapping functions *
- *  @brief   Context swapping functions *
+/** @defgroup HASH_Group3 Context swapping functions
+ *  @brief   Context swapping functions
  *
 @verbatim   
  ===============================================================================
@@ -437,8 +437,8 @@ void HASH_RestoreContext(HASH_Context* HASH_ContextRestore)
   * @}
   */
 
-/** @defgroup HASH_Group4 HASH's DMA interface Configuration function *
- *  @brief   HASH's DMA interface Configuration function  *
+/** @defgroup HASH_Group4 HASH's DMA interface Configuration function
+ *  @brief   HASH's DMA interface Configuration function 
  *
 @verbatim   
  ===============================================================================
@@ -506,8 +506,8 @@ void HASH_DMACmd(FunctionalState NewState)
   * @}
   */
 
-/** @defgroup HASH_Group5 Interrupts and flags management functions *
- *  @brief   Interrupts and flags management functions *
+/** @defgroup HASH_Group5 Interrupts and flags management functions
+ *  @brief   Interrupts and flags management functions
  *
 @verbatim   
  ===============================================================================
@@ -518,7 +518,7 @@ void HASH_DMACmd(FunctionalState NewState)
       to get the status and clear flags and Interrupts pending bits.
   
  [..] The HASH provides 2 Interrupts sources and 5 Flags:
-   *
+  
  *** Flags : ***
  =============== 
  [..]
@@ -536,7 +536,7 @@ void HASH_DMACmd(FunctionalState NewState)
    (#) HASH_FLAG_DINNE : set when Data IN FIFO is not empty which means that 
        the Data IN FIFO contains at least one word of data. This Flag is cleared 
        only by hardware.
-      *
+     
  *** Interrupts : ***
  ====================
  [..]   
@@ -548,7 +548,7 @@ void HASH_DMACmd(FunctionalState NewState)
    (#) HASH_IT_DCI   : if enabled, this interrupt source is pending when Digest 
        calculation is complete. This interrupt source is cleared using 
        HASH_ClearITPendingBit(HASH_IT_DCI) function.
- *
+
  *** Managing the HASH controller events : ***
  =============================================
  [..] The user should identify which mode will be used in his application to manage 

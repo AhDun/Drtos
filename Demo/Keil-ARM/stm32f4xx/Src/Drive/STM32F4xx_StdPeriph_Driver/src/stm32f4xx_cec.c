@@ -117,8 +117,8 @@
   * @{
   */
 
-/** @defgroup CEC_Group1 Initialization and Configuration functions *
- *  @brief   Initialization and Configuration functions *
+/** @defgroup CEC_Group1 Initialization and Configuration functions
+ *  @brief   Initialization and Configuration functions
  *
 @verbatim  
  ===============================================================================
@@ -277,8 +277,8 @@ void CEC_OwnAddressClear(void)
   * @}
   */
 
-/** @defgroup CEC_Group2 Data transfers functions *
- *  @brief    Data transfers functions *
+/** @defgroup CEC_Group2 Data transfers functions
+ *  @brief    Data transfers functions
  *
 @verbatim
  ===============================================================================
@@ -340,7 +340,7 @@ void CEC_EndOfMessage(void)
   * @}
   */
 
-/** @defgroup CEC_Group3 Interrupts and flags management functions *
+/** @defgroup CEC_Group3 Interrupts and flags management functions
  *  @brief    Interrupts and flags management functions
 *
 @verbatim

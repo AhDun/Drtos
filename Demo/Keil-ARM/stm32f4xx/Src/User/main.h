@@ -12,9 +12,7 @@
 #define __main_H_
 
 
-/*
-                                                  <引用文件区>
-*/
+
 
 //当前MUC库文件{
 #include "stm32f4xx.h"
@@ -23,9 +21,7 @@
 //}
 
 
-/*
-                                                  <宏定义区>
-*/
+
 #define ActionValue_Enable 	1	//操作值  1：启用 0：禁用
 
 #define DataTypeSize_Enabled 0	//数据类型长度  1：启用 0：禁用
@@ -228,7 +224,5 @@ typedef double  					d64_t;
 #endif
 
 #endif
-/*
-                                                  FILE-END
-*/
+
 

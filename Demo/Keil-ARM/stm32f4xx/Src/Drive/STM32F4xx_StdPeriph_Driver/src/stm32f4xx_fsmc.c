@@ -3,7 +3,7 @@
   * @file    stm32f4xx_fsmc.c
   * @author  MCD Application Team
   * @version V1.5.1
-  * @date    22-May-2015 *
+  * @date    22-May-2015
  * @brief    This file provides firmware functions to manage the following 
   *          functionalities of the FSMC peripheral:           
   *           + Interface with SRAM, PSRAM, NOR and OneNAND memories
@@ -77,8 +77,8 @@ const FSMC_NORSRAMTimingInitTypeDef FSMC_DefaultTimingStruct = {0x0F, /* FSMC_Ad
   * @{
   */
 
-/** @defgroup FSMC_Group1 NOR/SRAM Controller functions *
- *  @brief   NOR/SRAM Controller functions  *
+/** @defgroup FSMC_Group1 NOR/SRAM Controller functions
+ *  @brief   NOR/SRAM Controller functions 
  *
 @verbatim   
  ===============================================================================
@@ -320,8 +320,8 @@ void FSMC_NORSRAMCmd(uint32_t FSMC_Bank, FunctionalState NewState)
   * @}
   */
 
-/** @defgroup FSMC_Group2 NAND Controller functions *
- *  @brief   NAND Controller functions  *
+/** @defgroup FSMC_Group2 NAND Controller functions
+ *  @brief   NAND Controller functions 
  *
 @verbatim   
  ===============================================================================
@@ -644,8 +644,8 @@ uint32_t FSMC_GetECC(uint32_t FSMC_Bank)
   * @}
   */
 
-/** @defgroup FSMC_Group3 PCCARD Controller functions *
- *  @brief   PCCARD Controller functions  *
+/** @defgroup FSMC_Group3 PCCARD Controller functions
+ *  @brief   PCCARD Controller functions 
  *
 @verbatim   
  ===============================================================================
@@ -839,8 +839,8 @@ void FSMC_PCCARDCmd(FunctionalState NewState)
   * @}
   */
 
-/** @defgroup FSMC_Group4  Interrupts and flags management functions *
- *  @brief    Interrupts and flags management functions *
+/** @defgroup FSMC_Group4  Interrupts and flags management functions
+ *  @brief    Interrupts and flags management functions
  *
 @verbatim   
  ===============================================================================

@@ -1,6 +1,19 @@
 /*
-                                                  FILE-START
-*/
+ * Copyright (c) 2022-2023 AhDun
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 /*
  *
  * @文件名称: osMemory.c
@@ -13,25 +26,19 @@
  *
  */
 
-/*
-                                                  <引用文件区>
-*/
+
 #include "Main.h"
 #include "osMemory.h"
 #include "sram.h"
 
-/*
-                                                  <数据初始区>
-*/
+
 
 uint8_t CCRAM[MemTank_Max] __attribute__((at(0x10000000)));
 
 _MemoryInfo 	Memory_CCRAM = {&CCRAM[0],&CCRAM[MemTank_Max],&CCRAM[0]};
 
 _MemoryInfoHandle	MemoryInfoHandle;
-/*
-                                                  <函数区>
-*/
+
 
 
 
@@ -345,6 +352,4 @@ uint32_t osMemoryGetAllValue(void)
 }
 
 
-/*
-                                                  FILE-END
-*/
+

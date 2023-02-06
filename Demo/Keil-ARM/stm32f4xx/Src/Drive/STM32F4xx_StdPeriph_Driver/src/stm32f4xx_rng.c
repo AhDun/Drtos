@@ -76,8 +76,8 @@
   * @{
   */ 
 
-/** @defgroup RNG_Group1 Initialization and Configuration functions *
- *  @brief    Initialization and Configuration functions  *
+/** @defgroup RNG_Group1 Initialization and Configuration functions
+ *  @brief    Initialization and Configuration functions 
  *
 @verbatim    
  ===============================================================================
@@ -131,8 +131,8 @@ void RNG_Cmd(FunctionalState NewState)
   * @}
   */
 
-/** @defgroup RNG_Group2 Get 32 bit Random number function *
- *  @brief    Get 32 bit Random number function  *
+/** @defgroup RNG_Group2 Get 32 bit Random number function
+ *  @brief    Get 32 bit Random number function 
  *
 
 @verbatim    
@@ -184,8 +184,8 @@ uint32_t RNG_GetRandomNumber(void)
   * @}
   */
 
-/** @defgroup RNG_Group3 Interrupts and flags management functions *
- *  @brief   Interrupts and flags management functions *
+/** @defgroup RNG_Group3 Interrupts and flags management functions
+ *  @brief   Interrupts and flags management functions
  *
 @verbatim   
  ===============================================================================
@@ -196,7 +196,7 @@ uint32_t RNG_GetRandomNumber(void)
       to get the status and clear flags and Interrupts pending bits.
   
  [..] The RNG provides 3 Interrupts sources and 3 Flags:
-   *
+  
  *** Flags : ***
  ===============
  [..] 
@@ -207,7 +207,7 @@ uint32_t RNG_GetRandomNumber(void)
     (#) RNG_FLAG_CECS : In the case of a seed error detection. 
       
     (#) RNG_FLAG_SECS : In the case of a clock error detection.
-               *
+              
  *** Interrupts ***
  ==================
  [..] If enabled, an RNG interrupt is pending :
@@ -227,7 +227,7 @@ uint32_t RNG_GetRandomNumber(void)
        cleared using RNG_ClearITPendingBit(RNG_IT_CEI) function.
        -@- note In this case, User have to check that the clock controller is 
            correctly configured to provide the RNG clock. 
- *
+
  *** Managing the RNG controller events : ***
  ============================================
  [..] The user should identify which mode will be used in his application to manage 

@@ -24,8 +24,6 @@
  *
  * @文件内容: 
  *
- * @文件作者: AhDun (mail: ahdunxx@163.com)
- *
  * @注    释: 
  *
  */
@@ -124,9 +122,9 @@ void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
 void osTASK_START(uint32_t* tsas);
 /*
  *
- * @函数名称: INTX_ENABLE
+ * @函数名称: 使内核SVC悬起
  *
- * @函数功能: 开启所有中断
+ * @函数功能: CPU_PendSV
  *
  * @输入参数: 无
  *
@@ -138,9 +136,9 @@ void osTASK_START(uint32_t* tsas);
 void CPU_PendSV(void);
 /*
  *
- * @函数名称: INTX_ENABLE
+ * @函数名称: CPU_SVC
  *
- * @函数功能: 开启所有中断
+ * @函数功能: 使内核SVC悬起
  *
  * @输入参数: 无
  *

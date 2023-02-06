@@ -20,8 +20,6 @@
  *
  * @文件内容: print函数，与printf用法无异
  *
- * @文件作者: AhDun (mail: ahdunxx@163.com)
- *
  * @注    释: 无
  *
  */

@@ -24,8 +24,6 @@
  *
  * @文件内容: print系列函数
  *
- * @文件作者: AhDun (mail: ahdunxx@163.com)
- *
  * @注   释: 无
  *
  */

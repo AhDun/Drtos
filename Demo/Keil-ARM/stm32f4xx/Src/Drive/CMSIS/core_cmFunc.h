@@ -1,11 +1,11 @@
-/**************************************************************************//**
- * @file     core_cmFunc.h
- * @brief    CMSIS Cortex-M Core Function Access Header File
- * @version  V4.00
- * @date     28. August 2014
- *
- * @note
- *
+/**************************************************************************//** *
+ * @file     core_cmFunc.h *
+ * @brief    CMSIS Cortex-M Core Function Access Header File *
+ * @version  V4.00 *
+ * @date     28. August 2014 *
+ * *
+ * @note *
+ * *
  ******************************************************************************/
 /* Copyright (c) 2009 - 2014 ARM LIMITED
 
@@ -42,7 +42,7 @@
 /* ###########################  Core Function Access  ########################### */
 /** \ingroup  CMSIS_Core_FunctionInterface
     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
-  @{
+  @{ *
  */
 
 #if   defined ( __CC_ARM ) /*------------------RealView Compiler -----------------*/
@@ -59,7 +59,7 @@
 
     This function returns the content of the Control Register.
 
-    \return               Control Register value
+    \return               Control Register value *
  */
 __STATIC_INLINE uint32_t __get_CONTROL(void)
 {
@@ -72,7 +72,7 @@ __STATIC_INLINE uint32_t __get_CONTROL(void)
 
     This function writes the given value to the Control Register.
 
-    \param [in]    control  Control Register value to set
+    \param [in]    control  Control Register value to set *
  */
 __STATIC_INLINE void __set_CONTROL(uint32_t control)
 {
@@ -85,7 +85,7 @@ __STATIC_INLINE void __set_CONTROL(uint32_t control)
 
     This function returns the content of the IPSR Register.
 
-    \return               IPSR Register value
+    \return               IPSR Register value *
  */
 __STATIC_INLINE uint32_t __get_IPSR(void)
 {
@@ -98,7 +98,7 @@ __STATIC_INLINE uint32_t __get_IPSR(void)
 
     This function returns the content of the APSR Register.
 
-    \return               APSR Register value
+    \return               APSR Register value *
  */
 __STATIC_INLINE uint32_t __get_APSR(void)
 {
@@ -111,7 +111,7 @@ __STATIC_INLINE uint32_t __get_APSR(void)
 
     This function returns the content of the xPSR Register.
 
-    \return               xPSR Register value
+    \return               xPSR Register value *
  */
 __STATIC_INLINE uint32_t __get_xPSR(void)
 {
@@ -124,7 +124,7 @@ __STATIC_INLINE uint32_t __get_xPSR(void)
 
     This function returns the current value of the Process Stack Pointer (PSP).
 
-    \return               PSP Register value
+    \return               PSP Register value *
  */
 __STATIC_INLINE uint32_t __get_PSP(void)
 {
@@ -137,7 +137,7 @@ __STATIC_INLINE uint32_t __get_PSP(void)
 
     This function assigns the given value to the Process Stack Pointer (PSP).
 
-    \param [in]    topOfProcStack  Process Stack Pointer value to set
+    \param [in]    topOfProcStack  Process Stack Pointer value to set *
  */
 __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
 {
@@ -150,7 +150,7 @@ __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
 
     This function returns the current value of the Main Stack Pointer (MSP).
 
-    \return               MSP Register value
+    \return               MSP Register value *
  */
 __STATIC_INLINE uint32_t __get_MSP(void)
 {
@@ -163,7 +163,7 @@ __STATIC_INLINE uint32_t __get_MSP(void)
 
     This function assigns the given value to the Main Stack Pointer (MSP).
 
-    \param [in]    topOfMainStack  Main Stack Pointer value to set
+    \param [in]    topOfMainStack  Main Stack Pointer value to set *
  */
 __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
 {
@@ -176,7 +176,7 @@ __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
 
     This function returns the current state of the priority mask bit from the Priority Mask Register.
 
-    \return               Priority Mask value
+    \return               Priority Mask value *
  */
 __STATIC_INLINE uint32_t __get_PRIMASK(void)
 {
@@ -189,7 +189,7 @@ __STATIC_INLINE uint32_t __get_PRIMASK(void)
 
     This function assigns the given value to the Priority Mask Register.
 
-    \param [in]    priMask  Priority Mask
+    \param [in]    priMask  Priority Mask *
  */
 __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
 {
@@ -203,7 +203,7 @@ __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
 /** \brief  Enable FIQ
 
     This function enables FIQ interrupts by clearing the F-bit in the CPSR.
-    Can only be executed in Privileged modes.
+    Can only be executed in Privileged modes. *
  */
 #define __enable_fault_irq                __enable_fiq
 
@@ -211,7 +211,7 @@ __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
 /** \brief  Disable FIQ
 
     This function disables FIQ interrupts by setting the F-bit in the CPSR.
-    Can only be executed in Privileged modes.
+    Can only be executed in Privileged modes. *
  */
 #define __disable_fault_irq               __disable_fiq
 
@@ -220,7 +220,7 @@ __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
 
     This function returns the current value of the Base Priority register.
 
-    \return               Base Priority register value
+    \return               Base Priority register value *
  */
 __STATIC_INLINE uint32_t  __get_BASEPRI(void)
 {
@@ -233,7 +233,7 @@ __STATIC_INLINE uint32_t  __get_BASEPRI(void)
 
     This function assigns the given value to the Base Priority register.
 
-    \param [in]    basePri  Base Priority value to set
+    \param [in]    basePri  Base Priority value to set *
  */
 __STATIC_INLINE void __set_BASEPRI(uint32_t basePri)
 {
@@ -246,7 +246,7 @@ __STATIC_INLINE void __set_BASEPRI(uint32_t basePri)
 
     This function returns the current value of the Fault Mask register.
 
-    \return               Fault Mask register value
+    \return               Fault Mask register value *
  */
 __STATIC_INLINE uint32_t __get_FAULTMASK(void)
 {
@@ -259,7 +259,7 @@ __STATIC_INLINE uint32_t __get_FAULTMASK(void)
 
     This function assigns the given value to the Fault Mask register.
 
-    \param [in]    faultMask  Fault Mask value to set
+    \param [in]    faultMask  Fault Mask value to set *
  */
 __STATIC_INLINE void __set_FAULTMASK(uint32_t faultMask)
 {
@@ -276,7 +276,7 @@ __STATIC_INLINE void __set_FAULTMASK(uint32_t faultMask)
 
     This function returns the current value of the Floating Point Status/Control register.
 
-    \return               Floating Point Status/Control register value
+    \return               Floating Point Status/Control register value *
  */
 __STATIC_INLINE uint32_t __get_FPSCR(void)
 {
@@ -293,7 +293,7 @@ __STATIC_INLINE uint32_t __get_FPSCR(void)
 
     This function assigns the given value to the Floating Point Status/Control register.
 
-    \param [in]    fpscr  Floating Point Status/Control value to set
+    \param [in]    fpscr  Floating Point Status/Control value to set *
  */
 __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
 {
@@ -312,7 +312,7 @@ __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
 /** \brief  Enable IRQ Interrupts
 
   This function enables IRQ interrupts by clearing the I-bit in the CPSR.
-  Can only be executed in Privileged modes.
+  Can only be executed in Privileged modes. *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_irq(void)
 {
@@ -323,7 +323,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_irq(void)
 /** \brief  Disable IRQ Interrupts
 
   This function disables IRQ interrupts by setting the I-bit in the CPSR.
-  Can only be executed in Privileged modes.
+  Can only be executed in Privileged modes. *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_irq(void)
 {
@@ -335,7 +335,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_irq(void)
 
     This function returns the content of the Control Register.
 
-    \return               Control Register value
+    \return               Control Register value *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_CONTROL(void)
 {
@@ -350,7 +350,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_CONTROL(void)
 
     This function writes the given value to the Control Register.
 
-    \param [in]    control  Control Register value to set
+    \param [in]    control  Control Register value to set *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_CONTROL(uint32_t control)
 {
@@ -362,7 +362,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_CONTROL(uint32_t c
 
     This function returns the content of the IPSR Register.
 
-    \return               IPSR Register value
+    \return               IPSR Register value *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_IPSR(void)
 {
@@ -377,7 +377,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_IPSR(void)
 
     This function returns the content of the APSR Register.
 
-    \return               APSR Register value
+    \return               APSR Register value *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_APSR(void)
 {
@@ -392,7 +392,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_APSR(void)
 
     This function returns the content of the xPSR Register.
 
-    \return               xPSR Register value
+    \return               xPSR Register value *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_xPSR(void)
 {
@@ -407,7 +407,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_xPSR(void)
 
     This function returns the current value of the Process Stack Pointer (PSP).
 
-    \return               PSP Register value
+    \return               PSP Register value *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PSP(void)
 {
@@ -422,7 +422,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PSP(void)
 
     This function assigns the given value to the Process Stack Pointer (PSP).
 
-    \param [in]    topOfProcStack  Process Stack Pointer value to set
+    \param [in]    topOfProcStack  Process Stack Pointer value to set *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
 {
@@ -434,7 +434,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PSP(uint32_t topOf
 
     This function returns the current value of the Main Stack Pointer (MSP).
 
-    \return               MSP Register value
+    \return               MSP Register value *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_MSP(void)
 {
@@ -449,7 +449,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_MSP(void)
 
     This function assigns the given value to the Main Stack Pointer (MSP).
 
-    \param [in]    topOfMainStack  Main Stack Pointer value to set
+    \param [in]    topOfMainStack  Main Stack Pointer value to set *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
 {
@@ -461,7 +461,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_MSP(uint32_t topOf
 
     This function returns the current state of the priority mask bit from the Priority Mask Register.
 
-    \return               Priority Mask value
+    \return               Priority Mask value *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PRIMASK(void)
 {
@@ -476,7 +476,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PRIMASK(void)
 
     This function assigns the given value to the Priority Mask Register.
 
-    \param [in]    priMask  Priority Mask
+    \param [in]    priMask  Priority Mask *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
 {
@@ -489,7 +489,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PRIMASK(uint32_t p
 /** \brief  Enable FIQ
 
     This function enables FIQ interrupts by clearing the F-bit in the CPSR.
-    Can only be executed in Privileged modes.
+    Can only be executed in Privileged modes. *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_fault_irq(void)
 {
@@ -500,7 +500,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_fault_irq(void)
 /** \brief  Disable FIQ
 
     This function disables FIQ interrupts by setting the F-bit in the CPSR.
-    Can only be executed in Privileged modes.
+    Can only be executed in Privileged modes. *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_fault_irq(void)
 {
@@ -512,7 +512,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_fault_irq(void
 
     This function returns the current value of the Base Priority register.
 
-    \return               Base Priority register value
+    \return               Base Priority register value *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_BASEPRI(void)
 {
@@ -527,7 +527,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_BASEPRI(void)
 
     This function assigns the given value to the Base Priority register.
 
-    \param [in]    basePri  Base Priority value to set
+    \param [in]    basePri  Base Priority value to set *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_BASEPRI(uint32_t value)
 {
@@ -539,7 +539,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_BASEPRI(uint32_t v
 
     This function returns the current value of the Fault Mask register.
 
-    \return               Fault Mask register value
+    \return               Fault Mask register value *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FAULTMASK(void)
 {
@@ -554,7 +554,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FAULTMASK(void
 
     This function assigns the given value to the Fault Mask register.
 
-    \param [in]    faultMask  Fault Mask value to set
+    \param [in]    faultMask  Fault Mask value to set *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FAULTMASK(uint32_t faultMask)
 {
@@ -570,7 +570,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FAULTMASK(uint32_t
 
     This function returns the current value of the Floating Point Status/Control register.
 
-    \return               Floating Point Status/Control register value
+    \return               Floating Point Status/Control register value *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FPSCR(void)
 {
@@ -592,7 +592,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FPSCR(void)
 
     This function assigns the given value to the Floating Point Status/Control register.
 
-    \param [in]    fpscr  Floating Point Status/Control value to set
+    \param [in]    fpscr  Floating Point Status/Control value to set *
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
 {
@@ -619,10 +619,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fps
 
 #elif defined ( __TASKING__ ) /*------------------ TASKING Compiler --------------*/
 /* TASKING carm specific functions */
-/*
- * The CMSIS functions have been implemented as intrinsics in the compiler.
- * Please use "carm -?i" to get an up to date list of all intrinsics,
- * Including the CMSIS ones.
+/* *
+ * The CMSIS functions have been implemented as intrinsics in the compiler. *
+ * Please use "carm -?i" to get an up to date list of all intrinsics, *
+ * Including the CMSIS ones. *
  */
 
 
@@ -632,6 +632,6 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fps
 
 #endif
 
-/*@} end of CMSIS_Core_RegAccFunctions */
+/* @} end of CMSIS_Core_RegAccFunctions */
 
 #endif /* __CORE_CMFUNC_H */

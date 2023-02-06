@@ -2,18 +2,16 @@
                                                   FILE-START
 */
 /*
-
- *@文件名称: osMemory.c
-
- *@文件内容: 系统"内存"文件
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 无
-
-*/
+ *
+ * @文件名称: osMemory.c
+ *
+ * @文件内容: 系统"内存"文件
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 无
+ *
+ */
 
 /*
                                                   <引用文件区>
@@ -39,12 +37,14 @@ _MemoryInfoHandle	MemoryInfoHandle;
 
 osErrorValue  osMemoryInit(void)
 {
+	#if (osMemoryInitReset_Enable > 0)
 	uint32_t addr;
 	MemoryInfoHandle = &Memory_CCRAM; 
-	#if (osMemoryInitReset_Enable > 0)
 	for(addr = 0;(MemoryInfoHandle -> HeadAddr + addr) < MemoryInfoHandle -> TailAddr;addr++){
 		*(MemoryInfoHandle -> HeadAddr + addr) = 0x00;
 	}
+	#else
+	MemoryInfoHandle = &Memory_CCRAM; 
 	#endif
 	return (OK);
 }

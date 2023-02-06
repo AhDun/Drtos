@@ -71,8 +71,8 @@
   * @{
   */ 
 
-/** @defgroup CRYP_Group7 High Level TDES functions
- *  @brief   High Level TDES functions 
+/** @defgroup CRYP_Group7 High Level TDES functions *
+ *  @brief   High Level TDES functions  *
  *
 @verbatim   
  ===============================================================================

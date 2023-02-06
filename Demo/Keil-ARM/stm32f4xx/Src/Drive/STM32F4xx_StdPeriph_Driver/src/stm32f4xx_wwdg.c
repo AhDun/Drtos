@@ -118,8 +118,8 @@
   * @{
   */
 
-/** @defgroup WWDG_Group1 Prescaler, Refresh window and Counter configuration functions
- *  @brief   Prescaler, Refresh window and Counter configuration functions 
+/** @defgroup WWDG_Group1 Prescaler, Refresh window and Counter configuration functions *
+ *  @brief   Prescaler, Refresh window and Counter configuration functions  *
  *
 @verbatim   
  ===============================================================================
@@ -217,8 +217,8 @@ void WWDG_SetCounter(uint8_t Counter)
   * @}
   */
 
-/** @defgroup WWDG_Group2 WWDG activation functions
- *  @brief   WWDG activation functions 
+/** @defgroup WWDG_Group2 WWDG activation functions *
+ *  @brief   WWDG activation functions  *
  *
 @verbatim   
  ===============================================================================
@@ -246,8 +246,8 @@ void WWDG_Enable(uint8_t Counter)
   * @}
   */
 
-/** @defgroup WWDG_Group3 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions 
+/** @defgroup WWDG_Group3 Interrupts and flags management functions *
+ *  @brief   Interrupts and flags management functions  *
  *
 @verbatim   
  ===============================================================================

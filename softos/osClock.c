@@ -33,28 +33,27 @@
 * 在合同、侵权或其他诉讼中，由，由或在
 
 * 与软件的联系或对软件的使用或其他交易。
-
-*/
+ *
+ */
 
 /*
-
- *@文件名称: osClock.c
-
- *@文件内容: 系统时钟文件
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 
-
-*/
+ *
+ * @文件名称: osClock.c
+ *
+ * @文件内容: 系统时钟文件
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 
+ *
+ */
 
 /*
                                                   <引用文件区>
 */
 #include "osConfig.h"
 #include "osClock.h"
+
 
 /*
                                                   变量初始化区
@@ -67,20 +66,18 @@ _PerformanceStatistics PS;//性能统计
                                                   <函数区>
 */
 /*
-
- *@函数名称: osClockInit
-
- *@函数版本: 1.0.0
-
- *@函数功能: 系统时钟初始化
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osClockInit
+ *
+ * @函数功能: 系统时钟初始化
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osClockInit(void)
 {
 	if(osClock_Init() == Error){//如果时钟初始化错误
@@ -89,20 +86,18 @@ osErrorValue osClockInit(void)
 	return (OK);//返回OK
 }
 /*
-
- *@函数名称: osClockTimePulse
-
- *@函数版本: 1.0.0
-
- *@函数功能: 系统时钟脉冲处理
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osClockTimePulse
+ *
+ * @函数功能: 系统时钟脉冲处理
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 void osClockTimePulse(void)
 {
 	/*本函数已在中断响应入口中，下面是这个函数的副本*/

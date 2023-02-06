@@ -152,8 +152,8 @@
   * @{
   */
 
-/** @defgroup SAI_Group1 Initialization and Configuration functions
- *  @brief   Initialization and Configuration functions 
+/** @defgroup SAI_Group1 Initialization and Configuration functions *
+ *  @brief   Initialization and Configuration functions  *
  *
 @verbatim   
  ===============================================================================
@@ -637,8 +637,8 @@ void SAI_FlushFIFO(SAI_Block_TypeDef* SAI_Block_x)
   * @}
   */
 
-/** @defgroup SAI_Group2 Data transfers functions
- *  @brief   Data transfers functions
+/** @defgroup SAI_Group2 Data transfers functions *
+ *  @brief   Data transfers functions *
  *
 @verbatim   
  ===============================================================================
@@ -695,7 +695,7 @@ void SAI_SendData(SAI_Block_TypeDef* SAI_Block_x, uint32_t Data)
   * @}
   */
 
-/** @defgroup SAI_Group3 DMA transfers management functions
+/** @defgroup SAI_Group3 DMA transfers management functions *
  *  @brief   DMA transfers management functions
   *
 @verbatim   
@@ -736,7 +736,7 @@ void SAI_DMACmd(SAI_Block_TypeDef* SAI_Block_x, FunctionalState NewState)
   * @}
   */
 
-/** @defgroup SAI_Group4 Interrupts and flags management functions
+/** @defgroup SAI_Group4 Interrupts and flags management functions *
  *  @brief   Interrupts and flags management functions
   *
 @verbatim   

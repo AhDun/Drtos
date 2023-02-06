@@ -1,13 +1,11 @@
-/*
- *@文件名称: main.h
-
- *@文件内容: 基本库
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 
+/* *
+ * @文件名称: main.h
+ *
+ * @文件内容: 基本库
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 
 */
 
 #ifndef __main_H_

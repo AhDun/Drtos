@@ -42,10 +42,10 @@
    (#) Save and restore Cryptographic processor context using CRYP_SaveContext() 
        and CRYP_RestoreContext() functions.     
   
-  
+   *
  *** Procedure to perform an encryption or a decryption ***
  ========================================================== 
-  
+   *
  *** Initialization ***
  ====================== 
  [..] 
@@ -88,7 +88,7 @@
     (#) At the end of the processing, CRYP_FLAG_BUSY flag will be reset and 
           both FIFOs are empty (CRYP_FLAG_IFEM is set and CRYP_FLAG_OFNE is 
           reset). You can disable the peripheral using CRYP_Cmd() function.
-  
+   *
  *** Interrupts Processing mode *** 
  ==================================
  [..] In this mode, Processing is done when the data are transferred by the 
@@ -112,7 +112,7 @@
          empty (CRYP_FLAG_IFEM is set and CRYP_FLAG_OFNE is reset). 
          You can disable the CRYP_IT_OUTI interrupt (using CRYP_ITConfig() 
          function) and you can disable the peripheral using CRYP_Cmd() function.
-  
+   *
  *** DMA Processing mode *** 
  ===========================
  [..] In this mode, Processing is done when the DMA is used to transfer the 
@@ -187,8 +187,8 @@
   * @{
   */ 
 
-/** @defgroup CRYP_Group1 Initialization and Configuration functions
- *  @brief    Initialization and Configuration functions 
+/** @defgroup CRYP_Group1 Initialization and Configuration functions *
+ *  @brief    Initialization and Configuration functions  *
  *
 @verbatim    
  ===============================================================================
@@ -420,8 +420,8 @@ void CRYP_Cmd(FunctionalState NewState)
   * @}
   */
   
-/** @defgroup CRYP_Group2 CRYP Data processing functions
- *  @brief    CRYP Data processing functions
+/** @defgroup CRYP_Group2 CRYP Data processing functions *
+ *  @brief    CRYP Data processing functions *
  *
 @verbatim    
  ===============================================================================
@@ -461,8 +461,8 @@ uint32_t CRYP_DataOut(void)
   * @}
   */
   
-/** @defgroup CRYP_Group3 Context swapping functions
- *  @brief   Context swapping functions
+/** @defgroup CRYP_Group3 Context swapping functions *
+ *  @brief   Context swapping functions *
  *
 @verbatim   
  ===============================================================================
@@ -647,8 +647,8 @@ void CRYP_RestoreContext(CRYP_Context* CRYP_ContextRestore)
   * @}
   */
 
-/** @defgroup CRYP_Group4 CRYP's DMA interface Configuration function
- *  @brief   CRYP's DMA interface Configuration function 
+/** @defgroup CRYP_Group4 CRYP's DMA interface Configuration function *
+ *  @brief   CRYP's DMA interface Configuration function  *
  *
 @verbatim   
  ===============================================================================
@@ -699,8 +699,8 @@ void CRYP_DMACmd(uint8_t CRYP_DMAReq, FunctionalState NewState)
   * @}
   */
 
-/** @defgroup CRYP_Group5 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions
+/** @defgroup CRYP_Group5 Interrupts and flags management functions *
+ *  @brief   Interrupts and flags management functions *
  *
 @verbatim   
  ===============================================================================
@@ -711,7 +711,7 @@ void CRYP_DMACmd(uint8_t CRYP_DMAReq, FunctionalState NewState)
       to get the status and Interrupts pending bits.
 
  [..] The CRYP provides 2 Interrupts sources and 7 Flags:
-
+ *
  *** Flags : ***
  ===============
  [..] 
@@ -740,7 +740,7 @@ void CRYP_DMACmd(uint8_t CRYP_DMAReq, FunctionalState NewState)
        of data or a key preparation (for AES decryption). This Flag is cleared 
        only by hardware. To clear it, the CRYP core must be disabled and the last
        processing has completed. 
-
+ *
  *** Interrupts : ***
  ====================
  [..]
@@ -762,7 +762,7 @@ void CRYP_DMACmd(uint8_t CRYP_DMAReq, FunctionalState NewState)
        -@- This interrupt is cleared by reading data from the output FIFO until there 
            is no valid (32-bit) word left (that is, the interrupt follows the state 
            of the OFNE (output FIFO not empty) flag).
-
+ *
  *** Managing the CRYP controller events : ***
  =============================================
  [..] The user should identify which mode will be used in his application to manage 

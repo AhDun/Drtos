@@ -5,18 +5,16 @@
 #define __osClockH_
 
 /*
-
- *@文件名称: osClock.h
-
- *@文件内容: 
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 
-
-*/
+ *
+ * @文件名称: osClock.h
+ *
+ * @文件内容: 
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 
+ *
+ */
 
 /*
                                                   <引用文件区>
@@ -88,36 +86,32 @@ extern osTIME osTime;
                                                   <函数声明区>
 */
 /*
-
- *@函数名称: osClockInit
-
- *@函数版本: 1.0.0
-
- *@函数功能: 系统时钟初始化
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osClockInit
+ *
+ * @函数功能: 系统时钟初始化
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osClockInit(void);
 /*
-
- *@函数名称: osClockTimePulse
-
- *@函数版本: 1.0.0
-
- *@函数功能: 系统时钟脉冲处理
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osClockTimePulse
+ *
+ * @函数功能: 系统时钟脉冲处理
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 void osClockTimePulse(void);
 
 

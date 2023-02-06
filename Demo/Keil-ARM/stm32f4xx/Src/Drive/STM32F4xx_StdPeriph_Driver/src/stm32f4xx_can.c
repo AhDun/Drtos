@@ -137,8 +137,8 @@ static ITStatus CheckITStatus(uint32_t CAN_Reg, uint32_t It_Bit);
   * @{
   */
 
-/** @defgroup CAN_Group1 Initialization and Configuration functions
- *  @brief    Initialization and Configuration functions 
+/** @defgroup CAN_Group1 Initialization and Configuration functions *
+ *  @brief    Initialization and Configuration functions  *
  *
 @verbatim    
  ===============================================================================
@@ -550,8 +550,8 @@ void CAN_TTComModeCmd(CAN_TypeDef* CANx, FunctionalState NewState)
   */
 
 
-/** @defgroup CAN_Group2 CAN Frames Transmission functions
- *  @brief    CAN Frames Transmission functions 
+/** @defgroup CAN_Group2 CAN Frames Transmission functions *
+ *  @brief    CAN Frames Transmission functions  *
  *
 @verbatim    
  ===============================================================================
@@ -722,8 +722,8 @@ void CAN_CancelTransmit(CAN_TypeDef* CANx, uint8_t Mailbox)
   */
 
 
-/** @defgroup CAN_Group3 CAN Frames Reception functions
- *  @brief    CAN Frames Reception functions 
+/** @defgroup CAN_Group3 CAN Frames Reception functions *
+ *  @brief    CAN Frames Reception functions  *
  *
 @verbatim    
  ===============================================================================
@@ -843,8 +843,8 @@ uint8_t CAN_MessagePending(CAN_TypeDef* CANx, uint8_t FIFONumber)
   */
 
 
-/** @defgroup CAN_Group4 CAN Operation modes functions
- *  @brief    CAN Operation modes functions 
+/** @defgroup CAN_Group4 CAN Operation modes functions *
+ *  @brief    CAN Operation modes functions  *
  *
 @verbatim    
  ===============================================================================
@@ -1003,8 +1003,8 @@ uint8_t CAN_WakeUp(CAN_TypeDef* CANx)
   */
 
 
-/** @defgroup CAN_Group5 CAN Bus Error management functions
- *  @brief    CAN Bus Error management functions 
+/** @defgroup CAN_Group5 CAN Bus Error management functions *
+ *  @brief    CAN Bus Error management functions  *
  *
 @verbatim    
  ===============================================================================
@@ -1098,8 +1098,8 @@ uint8_t CAN_GetLSBTransmitErrorCounter(CAN_TypeDef* CANx)
   * @}
   */
 
-/** @defgroup CAN_Group6 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions
+/** @defgroup CAN_Group6 Interrupts and flags management functions *
+ *  @brief   Interrupts and flags management functions *
  *
 @verbatim   
  ===============================================================================

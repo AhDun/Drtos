@@ -167,8 +167,8 @@
   * @{
   */
 
-/** @defgroup DAC_Group1 DAC channels configuration
- *  @brief   DAC channels configuration: trigger, output buffer, data format 
+/** @defgroup DAC_Group1 DAC channels configuration *
+ *  @brief   DAC channels configuration: trigger, output buffer, data format  *
  *
 @verbatim   
  ===============================================================================
@@ -479,8 +479,8 @@ uint16_t DAC_GetDataOutputValue(uint32_t DAC_Channel)
   * @}
   */
 
-/** @defgroup DAC_Group2 DMA management functions
- *  @brief   DMA management functions
+/** @defgroup DAC_Group2 DMA management functions *
+ *  @brief   DMA management functions *
  *
 @verbatim   
  ===============================================================================
@@ -528,8 +528,8 @@ void DAC_DMACmd(uint32_t DAC_Channel, FunctionalState NewState)
   * @}
   */
 
-/** @defgroup DAC_Group3 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions
+/** @defgroup DAC_Group3 Interrupts and flags management functions *
+ *  @brief   Interrupts and flags management functions *
  *
 @verbatim   
  ===============================================================================

@@ -2,16 +2,14 @@
                                                   FILE-START
 */
 
-/*
- *@文件名称: main.c
-
- *@文件内容: 
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 
+/* *
+ * @文件名称: main.c
+ *
+ * @文件内容: 
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 
 */
 
 
@@ -26,32 +24,32 @@
 */
 
 
-/*
- *@函数名称: 无
-
- *@函数功能: 无
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+/* *
+ * @函数名称: 无
+ *
+ * @函数功能: 无
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 
 int main(void)
 {
 /*--------------------------------------demo---------------------------------------------------------*/
 	u32 _tr0;
-
-
 	osInit();
+
 	//osMemoryMalloc(25000);
+
 
 	TaskHandle_Task1 = osTaskLogin(
 	"RTC", 			                    //任务名称
 	Task1_Func,			            //任务地址
-	Task1_Stack_size,		                    //任务栈长度
+	Task1_Stack_size,		                    //任务栈长度s
 	50,		                            //任务时间轮片
 	-2,	                                    //任务优先级
 	"Hello Task1\n",									//任务传参   
@@ -90,12 +88,11 @@ int main(void)
 	Task_Set_Default                                    
 	);
 
-	osTaskSIRQLogin(&SIRQ_RTC[0],RTC_Func);
+
 	
 	//osTaskLogout(TaskHandle_Task4);
 
 	while(1){
-		osTaskDelayMs(100);
 		for(_tr0 = 0;_tr0 < 500;_tr0++){
 			osPostReadWait();
 		}

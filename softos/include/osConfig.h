@@ -4,18 +4,16 @@
 #ifndef __osConfig_H_
 #define __osConfig_H_
 /*
-
- *@文件名称: osConfig.h
-
- *@文件内容: 系统配置
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 
-
-*/
+ *
+ * @文件名称: osConfig.h
+ *
+ * @文件内容: 系统配置
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 
+ *
+ */
 
 /*
                              __ _            
@@ -26,8 +24,8 @@
                  |___/\___/|_|  \__\___/|___/
                             
 						softos v1.0.0
-
-*/
+ *
+ */
 
 
 /*
@@ -157,7 +155,7 @@ typedef int32_t osErrorValue;//函数错误返回值
 /*
                                                   <引用文件区>
 */
-#include "osCPU.h"
+#include "osLink.h"
 #include "osSignal.h"
 #include "osPost.h"
 #include "osTask.h"

@@ -23,8 +23,6 @@
 ;
 	EXPORT  CPU_PendSV
 	EXPORT  CPU_SVC
-	EXPORT	INTX_DISABLE
-	EXPORT	INTX_ENABLE
 ;
 ;                                                  <常量标号定义>
 ;
@@ -94,15 +92,7 @@ CPU_PendSV
 
 
 
-INTX_DISABLE
 
-	CPSID   I	;禁用所有中断
-	BX      LR	;退出函数，跳转到BX寄存器中所存的地址
-
-INTX_ENABLE
-
-	CPSIE   I	;禁用所有中断
-	BX      LR  ;退出函数，跳转到BX寄存器中所存的地址
 
 
 

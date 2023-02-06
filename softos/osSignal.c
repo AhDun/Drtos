@@ -2,18 +2,16 @@
                                                   FILE-START
 */
 /*
-
- *@文件名称: .c
-
- *@文件内容: 系统"信号量"文件
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 无
-
-*/
+ *
+ * @文件名称: .c
+ *
+ * @文件内容: 系统"信号量"文件
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 无
+ *
+ */
 
 /*
                                                   <引用文件区>
@@ -27,8 +25,8 @@
  @头文件功能: 无
 
  @注      释: 无
-
-*/
+ *
+ */
 
 /*
                                                   <数据初始区>
@@ -38,29 +36,27 @@
  @变量名称: 无
 
  @变量功能: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @注    释: 无
+ *
+ */
 /*
                                                   <函数区>
 */
 
 /*
-
- *@函数名称: osSignalRegister
-
- *@函数版本: 1.0.0
-
- *@函数功能: 注册信号量
-
- *@输入参数: _SignalType SP(信号量的类型)
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osSignalRegister
+ *
+ * @函数功能: 注册信号量
+ *
+ * @输入参数: _SignalType SP(信号量的类型)
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 #if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
 _Signal* osSignalLogin(_SignalType SP)
 {
@@ -89,20 +85,18 @@ _Signal* osSignalLogin(_SignalType SP)
 }
 #else
 /*
-
- *@函数名称: osSignalRegister
-
- *@函数版本: 1.0.0
-
- *@函数功能: 注册信号量
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osSignalRegister
+ *
+ * @函数功能: 注册信号量
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osSignalLogin(_Signal* ST,_SignalType SP)
 {
     switch(SP){
@@ -134,20 +128,18 @@ osErrorValue osSignalLogin(_Signal* ST,_SignalType SP)
 #endif
 
 /*
-
- *@函数名称: osSignalApply_Wait
-
- *@函数版本: 1.0.0
-
- *@函数功能: 信号量请求
-
- *@输入参数: _Signal* ST(信号量结构体)
-
- *@返 回 值: -1:发生错误 / 0:请求成功
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osSignalApply_Wait
+ *
+ * @函数功能: 信号量请求
+ *
+ * @输入参数: _Signal* ST(信号量结构体)
+ *
+ * @返 回 值: -1:发生错误 / 0:请求成功
+ *
+ * @注    释: 无
+ *
+ */
 
 static osErrorValue osSignalApplyToken(_Signal* ST)
 {
@@ -167,20 +159,18 @@ static osErrorValue osSignalApplyToken(_Signal* ST)
 
 
 /*
-
- *@函数名称: osSignalApply_Wait
-
- *@函数版本: 1.0.0
-
- *@函数功能: 信号量请求
-
- *@输入参数: _Signal* ST(信号量结构体)
-
- *@返 回 值: -1:发生错误 / 0:请求成功
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osSignalApply_Wait
+ *
+ * @函数功能: 信号量请求
+ *
+ * @输入参数: _Signal* ST(信号量结构体)
+ *
+ * @返 回 值: -1:发生错误 / 0:请求成功
+ *
+ * @注    释: 无
+ *
+ */
 
 static osErrorValue osSignalWaitToken(_Signal* ST)
 {
@@ -276,20 +266,18 @@ osErrorValue osSignalUseWait(_Signal* ST)
 }
 
 /*
-
- *@函数名称: osSignalFree
-
- *@函数版本: 1.0.0
-
- *@函数功能: 释放信号量
-
- *@输入参数: _Signal* ST(信号量结构体)
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osSignalFree
+ *
+ * @函数功能: 释放信号量
+ *
+ * @输入参数: _Signal* ST(信号量结构体)
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osSignalFree(_Signal* ST)
 {
 #if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
@@ -344,20 +332,18 @@ osErrorValue osSignalFree(_Signal* ST)
 }
 
 /*
-
- *@函数名称: osSignalLogout
-
- *@函数版本: 1.0.0
-
- *@函数功能: 信号量注销
-
- *@输入参数: _Signal* ST(信号量结构体)
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osSignalLogout
+ *
+ * @函数功能: 信号量注销
+ *
+ * @输入参数: _Signal* ST(信号量结构体)
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osSignalLogout(_Signal* ST)
 {
 	#if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable

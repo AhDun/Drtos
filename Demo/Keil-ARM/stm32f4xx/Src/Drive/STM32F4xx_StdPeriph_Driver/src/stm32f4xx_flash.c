@@ -94,7 +94,7 @@
   */ 
 
 /** @defgroup FLASH_Group1 FLASH Interface configuration functions
-  *  @brief   FLASH Interface configuration functions 
+  *  @brief   FLASH Interface configuration functions  *
  *
 
 @verbatim   
@@ -373,8 +373,8 @@ void FLASH_DataCacheReset(void)
   * @}
   */
 
-/** @defgroup FLASH_Group2 FLASH Memory Programming functions
- *  @brief   FLASH Memory Programming functions
+/** @defgroup FLASH_Group2 FLASH Memory Programming functions *
+ *  @brief   FLASH Memory Programming functions *
  *
 @verbatim   
  ===============================================================================
@@ -900,8 +900,8 @@ FLASH_Status FLASH_ProgramByte(uint32_t Address, uint8_t Data)
   * @}
   */
 
-/** @defgroup FLASH_Group3 Option Bytes Programming functions
- *  @brief   Option Bytes Programming functions 
+/** @defgroup FLASH_Group3 Option Bytes Programming functions *
+ *  @brief   Option Bytes Programming functions  *
  *
 @verbatim   
  ===============================================================================
@@ -1428,8 +1428,8 @@ uint8_t FLASH_OB_GetBOR(void)
   * @}
   */
 
-/** @defgroup FLASH_Group4 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions
+/** @defgroup FLASH_Group4 Interrupts and flags management functions *
+ *  @brief   Interrupts and flags management functions *
  *
 @verbatim   
  ===============================================================================

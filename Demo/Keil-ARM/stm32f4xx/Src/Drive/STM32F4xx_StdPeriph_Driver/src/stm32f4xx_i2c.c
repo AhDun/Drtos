@@ -117,8 +117,8 @@
   * @{
   */
 
-/** @defgroup I2C_Group1 Initialization and Configuration functions
- *  @brief   Initialization and Configuration functions 
+/** @defgroup I2C_Group1 Initialization and Configuration functions *
+ *  @brief   Initialization and Configuration functions  *
  *
 @verbatim   
  ===============================================================================
@@ -735,8 +735,8 @@ void I2C_ARPCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @}
   */
 
-/** @defgroup I2C_Group2 Data transfers functions
- *  @brief   Data transfers functions 
+/** @defgroup I2C_Group2 Data transfers functions *
+ *  @brief   Data transfers functions  *
  *
 @verbatim   
  ===============================================================================
@@ -778,8 +778,8 @@ uint8_t I2C_ReceiveData(I2C_TypeDef* I2Cx)
   * @}
   */
 
-/** @defgroup I2C_Group3 PEC management functions
- *  @brief   PEC management functions 
+/** @defgroup I2C_Group3 PEC management functions *
+ *  @brief   PEC management functions  *
  *
 @verbatim   
  ===============================================================================
@@ -886,8 +886,8 @@ uint8_t I2C_GetPEC(I2C_TypeDef* I2Cx)
   * @}
   */
 
-/** @defgroup I2C_Group4 DMA transfers management functions
- *  @brief   DMA transfers management functions 
+/** @defgroup I2C_Group4 DMA transfers management functions *
+ *  @brief   DMA transfers management functions  *
  *
 @verbatim   
  ===============================================================================
@@ -952,8 +952,8 @@ void I2C_DMALastTransferCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @}
   */
 
-/** @defgroup I2C_Group5 Interrupts events and flags management functions
- *  @brief   Interrupts, events and flags management functions
+/** @defgroup I2C_Group5 Interrupts events and flags management functions *
+ *  @brief   Interrupts, events and flags management functions *
  *
 @verbatim   
  ===============================================================================
@@ -1118,7 +1118,7 @@ void I2C_ITConfig(I2C_TypeDef* I2Cx, uint16_t I2C_IT, FunctionalState NewState)
 /*
  ===============================================================================
                           1. Basic state monitoring                    
- ===============================================================================  
+ ===============================================================================   *
  */
 
 /**
@@ -1191,7 +1191,7 @@ ErrorStatus I2C_CheckEvent(I2C_TypeDef* I2Cx, uint32_t I2C_EVENT)
 /*
  ===============================================================================
                           2. Advanced state monitoring                   
- ===============================================================================  
+ ===============================================================================   *
  */
 
 /**
@@ -1226,7 +1226,7 @@ uint32_t I2C_GetLastEvent(I2C_TypeDef* I2Cx)
 /*
  ===============================================================================
                           3. Flag-based state monitoring                   
- ===============================================================================  
+ ===============================================================================   *
  */
 
 /**

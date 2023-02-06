@@ -76,8 +76,8 @@
   * @{
   */ 
 
-/** @defgroup CRYP_Group6 High Level AES functions
- *  @brief   High Level AES functions 
+/** @defgroup CRYP_Group6 High Level AES functions *
+ *  @brief   High Level AES functions  *
  *
 @verbatim   
  ===============================================================================

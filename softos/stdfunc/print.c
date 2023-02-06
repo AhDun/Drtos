@@ -2,18 +2,16 @@
                                                   FILE-START
 */
 /*
-
- *@文件名称: print.c
-
- *@文件内容: print函数，与printf用法无异
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 无
-
-*/
+ *
+ * @文件名称: print.c
+ *
+ * @文件内容: print函数，与printf用法无异
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 无
+ *
+ */
 
 /*
                                                   <引用文件区>
@@ -29,20 +27,18 @@
                                                   <函数区>
 */
 /*
-
- *@函数名称: pchar
-
- *@函数版本: 1.0.0
-
- *@函数功能: 输出接口
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 该函数可以用于重定向
-
-*/
+ *
+ * @函数名称: pchar
+ *
+ * @函数功能: 输出接口
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 该函数可以用于重定向
+ *
+ */
 int pchar(const char ch)
 {
 	USART_SendData(USART1,ch);
@@ -50,20 +46,18 @@ int pchar(const char ch)
 	return (ch);
 }
 /*
-
- *@函数名称: pchar
-
- *@函数版本: 1.0.0
-
- *@函数功能: 输出接口
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 该函数可以用于重定向
-
-*/
+ *
+ * @函数名称: pchar
+ *
+ * @函数功能: 输出接口
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 该函数可以用于重定向
+ *
+ */
 static int vpchar(const char ch,int* s)
 {
 	if(s == 0){
@@ -76,20 +70,18 @@ static int vpchar(const char ch,int* s)
 	return ch;
 }
 /*
-
- *@函数名称: _print_num
-
- *@函数版本: 1.0.0
-
- *@函数功能: print内联输出数字
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: _print_num
+ *
+ * @函数功能: print内联输出数字
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 static void _print_num(unsigned int num,int ctl,int* s)
 {
 	int _FLAG = 0;
@@ -151,20 +143,18 @@ static void _print_num(unsigned int num,int ctl,int* s)
 	vpchar((char)(num % 10+ 48),s);
 }
 /*
-
- *@函数名称: _print_d
-
- *@函数版本: 1.0.0
-
- *@函数功能: print内联输出有符号整型数据
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: _print_d
+ *
+ * @函数功能: print内联输出有符号整型数据
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 static void _print_d(int num,int ctl,int* s)
 {
 	if(num < 0){
@@ -174,20 +164,18 @@ static void _print_d(int num,int ctl,int* s)
 	_print_num(num,ctl,s);
 }
 /*
-
- *@函数名称: _pchar
-
- *@函数版本: 1.0.0
-
- *@函数功能: print内联输出字符
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: _pchar
+ *
+ * @函数功能: print内联输出字符
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 static void _vpchar(int p,int* s)
 {
 	while(1){
@@ -201,20 +189,18 @@ static void _vpchar(int p,int* s)
 	}
 } 
 /*
-
- *@函数名称: _print_X
-
- *@函数版本: 1.0.0
-
- *@函数功能: printf内联输出大写十六形式
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: _print_X
+ *
+ * @函数功能: printf内联输出大写十六形式
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 static void _print_X(int num,int* s)
 {
 	int _FLAG = 28;
@@ -245,20 +231,18 @@ static void _print_X(int num,int* s)
 	}
 }
 /*
-
- *@函数名称: _print_x
-
- *@函数版本: 1.0.0
-
- *@函数功能: printf内联输出小写十六形式
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: _print_x
+ *
+ * @函数功能: printf内联输出小写十六形式
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 static void _print_x(int num,int* s)
 {
 	int _FLAG = 28;
@@ -289,20 +273,18 @@ static void _print_x(int num,int* s)
 	}
 }
 /*
-
- *@函数名称: _print_o
-
- *@函数版本: 1.0.0
-
- *@函数功能: printf内联输出八进制
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: _print_o
+ *
+ * @函数功能: printf内联输出八进制
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 static void _print_o(int num,int* s)
 {
 	int _FLAG = 30;
@@ -326,39 +308,35 @@ static void _print_o(int num,int* s)
 	}
 }
 /*
-
- *@函数名称: 无
-
- *@函数版本: 1.0.0
-
- *@函数功能: 无
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: 无
+ *
+ * @函数功能: 无
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 /*static void _print_lu(unsigned int num)
 {
 
 }*/
 /*
-
- *@函数名称: _print_f
-
- *@函数版本: 1.0.0
-
- *@函数功能: print内联输出浮点数
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: _print_f
+ *
+ * @函数功能: print内联输出浮点数
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 /*static void _print_f(float num)
 {
 	int b = 0;
@@ -387,20 +365,18 @@ static void _print_o(int num,int* s)
 	_print_num(c,0);
 }*/
 /*
-
- *@函数名称: _print_f
-
- *@函数版本: 1.0.0
-
- *@函数功能: print内联输出双浮点数
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: _print_f
+ *
+ * @函数功能: print内联输出双浮点数
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 static void _print_lf(double* num,char ctrl,int* s)
 {
 	int c = 0;
@@ -444,25 +420,23 @@ static void _print_lf(double* num,char ctrl,int* s)
 	
 }
 /*
-
- *@函数名称: print
-
- *@函数版本: 1.0.0
-
- *@函数功能: 格式打印函数
+ *
+ * @函数名称: print
+ *
+ * @函数功能: 格式打印函数
 			print("hello");//打印hello
 			控制字符
 			print("%d",a);//将变量a以整型数据输出
 			print("%f",a);//将变量a以浮点型数据输出
 			print("%f",a);//将变量a以浮点型数据输出
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 void xprint(int sp,int c)
 {	
 	int _SP;
@@ -595,20 +569,18 @@ void xprint(int sp,int c)
   
 }
 /*
-
- *@函数名称: 无
-
- *@函数版本: 1.0.0
-
- *@函数功能: 无
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: 无
+ *
+ * @函数功能: 无
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 void tprint(const char* c,unsigned int s)
 {
 	while(1)

@@ -1,11 +1,11 @@
-/**************************************************************************//**
- * @file     core_cmSimd.h
- * @brief    CMSIS Cortex-M SIMD Header File
- * @version  V4.00
- * @date     22. August 2014
- *
- * @note
- *
+/**************************************************************************//** *
+ * @file     core_cmSimd.h *
+ * @brief    CMSIS Cortex-M SIMD Header File *
+ * @version  V4.00 *
+ * @date     22. August 2014 *
+ * *
+ * @note *
+ * *
  ******************************************************************************/
 /* Copyright (c) 2009 - 2014 ARM LIMITED
 
@@ -47,8 +47,8 @@
 #endif
 
 
-/*******************************************************************************
- *                Hardware Abstraction Layer
+/******************************************************************************* *
+ *                Hardware Abstraction Layer *
  ******************************************************************************/
 
 
@@ -687,7 +687,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMMLA (int32_t op1
 
 #endif
 
-/*@} end of group CMSIS_SIMD_intrinsics */
+/* @} end of group CMSIS_SIMD_intrinsics */
 
 
 #ifdef __cplusplus

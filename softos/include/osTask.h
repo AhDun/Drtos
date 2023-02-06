@@ -4,18 +4,16 @@
 #ifndef __osTaskH_
 #define __osTaskH_
 /*
-
- *@文件名称: osTask.h
-
- *@文件内容: 
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 
-
-*/
+ *
+ * @文件名称: osTask.h
+ *
+ * @文件内容: 
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 
+ *
+ */
 
 /*
                                                   <引用文件区>
@@ -223,40 +221,36 @@ extern _TaskHandle*	TaskHandle_Main;
                                                   <函数声明区>
 */	
 /*
-
- *@函数名称: osTaskInit
-
- *@函数版本: 1.0.0
-
- *@函数功能: 根据任务名称查询任务表地址
-
- *@输入参数: 无	
-
- *@返 回 值: osErrorValue - 函数错误返回值 (0:表示初始化成功，-1:表示初始化成功)
-
- *@注    释: 无
+ *
+ * @函数名称: osTaskInit
+ *
+ * @函数功能: 根据任务名称查询任务表地址
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: osErrorValue - 函数错误返回值 (0:表示初始化成功，-1:表示初始化成功)
+ *
+ * @注    释: 无
 */
 osErrorValue osTaskInit(void);	
 
 /*
-
- *@函数名称: osTaskNameToTable
-
- *@函数版本: 1.0.0
-
- *@函数功能: 根据任务名称查询任务表地址
-
- *@输入参数: TN		任务名称	
+ *
+ * @函数名称: osTaskNameToTable
+ *
+ * @函数功能: 根据任务名称查询任务表地址
+ *
+ * @输入参数: TN		任务名称	
 			 TA		任务地址
 			 TSS  	任务栈长度
 			 TTW  	任务时间轮片
 			 TPL    任务优先级
 			 TPP 	任务传参
 			 TC 	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
-	
- *@返 回 值: 0:注册失败		任务句柄值:注册成功
-			 
- *@注    释: 无
+	 *
+ * @返 回 值: 0:注册失败		任务句柄值:注册成功
+			  *
+ * @注    释: 无
 */
 _TaskHandle* osTaskLogin(
 	_TaskName *TN,
@@ -288,118 +282,106 @@ osErrorValue  osTaskLogout(_TaskHandle* TaskHandle);
 osErrorValue	osTaskLogout_Static(_TaskHandle* TaskHandle);
 
 /*
-
- *@函数名称: osTaskNext
-
- *@函数版本: 1.0.0
-
- *@函数功能: 计算下一个要运行的任务
-
- *@输入参数: 无	
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osTaskNext
+ *
+ * @函数功能: 计算下一个要运行的任务
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 void osTaskNext(void);
 /*
-
- *@函数名称: osTaskDelayMs
-
- *@函数版本: 1.0.0
-
- *@函数功能: 任务毫秒级阻塞延时
-
- *@输入参数: ms	-	要延时的时长	
-
- *@返 回 值: 0: 完成延时
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osTaskDelayMs
+ *
+ * @函数功能: 任务毫秒级阻塞延时
+ *
+ * @输入参数: ms	-	要延时的时长	
+ *
+ * @返 回 值: 0: 完成延时
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osTaskDelayMs(uint32_t ms);
 /*
-
- *@函数名称: osTaskDelayUs
-
- *@函数版本: 1.0.0
-
- *@函数功能: 任务微秒级阻塞延时
-
- *@输入参数: us	-	要延时的时长
-
- *@返 回 值: 0: 完成延时
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osTaskDelayUs
+ *
+ * @函数功能: 任务微秒级阻塞延时
+ *
+ * @输入参数: us	-	要延时的时长
+ *
+ * @返 回 值: 0: 完成延时
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osTaskDelayUs(uint32_t us);
 
 //extern osErrorValue osTaskSwitch_State(void);
 ///*
 
-// *@函数名称: osTaskAddrReplace
+// * @函数名称: osTaskAddrReplace
 
-// *@函数版本: 1.0.0
+// * @函数版本: 1.0.0
 
-// *@函数功能: 任务配置
+// * @函数功能: 任务配置
 
-// *@输入参数: 无	
+// * @输入参数: 无	
 
-// *@返 回 值: -1:配置时出现错误，0: 配置成功
+// * @返 回 值: -1:配置时出现错误，0: 配置成功
 
-// *@注    释: 无
+// * @注    释: 无
 
 //*/
 //extern osErrorValue osTaskISR(_TaskHandle* TaskHandle);
 /*
-
- *@函数名称: osTaskAddrReplace
-
- *@函数版本: 1.0.0
-
- *@函数功能: 任务配置
-
- *@输入参数: 无	
-
- *@返 回 值: -1:配置时出现错误，0: 配置成功
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osTaskAddrReplace
+ *
+ * @函数功能: 任务配置
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: -1:配置时出现错误，0: 配置成功
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv);
 /*
-
- *@函数名称: osTaskAddrReplace
-
- *@函数版本: 1.0.0
-
- *@函数功能: 任务地址替换
-
- *@输入参数: 无	
-
- *@返 回 值: -1:创建错误，0: 创建成功
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osTaskAddrReplace
+ *
+ * @函数功能: 任务地址替换
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: -1:创建错误，0: 创建成功
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA);
 /*
-
- *@函数名称: osTaskExit
-
- *@函数版本: 1.0.0
-
- *@函数功能: 任务结束
-
- *@输入参数: 无	
-
- *@返 回 值: 0: 成功结束
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osTaskExit
+ *
+ * @函数功能: 任务结束
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 0: 成功结束
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osTaskExit(void);
 
 osErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp);

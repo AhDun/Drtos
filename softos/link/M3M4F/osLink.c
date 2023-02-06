@@ -2,26 +2,22 @@
                                                   FILE-START
 */
 /*
-
- *@文件名称: osCPU.c
-
- *@文件内容: 系统"CPU内核操作"文件
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 
-
-*/
+ *
+ * @文件名称: osCPU.c
+ *
+ * @文件内容: 系统"CPU内核操作"文件
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 
+ *
+ */
 
 /*
                                                   <引用文件区>
 */
 #include "osConfig.h"
-#include "osCPU.h"
-
-
+#include "osLink.h"
 
 /*
                                                   变量初始化区
@@ -41,21 +37,33 @@ __asm void Jump(uint32_t* addr)
 	POP	{PC}
 }
 
+__asm void INTX_DISABLE()
+{
+
+	CPSID   I	//禁用所有中断
+	BX      LR	//退出函数，跳转到BX寄存器中所存的地址
+}
+
+__asm void INTX_ENABLE()
+{
+
+	CPSIE   I	//禁用所有中断
+	BX      LR  //退出函数，跳转到BX寄存器中所存的地址
+}
+
 /*
-
- *@函数名称: osTASK_Stack_Init
-
- *@函数版本: 1.0.0
-
- *@函数功能: 任务栈初始化
-
- *@输入参数: uint32_t tta(任务传参) ,uint32_t *tsa(任务开始地址),uint32_t *eca(任务结束回调地址),uint32_t *tsas(任务栈地址)
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osTASK_Stack_Init
+ *
+ * @函数功能: 任务栈初始化
+ *
+ * @输入参数: uint32_t tta(任务传参) ,uint32_t *tsa(任务开始地址),uint32_t *eca(任务结束回调地址),uint32_t *tsas(任务栈地址)
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 __asm void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
 						  //R0      ,R1      ,R2      ,R3
 						  //C编译器函数各个传参对应的寄存器
@@ -110,20 +118,18 @@ __asm void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t*
 	BX	  LR
 }
 /*
-
- *@函数名称: osTASK_FIRST_START
-
- *@函数版本: 1.0.0
-
- *@函数功能: 启动第一个任务
-
- *@输入参数: uint32_t *tsas(任务栈地址)
-
- *@返 回 值: 无
-
- *@注   释: 无
-
-*/
+ *
+ * @函数名称: osTASK_FIRST_START
+ *
+ * @函数功能: 启动第一个任务
+ *
+ * @输入参数: uint32_t *tsas(任务栈地址)
+ *
+ * @返 回 值: 无
+ *
+ * @注   释: 无
+ *
+ */
 __asm void osTASK_START(uint32_t* tsas)
 								//R0
 								//C编译器函数各个传参对应的寄存器
@@ -147,7 +153,7 @@ __asm void HardFault_Handler(void)
 {
 	extern osTaskErrorHardFault
 	
-	PUSH	{R4,LR}
+	PUSH	{LR}
 
 	MRS	  	R1,		PSP		//通过MRS命令将PSP（进程栈）寄存器中的内容读到R1寄存器中
 	LDR		R0,		[R1,#0x14]
@@ -155,18 +161,18 @@ __asm void HardFault_Handler(void)
 	
 	BL.W	osTaskErrorHardFault
 
-	POP		{R4,PC}
+	POP		{PC}
 }
 
 __asm void SysTick_Handler(void)
 {
 	extern osClockTimePulse
 	
-	PUSH	{R4,LR}
+	PUSH	{LR}
 
 	BL.W	osClockTimePulse
 
-	POP		{R4,PC}
+	POP		{PC}
 
 	NOP
 }

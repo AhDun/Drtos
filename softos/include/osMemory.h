@@ -2,18 +2,16 @@
                                                   FILE-START
 */
 /*
-
- *@文件名称: osMemory.h
-
- *@文件内容: 无
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注   释: 无
-
-*/
+ *
+ * @文件名称: osMemory.h
+ *
+ * @文件内容: 无
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注   释: 无
+ *
+ */
 #ifndef _osMemory_H_
 #define _osMemory_H_
 
@@ -109,133 +107,117 @@ typedef  struct
                                                   <函数声明区>
 */
 /*
-
- *@函数名称: osMemoryInit
-
- *@函数版本: 1.0.0
-
- *@函数功能: 内存初始化
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osMemoryInit
+ *
+ * @函数功能: 内存初始化
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue  osMemoryInit(void);
 /*
-
- *@函数名称: osMemoryMalloc
-
- *@函数版本: 1.0.0
-
- *@函数功能: 内存申请
-
- *@输入参数: MemSize	申请长度
-
- *@返 回 值: 申请返回的内存地址
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osMemoryMalloc
+ *
+ * @函数功能: 内存申请
+ *
+ * @输入参数: MemSize	申请长度
+ *
+ * @返 回 值: 申请返回的内存地址
+ *
+ * @注    释: 无
+ *
+ */
 void* osMemoryMalloc(uint32_t MemSize);
 /*
-
- *@函数名称: osMemoryReset
-
- *@函数版本: 1.0.0
-
- *@函数功能: 内存块复位
-
- *@输入参数: addr	内存块地址
+ *
+ * @函数名称: osMemoryReset
+ *
+ * @函数功能: 内存块复位
+ *
+ * @输入参数: addr	内存块地址
 			 data	复位内容
-
- *@返 回 值: 与addr变量输入相同的内存块地址
-
- *@注    释: 无
-
-*/
+ *
+ * @返 回 值: 与addr变量输入相同的内存块地址
+ *
+ * @注    释: 无
+ *
+ */
 void* osMemoryReset(void* addr,uint8_t data);
 /*
-
- *@函数名称: osMemoryFree
-
- *@函数版本: 1.0.0
-
- *@函数功能: 释放内存
-
- *@输入参数: 0
-
- *@返 回 值: 
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osMemoryFree
+ *
+ * @函数功能: 释放内存
+ *
+ * @输入参数: 0
+ *
+ * @返 回 值: 
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osMemoryFree(void* addr);
 /*
-
- *@函数名称: osMemoryGetFreeValue
-
- *@函数版本: 1.0.0
-
- *@函数功能: 获取剩余内存的长度
-
- *@输入参数: 无
-
- *@返 回 值: 剩余内存的长度
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osMemoryGetFreeValue
+ *
+ * @函数功能: 获取剩余内存的长度
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 剩余内存的长度
+ *
+ * @注    释: 无
+ *
+ */
 uint32_t osMemoryGetFreeValue(void);
 /*
-
- *@函数名称: osMemoryGetPassValue
-
- *@函数版本: 1.0.0
-
- *@函数功能: 获取可申请内存的长度
-
- *@输入参数: 无
-
- *@返 回 值: 可申请内存的长度
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osMemoryGetPassValue
+ *
+ * @函数功能: 获取可申请内存的长度
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 可申请内存的长度
+ *
+ * @注    释: 无
+ *
+ */
 uint32_t osMemoryGetPassValue(void);
 /*
-
- *@函数名称: osMemoryGetAllValue
-
- *@函数版本: 1.0.0
-
- *@函数功能: 获取总内存长度
-
- *@输入参数: 无
-
- *@返 回 值: 总内存长度
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osMemoryGetAllValue
+ *
+ * @函数功能: 获取总内存长度
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 总内存长度
+ *
+ * @注    释: 无
+ *
+ */
 uint32_t osMemoryGetAllValue(void);
 /*
-
- *@函数名称: osMemorySum
-
- *@函数版本: 1.0.0
-
- *@函数功能: 对所有内存块校验
-
- *@输入参数: 无
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osMemorySum
+ *
+ * @函数功能: 对所有内存块校验
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 osErrorValue osMemorySum(void);
 
 

@@ -2,18 +2,16 @@
                                                   FILE-START
 */
 /*
-
- *@文件名称: .h
-
- *@文件内容: 无
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 无
-
-*/
+ *
+ * @文件名称: .h
+ *
+ * @文件内容: 无
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 无
+ *
+ */
 /*
                                                   防重复编译宏配置区
 */
@@ -87,20 +85,18 @@ typedef struct
 #if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
 
 /*
-
- *@函数名称: osSignalLogin
-
- *@函数版本: 1.0.0
-
- *@函数功能: 信号量注册
-
- *@输入参数: _Signal* ST(信号量结构体)
-
- *@返 回 值: 无
-
- *@注    释: 无
-
-*/
+ *
+ * @函数名称: osSignalLogin
+ *
+ * @函数功能: 信号量注册
+ *
+ * @输入参数: _Signal* ST(信号量结构体)
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 _Signal* osSignalLogin(_SignalType SP);
 #else
 osErrorValue osSignalLogin(_Signal* ST,_SignalType SP);

@@ -89,8 +89,8 @@
   * @{
   */
 
-/** @defgroup EXTI_Group1 Initialization and Configuration functions
- *  @brief   Initialization and Configuration functions 
+/** @defgroup EXTI_Group1 Initialization and Configuration functions *
+ *  @brief   Initialization and Configuration functions  *
  *
 @verbatim   
  ===============================================================================
@@ -205,8 +205,8 @@ void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
   * @}
   */
 
-/** @defgroup EXTI_Group2 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions 
+/** @defgroup EXTI_Group2 Interrupts and flags management functions *
+ *  @brief   Interrupts and flags management functions  *
  *
 @verbatim   
  ===============================================================================

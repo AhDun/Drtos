@@ -108,7 +108,7 @@
 #endif
 
 #if !defined  (USE_STDPERIPH_DRIVER)
-/**
+/** *
  * @brief Comment the line below if you will not use the peripherals drivers.
    In this case, these drivers will not be included and the application code will 
    be based on direct access to peripherals registers 
@@ -116,7 +116,7 @@
   /*#define USE_STDPERIPH_DRIVER */
 #endif /* USE_STDPERIPH_DRIVER */
 
-/**
+/** *
  * @brief In the following line adjust the value of External High Speed oscillator (HSE)
    used in your application 
    
@@ -132,7 +132,7 @@
   #define HSE_VALUE    ((uint32_t)8000000) /*!< Value of the External oscillator in Hz */
 #endif /* HSE_VALUE */
 #endif /* STM32F40_41xxx || STM32F427_437xx || STM32F429_439xx || STM32F401xx || STM32F411xE */
-/**
+/** *
  * @brief In the following line adjust the External High Speed oscillator (HSE) Startup 
    Timeout value 
    */
@@ -144,7 +144,7 @@
   #define HSI_VALUE    ((uint32_t)16000000) /*!< Value of the Internal oscillator in Hz*/
 #endif /* HSI_VALUE */   
 
-/**
+/** *
  * @brief STM32F4XX Standard Peripherals Library version number V1.5.0
    */
 #define __STM32F4XX_STDPERIPH_VERSION_MAIN   (0x01) /*!< [31:24] main version */
@@ -164,8 +164,8 @@
   * @{
   */
 
-/**
- * @brief Configuration of the Cortex-M4 Processor and Core Peripherals 
+/** *
+ * @brief Configuration of the Cortex-M4 Processor and Core Peripherals  *
  */
 #define __CM4_REV                 0x0001  /*!< Core revision r0p1                            */
 #define __MPU_PRESENT             1       /*!< STM32F4XX provides an MPU                     */
@@ -173,9 +173,9 @@
 #define __Vendor_SysTickConfig    0       /*!< Set to 1 if different SysTick Config is used  */
 #define __FPU_PRESENT             1       /*!< FPU present                                   */
 
-/**
- * @brief STM32F4XX Interrupt Number Definition, according to the selected device 
- *        in @ref Library_configuration_section 
+/** *
+ * @brief STM32F4XX Interrupt Number Definition, according to the selected device  *
+ *        in @ref Library_configuration_section  *
  */
 typedef enum IRQn
 {

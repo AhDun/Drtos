@@ -191,8 +191,8 @@
   * @{
   */
 
-/** @defgroup SPI_Group1 Initialization and Configuration functions
- *  @brief   Initialization and Configuration functions 
+/** @defgroup SPI_Group1 Initialization and Configuration functions *
+ *  @brief   Initialization and Configuration functions  *
  *
 @verbatim   
  ===============================================================================
@@ -777,8 +777,8 @@ void I2S_FullDuplexConfig(SPI_TypeDef* I2Sxext, I2S_InitTypeDef* I2S_InitStruct)
   * @}
   */
 
-/** @defgroup SPI_Group2 Data transfers functions
- *  @brief   Data transfers functions
+/** @defgroup SPI_Group2 Data transfers functions *
+ *  @brief   Data transfers functions *
  *
 @verbatim   
  ===============================================================================
@@ -834,8 +834,8 @@ void SPI_I2S_SendData(SPI_TypeDef* SPIx, uint16_t Data)
   * @}
   */
 
-/** @defgroup SPI_Group3 Hardware CRC Calculation functions
- *  @brief   Hardware CRC Calculation functions
+/** @defgroup SPI_Group3 Hardware CRC Calculation functions *
+ *  @brief   Hardware CRC Calculation functions *
  *
 @verbatim   
  ===============================================================================
@@ -989,7 +989,7 @@ uint16_t SPI_GetCRCPolynomial(SPI_TypeDef* SPIx)
   * @}
   */
 
-/** @defgroup SPI_Group4 DMA transfers management functions
+/** @defgroup SPI_Group4 DMA transfers management functions *
  *  @brief   DMA transfers management functions
   *
 @verbatim   
@@ -1036,7 +1036,7 @@ void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState 
   * @}
   */
 
-/** @defgroup SPI_Group5 Interrupts and flags management functions
+/** @defgroup SPI_Group5 Interrupts and flags management functions *
  *  @brief   Interrupts and flags management functions
   *
 @verbatim   
@@ -1048,7 +1048,7 @@ void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState 
       sources and check or clear the flags or pending bits status.
       The user should identify which mode will be used in his application to manage 
       the communication: Polling mode, Interrupt mode or DMA mode. 
-    
+     *
  *** Polling Mode ***
  ====================
 [..] In Polling Mode, the SPI/I2S communication can be managed by 9 flags:
@@ -1068,7 +1068,7 @@ void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState 
  [..] In this Mode it is advised to use the following functions:
    (+) FlagStatus SPI_I2S_GetFlagStatus(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG);
    (+) void SPI_I2S_ClearFlag(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG);
-
+ *
  *** Interrupt Mode ***
  ======================
  [..] In Interrupt Mode, the SPI communication can be managed by 3 interrupt sources
@@ -1093,7 +1093,7 @@ void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState 
    (+) void SPI_I2S_ITConfig(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT, FunctionalState NewState);
    (+) ITStatus SPI_I2S_GetITStatus(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT);
    (+) void SPI_I2S_ClearITPendingBit(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT);
-
+ *
  *** DMA Mode ***
  ================
  [..] In DMA Mode, the SPI communication can be managed by 2 DMA Channel requests:

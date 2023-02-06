@@ -157,8 +157,8 @@ static void TI4_Config(TIM_TypeDef* TIMx, uint16_t TIM_ICPolarity, uint16_t TIM_
   * @{
   */
 
-/** @defgroup TIM_Group1 TimeBase management functions
- *  @brief   TimeBase management functions 
+/** @defgroup TIM_Group1 TimeBase management functions *
+ *  @brief   TimeBase management functions  *
  *
 @verbatim   
  ===============================================================================
@@ -610,8 +610,8 @@ void TIM_Cmd(TIM_TypeDef* TIMx, FunctionalState NewState)
   * @}
   */
 
-/** @defgroup TIM_Group2 Output Compare management functions
- *  @brief    Output Compare management functions 
+/** @defgroup TIM_Group2 Output Compare management functions *
+ *  @brief    Output Compare management functions  *
  *
 @verbatim   
  ===============================================================================
@@ -1834,8 +1834,8 @@ void TIM_CCxNCmd(TIM_TypeDef* TIMx, uint16_t TIM_Channel, uint16_t TIM_CCxN)
   * @}
   */
 
-/** @defgroup TIM_Group3 Input Capture management functions
- *  @brief    Input Capture management functions 
+/** @defgroup TIM_Group3 Input Capture management functions *
+ *  @brief    Input Capture management functions  *
  *
 @verbatim   
  ===============================================================================
@@ -2181,8 +2181,8 @@ void TIM_SetIC4Prescaler(TIM_TypeDef* TIMx, uint16_t TIM_ICPSC)
   * @}
   */
 
-/** @defgroup TIM_Group4 Advanced-control timers (TIM1 and TIM8) specific features
- *  @brief   Advanced-control timers (TIM1 and TIM8) specific features
+/** @defgroup TIM_Group4 Advanced-control timers (TIM1 and TIM8) specific features *
+ *  @brief   Advanced-control timers (TIM1 and TIM8) specific features *
  *
 @verbatim   
  ===============================================================================
@@ -2332,8 +2332,8 @@ void TIM_CCPreloadControl(TIM_TypeDef* TIMx, FunctionalState NewState)
   * @}
   */
 
-/** @defgroup TIM_Group5 Interrupts DMA and flags management functions
- *  @brief    Interrupts, DMA and flags management functions 
+/** @defgroup TIM_Group5 Interrupts DMA and flags management functions *
+ *  @brief    Interrupts, DMA and flags management functions  *
  *
 @verbatim   
  ===============================================================================
@@ -2662,8 +2662,8 @@ void TIM_SelectCCDMA(TIM_TypeDef* TIMx, FunctionalState NewState)
   * @}
   */
 
-/** @defgroup TIM_Group6 Clocks management functions
- *  @brief    Clocks management functions
+/** @defgroup TIM_Group6 Clocks management functions *
+ *  @brief    Clocks management functions *
  *
 @verbatim   
  ===============================================================================
@@ -2837,8 +2837,8 @@ void TIM_ETRClockMode2Config(TIM_TypeDef* TIMx, uint16_t TIM_ExtTRGPrescaler,
   * @}
   */
 
-/** @defgroup TIM_Group7 Synchronization management functions
- *  @brief    Synchronization management functions 
+/** @defgroup TIM_Group7 Synchronization management functions *
+ *  @brief    Synchronization management functions  *
  *
 @verbatim   
  ===============================================================================
@@ -3035,8 +3035,8 @@ void TIM_ETRConfig(TIM_TypeDef* TIMx, uint16_t TIM_ExtTRGPrescaler,
   * @}
   */
 
-/** @defgroup TIM_Group8 Specific interface management functions
- *  @brief    Specific interface management functions 
+/** @defgroup TIM_Group8 Specific interface management functions *
+ *  @brief    Specific interface management functions  *
  *
 @verbatim   
  ===============================================================================
@@ -3140,8 +3140,8 @@ void TIM_SelectHallSensor(TIM_TypeDef* TIMx, FunctionalState NewState)
   * @}
   */
 
-/** @defgroup TIM_Group9 Specific remapping management function
- *  @brief   Specific remapping management function
+/** @defgroup TIM_Group9 Specific remapping management function *
+ *  @brief   Specific remapping management function *
  *
 @verbatim   
  ===============================================================================

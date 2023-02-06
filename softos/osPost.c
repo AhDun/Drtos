@@ -2,18 +2,16 @@
                                                   FILE-START
 */
 /*
-
- *@文件名称: osPost.c
-
- *@文件内容: 系统"队列与邮箱"文件
-
- *@文件版本: 1.0.0
-
- *@文件作者: AhDun (mail: ahdunxx@163.com)
-
- *@注    释: 无
-
-*/
+ *
+ * @文件名称: osPost.c
+ *
+ * @文件内容: 系统"队列与邮箱"文件
+ *
+ * @文件作者: AhDun (mail: ahdunxx@163.com)
+ *
+ * @注    释: 无
+ *
+ */
 
 /*
                                                   <引用文件区>
@@ -30,20 +28,18 @@
 
 
 /*
-
- *@函数名称: osPostSend
-
- *@函数版本: 1.0.0
-
- *@函数功能: 发送邮件
-
- *@输入参数: 无
-
- *@返 回 值: -1:发生错误 / 0:发送成功
-
- *@注   释: 无
-
-*/
+ *
+ * @函数名称: osPostSend
+ *
+ * @函数功能: 发送邮件
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: -1:发生错误 / 0:发送成功
+ *
+ * @注   释: 无
+ *
+ */
 osErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 {
 	_Post* PostForm;
@@ -77,20 +73,18 @@ osErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 
 
 /*
-
- *@函数名称: osPostRead
-
- *@函数版本: 1.0.0
-
- *@函数功能: 读取邮件
-
- *@输入参数: uint8_t* ResiduePost(邮箱指针)
-
- *@返 回 值: 邮件内容
-
- *@注   释: 无
-
-*/
+ *
+ * @函数名称: osPostRead
+ *
+ * @函数功能: 读取邮件
+ *
+ * @输入参数: uint8_t* ResiduePost(邮箱指针)
+ *
+ * @返 回 值: 邮件内容
+ *
+ * @注   释: 无
+ *
+ */
 uint32_t* osPostRead(void)
 {
 	_Post* PostForm;
@@ -116,20 +110,18 @@ uint32_t* osPostRead(void)
 	}
 }
 /*
-
- *@函数名称: osPostRead_Wait
-
- *@函数版本: 1.0.0
-
- *@函数功能: 阻塞式读取邮件
-
- *@输入参数: 无
-
- *@返 回 值: 邮件内容
-
- *@注   释: 无
-
-*/
+ *
+ * @函数名称: osPostRead_Wait
+ *
+ * @函数功能: 阻塞式读取邮件
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 邮件内容
+ *
+ * @注   释: 无
+ *
+ */
 uint32_t* osPostReadWait(void)
 {
 	if(RunTaskHandle -> PF == 0){//没有邮件,进行等待

@@ -1,3 +1,19 @@
+#
+# Copyright (c) 2022-2023 AhDun
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 import os
 
 
@@ -34,7 +50,7 @@ def remoterm():
 
 
 def push():
-    cmd = "git push -f origin master"
+    cmd = "git push origin master"
     return cmd
 
 
@@ -59,12 +75,11 @@ def git():
     print("---------------")
     print(" 自动git脚本")
     print("---------------")
-    print("1.首次提交 ")
+    print("1.首次提交与仓库推送")
     print("2.本地提交")
     print("3.仓库推送")
     print("4.回滚上一个版本")
     print("5.回滚到指定版本")
-    print("6.查看所有版本")
     print("R.删除本地git")
     print("S.更改仓库地址")
     print("---------------")

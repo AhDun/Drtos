@@ -1,6 +1,6 @@
 ; .\Objects\CPU.SRC generated from: OS\CPU.c
 ; COMPILER INVOKED BY:
-;        C:\Keil\C51\BIN\C51.EXE OS\CPU.c OMF2 OPTIMIZE(9,SPEED) BROWSE INCDIR(.\App;.\ASM;.\Func;.\Drive;.\OS;.\User) DEBUG PRINT(.\Listings\CPU.lst) SRC(.\Objects\CPU.SRC)
+;        C:\Keil\C51\BIN\C51.EXE OS\CPU.c OMF2 OPTIMIZE(9,SPEED) BROWSE NOAREGS INCDIR(.\App;.\ASM;.\Func;.\Drive;.\OS;.\User) DEBUG CODE LISTINCLUDE SYMBOLS PRINT(.\Listings\CPU.lst) PREPRINT(.\Listings\CPU.i) SRC(.\Objects\CPU.SRC)
 
 $NOMOD51
 
@@ -568,7 +568,10 @@ TaskSwitch:
 	MOV  	stack0+0DH,A
 ; 				stack0 [14]=  TPC & 0x00FF;
 			; SOURCE LINE # 99
+	XCH  	A,R7
 	MOV  	A,R5
+	XCH  	A,R7
+	MOV  	A,R7
 	MOV  	stack0+0EH,A
 ; 				
 ; 				if(RunAppID > NULL)
@@ -590,6 +593,10 @@ TaskSwitch:
 	MOV  	R6,A
 	INC  	DPTR
 	MOVX 	A,@DPTR
+	MOV  	R7,A
+	XCH  	A,R5
+	MOV  	A,R7
+	XCH  	A,R5
 	MOV  	stack0+010H,A
 ; 					stack0 [15] = TaskEndAddr >> 8;
 			; SOURCE LINE # 105
@@ -668,7 +675,9 @@ TaskSwitch:
 	MOV  	A,#LOW (stack0)
 	ADD  	A,TS_F0?040
 	MOV  	R0,A
-	MOV  	@R0,AR7
+	XCH  	A,@R0
+	MOV  	A,R7
+	XCH  	A,@R0
 ; 				}
 			; SOURCE LINE # 130
 	INC  	TS_F0?040

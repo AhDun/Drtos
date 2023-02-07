@@ -52,7 +52,7 @@
 
 /*
  *
- * @函数名称: INTX_DISABLE
+ * @函数名称: ISR_Disable
  *
  * @函数功能: 关闭所有中断
  *
@@ -63,10 +63,10 @@
  * @注    释: 无
  *
  */
-void INTX_DISABLE(void);
+void ISR_Disable(void);
 /*
  *
- * @函数名称: INTX_ENABLE
+ * @函数名称: ISR_Enable
  *
  * @函数功能: 开启所有中断
  *
@@ -77,7 +77,7 @@ void INTX_DISABLE(void);
  * @注    释: 无
  *
  */
-void INTX_ENABLE(void);
+void ISR_Enable(void);
 /*
  *
  * @函数名称: Jump
@@ -122,9 +122,9 @@ void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
 void osTASK_START(uint32_t* tsas);
 /*
  *
- * @函数名称: 使内核SVC悬起
+ * @函数名称: ISR_Touch
  *
- * @函数功能: CPU_PendSV
+ * @函数功能: 触发中断
  *
  * @输入参数: 无
  *
@@ -133,12 +133,12 @@ void osTASK_START(uint32_t* tsas);
  * @注    释: 无
  *
  */
-void CPU_PendSV(void);
+void ISR_Touch(void);
 /*
+ * 
+ * @函数名称: ISR_Touch1
  *
- * @函数名称: CPU_SVC
- *
- * @函数功能: 使内核SVC悬起
+ * @函数功能: 触发中断
  *
  * @输入参数: 无
  *
@@ -147,7 +147,7 @@ void CPU_PendSV(void);
  * @注    释: 无
  *
  */
-void CPU_SVC(void);
+void ISR_Touch1(void);
 
 
 

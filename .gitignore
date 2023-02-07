@@ -19,16 +19,19 @@
 *.dep          
 *.scvd
 *.dbgconf
+*.i
+*._ia
 
 *.iex 
 *.htm 
 *.sct 
 *.map 
 *.uvopt 
+*.ls1
 
 
 JLinkLog.txt
 JLinkSettings.ini
 debug.ini
-stm32f4xx.uvguix.123
-stm32f4xx.uvoptx
+*.uvguix.123
+*.uvoptx

@@ -311,7 +311,7 @@
             <RegisterColoring>0</RegisterColoring>
             <VariablesInOrder>0</VariablesInOrder>
             <IntegerPromotion>1</IntegerPromotion>
-            <uAregs>0</uAregs>
+            <uAregs>1</uAregs>
             <UseInterruptVector>1</UseInterruptVector>
             <Fuzzy>3</Fuzzy>
             <Optimize>9</Optimize>
@@ -324,7 +324,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>.\App;.\ASM;.\Func;.\Drive;.\OS;.\User</IncludePath>
+              <IncludePath>.\App;.\ASM;.\Func;.\Drive;.\OS;.\User;..\..\..\softos;..\..\..\softos\include;..\..\..\softos\link\8051;..\..\..\softos\stdfunc;..\..\..\softos\stdfunc\include</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -381,6 +381,21 @@
               <FileType>1</FileType>
               <FilePath>.\User\Main.c</FilePath>
             </File>
+            <File>
+              <FileName>LinkList.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\softos\stdfunc\LinkList.c</FilePath>
+            </File>
+            <File>
+              <FileName>print.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\softos\stdfunc\print.c</FilePath>
+            </File>
+            <File>
+              <FileName>str.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\softos\stdfunc\str.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -397,70 +412,39 @@
           <GroupName>OS</GroupName>
           <Files>
             <File>
-              <FileName>System_Clock.c</FileName>
+              <FileName>osClock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\OS\System_Clock.c</FilePath>
+              <FilePath>..\..\..\softos\osClock.c</FilePath>
             </File>
             <File>
-              <FileName>System_Control.c</FileName>
+              <FileName>osMemory.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\OS\System_Control.c</FilePath>
+              <FilePath>..\..\..\softos\osMemory.c</FilePath>
             </File>
             <File>
-              <FileName>System_Task.c</FileName>
+              <FileName>osPost.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\OS\System_Task.c</FilePath>
+              <FilePath>..\..\..\softos\osPost.c</FilePath>
             </File>
             <File>
-              <FileName>System_Uart.c</FileName>
+              <FileName>osSignal.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\OS\System_Uart.c</FilePath>
+              <FilePath>..\..\..\softos\osSignal.c</FilePath>
             </File>
             <File>
-              <FileName>CPU.c</FileName>
+              <FileName>osTask.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\OS\CPU.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>1</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>1</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                  <BankNo>65535</BankNo>
-                </CommonProperty>
-                <File51>
-                  <C51>
-                    <RegisterColoring>2</RegisterColoring>
-                    <VariablesInOrder>2</VariablesInOrder>
-                    <IntegerPromotion>2</IntegerPromotion>
-                    <uAregs>2</uAregs>
-                    <UseInterruptVector>2</UseInterruptVector>
-                    <Fuzzy>8</Fuzzy>
-                    <Optimize>10</Optimize>
-                    <WarningLevel>3</WarningLevel>
-                    <SizeSpeed>2</SizeSpeed>
-                    <ObjectExtend>2</ObjectExtend>
-                    <ACallAJmp>2</ACallAJmp>
-                    <InterruptVectorAddress>0</InterruptVectorAddress>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </C51>
-                </File51>
-              </FileOption>
+              <FilePath>..\..\..\softos\osTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>osLink.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\softos\link\8051\osLink.s</FilePath>
+            </File>
+            <File>
+              <FileName>osLink.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\softos\link\8051\osLink.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -536,16 +520,6 @@
               <FileName>NOP.A51</FileName>
               <FileType>2</FileType>
               <FilePath>.\ASM\NOP.A51</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Readme</GroupName>
-          <Files>
-            <File>
-              <FileName>readme.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\readme.txt</FilePath>
             </File>
           </Files>
         </Group>

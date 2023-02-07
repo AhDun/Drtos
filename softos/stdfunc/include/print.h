@@ -44,7 +44,7 @@
  *
  * @函数功能: 输出接口
  *
- * @输入参数: 无
+ * @输入参数: ch	字符
  *
  * @返 回 值: 无
  *
@@ -73,8 +73,8 @@ static int vpchar(const char ch,int* s);
  * @函数功能: 输出无符号十进制数值
  *
  * @输入参数: num	十进制数值
-			 ctl	前补零个数
-			 s		spirnt函数指针回传
+ * @输入参数: ctl	前补零个数
+ * @输入参数: s		spirnt函数指针回传
  *
  * @返 回 值: 无
  *
@@ -89,8 +89,8 @@ static void _print_num(unsigned int num,int ctl,int* s);
  * @函数功能: 输出有符号十进制数值
  *
  * @输入参数: num	十进制数值
-			 ctl	前补零个数
-			 s		spirnt函数指针回传
+ * @输入参数: ctl	前补零个数
+ * @输入参数: s		spirnt函数指针回传
  *
  * @返 回 值: 无
  *
@@ -105,7 +105,7 @@ static void _print_d(int num,int ctl,int* s);
  * @函数功能: 输出字符串
  *
  * @输入参数: p		字符串地址
-			 s		spirnt函数指针回传
+ * @输入参数: s		spirnt函数指针回传
  *
  * @返 回 值: 无
  *
@@ -120,7 +120,7 @@ static void _print_s(int p,int* s);
  * @函数功能: 输出大写的十六进制数
  *
  * @输入参数: num	十六进制数值
-			 s		spirnt函数指针回传
+ * @输入参数: s		spirnt函数指针回传
  *
  * @返 回 值: 无
  *
@@ -150,7 +150,7 @@ static void _print_x(int num,int* s);
  * @函数功能: 输出八进制数
  *
  * @输入参数: num	八进制数值
-			 s		spirnt函数指针回传
+ * @输入参数: s		spirnt函数指针回传
  *
  * @返 回 值: 无
  *
@@ -160,7 +160,7 @@ static void _print_x(int num,int* s);
 static void _print_o(int num,int* s);
 /*
  *
- * @函数名称: pchar
+ * @函数名称: _print_lu
  *
  * @函数功能: 输出接口
  *
@@ -168,13 +168,13 @@ static void _print_o(int num,int* s);
  *
  * @返 回 值: 无
  *
- * @注    释: 该函数可以用于重定向
+ * @注    释: 无
  *
  */
 static void _print_lu(unsigned int num,int* s);
 /*
  *
- * @函数名称: pchar
+ * @函数名称: _print_lf
  *
  * @函数功能: 输出接口
  *
@@ -182,13 +182,13 @@ static void _print_lu(unsigned int num,int* s);
  *
  * @返 回 值: 无
  *
- * @注    释: 该函数可以用于重定向
+ * @注    释: 无
  *
  */
 static void _print_lf(double* num,char ctrl,int* s);
 /*
  *
- * @函数名称: pchar
+ * @函数名称: _pchar
  *
  * @函数功能: 输出接口
  *
@@ -196,13 +196,13 @@ static void _print_lf(double* num,char ctrl,int* s);
  *
  * @返 回 值: 无
  *
- * @注    释: 该函数可以用于重定向
+ * @注    释: 无
  *
  */
 static void _pchar(int p,int* s);
 /*
  *
- * @函数名称: pchar
+ * @函数名称: print
  *
  * @函数功能: 输出接口
  *
@@ -210,13 +210,13 @@ static void _pchar(int p,int* s);
  *
  * @返 回 值: 无
  *
- * @注    释: 该函数可以用于重定向
+ * @注    释: 无
  *
  */
 __asm void print(const char* s,...);
 /*
  *
- * @函数名称: pchar
+ * @函数名称: sprint
  *
  * @函数功能: 输出接口
  *
@@ -224,13 +224,13 @@ __asm void print(const char* s,...);
  *
  * @返 回 值: 无
  *
- * @注    释: 该函数可以用于重定向
+ * @注    释: 无
  *
  */
 __asm void sprint(char* s,const char* c,...);
 /*
  *
- * @函数名称: pchar
+ * @函数名称: xprint
  *
  * @函数功能: 输出接口
  *
@@ -238,13 +238,13 @@ __asm void sprint(char* s,const char* c,...);
  *
  * @返 回 值: 无
  *
- * @注    释: 该函数可以用于重定向
+ * @注    释: 无
  *
  */
 void xprint(int sp,int c);
 /*
  *
- * @函数名称: pchar
+ * @函数名称: tprint
  *
  * @函数功能: 输出接口
  *
@@ -252,7 +252,7 @@ void xprint(int sp,int c);
  *
  * @返 回 值: 无
  *
- * @注    释: 该函数可以用于重定向
+ * @注    释: 无
  *
  */
 void tprint(const char* c,unsigned int s);

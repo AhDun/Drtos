@@ -96,13 +96,13 @@ osErrorValue osTaskInit(void)
  *
  * @函数功能: 任务创建（自动分配内存）
  *
- * @输入参数:  	1.任务名称 
-				2.任务地址
-				3.任务栈长度		
-				4.任务时间轮片
-				5.任务优先级
-				6.任务传参
-				7.任务配置
+ * @输入参数:	TN 任务名称
+ * @输入参数: 	TA 任务地址
+ * @输入参数: 	TSS 任务栈长度
+ * @输入参数: 	TTW 任务时间轮片
+ * @输入参数: 	TPL 任务优先级
+ * @输入参数: 	TPP 任务传参
+ * @输入参数: 	TC 任务配置	
  *
  * @返 回 值: -1:创建错误 / 0: 创建成功
  *
@@ -139,15 +139,14 @@ _TaskHandle* osTaskLogin(
  *
  * @函数功能: 任务创建
  *
- * @输入参数: 	1.任务表
-				2.任务名称
-				3.任务地址
-				5.任务栈长度		
-				6.任务时间轮片
-				7.任务优先级
-				8.任务传参
-				9.任务配置
-				
+ * @输入参数: 	TaskHandle 任务表
+ * @输入参数: 	TN 任务名称
+ * @输入参数: 	TA 任务地址
+ * @输入参数: 	TSS 任务栈长度
+ * @输入参数: 	TTW 任务时间轮片
+ * @输入参数: 	TPL 任务优先级
+ * @输入参数: 	TPP 任务传参
+ * @输入参数: 	TC 任务配置	
  *
  * @返 回 值: -1:创建错误 / 0: 创建成功
  *
@@ -260,7 +259,19 @@ _TaskHandle* osTaskLogin_Static(
 #endif
 	return (TaskHandle);//返回
 }
-	
+/*
+ *
+ * @函数名称: 	osTaskLogout
+ *
+ * @函数功能: 	任务注销
+ *
+ * @输入参数:	TaskHandle	任务句柄
+ *
+ * @返 回 值: 	-1:注销错误，0: 注销成功
+ *
+ * @注    释: 	这个任务注销会释放
+ *
+ */	
 osErrorValue  osTaskLogout(_TaskHandle* TaskHandle)
 {
 
@@ -281,17 +292,17 @@ osErrorValue  osTaskLogout(_TaskHandle* TaskHandle)
 }
 /*
  *
- * @函数名称: osTaskLogout
+ * @函数名称: 	osTaskLogout
  *
- * @函数功能: 任务写入注销写入
+ * @函数功能: 	任务注销
  *
- * @输入参数: _TaskHandle* TaskHandle //任务信息表指针
+ * @输入参数:	TaskHandle	任务句柄
  *
- * @返 回 值: -1:注销错误，0: 注销成功
+ * @返 回 值: 	-1:注销错误，0: 注销成功
  *
- * @注    释: 在不启用任务栈自动分配的情况下调用的任务注销函数
+ * @注    释: 	
  *
- */
+ */	
 osErrorValue  osTaskLogout_Static(_TaskHandle* TaskHandle)
 {
 	int32_t _tr0,_tr1;//定义变量

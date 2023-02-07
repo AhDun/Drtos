@@ -19,8 +19,8 @@
 ;	IMPORT  osTaskSwitch
 
 ;
-	EXPORT  CPU_PendSV
-	EXPORT  CPU_SVC
+	EXPORT  ISR_Touch
+	EXPORT  ISR_Touch1
 ;
 ;
 NVIC_PendSV   		EQU     0xE000ED04;PendSV寄存器地址   
@@ -46,7 +46,7 @@ NVIC_PendSV_SET   	EQU     0x10000000;PendSV寄存器内核悬起使能值
 ;
 ; 注    释: 无
 
-CPU_SVC
+ISR_Touch1
 
     CPSIE   I   ;使能所有中断，如有没有启用中断将会触发HardFault_Handler
 	SVC		0   ;触发SVC悬起
@@ -61,7 +61,7 @@ CPU_SVC
 ; 输出参数: 无
 ;
 ; 注    释: 无
-CPU_PendSV
+ISR_Touch
 
 	PUSH    {R0,R1,LR}						;禁用所有中断
     LDR     R0,     =NVIC_PendSV 	;将PendSV寄存器的地址加载到R0寄存器中

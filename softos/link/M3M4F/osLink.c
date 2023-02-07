@@ -44,14 +44,14 @@ __asm void Jump(uint32_t* addr)
 	POP	{PC}
 }
 
-__asm void INTX_DISABLE()
+__asm void ISR_Disable(void)
 {
 
 	CPSID   I	//禁用所有中断
 	BX      LR	//退出函数，跳转到BX寄存器中所存的地址
 }
 
-__asm void INTX_ENABLE()
+__asm void ISR_Enable(void)
 {
 
 	CPSIE   I	//禁用所有中断
@@ -155,7 +155,19 @@ __asm void osTASK_START(uint32_t* tsas)
 }
 
 
-
+/*
+ *
+ * @函数名称: HardFault_Handler
+ *
+ * @函数功能: 启动第一个任务
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注   释: 无
+ *
+ */
 __asm void HardFault_Handler(void)
 {
 	extern osTaskErrorHardFault
@@ -170,7 +182,19 @@ __asm void HardFault_Handler(void)
 
 	POP		{PC}
 }
-
+/*
+ *
+ * @函数名称: SysTick_Handler
+ *
+ * @函数功能: 启动第一个任务
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注   释: 无
+ *
+ */
 __asm void SysTick_Handler(void)
 {
 	extern osClockTimePulse
@@ -183,7 +207,19 @@ __asm void SysTick_Handler(void)
 
 	NOP
 }
-
+/*
+ *
+ * @函数名称: PendSV_Handler
+ *
+ * @函数功能: 启动第一个任务
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注   释: 无
+ *
+ */
 __asm void PendSV_Handler(void)
 {
 	PRESERVE8
@@ -230,6 +266,54 @@ __asm void PendSV_Handler(void)
     BX	  LR
 	NOP
 	NOP
+}
+
+
+__asm void print(const char* s,...)
+{
+	PRESERVE8
+	extern  xprint
+	
+	PUSH	{R3}
+	PUSH	{R2}
+	PUSH	{R1}
+	PUSH	{R0}
+	MOV		R1,#0x00
+	MOV		R0,SP
+	PUSH 	{R4-R12,LR}
+	LDR		R2,=xprint
+    BLX     R2						
+	NOP
+	NOP
+	POP  	{R4-R12,LR}
+	POP		{R0}
+	POP		{R1}
+	POP		{R2}
+	POP		{R3}
+	BX		LR
+}
+__asm void sprint(char* s,const char* c,...)
+{
+	PRESERVE8
+	extern  xprint
+
+	PUSH	{R3}
+	PUSH	{R2}
+	PUSH	{R1}
+	PUSH	{R0}
+	MOV		R1,#0x01
+	MOV		R0,SP
+	PUSH 	{R4-R12,LR}
+	LDR		R2,=xprint
+    BLX     R2						
+	NOP
+	NOP
+	POP  	{R4-R12,LR}
+	POP		{R0}
+	POP		{R1}
+	POP		{R2}
+	POP		{R3}
+	BX		LR
 }
 
 

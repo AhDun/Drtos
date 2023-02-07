@@ -28,18 +28,15 @@
  */
 
 
-
-
-
 #define osClock_Enable 	//启用时钟 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 
 
 #define TaskOccupyRatioSamplingTime 		1000 //任务统计时间，单位ms
 
-#define osClockGetTimePulse()		osTime.TSRT
+#define osClockGetTimePulse()		osTime.TSRT//获取系统的时钟数
 
 
-
+//系统时间{
 #if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
 typedef uint32_t _TotalSystemRunningTime;//系统运行时间
 typedef uint32_t _TaskISRRunningTime;//系统运行时间
@@ -48,13 +45,11 @@ typedef	uint32_t	_TaskTimeWheelMargin;//任务轮片时间
 #if (osClockTimePeriod < osClockTimePeriodStandard)
 typedef uint32_t _ClockTimePeriodValue; //时间周期计数
 #endif
-
-//系统时间{
 typedef struct
 {
 	#if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
 	_TotalSystemRunningTime 	TSRT;//系统运行时间
-	_TaskISRRunningTime			TISRRT;
+	_TaskISRRunningTime			TISRRT;//系统运行时长
 	#endif
 	_TaskTimeWheelMargin	   TTWM;//任务轮片时间
 	#if (osClockTimePeriod < osClockTimePeriodStandard)
@@ -63,13 +58,13 @@ typedef struct
 }osTIME;
 //}
 
+//性能统计{
 #if (osPerformanceStatistics_Enable > 0)
 typedef  uint8_t  	_CPUTaskOccupy;//任务占用比
 typedef  uint8_t  	_CPUISROccupy;//中断占用比
 typedef	 uint8_t 	_CPUSwitchOccupy;//切换占用比
 typedef	 uint32_t	_TaskSwitchConut;//任务调度次数
 typedef	 uint8_t	_TaskSwitchSpeedUs;//任务切换速度测试
-//性能统计{
 typedef struct
 {
  

@@ -433,11 +433,6 @@
               <FilePath>..\..\..\softos\include\osClock.h</FilePath>
             </File>
             <File>
-              <FileName>osConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osConfig.h</FilePath>
-            </File>
-            <File>
               <FileName>osMemory.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\softos\include\osMemory.h</FilePath>
@@ -466,6 +461,16 @@
               <FileName>osLink.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\softos\link\M3M4F\osLink.s</FilePath>
+            </File>
+            <File>
+              <FileName>osLink.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\softos\include\osLink.h</FilePath>
+            </File>
+            <File>
+              <FileName>osConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Src\User\osConfig.h</FilePath>
             </File>
           </Files>
         </Group>

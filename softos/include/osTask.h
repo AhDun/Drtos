@@ -117,12 +117,12 @@
      
 //--------------------------函数替换----------------------
 #if (osCriticalToProtect_Enable > 0)//启用了临界保护
-	#define osProtect_DISABLE() 			INTX_ENABLE()//退出临界保护
-	#define osProtect_ENABLE() 				INTX_DISABLE()//进入临界保护
+	#define osProtect_DISABLE() 			ISR_Enable()//退出临界保护
+	#define osProtect_ENABLE() 				ISR_Disable()//进入临界保护
 #endif
-#define osTaskSwitch_Enable() 			do{TaskSwitchState.SwitchState = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
+#define osTaskSwitch_Enable() 			do{TaskSwitchState.SwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);//触发任务切换
 
-#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b;TaskSwitchState.SwitchState = TaskSwitch_Wait; CPU_PendSV();}while(0);//触发任务切换
+#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b;TaskSwitchState.SwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);//触发任务切换
 
 
 #define osTaskErrorDebug 		osDebugError

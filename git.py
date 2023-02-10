@@ -35,7 +35,7 @@ def add():
 
 
 def commit(s):
-    cmd = "git commit -m" + "'" + s + "'"
+    cmd = "git commit -m" + s
     return cmd
 
 

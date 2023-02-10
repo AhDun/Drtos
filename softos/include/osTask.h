@@ -237,6 +237,8 @@ extern _TaskHandle*	TaskHandle_Main;
 */
 osErrorValue osTaskInit(void);	
 
+osErrorValue osTaskSIRQInit(void);	
+
 /*
  *
  * @º¯ÊýÃû³Æ: osTaskNameToTable

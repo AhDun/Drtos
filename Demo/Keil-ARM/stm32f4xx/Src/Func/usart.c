@@ -1,12 +1,12 @@
 #include "usart.h"		 
 
 
-int fputc(int ch,FILE *p)  //函数默认的，在使用printf函数时自动调用
-{
-	USART_SendData(USART1,(u8)ch);	
-	while(USART_GetFlagStatus(USART1,USART_FLAG_TXE)==RESET);
-	return ch;
-}
+//int fputc(int ch,FILE *p)  //函数默认的，在使用printf函数时自动调用
+//{
+//	USART_SendData(USART1,(u8)ch);	
+//	while(USART_GetFlagStatus(USART1,USART_FLAG_TXE)==RESET);
+//	return ch;
+//}
 
 //串口1中断服务程序
 //注意,读取USARTx->SR能避免莫名其妙的错误   	

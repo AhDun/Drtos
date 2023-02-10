@@ -97,6 +97,7 @@
 						osClockInit();\
 						osInfoDebug();\
 						osTaskSpeedTest();\
+						osTaskSIRQInit();\
 					}while(0);//系统初始化
 
 

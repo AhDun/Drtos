@@ -54,116 +54,103 @@
 int pchar(const char ch);
 /*
  *
- * @函数名称: vpchar
+ * @函数名称: pchar
  *
- * @函数功能: pchar函数的上级函数
+ * @函数功能: sprint函数字符回流
  *
- * @输入参数: 无
+ * @输入参数: ch	字符
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
- * @注    释: 
+ * @注    释: 该函数可以用于重定向
  *
  */
-static int vpchar(const char ch,int* s);
+static int _spchar(const char ch,int* s);
 /*
  *
- * @函数名称: _print_num
+ * @函数名称: _printU10
  *
- * @函数功能: 输出无符号十进制数值
- *
- * @输入参数: num	十进制数值
- * @输入参数: ctl	前补零个数
- * @输入参数: s		spirnt函数指针回传
+ * @输入参数: num	无符号十进制数
+ * @输入参数: ctl	前置0个数
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
  * @注    释: 无
  *
  */
-static void _print_num(unsigned int num,int ctl,int* s);
+static void _printU10(unsigned int num,int ctl,int* s);
 /*
  *
- * @函数名称: _print_d
+ * @函数名称: _printS10
  *
- * @函数功能: 输出有符号十进制数值
+ * @函数功能: print内联输出有符号十进制数
  *
- * @输入参数: num	十进制数值
- * @输入参数: ctl	前补零个数
- * @输入参数: s		spirnt函数指针回传
+ * @输入参数: num	有符号十进制数
+ * @输入参数: ctl	前置0个数
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
- * @注    释: 
+ * @注    释: 无
  *
  */
-static void _print_d(int num,int ctl,int* s);
+static void _printS10(int num,int ctl,int* s);
 /*
  *
- * @函数名称: _print_s
+ * @函数名称: _printSring
  *
- * @函数功能: 输出字符串
+ * @函数功能: print内联输出字符串
  *
- * @输入参数: p		字符串地址
- * @输入参数: s		spirnt函数指针回传
+ * @输入参数: p		字符串首地址
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
- * @注    释: 
+ * @注    释: 无
  *
  */
-static void _print_s(int p,int* s);
+static void _printSring(int p,int* s);
 /*
  *
- * @函数名称: _print_X
+ * @函数名称: _print16
  *
- * @函数功能: 输出大写的十六进制数
+ * @函数功能: printf内联输出十六形式
  *
  * @输入参数: num	十六进制数值
- * @输入参数: s		spirnt函数指针回传
+ * @输入参数: c		ASCII码起始值
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
- * @注    释: 
+ * @注    释: 无
  *
  */
 static void _print16(int num,int c,int* s);
 /*
  *
- * @函数名称: _print_o
+ * @函数名称: _print8
  *
- * @函数功能: 输出八进制数
+ * @函数功能: printf内联输出八进制
  *
  * @输入参数: num	八进制数值
- * @输入参数: s		spirnt函数指针回传
- *
- * @返 回 值: 无
- *
- * @注    释: 
- *
- */
-static void _print8(int num,int* s);
-/*
- *
- * @函数名称: _print_lu
- *
- * @函数功能: 输出接口
- *
- * @输入参数: 无
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
  * @注    释: 无
  *
  */
-static void _print_lu(unsigned int num,int* s);
+static void _print8(int num,int* s);
 /*
  *
  * @函数名称: _print_lf
  *
- * @函数功能: 输出接口
+ * @函数功能: print内联输出双精度浮点数(64位)
  *
- * @输入参数: 无
+ * @输入参数: num	双精度浮点数
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
@@ -173,9 +160,9 @@ static void _print_lu(unsigned int num,int* s);
 static void _print_lf(double* num,char ctrl,int* s);
 /*
  *
- * @函数名称: _pchar
+ * @函数名称: xprint
  *
- * @函数功能: 输出接口
+ * @函数功能: print函数子函数
  *
  * @输入参数: 无
  *
@@ -184,12 +171,14 @@ static void _print_lf(double* num,char ctrl,int* s);
  * @注    释: 无
  *
  */
-static void _pchar(int p,int* s);
+void xprint(int sp,int c);
+
+
 /*
  *
  * @函数名称: print
  *
- * @函数功能: 输出接口
+ * @函数功能: 与printf函数一致
  *
  * @输入参数: 无
  *
@@ -203,7 +192,7 @@ __asm void print(const char* s,...);
  *
  * @函数名称: sprint
  *
- * @函数功能: 输出接口
+ * @函数功能: 与sprintf函数一致
  *
  * @输入参数: 无
  *
@@ -213,20 +202,8 @@ __asm void print(const char* s,...);
  *
  */
 __asm void sprint(char* s,const char* c,...);
-/*
- *
- * @函数名称: xprint
- *
- * @函数功能: 输出接口
- *
- * @输入参数: 无
- *
- * @返 回 值: 无
- *
- * @注    释: 无
- *
- */
-void xprint(int sp,int c);
+
+
 /*
  *
  * @函数名称: tprint

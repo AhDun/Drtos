@@ -39,7 +39,7 @@
  *
  * @函数功能: 输出接口
  *
- * @输入参数: 无
+ * @输入参数: ch	字符
  *
  * @返 回 值: 无
  *
@@ -56,16 +56,17 @@ int pchar(const char ch)
  *
  * @函数名称: pchar
  *
- * @函数功能: 输出接口
+ * @函数功能: sprint函数字符回流
  *
- * @输入参数: 无
+ * @输入参数: ch	字符
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
  * @注    释: 该函数可以用于重定向
  *
  */
-static int vpchar(const char ch,int* s)
+static int _spchar(const char ch,int* s)
 {
 	if(s == 0){
 		pchar(ch);
@@ -78,29 +79,29 @@ static int vpchar(const char ch,int* s)
 }
 /*
  *
- * @函数名称: _print_num
+ * @函数名称: _printU10
  *
- * @函数功能: print内联输出数字
- *
- * @输入参数: 无
+ * @输入参数: num	无符号十进制数
+ * @输入参数: ctl	前置0个数
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
  * @注    释: 无
  *
  */
-static void _print_num(unsigned int num,int ctl,int* s)
+static void _printU10(unsigned int num,int ctl,int* s)
 {
 	int _FLAG = 100000000;
 	char _FLAG1 = 0;
 	if((num / 1000000000) % 10 > 0){
-		vpchar((char)(num / 1000000000) % 10 + 48,s);
+		_spchar((char)(num / 1000000000) % 10 + 48,s);
 		_FLAG1 = 1;
 	}
-	ctl = 10  - ctl;
+	ctl = 9  - ctl;
 	while(_FLAG > 1){
 		if(((num / _FLAG) % 10) > 0 || _FLAG1 == 1 || ctl == 0){
-			vpchar((char)((num / _FLAG) % 10) + 48,s);
+			_spchar((char)((num / _FLAG) % 10) + 48,s);
 			_FLAG1 = 1;
 		}
 		_FLAG /= 10;
@@ -108,47 +109,50 @@ static void _print_num(unsigned int num,int ctl,int* s)
 			ctl -= 1;
 		}
 	}
-	vpchar((num % 10) + 48,s);
+	_spchar(num % 10 + 48,s);
 }
 /*
  *
- * @函数名称: _print_d
+ * @函数名称: _printS10
  *
- * @函数功能: print内联输出有符号整型数据
+ * @函数功能: print内联输出有符号十进制数
  *
- * @输入参数: 无
+ * @输入参数: num	有符号十进制数
+ * @输入参数: ctl	前置0个数
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
  * @注    释: 无
  *
  */
-static void _print_d(int num,int ctl,int* s)
+static void _printS10(int num,int ctl,int* s)
 {
 	if(num < 0){
 		num = (~num) + 1;
-		vpchar('-',s);
+		_spchar('-',s);
 	}
-	_print_num(num,ctl,s);
+	_printU10(num,ctl,s);
 }
 /*
  *
- * @函数名称: _pchar
+ * @函数名称: _printSring
  *
- * @函数功能: print内联输出字符
+ * @函数功能: print内联输出字符串
  *
- * @输入参数: 无
+ * @输入参数: p		字符串首地址
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
  * @注    释: 无
  *
  */
-static void _vpchar(int p,int* s)
+static void _printSring(int p,int* s)
 {
 	while(1){
-		if((*(char*)p) != '\0'){
-			vpchar((char)(*(char*)p),s);
+		if(*(char*)p != '\0'){
+			_spchar(*(char*)p,s);
 		}
 		else{
 			break;
@@ -158,11 +162,13 @@ static void _vpchar(int p,int* s)
 } 
 /*
  *
- * @函数名称: _print_x
+ * @函数名称: _print16
  *
- * @函数功能: printf内联输出小写十六形式
+ * @函数功能: printf内联输出十六形式
  *
- * @输入参数: 无
+ * @输入参数: num	十六进制数值
+ * @输入参数: c		ASCII码起始值
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
@@ -174,20 +180,20 @@ static void _print16(int num,int c,int* s)
 	char _FLAG = 28;
 	char _FLAG1 = 0;
 	char _BUF;
-	vpchar('0',s);
-	vpchar('x',s);
+	_spchar('0',s);
+	_spchar('x',s);
 	if(num == 0x00){
-		vpchar(0 + 48,s);
-		vpchar(0 + 48,s);
+		_spchar(0 + 48,s);
+		_spchar(0 + 48,s);
 	}else{
 		while(1){
 			_BUF = ((num >> _FLAG) & 0x0F);
 			if(_BUF > 0 || _FLAG1 > 0){
-				vpchar(c + (_BUF - 10),s);
+				_spchar(c + (_BUF - 10),s);
 				_FLAG1 = 1;
 			}
 			else if(_BUF >= 10){
-				vpchar(c + (_BUF - 10),s);
+				_spchar(c + (_BUF - 10),s);
 				_FLAG1 = 1;
 			}
 			if(_FLAG <= 0){
@@ -199,11 +205,12 @@ static void _print16(int num,int c,int* s)
 }
 /*
  *
- * @函数名称: _print_o
+ * @函数名称: _print8
  *
  * @函数功能: printf内联输出八进制
  *
- * @输入参数: 无
+ * @输入参数: num	八进制数值
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
@@ -216,15 +223,15 @@ static void _print8(int num,int* s)
 	char _FLAG1 = 0;
 	char _BUF;
 	_BUF = ((num >> _FLAG) & 0x03);
-	vpchar('0',s);
+	_spchar('0',s);
 	if(_BUF > 0){
-		vpchar(_BUF + 48,s);
+		_spchar(_BUF + 48,s);
 		_FLAG1 = 1;
 	}
 	while(1){
 		_BUF = ((num >> _FLAG) & 0x07);
 		if(_BUF > 0 || _FLAG1 > 0){
-			vpchar(_BUF + 48,s);
+			_spchar(_BUF + 48,s);
 			_FLAG1 = 1;
 		}
 		if(_FLAG <= 0){
@@ -235,51 +242,12 @@ static void _print8(int num,int* s)
 }
 /*
  *
- * @函数名称: _print_f
+ * @函数名称: _print_lf
  *
- * @函数功能: print内联输出浮点数
+ * @函数功能: print内联输出双精度浮点数(64位)
  *
- * @输入参数: 无
- *
- * @返 回 值: 无
- *
- * @注    释: 无
- *
- */
-/*static void _print_f(float num)
-{
-	int b = 0;
-	int c = 0;
-	int x = 0;
-	int m = 10;
-	for(x = 1; x < 7; x++){
-		b = (unsigned int)(num * m);
-		c = (c * 10) + (b % 10);
-		m = m * 10;
-	}
-	m = m * 10;
-	if((unsigned int)(num * m) % 10 > 4){
-		c++;
-	}
-	while(1){
-		if((c % 10) == 0){
-			c = c / 10;
-		}
-		else{
-			break;
-		}
-	}
-	_print_d((int)num,0);
-	vpchar('.');
-	_print_num(c,0);
-}*/
-/*
- *
- * @函数名称: _print_f
- *
- * @函数功能: print内联输出双浮点数
- *
- * @输入参数: 无
+ * @输入参数: num	双精度浮点数
+ * @输入参数: s		sprint函数回流数据
  *
  * @返 回 值: 无
  *
@@ -304,8 +272,8 @@ static void _print_lf(double* num,char ctrl,int* s)
 	}
 
 	numv = *num;
-	_print_d((int)numv,0,s);
-	vpchar('.',s);
+	_printS10((int)numv,0,s);
+	_spchar('.',s);
 	for(x = 1; x < (p + 1); x++){
 		c = (c * 10) + ((unsigned int)(numv * m) % 10);
 		if(c == 0){
@@ -318,26 +286,21 @@ static void _print_lf(double* num,char ctrl,int* s)
 			c = c / 10;
 		}else{
 			for(;k > 0;k--){
-				vpchar('0',s);
+				_spchar('0',s);
 			}
 			break;
 		}
 	}
 	
-	_print_num(c,0,s);
+	_printU10(c,0,s);
 	
 	
 }
 /*
  *
- * @函数名称: print
+ * @函数名称: xprint
  *
- * @函数功能: 格式打印函数
-			print("hello");//打印hello
-			控制字符
-			print("%d",a);//将变量a以整型数据输出
-			print("%f",a);//将变量a以浮点型数据输出
-			print("%f",a);//将变量a以浮点型数据输出
+ * @函数功能: print函数子函数
  *
  * @输入参数: 无
  *
@@ -373,32 +336,32 @@ void xprint(int sp,int c)
 						xprintc:
 						switch(*_CONTROL){
 							case 'd'://以十进制形式输出带符号整数(正数不输出符号)
-									_print_d(*((int*)(_SP)),LeftValue,s1);
+									_printS10(*((int*)(_SP)),LeftValue,s1);
 									_SP = _SP + 0x04;
 									break;
 							case 'l'://输出32位无符号整数
 									if(*(_CONTROL + 1) != 'u'){
-										vpchar((char)*_CONTROL,s1);
+										_spchar((char)*_CONTROL,s1);
 										break;
 									}
 							case 'u'://输出32位无符号整数
 									_CONTROL++;
-									_print_num((*((unsigned int*)(_SP))),LeftValue,s1);
+									_printU10((*((unsigned int*)(_SP))),LeftValue,s1);
 									_SP = _SP + 0x04;
 									break;									
 							case 'p'://输出指针地址
 									
-									_print_num((int)(_SP),LeftValue,s1);
+									_printU10((int)(_SP),LeftValue,s1);
 									_SP = _SP + 0x04;
 									break;
 							case 's'://输出字符串
 									
-									_vpchar(*((int*)(_SP)),s1);
+									_printSring(*((int*)(_SP)),s1);
 									_SP = _SP + 0x04;
 									break;
 							case 'c'://输出单个字符
 									
-									vpchar((char)(*((int*)(_SP))),s1);
+									_spchar((char)(*((int*)(_SP))),s1);
 									_SP = _SP + 0x04;
 									break;
 							case 'X'://以十六进制大写形式输出无符号整数(输出前缀0x)
@@ -423,7 +386,7 @@ void xprint(int sp,int c)
 									_print_lf((double*)(_SP),RightValue,s1);
 									_SP = _SP + 0x08;
 									break;
-							case '.':
+							case '.'://右值
 									_CONTROL++;
 									RightValue = 0;
 									while(*_CONTROL >= '0' && *_CONTROL <= '9'){
@@ -432,25 +395,15 @@ void xprint(int sp,int c)
 									}
 									goto xprintc;
 							default:
-									if(*_CONTROL >= '0' && *_CONTROL <= '9'){
+									if(*_CONTROL >= '0' && *_CONTROL <= '9'){//左值
 										LeftValue = 0;
 										while(*_CONTROL >= '0' && *_CONTROL <= '9'){
 											LeftValue = (LeftValue * 10) + *_CONTROL - '0';
 											_CONTROL++;
 										}
-										if(*_CONTROL == '.'){
-											_CONTROL++;
-											RightValue = 0;
-											while(*_CONTROL >= '0' && *_CONTROL <= '9'){
-												RightValue = (RightValue * 10) + *_CONTROL - '0';
-												_CONTROL++;
-											}
-											goto xprintc;
-										}else{
-											goto xprintc;
-										}
+										goto xprintc;
 									}else{
-										vpchar((char)*_CONTROL,s1);
+										_spchar((char)*_CONTROL,s1);
 									}
 									break;
 								
@@ -459,14 +412,14 @@ void xprint(int sp,int c)
 			case '\0'://结束符
 						return;
 			case '\n'://回车符
-						vpchar('\n',s1);
+						_spchar('\n',s1);
 						break;
-			case '\b':
+			case '\b'://自定义
 						break;
-			case '\a':
+			case '\a'://自定义
 						break;
 			default:
-						vpchar((char)*_CONTROL,s1);
+						_spchar((char)*_CONTROL,s1);
 						break;
 		}
 		_CONTROL++;
@@ -496,20 +449,20 @@ void tprint(const char* c,unsigned int s)
 			case '%':
 					c++;
 					switch(*c){
-						case 'd':_print_d((s / 1000) /86400,0,0);break;//天			
-						case 'h':_print_d(((s / 1000) /3600) % 24,0,0);break;//时
-						case 'm':_print_d(((s / 1000) /60) % 60,0,0);break;//分
-						case 's':_print_d((s / 1000) % 60,0,0);break;//秒
-						case '%':vpchar('%',0);
+						case 'd':_printS10((s / 1000) /86400,0,0);break;//天			
+						case 'h':_printS10(((s / 1000) /3600) % 24,0,0);break;//时
+						case 'm':_printS10(((s / 1000) /60) % 60,0,0);break;//分
+						case 's':_printS10((s / 1000) % 60,0,0);break;//秒
+						case '%':_spchar('%',0);
 					}
 					break;
 			case '\0':
 					return;
 			case '\n':
-					vpchar('\n',0);
+					_spchar('\n',0);
 					break;
 			default:
-					vpchar((char)*c,0);
+					_spchar((char)*c,0);
 					break;
 		}
 		c++;

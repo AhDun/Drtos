@@ -64,14 +64,7 @@ osErrorValue osTaskInit(void)
 	TaskSwitchState.SwitchState = TaskSwitch_Ready;
     /***********************************系统任务初始化**********************************/
 	
-	TaskHandle_SIRQ = osTaskLogin("SIRQ",osTaskSIRQ,200,TaskTimeWheelDefault,-127,(void*)0,Task_Set_Default); 
-	if(TaskHandle_SIRQ == NULL){
 
-		#if (osTaskDebug_Enable > 0)
-		osTaskErrorDebug("SIRQ 任务创建失败\n");
-		#endif
-		return (Error);//返回Error
-	}
 
 	TaskHandle_Main = osTaskLogin("Main",(void*)0,Default_Stack_Size,TaskTimeWheelDefault,0,(void*)0,Task_Set_Default ); 
 	if(TaskHandle_Main == NULL){
@@ -88,8 +81,21 @@ osErrorValue osTaskInit(void)
 	TaskSwitchState.DispatchNum += 1;//轮盘指针向后移一位     
 	osTime.TTWM = RunTaskHandle -> TaskTimeWheel;//将当前任务的时间轮片写入到时间记录器
 	osTASK_START(&RunTaskHandle -> RealSP);//启动第一个任务
+
     return (OK);//返回OK
 }		
+osErrorValue osTaskSIRQInit(void)
+{
+	TaskHandle_SIRQ = osTaskLogin("SIRQ",osTaskSIRQ,200,TaskTimeWheelDefault,-127,(void*)0,Task_Set_Default); 
+	if(TaskHandle_SIRQ == NULL){
+
+		#if (osTaskDebug_Enable > 0)
+		osTaskErrorDebug("SIRQ 任务创建失败\n");
+		#endif
+		return (Error);//返回Error
+	}
+	return (OK);
+}
 /*
  *
  * @函数名称: osTaskLogin
@@ -761,7 +767,7 @@ void osTaskSIRQ(void)
 	uint8_t SIRQList_Count;
 
 	while(1){
-		//RunTaskHandle -> Config = Task_State_Up_SI;//主动挂起(挂起态)
+		//RunTaskHandle -> Config = Task_State_Up_SI;//主动挂起(挂起态) 
 		osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_Up_SI);
 		SIRQList_Addr = (_SIRQList*)RunTaskHandle -> ParameterPass;
 		for(SIRQList_Count = 1; SIRQList_Count <= *SIRQList_Addr; SIRQList_Count++){

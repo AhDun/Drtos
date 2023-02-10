@@ -281,8 +281,7 @@ __asm void print(const char* s,...)
 	MOV		R1,#0x00
 	MOV		R0,SP
 	PUSH 	{R4-R12,LR}
-	LDR		R2,=xprint
-    BLX     R2						
+	BL.W	xprint					
 	NOP
 	NOP
 	POP  	{R4-R12,LR}
@@ -304,8 +303,7 @@ __asm void sprint(char* s,const char* c,...)
 	MOV		R1,#0x01
 	MOV		R0,SP
 	PUSH 	{R4-R12,LR}
-	LDR		R2,=xprint
-    BLX     R2						
+	BL.W	xprint							
 	NOP
 	NOP
 	POP  	{R4-R12,LR}

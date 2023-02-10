@@ -127,22 +127,7 @@ static void _print_s(int p,int* s);
  * @注    释: 
  *
  */
-static void _print_X(int num,int* s);
-/*
- *
- * @函数名称: _print_x
- *
- * @函数功能: 输出小写的十六进制数
- *
- * @输入参数: num	十六进制数值
-			 s		spirnt函数指针回传
- *
- * @返 回 值: 无
- *
- * @注    释: 
- *
- */
-static void _print_x(int num,int* s);
+static void _print16(int num,int c,int* s);
 /*
  *
  * @函数名称: _print_o
@@ -157,7 +142,7 @@ static void _print_x(int num,int* s);
  * @注    释: 
  *
  */
-static void _print_o(int num,int* s);
+static void _print8(int num,int* s);
 /*
  *
  * @函数名称: _print_lu

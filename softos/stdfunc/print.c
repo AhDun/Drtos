@@ -91,63 +91,24 @@ static int vpchar(const char ch,int* s)
  */
 static void _print_num(unsigned int num,int ctl,int* s)
 {
-	int _FLAG = 0;
-	//unsigned int _PLACE = 1000000000;
-//	if((num / 10000000000) > 0){
-//		vpchar((char)(num / 10000000000 + 48));
-//	}
-//	while(1)
-//	{
-//		if((num % (_PLACE * 10) / _PLACE) > 0 || _FLAG == 1){
-//			vpchar((char)(num % (_PLACE * 10) / _PLACE + 48));
-//			_FLAG = 1;
-//		}
-//		if(_PLACE == 1){
-//			break;
-//		}
-//		_PLACE = _PLACE / 10;
-//	}
-	if((num / 10000000000) > 0 || ctl >= 11){
-		vpchar((char)(num / 10000000000 + 48),s);
-		_FLAG = 1;
+	int _FLAG = 100000000;
+	char _FLAG1 = 0;
+	if((num / 1000000000) % 10 > 0){
+		vpchar((char)(num / 1000000000) % 10 + 48,s);
+		_FLAG1 = 1;
 	}
-	if((num % 10000000000 / 1000000000) > 0 || _FLAG == 1 || ctl >= 10){
-		vpchar((char)(num % 10000000000 / 1000000000 + 48),s);
-		_FLAG = 1;
+	ctl = 10  - ctl;
+	while(_FLAG > 1){
+		if(((num / _FLAG) % 10) > 0 || _FLAG1 == 1 || ctl == 0){
+			vpchar((char)((num / _FLAG) % 10) + 48,s);
+			_FLAG1 = 1;
+		}
+		_FLAG /= 10;
+		if(ctl > 0){
+			ctl -= 1;
+		}
 	}
-	if((num % 1000000000 / 100000000) > 0 || _FLAG == 1 || ctl >= 9){
-		vpchar((char)(num % 1000000000 / 100000000 + 48),s);
-		_FLAG = 1;
-	}
-	if((num % 100000000 / 10000000) > 0 || _FLAG == 1 || ctl >= 8){
-		vpchar((char)(num % 100000000 / 10000000 + 48),s);
-		_FLAG = 1;
-	}
-	if((num % 10000000 / 1000000) > 0 || _FLAG == 1 || ctl >= 7){
-		vpchar((char)(num % 10000000 / 1000000 + 48),s);
-		_FLAG = 1;
-	}
-	if((num % 1000000 / 100000) > 0 || _FLAG == 1 || ctl >= 6){
-		vpchar((char)(num % 1000000 / 100000 + 48),s);
-		_FLAG = 1;
-	}
-	if((num % 100000 / 10000) > 0 || _FLAG == 1 || ctl >= 5){
-		vpchar((char)(num % 100000 / 10000 + 48),s);
-		_FLAG = 1;
-	}
-	if((num % 10000 / 1000) > 0 || _FLAG == 1 || ctl >= 4){
-		vpchar((char)(num % 10000 / 1000 + 48),s);
-		_FLAG = 1;
-	}
-	if((num % 1000 / 100) > 0 || _FLAG == 1 || ctl >= 3){
-		vpchar((char)(num % 1000 / 100 + 48),s);	
-		_FLAG = 1;
-	}
-	if((num % 100 / 10) > 0 || _FLAG == 1 || ctl >= 2){
-		vpchar((char)(num % 100 / 10 + 48),s);
-		_FLAG = 1;
-	}
-	vpchar((char)(num % 10+ 48),s);
+	vpchar((num % 10) + 48,s);
 }
 /*
  *
@@ -197,48 +158,6 @@ static void _vpchar(int p,int* s)
 } 
 /*
  *
- * @函数名称: _print_X
- *
- * @函数功能: printf内联输出大写十六形式
- *
- * @输入参数: 无
- *
- * @返 回 值: 无
- *
- * @注    释: 无
- *
- */
-static void _print_X(int num,int* s)
-{
-	int _FLAG = 28;
-	int _BUF;
-	vpchar('0',s);
-	vpchar('x',s);
-	if(num == 0x00){
-		vpchar(0 + 48,s);
-		vpchar(0 + 48,s);
-	}else{
-		while(1){
-			_BUF = ((num >> _FLAG) & 0x0F);
-			switch(_BUF){
-				case 0: if(_FLAG & 0x80000000){vpchar(_BUF + 48,s);}break;
-				case 10:vpchar('A',s);_FLAG = _FLAG | 0x80000000;break;
-				case 11:vpchar('B',s);_FLAG = _FLAG | 0x80000000;break;
-				case 12:vpchar('C',s);_FLAG = _FLAG | 0x80000000;break;
-				case 13:vpchar('D',s);_FLAG = _FLAG | 0x80000000;break;
-				case 14:vpchar('E',s);_FLAG = _FLAG | 0x80000000;break;
-				case 15:vpchar('F',s);_FLAG = _FLAG | 0x80000000;break;
-				default:vpchar(_BUF + 48,s);_FLAG = _FLAG | 0x80000000;break;
-			}
-			if((_FLAG & 0x7FFFFFFF) == 0){
-				break;
-			}
-			_FLAG = _FLAG - 4;
-		}
-	}
-}
-/*
- *
  * @函数名称: _print_x
  *
  * @函数功能: printf内联输出小写十六形式
@@ -250,10 +169,11 @@ static void _print_X(int num,int* s)
  * @注    释: 无
  *
  */
-static void _print_x(int num,int* s)
+static void _print16(int num,int c,int* s)
 {
-	int _FLAG = 28;
-	int _BUF;
+	char _FLAG = 28;
+	char _FLAG1 = 0;
+	char _BUF;
 	vpchar('0',s);
 	vpchar('x',s);
 	if(num == 0x00){
@@ -262,20 +182,18 @@ static void _print_x(int num,int* s)
 	}else{
 		while(1){
 			_BUF = ((num >> _FLAG) & 0x0F);
-			switch(_BUF){
-				case 0: if(_FLAG & 0x80000000){vpchar(_BUF + 48,s);}break;
-				case 10:vpchar('a',s);_FLAG = _FLAG | 0x80000000;break;
-				case 11:vpchar('b',s);_FLAG = _FLAG | 0x80000000;break;
-				case 12:vpchar('c',s);_FLAG = _FLAG | 0x80000000;break;
-				case 13:vpchar('d',s);_FLAG = _FLAG | 0x80000000;break;
-				case 14:vpchar('e',s);_FLAG = _FLAG | 0x80000000;break;
-				case 15:vpchar('f',s);_FLAG = _FLAG | 0x80000000;break;
-				default:vpchar(_BUF + 48,s);_FLAG = _FLAG | 0x80000000;break;
+			if(_BUF > 0 || _FLAG1 > 0){
+				vpchar(c + (_BUF - 10),s);
+				_FLAG1 = 1;
 			}
-			if((_FLAG & 0x7FFFFFFF) == 0){
-				break;
+			else if(_BUF >= 10){
+				vpchar(c + (_BUF - 10),s);
+				_FLAG1 = 1;
 			}
-			_FLAG = _FLAG - 4;
+			if(_FLAG <= 0){
+				return;
+			}
+			_FLAG -= 4;
 		}
 	}
 }
@@ -292,45 +210,29 @@ static void _print_x(int num,int* s)
  * @注    释: 无
  *
  */
-static void _print_o(int num,int* s)
+static void _print8(int num,int* s)
 {
-	int _FLAG = 30;
-	int _BUF;
-	_BUF = (((num >> _FLAG) & 0x03));
+	char _FLAG = 30;
+	char _FLAG1 = 0;
+	char _BUF;
+	_BUF = ((num >> _FLAG) & 0x03);
 	vpchar('0',s);
 	if(_BUF > 0){
 		vpchar(_BUF + 48,s);
-		_FLAG = _FLAG | 0x80000000;
+		_FLAG1 = 1;
 	}
 	while(1){
 		_BUF = ((num >> _FLAG) & 0x07);
-		if(_BUF > 0 || (_FLAG & 0x80000000) > 0){
+		if(_BUF > 0 || _FLAG1 > 0){
 			vpchar(_BUF + 48,s);
-			_FLAG = _FLAG | 0x80000000;
+			_FLAG1 = 1;
 		}
-		if((_FLAG & 0x7FFFFFFF) == 0){
-			break;
+		if(_FLAG <= 0){
+			return;
 		}
 		_FLAG = _FLAG - 3;
 	}
 }
-/*
- *
- * @函数名称: 无
- *
- * @函数功能: 无
- *
- * @输入参数: 无
- *
- * @返 回 值: 无
- *
- * @注    释: 无
- *
- */
-/*static void _print_lu(unsigned int num)
-{
-
-}*/
 /*
  *
  * @函数名称: _print_f
@@ -416,7 +318,7 @@ static void _print_lf(double* num,char ctrl,int* s)
 			c = c / 10;
 		}else{
 			for(;k > 0;k--){
-				_print_num(0,0,s);
+				vpchar('0',s);
 			}
 			break;
 		}
@@ -474,18 +376,16 @@ void xprint(int sp,int c)
 									_print_d(*((int*)(_SP)),LeftValue,s1);
 									_SP = _SP + 0x04;
 									break;
-							case 'u':
 							case 'l'://输出32位无符号整数
-									if(*(_CONTROL + 1) == 'u'){
-										_CONTROL++;
-										_print_num((*((unsigned int*)(_SP))),LeftValue,s1);
-										_SP = _SP + 0x04;
-									}
-									else{
+									if(*(_CONTROL + 1) != 'u'){
 										vpchar((char)*_CONTROL,s1);
 										break;
 									}
-									break;
+							case 'u'://输出32位无符号整数
+									_CONTROL++;
+									_print_num((*((unsigned int*)(_SP))),LeftValue,s1);
+									_SP = _SP + 0x04;
+									break;									
 							case 'p'://输出指针地址
 									
 									_print_num((int)(_SP),LeftValue,s1);
@@ -503,17 +403,17 @@ void xprint(int sp,int c)
 									break;
 							case 'X'://以十六进制大写形式输出无符号整数(输出前缀0x)
 									
-									_print_X(*((int*)(_SP)),s1);
+									_print16(*((int*)(_SP)),'A',s1);
 									_SP = _SP + 0x04;
 									break;
 							case 'x'://以十六进制小写形式输出无符号整数(输出前缀0x)
 									
-									_print_x(*((int*)(_SP)),s1);
+									_print16(*((int*)(_SP)),'a',s1);
 									_SP = _SP + 0x04;
 									break;
 							case 'o'://以八进制形式输出无符号整数(输出前缀0)
 									
-									_print_o(*((int*)(_SP)),s1);
+									_print8(*((int*)(_SP)),s1);
 									_SP = _SP + 0x04;
 									break;
 							case 'f'://输出双精度浮点

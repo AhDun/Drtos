@@ -53,7 +53,8 @@ int main(void)
 	osInit();
 
 	//osMemoryMalloc(25000);
-
+	_tr0 = ~0x00;
+	print("%u",_tr0);
 
 	TaskHandle_Task1 = osTaskLogin(
 	"RTC", 			                    //ÈÎÎñÃû³Æ
@@ -98,7 +99,7 @@ int main(void)
 	);
 
 
-	
+
 	//osTaskLogout(TaskHandle_Task4);
 
 	while(1){

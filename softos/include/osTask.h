@@ -109,6 +109,12 @@
 
 
 
+
+
+#define osTaskDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
+
+#define osTaskRunError_Enable 1 //任务运行时发生致命错误 1:开启Debug输出 0:关闭Debug输出
+
 //------------------------默认轮片时间-----------------------------
 #define TaskTimeWheelDefault        100u//默认轮片时间(单位ms)
 
@@ -117,24 +123,104 @@
      
 //--------------------------函数替换----------------------
 #if (osCriticalToProtect_Enable > 0)//启用了临界保护
-	#define osProtect_DISABLE() 			ISR_Enable()//退出临界保护
-	#define osProtect_ENABLE() 				ISR_Disable()//进入临界保护
+/*
+ *
+ * @函数名称: osProtect_DISABLE
+ *
+ * @函数功能: 退出临界保护
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osProtect_DISABLE() 			ISR_Enable()
+/*
+ *
+ * @函数名称: osProtect_DISABLE
+ *
+ * @函数功能: 进入临界保护
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osProtect_ENABLE() 				ISR_Disable()
 #endif
-#define osTaskSwitch_Enable() 			do{TaskSwitchState.SwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);//触发任务切换
-
-#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b;TaskSwitchState.SwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);//触发任务切换
-
+/*
+ *
+ * @函数名称: osTaskSwitch_Enable
+ *
+ * @函数功能: 触发任务上下文切换
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osTaskSwitch_Enable() 			do{TaskSwitchState.SwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);
+/*
+ *
+ * @函数名称: osTaskSwitchConfig_Enable
+ *
+ * @函数功能: 带配置触发任务上下文切换
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b;TaskSwitchState.SwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);
+/*
+ *
+ * @函数名称: osTaskEnterIRQ
+ *
+ * @函数功能: 进入中断
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osTaskEnterIRQ()			TaskSwitchState.ISRFlag += 1;
+/*
+ *
+ * @函数名称: osTaskExitIRQ
+ *
+ * @函数功能: 退出中断
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osTaskExitIRQ()				TaskSwitchState.ISRFlag -= 1;
+/*
+ *
+ * @函数名称: osTaskErrorDebug
+ *
+ * @函数功能: 进入中断
+ *
+ * @输入参数: 退出中断	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
 
 #define osTaskErrorDebug 		osDebugError
 
-#define osTaskDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
 
-#define osTaskRunError_Enable 1 //任务运行时发生致命错误 1:开启Debug输出 0:关闭Debug输出
 
-#define osTaskEnterIRQ()			TaskSwitchState.ISRFlag += 1;//进入 中断
 
-#define osTaskExitIRQ()				TaskSwitchState.ISRFlag -= 1;//退出 中断
 
 
 /*
@@ -148,10 +234,10 @@ typedef 	uint32_t 	_TaskStackSize;//任务栈长度
 typedef 	uint32_t 	_TaskSemaphore;//任务信号量
 typedef 	uint32_t 	_TaskTimeWheel;//任务时间轮片
 typedef 	int8_t 		_TaskPriorityLevel;//任务优先级
-typedef		uint32_t	_PostFormT;
-typedef 	uint32_t 	_TaskAddr;
-typedef		uint32_t	_TaskRealSP;
-typedef		uint32_t	_TaskTimeFlag;
+typedef		uint32_t	_PostFormT;//任务邮箱
+typedef 	uint32_t 	_TaskAddr;//任务地址
+typedef		uint32_t	_TaskRealSP;//任务实时栈指针
+typedef		uint32_t	_TaskTimeFlag;//任务时间标志
 #if (osTaskParameterPass_Enable > 0)
 typedef     uint32_t     _TaskParameterPass;//任务传参
 #endif
@@ -163,21 +249,21 @@ typedef     uint16_t      _TaskOccupyRatio;//任务占用比
 
 typedef struct
 {
-	_TaskRealSP			RealSP;	//任务实时栈指针
-	_TaskRealSP			RealSPb;	//任务实时栈指针
-	_TaskID				ID;		//任务ID
-	_TaskName*			Name; 	//任务名称
-	_TaskConfig 		Config;  	//任务控制量	
+	_TaskRealSP			RealSP;				//任务实时栈指针
+	_TaskRealSP			RealSPb;			//任务实时栈指针
+	_TaskID				ID;					//任务ID
+	_TaskName*			Name; 				//任务名称
+	_TaskConfig 		Config;  			//任务控制量	
 #ifdef osSignalMutual_Enable
-	_TaskPriorityLevel	PriorityLevelb;   //任务备用优先级
+	_TaskPriorityLevel	PriorityLevelb;   	//任务备用优先级
 #endif
 //#ifdef osPost_Enable
-	_PostFormT			PF;		//任务邮箱
+	_PostFormT			PF;					//任务邮箱
 //#endif
-	_TaskTimeWheel 		TaskTimeWheel;	//任务时间轮片
-	_TaskPriorityLevel 	PriorityLevel;	//任务优先级
-	_TaskAddr*			Addr;		//任务地址
-	_TaskTimeFlag		TimeFlag;	//任务时间标志
+	_TaskTimeWheel 		TaskTimeWheel;			//任务时间轮片
+	_TaskPriorityLevel 	PriorityLevel;			//任务优先级
+	_TaskAddr*			Addr;					//任务地址
+	_TaskTimeFlag		TimeFlag;			//任务时间标志
 #if (osTaskParameterPass_Enable > 0)
 	_TaskParameterPass*  ParameterPass;    //任务传参	
 #endif
@@ -306,28 +392,28 @@ void osTaskNext(void);
  *
  * @函数功能: 任务毫秒级阻塞延时
  *
- * @输入参数: ms	-	要延时的时长	
+ * @输入参数: ms	要延时的时长	
  *
- * @返 回 值: 0: 完成延时
+ * @返 回 值: 无
  *
  * @注    释: 无
  *
  */
-osErrorValue osTaskDelayMs(uint32_t ms);
+void osTaskDelayMs(uint32_t ms);
 /*
  *
  * @函数名称: osTaskDelayUs
  *
  * @函数功能: 任务微秒级阻塞延时
  *
- * @输入参数: us	-	要延时的时长
+ * @输入参数: us	要延时的时长
  *
- * @返 回 值: 0: 完成延时
+ * @返 回 值: 无
  *
  * @注    释: 无
  *
  */
-osErrorValue osTaskDelayUs(uint32_t us);
+void osTaskDelayUs(uint32_t us);
 
 //extern osErrorValue osTaskSwitch_State(void);
 ///*

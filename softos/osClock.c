@@ -133,7 +133,7 @@ void osClockTimePulse(void)
     }
     for(_tr0 = NULL;_tr0 < TaskSwitchState.TaskListMax;_tr0++){//根据任务最大活动量，进行遍历
 		/*----------------------------------延时---------------------------------------*/
-        if((TaskList[_tr0].TaskHandle -> Config) == Task_State_Up_DT){//这个任务是延时挂起(等待态)，才进入
+        if(TaskList[_tr0].TaskHandle -> Config == Task_State_Up_DT){//这个任务是延时挂起(等待态)，才进入
             TaskList[_tr0].TaskHandle -> TimeFlag--;//把这个任务时间标志中内容减一
             if(TaskList[_tr0].TaskHandle -> TimeFlag == 0){	//当这个任务时间标志中内容为零时
                 if(TaskSwitchState.SwitchState != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)

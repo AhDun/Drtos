@@ -131,9 +131,7 @@ uint32_t* osPostReadWait(void)
 {
 	if(RunTaskHandle -> PF == 0){//没有邮件,进行等待
 		while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询任务可切换态,如果是不可切换,无限循环,直到可切换态
-		//RunTaskHandle -> Config &= TIT_Task_State_TC_RST;//任务的状态位复位
-		RunTaskHandle -> Config = Task_State_Up_PT;//修改为邮件挂起(等待态)
-		osTaskSwitch_Enable();//触发异常,进行任务切换
+		osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_Up_PT);//触发异常,进行任务切换
 	}
 	return (osPostRead());//通过非阻塞式读取邮件
 }

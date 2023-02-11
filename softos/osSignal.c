@@ -206,15 +206,13 @@ static osErrorValue osSignalWaitToken(_Signal* ST)
 					TaskInfoTable_Buf -> Config = Task_State_Up_SI;
 					return (OK);
 				}
-				RunTaskHandle -> Config = Task_State_Up_SI;  //修改为信号挂起(等待态)
-				osTaskSwitch_Enable();//触发异常,进行任务切换
+				osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_Up_SI);//触发异常,进行任务切换 //修改为信号挂起(等待态)
 				return (OK);
 			}
 			NextAddr_Buf = (_NextAddr*)*NextAddr_Buf;
 		}
 		*NextAddr_Buf = (_NextAddr)SemaphoreToken_Buf;
-		RunTaskHandle -> Config = Task_State_Up_SI;  //修改为信号挂起(等待态)
-		osTaskSwitch_Enable();//触发异常,进行任务切换
+		osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_Up_SI);//触发异常,进行任务切换 //修改为信号挂起(等待态)
 		return(OK);
 	}
 }

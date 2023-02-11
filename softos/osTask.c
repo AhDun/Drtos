@@ -29,13 +29,11 @@
 #include "osTask.h"
 
 _TaskSwitchState TaskSwitchState;//任务调度状态表
-_TaskHandle*	RunTaskHandle;//当前正在运行任务的信息表
 _TaskList TaskList[TaskListLength];//任务轮询表
 
 _TaskHandle*	TaskHandle_Main;
 _TaskHandle*	TaskHandle_SIRQ;
-
-
+_TaskHandle*	RunTaskHandle;//当前正在运行任务的句柄
 
 
 /*
@@ -365,25 +363,22 @@ osErrorValue  osTaskLogout_Static(_TaskHandle* TaskHandle)
  *
  * @输入参数: ms(延时时长，单位毫秒)	
  *
- * @返 回 值: 0: 时间阻塞成功
+ * @返 回 值: 无
  *
  * @注    释: 无
  *
  */	
-osErrorValue osTaskDelayMs(uint32_t ms)
+void osTaskDelayMs(uint32_t ms)
 {
-    if(ms > 0){//不特别
+	if(ms > 0){
 		#if (osClockTimePeriod > osClockTimePeriodStandard)
 		ms = ms /(osClockTimePeriod / osClockTimePeriodStandard);	
 		#endif
 		while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//检查查询CPU是否已经被设为悬起态
 		//如果悬起了，就会返回真值，就while循环，直到未来悬起
-		//RunTaskHandle -> Config &= TIT_Task_State_TC_RST;//清除正在运行任务的状态位
-		RunTaskHandle -> Config = Task_State_Up_DT;//将正在运行任务的状态设为延时挂起(等待态)
 		RunTaskHandle -> TimeFlag = ms;
-		osTaskSwitch_Enable();
-    }
-	return (OK);
+		osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_Up_DT);
+	}
 }
 /*
  *
@@ -393,16 +388,15 @@ osErrorValue osTaskDelayMs(uint32_t ms)
  *
  * @输入参数: ms(延时时长，单位微秒)	
  *
- * @返 回 值: 0: 时间阻塞成功
+ * @返 回 值: 无
  *
  * @注    释: 无
  *
  */	
-osErrorValue osTaskDelayUs(uint32_t us)
+void osTaskDelayUs(uint32_t us)
 {
 	osTime.TTWM = osTime.TTWM + 1;
 	osTaskTimeUs();
-	return (OK);
 }
 
 
@@ -507,9 +501,8 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 									return (OK);//返回OK
 			case Task_Set_Start://立即启动任务
 									while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
-									TaskHandle -> Config = Task_State_Up_IN;//主动挂起(挂起态)
 									TaskSwitchState.DispatchNum = TaskHandle -> ID;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
-									osTaskSwitch_Enable();
+									osTaskSwitchConfig_Enable(TaskHandle,Task_State_Up_IN);
 									return (OK);//返回OK
 			case Task_Set_Up://挂起任务
 								return (OK);
@@ -520,8 +513,7 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 		switch(Pv){
 			case Task_Set_Pause://暂停任务
 									while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
-									RunTaskHandle -> Config = Task_State_DI;//设为禁用态
-									osTaskSwitch_Enable();//触发任务切换
+									osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_DI);
 									return (OK);//返回OK
 
 			case Task_Set_Cont://继续任务
@@ -529,15 +521,13 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 
 			case Task_Set_Reboot://重启任务
 									while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
-									RunTaskHandle -> Config = Task_State_RB;//
-									osTaskSwitch_Enable();//触发任务切换
+									osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_RB);//触发任务切换
 									return (OK);//返回OK
 			case Task_Set_Start://立即启动任务
 									return (OK);//返回OK
 			case Task_Set_Up://挂起任务
 								while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态								
-								RunTaskHandle -> Config = Task_State_Up_IN;
-								osTaskSwitch_Enable();//触发任务切换
+								osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_Up_IN);//触发任务切换
 								return (OK);
 
 									
@@ -564,8 +554,7 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 osErrorValue osTaskExit(void)
 {
 	while(true){
-		RunTaskHandle -> Config = Task_State_ST;//设为终止态
-		osTaskSwitch_Enable();//触发任务切换
+		osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_ST);//触发任务切换
 	}
 }
 /*
@@ -587,7 +576,7 @@ osErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA)
 		RunTaskHandle -> Addr = NewTA;
 		while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
 		RunTaskHandle -> Config = Task_State_RB;//
-		osTaskSwitch_Enable();//触发任务切换
+		osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_RB);//触发任务切换
 		return (OK);//返回OK
 
 	}else{
@@ -726,9 +715,8 @@ void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr)
 {
 	TaskHandle_SIRQ -> ParameterPass = (_TaskParameterPass*)SIRQList_Addr;
 	TaskHandle_SIRQ -> Config = Task_State_Up_IN;//主动挂起(挂起态)
-	RunTaskHandle -> Config = Task_State_Up_IN;//主动挂起(挂起态)
 	TaskSwitchState.DispatchNum = TaskHandle_SIRQ -> ID;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
-	osTaskSwitch_Enable();
+	osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_Up_IN);
 }
 /*
  *

@@ -40,7 +40,6 @@
 
 
 //系统信息{
-#define osMaximumTask 	     	64 //系统最大任务量
 #define osVersionNumber        110 //系统版本号
 #define osVersionNumberS       "v1.1.0" //系统版本号名
 #define osName                 "softos" //系统名称
@@ -82,7 +81,6 @@
 #define osInfoDebug()  		do{\
 							print("系统名称: %s\n",osName);\
 							print("系统版本号: %s\n",osVersionNumberS);\
-							print("系统最大任务量: %d\n",osMaximumTask);\
 							print("系统编译日期: %s\n",osCompileDate);\
 							print("系统编译时间: %s\n",osCompileTime);\
 							print("CPU名称: %s\n",osCPU_Name);\

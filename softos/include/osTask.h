@@ -31,7 +31,6 @@
 
 #define osTask_Enable 	//启用任务 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 
-#define TaskListLength 		osMaximumTask 	//任务轮询表长度，这个意味着最大的任务量
 
 
 //任务状态{
@@ -227,7 +226,6 @@
                                                   数据类型别名声明区
 */
 
-typedef 	uint8_t 	_TaskID;//任务ID
 typedef 	uint8_t 	_TaskName;//任务名称
 typedef 	uint8_t 	_TaskConfig;//任务控制量
 typedef 	uint32_t 	_TaskStackSize;//任务栈长度
@@ -252,7 +250,6 @@ typedef struct
 {
 	_TaskRealSP			RealSP;				//任务实时栈指针
 	_TaskRealSP			RealSPb;			//任务实时栈指针
-	_TaskID				ID;					//任务ID
 	_TaskName*			Name; 				//任务名称
 	_TaskConfig 		Config;  			//任务控制量	
 #ifdef osSignalMutual_Enable

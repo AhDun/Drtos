@@ -74,7 +74,7 @@ osErrorValue osClockInit(void)
 void osClockTimePulse(void)
 {
 	/*本函数已在中断响应入口中，下面是这个函数的副本*/
-	uint32_t _tr0;//变量初始化
+	_TaskHandle* TaskHandleListBuf;
 
 	#if (osClockTimePeriod < osClockTimePeriodStandard) //
 	if(++osTime.CTPV >= (osClockTimePeriodStandard /osClockTimePeriod)){
@@ -98,14 +98,17 @@ void osClockTimePulse(void)
     }
     if(osTime. TSRT % TaskOccupyRatioSamplingTime == 0){//系统每过一定时长，就进行占用比例统计
         PS.CTO = 0;//CPU占用量设为0
-        for(_tr0 = NULL;_tr0 < TaskSwitchState.TaskListMax;_tr0++){//对每一个任务进行遍历
-            //TaskList[_tr0].TaskHandle -> OccupyRatio = TaskList[_tr0].TaskHandle -> OccupyTime / (TaskOccupyRatioSamplingTime / 100);//计算这个任务占用比
-			TaskList[_tr0].TaskHandle -> OccupyRatio = TaskList[_tr0].TaskHandle -> OccupyTime;//计算这个任务占用比
+		TaskHandleListBuf = TaskHandleListHead;
+		do{//对每一个任务进行遍历
+			//TaskHandleListBuf -> OccupyRatio = TaskHandleListBuf -> OccupyTime / (TaskOccupyRatioSamplingTime / 100);//计算这个任务占用比
+			TaskHandleListBuf -> OccupyRatio = TaskHandleListBuf -> OccupyTime;//计算这个任务占用比
 			//计算公式：占用比 = 单位时间内的占用时长 / (单位时间 / 100)
-            PS.CTO += (TaskList[_tr0].TaskHandle -> OccupyRatio / (TaskOccupyRatioSamplingTime / 100));//计算CPU占用量
+            PS.CTO += (TaskHandleListBuf -> OccupyRatio / (TaskOccupyRatioSamplingTime / 100));//计算CPU占用量
 			//计算公式：CPU占用量 = CPU占用量 + 每个任务的占用量
-            TaskList[_tr0].TaskHandle -> OccupyTime = 0;//清空单位时间内的占用时长
-        }
+            TaskHandleListBuf -> OccupyTime = 0;//清空单位时间内的占用时长
+
+			TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
+		}while(TaskHandleListBuf != TaskHandleListHead);
 		if(osTime.TISRRT > NULL){
 			PS.CISRO = (osTime.TISRRT / (TaskOccupyRatioSamplingTime / 100));//计算CPU占用量
 			osTime.TISRRT = 0;
@@ -131,35 +134,37 @@ void osClockTimePulse(void)
              
         }
     }
-    for(_tr0 = NULL;_tr0 < TaskSwitchState.TaskListMax;_tr0++){//根据任务最大活动量，进行遍历
+	TaskHandleListBuf = TaskHandleListHead;
+	do{//对每一个任务进行遍历
 		/*----------------------------------延时---------------------------------------*/
-        if(TaskList[_tr0].TaskHandle -> Config == Task_State_Up_DT){//这个任务是延时挂起(等待态)，才进入
-            TaskList[_tr0].TaskHandle -> TimeFlag--;//把这个任务时间标志中内容减一
-            if(TaskList[_tr0].TaskHandle -> TimeFlag == 0){	//当这个任务时间标志中内容为零时
+        if(TaskHandleListBuf -> Config == Task_State_Up_DT){//这个任务是延时挂起(等待态)，才进入
+            TaskHandleListBuf -> TimeFlag--;//把这个任务时间标志中内容减一
+            if(TaskHandleListBuf -> TimeFlag == 0){	//当这个任务时间标志中内容为零时
                 if(TaskSwitchState.SwitchState != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)
-                    //TaskList[_tr0].TaskHandle  -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
-                    TaskList[_tr0].TaskHandle  -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
+                    //TaskHandleListBuf  -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
+                    TaskHandleListBuf  -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
                 }
-                else if(TaskList[_tr0].TaskHandle -> PriorityLevel <  RunTaskHandle -> PriorityLevel){//如果这个任务高于当前工作运行任务栏的优先级，就占用
-                    //TaskList[_tr0].TaskHandle -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
-                    TaskList[_tr0].TaskHandle -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
+                else if(TaskHandleListBuf -> PriorityLevel <  RunTaskHandle -> PriorityLevel){//如果这个任务高于当前工作运行任务栏的优先级，就占用
+                    //TaskHandleListBuf -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
+                    TaskHandleListBuf -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
                     //RunTaskHandle -> Config &= TIT_Task_State_TC_RST;//清除正在运行任务的状态位
                     RunTaskHandle -> Config = Task_State_Up_TD;//将正在运行任务的状态设为轮片挂起(挂起态)
                     if(TaskSwitchState.SwitchState == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
-                        TaskSwitchState.DispatchNum = _tr0;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
+                        TaskSwitchState.NextTaskHandle = TaskHandleListBuf;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
                         osTaskSwitch_Enable(); //触发任务切换
                     }
                     else{//如果已经悬起了
-                        TaskList[_tr0].TaskHandle -> TimeFlag = 1;//当前正在运行的任务的轮片时间置为一，意味着轮片时间向后推迟一秒
+                        TaskHandleListBuf -> TimeFlag = 1;//当前正在运行的任务的轮片时间置为一，意味着轮片时间向后推迟一秒
                     }
                 }
                 else{//意外之料的情况
-                        //TaskList[_tr0].TaskHandle -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
-                        TaskList[_tr0].TaskHandle -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
+                        //TaskHandleListBuf -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
+                        TaskHandleListBuf -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
                 }
             }
         }
-    }
+		TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
+	}while(TaskHandleListBuf != TaskHandleListHead);
 	#if (osClockTimePeriod < osClockTimePeriodStandard)
 	}
 	#endif

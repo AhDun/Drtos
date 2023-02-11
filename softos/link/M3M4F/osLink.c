@@ -266,6 +266,9 @@ __asm void PendSV_Handler(void)
     BX	  LR
 	NOP
 	NOP
+#if (osFPU_Enable > 0) //∆Ù”√¡ÀFPU
+	NOP
+#endif
 }
 
 

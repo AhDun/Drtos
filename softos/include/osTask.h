@@ -238,6 +238,7 @@ typedef		uint32_t	_PostFormT;//任务邮箱
 typedef 	uint32_t 	_TaskAddr;//任务地址
 typedef		uint32_t	_TaskRealSP;//任务实时栈指针
 typedef		uint32_t	_TaskTimeFlag;//任务时间标志
+typedef		uint32_t	_NextTaskHandle;//任务时间标志
 #if (osTaskParameterPass_Enable > 0)
 typedef     uint32_t     _TaskParameterPass;//任务传参
 #endif
@@ -271,7 +272,8 @@ typedef struct
 #if (osPerformanceStatistics_Enable > 0) //开启了性能统计
     _TaskOccupyTime      OccupyTime;    //任务占用时长
     _TaskOccupyRatio     OccupyRatio;    //任务占用比
-#endif				
+#endif			
+	_NextTaskHandle*	 NextTaskHandle;	
 } _TaskHandle;
 //}
 
@@ -290,9 +292,9 @@ typedef		uint8_t		_TaskISRFlag;
 typedef struct
 {
 	_SwitchState	    		SwitchState;//任务调度状态
-	_TaskDispatchNum			DispatchNum;//任务调度计数
-    _TaskListMaximumActivity	TaskListMax;//任务最大活动量
 	_TaskISRFlag				ISRFlag;//中断状态
+	_TaskHandle* 				NextTaskHandle;
+	
     
 }_TaskSwitchState;
 //}
@@ -301,11 +303,11 @@ typedef _TaskAddr _SIRQList;
 
 
 extern _TaskHandle*	RunTaskHandle;//当前正在运行的任务表指针
-extern _TaskList TaskList[TaskListLength];//任务轮询表
 extern _TaskSwitchState TaskSwitchState;//任务调度状态表
 
 extern _TaskHandle*	TaskHandle_Main;
 
+extern _TaskHandle* 	TaskHandleListHead;
 
 
 	

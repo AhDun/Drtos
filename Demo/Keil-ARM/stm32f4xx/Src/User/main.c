@@ -50,6 +50,7 @@ int main(void)
 {
 /*--------------------------------------demo---------------------------------------------------------*/
 	u32 _tr0;
+
 	osInit();
 
 
@@ -101,13 +102,13 @@ int main(void)
 	);
 
 
-
 	//osTaskLogout(TaskHandle_Task4);
 
 	while(1){
 		for(_tr0 = 0;_tr0 < 500;_tr0++){
 			osPostReadWait();
 		}
+		//osTaskMonitor();
 //		for(_tr0 = 10;_tr0 < MemTank_Max;_tr0++){
 //			MemoryPool[_tr0] = _tr0;
 //			osTaskDelayMs(10);

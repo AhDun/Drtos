@@ -62,7 +62,8 @@ void Task1_Func(char* a)
 
 void Task2_Func(void)
 {
-	int a = 0;
+	_TaskHandle* TaskHandleListBuf = TaskHandleListHead;
+	u8 a;
 	u8* buf = osMemoryMalloc(50);
 	
 
@@ -95,13 +96,14 @@ void Task2_Func(void)
 		LCD_ShowString(10,180,tftlcd_data.width,tftlcd_data.height,16,buf);
 		LCD_ShowString(10,210,tftlcd_data.width,tftlcd_data.height,16,"------------TaskList--------------");
 		LCD_ShowString(10,240,tftlcd_data.width,tftlcd_data.height,16,"Name  CPU  Class ");
-        for(a = 0;a < TaskSwitchState.TaskListMax;a++){
-
+		a = 0;
+		do{
 			osMemoryReset(buf,' ');
-			sprint((char *)buf,"%s  %d%ms  %d ",TaskList[a].TaskHandle -> Name,TaskList[a].TaskHandle -> OccupyRatio,TaskList[a].TaskHandle -> PriorityLevel);
+			sprint((char *)buf,"%s  %d%ms  %d ",TaskHandleListBuf -> Name,TaskHandleListBuf -> OccupyRatio,TaskHandleListBuf -> PriorityLevel);
 			LCD_ShowString(10,270+(a*25),tftlcd_data.width,tftlcd_data.height,16,buf);
-		}
-		osTaskMonitor();
+			a++;
+			TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
+		}while(TaskHandleListBuf != TaskHandleListHead);
 		osSignalUseWait(timebz);
 	}
 }

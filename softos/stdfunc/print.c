@@ -155,7 +155,7 @@ static void _printSring(int p,int* s)
 			_spchar(*(char*)p,s);
 		}
 		else{
-			break;
+			return;
 		}
 		p++;
 	}

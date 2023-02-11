@@ -146,7 +146,7 @@ void Task4_Func(u32* a)
 {
 	u8 b=0;
 	u8 c;
-	//LED_Init();
+	LED_Init();
 	while(1){
 		for(c = 0; c < 50; c++){
 			LED1 = 0;

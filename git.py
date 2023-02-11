@@ -78,8 +78,8 @@ def git():
     print("1.首次提交与仓库推送")
     print("2.本地提交")
     print("3.仓库推送")
-    print("4.回滚上一个版本")
-    print("5.回滚到指定版本")
+    print("W.回滚上一个版本")
+    print("E.回滚到指定版本")
     print("R.删除本地git")
     print("S.更改仓库地址")
     print("---------------")
@@ -99,9 +99,9 @@ def git():
         shell(commit(input("\n请输入,提交备注：")))
     elif i == "3":
         shell(push())
-    elif i == "4":
+    elif i == "W":
         shell(reseth())
-    elif i == "5":
+    elif i == "E":
         shell(resets(input("\n请输入,指定版本哈希：")))
     elif i == "R":
         shell(rm())

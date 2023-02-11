@@ -176,23 +176,17 @@ _TaskHandle* osTaskLogin_Static(
 #endif
 #if (osFPU_Enable > 0) //启用了FPU
 	if(TSS < 320 || (TSS % 2) != 0){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
-#if (osCriticalToProtect_Enable > 0)//启用了临界保护
-		osProtect_DISABLE();//退出保护
-#endif
 		#if (osTaskDebug_Enable > 0)
 		osTaskErrorDebug("注册任务时任务栈内存太小 %s\n" ,TN);
 		#endif
-		return (NULL);//返回错误
+		goto osTaskLogin_Static_Error;
 	}
 #else
     if(TSS < 200 || (TSS % 2) != 0){//如果没有启用了浮点硬件，至少任务栈大小也应大于50*4字节
-#if (osCriticalToProtect_Enable > 0)//启用了临界保护
-		osProtect_DISABLE();//退出保护
-#endif
 		#if (osTaskDebug_Enable > 0)
 		osTaskErrorDebug("注册任务时任务栈内存太小 %s\n" ,TN);
 		#endif
-		return (NULL);//返回错误
+		goto osTaskLogin_Static_Error;
 	}
 #endif
 	TaskHandle -> Name = TN;//写入任务名称
@@ -223,8 +217,6 @@ _TaskHandle* osTaskLogin_Static(
     }
 
 
-
-	
 
 	if(TaskHandleListHead == NULL){
 		TaskHandleListHead = TaskHandle;
@@ -261,6 +253,14 @@ _TaskHandle* osTaskLogin_Static(
 	osProtect_DISABLE();//退出保护
 #endif
 	return (TaskHandle);//返回
+
+osTaskLogin_Static_Error:
+#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+	osProtect_DISABLE();//退出保护
+#endif
+	return (NULL);//返回错误
+
+
 }
 /*
  *
@@ -284,6 +284,7 @@ osErrorValue  osTaskLogout(_TaskHandle* TaskHandle)
 		#endif
 		return (Error);//发生错误，返回错误
 	}
+	
 	if(osMemoryFree(TaskHandle) != OK){
 		#if (osTaskDebug_Enable > 0)
 		osTaskErrorDebug("释放任务: 内存释放失败\n");
@@ -308,16 +309,42 @@ osErrorValue  osTaskLogout(_TaskHandle* TaskHandle)
  */	
 osErrorValue  osTaskLogout_Static(_TaskHandle* TaskHandle)
 {
-
+	_TaskHandle* TaskHandleList_Buf1 = TaskHandleListHead;
+	_TaskHandle* TaskHandleList_Buf2;
     #if (osCriticalToProtect_Enable > 0)//启用了临界保护
 	osProtect_ENABLE();//进入保护
     #endif
-
-
+	TaskHandleList_Buf1 = TaskHandleListHead;
+	if(TaskHandle == TaskHandleListHead){
+		while(TaskHandleList_Buf1 -> NextTaskHandle != (_NextTaskHandle*)TaskHandleListHead){
+			TaskHandleList_Buf1 = (_TaskHandle*)TaskHandleList_Buf1 -> NextTaskHandle;
+		}
+		TaskHandleListHead = (_TaskHandle*)TaskHandleListHead -> NextTaskHandle;
+		TaskHandleList_Buf1 -> NextTaskHandle = (_NextTaskHandle*)TaskHandleListHead;
+		goto osTaskLogout_Static_OK;
+	}else{
+		do{
+			TaskHandleList_Buf2 = TaskHandleList_Buf1;
+			TaskHandleList_Buf1 = (_TaskHandle*)TaskHandleList_Buf1 -> NextTaskHandle;
+			if(TaskHandleList_Buf1 == TaskHandle){
+				TaskHandleList_Buf2 -> NextTaskHandle = TaskHandleList_Buf1 -> NextTaskHandle;
+				goto osTaskLogout_Static_OK;
+			}
+		}while(TaskHandleList_Buf1 != TaskHandleListHead);
+		goto osTaskLogout_Static_Error;
+	}
+	
+osTaskLogout_Static_OK:
   #if (osCriticalToProtect_Enable > 0)//启用了临界保护
 	osProtect_DISABLE();//退出保护
   #endif
 	return (OK);//无异常，返回OK
+osTaskLogout_Static_Error:
+  #if (osCriticalToProtect_Enable > 0)//启用了临界保护
+	osProtect_DISABLE();//退出保护
+  #endif
+	return (Error);//无异常，返回OK
+
 }
 
 /*

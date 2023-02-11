@@ -102,13 +102,13 @@ int main(void)
 	);
 
 
-	//osTaskLogout(TaskHandle_Task4);
+	//osTaskLogout(TaskHandle_Task3);
 
 	while(1){
 		for(_tr0 = 0;_tr0 < 500;_tr0++){
 			osPostReadWait();
 		}
-		//osTaskMonitor();
+		osTaskMonitor();
 //		for(_tr0 = 10;_tr0 < MemTank_Max;_tr0++){
 //			MemoryPool[_tr0] = _tr0;
 //			osTaskDelayMs(10);

@@ -161,7 +161,7 @@
  *
  * @注    释: 无
 */
-#define osTaskSwitch_Enable() 			do{TaskSwitchState.SwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);
+#define osTaskSwitch_Enable() 			do{TaskSwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);
 /*
  *
  * @函数名称: osTaskSwitchConfig_Enable
@@ -174,7 +174,7 @@
  *
  * @注    释: 无
 */
-#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b;TaskSwitchState.SwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);
+#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b;TaskSwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);
 /*
  *
  * @函数名称: osTaskEnterIRQ
@@ -187,7 +187,7 @@
  *
  * @注    释: 无
 */
-#define osTaskEnterIRQ()			TaskSwitchState.ISRFlag += 1;
+#define osTaskEnterIRQ()			ISRFlag += 1;
 /*
  *
  * @函数名称: osTaskExitIRQ
@@ -200,7 +200,7 @@
  *
  * @注    释: 无
 */
-#define osTaskExitIRQ()				TaskSwitchState.ISRFlag -= 1;
+#define osTaskExitIRQ()				ISRFlag -= 1;
 /*
  *
  * @函数名称: osTaskErrorDebug
@@ -219,12 +219,6 @@
 
 
 
-
-
-
-/*
-                                                  数据类型别名声明区
-*/
 
 typedef 	uint8_t 	_TaskName;//任务名称
 typedef 	uint8_t 	_TaskConfig;//任务控制量
@@ -286,25 +280,21 @@ typedef		uint8_t		_TaskListMaximumActivity;//任务最大活动量
 typedef 	uint8_t		_TaskDispatchNum;//任务调度状态
 typedef     uint8_t      _SwitchState;//任务调度计数
 typedef		uint8_t		_TaskISRFlag;
-typedef struct
-{
-	_SwitchState	    		SwitchState;//任务调度状态
-	_TaskISRFlag				ISRFlag;//中断状态
-	_TaskHandle* 				NextTaskHandle;
-	
-    
-}_TaskSwitchState;
+
 //}
 
 typedef _TaskAddr _SIRQList;
 
-
+extern _TaskISRFlag				ISRFlag;//中断状态
 extern _TaskHandle*	RunTaskHandle;//当前正在运行的任务表指针
-extern _TaskSwitchState TaskSwitchState;//任务调度状态表
+
 
 extern _TaskHandle*	TaskHandle_Main;
 
 extern _TaskHandle* 	TaskHandleListHead;
+extern _TaskHandle* 	NextTaskHandle;
+
+extern 	_SwitchState	TaskSwitchState;//任务调度状态
 
 
 	

@@ -40,6 +40,7 @@ void Task4_Func(u32* a);
 void Task5_Func(u32* a);
 
 void RTC_Func(void);
+void Time_Func(void);
 
 
 

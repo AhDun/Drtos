@@ -65,8 +65,8 @@ osErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 		if(TaskHandle -> PriorityLevel <  RunTaskHandle -> PriorityLevel){//如果这个任务高于当前工作运行任务栏的优先级，就占用
 			TaskHandle -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
 			RunTaskHandle -> Config = Task_State_Up_TD;//将正在运行任务的状态设为轮片挂起(挂起态)
-			if(TaskSwitchState.SwitchState == TaskSwitch_Ready){
-				TaskSwitchState.NextTaskHandle = TaskHandle;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
+			if(TaskSwitchState == TaskSwitch_Ready){
+				NextTaskHandle = TaskHandle;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
 				osTaskSwitch_Enable();//触发任务切换
 			} 
 		}else{
@@ -130,7 +130,7 @@ uint32_t* osPostRead(void)
 uint32_t* osPostReadWait(void)
 {
 	if(RunTaskHandle -> PF == 0){//没有邮件,进行等待
-		while(TaskSwitchState.SwitchState != TaskSwitch_Ready);//查询任务可切换态,如果是不可切换,无限循环,直到可切换态
+		while(TaskSwitchState != TaskSwitch_Ready);//查询任务可切换态,如果是不可切换,无限循环,直到可切换态
 		osTaskSwitchConfig_Enable(RunTaskHandle,Task_State_Up_PT);//触发异常,进行任务切换
 	}
 	return (osPostRead());//通过非阻塞式读取邮件

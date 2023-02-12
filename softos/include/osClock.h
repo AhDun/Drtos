@@ -33,6 +33,10 @@
 
 #define TaskOccupyRatioSamplingTime 		1000 //任务统计时间，单位ms
 
+#define STimeConfig_Restart		0x01
+#define STimeConfig_NRestartL	0x02
+#define STimeConfig_NRestart	0x03
+
 #define osClockGetTimePulse()		osTime.TSRT//获取系统的时钟数
 
 
@@ -76,10 +80,37 @@ typedef struct
 	_TaskSwitchSpeedUs	TSSU;//任务切换速度测试
 
 }_PerformanceStatistics;
+
+//软件定时器{
+typedef	 uint8_t		_STimeName;
+typedef	 uint32_t		_STimeFlag;
+typedef	 uint8_t		_STimeConfig;
+typedef	 uint32_t		_STimeAddr;
+typedef struct
+{
+	_NextAddr	  DownAddr;//下一个邮件的地址
+	_STimeName* 	Name;
+	_STimeConfig  	Config;
+	_STimeAddr*	  	Addr;
+	_STimeFlag		Flag;
+}_STime;
+
+typedef struct
+{
+	_NextAddr	  DownAddr;//下一个邮件的地址
+	_STimeName* 	Name;
+	_STimeConfig  	Config;
+	_STimeAddr*	  	Addr;
+	_STimeFlag		Flag;
+	_STimeFlag		Flagb;
+}_STimes;
 //}
 #endif
 
 extern _PerformanceStatistics PS;//性能统计
+
+extern _NextAddr STimeListHead;
+extern _TaskHandle* TaskHandle_STime;
 
 extern osTIME osTime;
 
@@ -111,6 +142,12 @@ osErrorValue osClockInit(void);
  *
  */
 void osClockTimePulse(void);
+
+
+_STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr);
+_STimes* osTimeLogin(_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr);
+osErrorValue osSTimeInit(void);
+void osSTime(void);
 
 
 #endif

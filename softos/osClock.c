@@ -34,6 +34,8 @@
                                                   变量初始化区
 */
 osTIME osTime;//系统时间
+_NextAddr STimeListHead;
+_TaskHandle* TaskHandle_STime;
 #if (osPerformanceStatistics_Enable > 0)
 _PerformanceStatistics PS;//性能统计
 #endif
@@ -90,10 +92,10 @@ void osClockTimePulse(void)
 	#endif
      /*----------------------------------统计---------------------------------------*/
 	#if (osPerformanceStatistics_Enable > 0) //开启了性能统计
-	if(TaskSwitchState.ISRFlag > NULL){
+	if(ISRFlag > NULL){
 		osTime.TISRRT++;
 	}
-	else if(TaskSwitchState.SwitchState == TaskSwitch_Ready){//任务调度状态为未调度，进行计时
+	else if(TaskSwitchState == TaskSwitch_Ready){//任务调度状态为未调度，进行计时
         RunTaskHandle -> OccupyTime++;//任务占用时长计数
     }
     if(osTime. TSRT % TaskOccupyRatioSamplingTime == 0){//系统每过一定时长，就进行占用比例统计
@@ -119,13 +121,13 @@ void osClockTimePulse(void)
     }
 	#endif
     /*----------------------------------轮片---------------------------------------*/
-    if(osTime.TTWM > 0 && TaskSwitchState.SwitchState == TaskSwitch_Ready && TaskSwitchState.ISRFlag == NULL){ //时间轮片
+    if(osTime.TTWM > 0 && TaskSwitchState == TaskSwitch_Ready && ISRFlag == NULL){ //时间轮片
 	   //当前正在运行的任务的轮片时间大于0并且调度状态为未调度状态
         osTime.TTWM--;//当前正在运行的任务的轮片时间减一
         if(osTime.TTWM == 0){//当目前正在运行的任务的轮片时间为零时
             //RunTaskHandle -> Config &= TIT_Task_State_TC_RST;//清除正在运行的任务的状态位
             RunTaskHandle -> Config = Task_State_Up_TD;//将正在运行的任务的状态设为位轮片挂起(挂起态)
-            if(TaskSwitchState.SwitchState == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
+            if(TaskSwitchState == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
                 osTaskSwitch_Enable();//触发任务切换
             }
             else{//如果已经悬起了
@@ -140,21 +142,16 @@ void osClockTimePulse(void)
         if(TaskHandleListBuf -> Config == Task_State_Up_DT){//这个任务是延时挂起(等待态)，才进入
             TaskHandleListBuf -> TimeFlag--;//把这个任务时间标志中内容减一
             if(TaskHandleListBuf -> TimeFlag == 0){	//当这个任务时间标志中内容为零时
-                if(TaskSwitchState.SwitchState != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)
+                if(TaskSwitchState != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)
                     //TaskHandleListBuf  -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
                     TaskHandleListBuf  -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
                 }
                 else if(TaskHandleListBuf -> PriorityLevel <  RunTaskHandle -> PriorityLevel){//如果这个任务高于当前工作运行任务栏的优先级，就占用
                     //TaskHandleListBuf -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
                     TaskHandleListBuf -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
-                    //RunTaskHandle -> Config &= TIT_Task_State_TC_RST;//清除正在运行任务的状态位
-                    RunTaskHandle -> Config = Task_State_Up_TD;//将正在运行任务的状态设为轮片挂起(挂起态)
-                    if(TaskSwitchState.SwitchState == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
-                        TaskSwitchState.NextTaskHandle = TaskHandleListBuf;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
+                    if(TaskSwitchState == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
+                        NextTaskHandle = TaskHandleListBuf;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
                         osTaskSwitch_Enable(); //触发任务切换
-                    }
-                    else{//如果已经悬起了
-                        TaskHandleListBuf -> TimeFlag = 1;//当前正在运行的任务的轮片时间置为一，意味着轮片时间向后推迟一秒
                     }
                 }
                 else{//意外之料的情况
@@ -170,8 +167,75 @@ void osClockTimePulse(void)
 	#endif
 }
 
+_STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr)
+{
+	_STimes* STime_Buf = (_STimes*)ListAddr;
+	STime_Buf -> Name = Name;
+	STime_Buf -> Addr = (_STimeAddr*)Addr;
+	STime_Buf -> Flag = Flag;
+	STime_Buf -> Config = Config;
+	if(Config < STimeConfig_NRestartL){
+		STime_Buf -> Flagb = Flag;
+	}
+	if(uLinkListTailWrtie(&STimeListHead,(uint32_t*)ListAddr) == OK){
+		return STime_Buf;
+	}else{
+		return NULL;
+	}
+}
 
 
+_STimes* osTimeLogin(_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr)
+{
+	uint8_t* Addr1;
+	if(Config >= STimeConfig_NRestartL){
+		Addr1 = osMemoryMalloc(sizeof(_STime));//为任务表分配内存
+	}else{
+		Addr1 = osMemoryMalloc(sizeof(_STimes));//为任务表分配内存
+	}
+//	if(Addr1 == NULL){//如果为空，就说明内存分配失败
+//		#if (osTaskDebug_Enable > 0)
+//		osTaskErrorDebug("注册任务时,任务分配内存失败 %s\n",TN);
+//		#endif
+//		return (NULL);//返回错误
+//	}
+	return osTimeLogin_Static(Addr1, Name, Flag, Config, Addr);
+}
 
+osErrorValue osSTimeInit(void)
+{
+	STimeListHead = NULL;
+	TaskHandle_STime = osTaskLogin("STime",osSTime,400,TaskTimeWheelDefault,-126,(void*)0,Task_Set_Default); 
+	if(TaskHandle_STime == NULL){
+
+		#if (osTaskDebug_Enable > 0)
+		osTaskErrorDebug("SIRQ 任务创建失败\n");
+		#endif
+		return (Error);//返回Error
+	}
+	return (OK);
+}
+
+void osSTime(void)
+{
+	_STimes* STime_Buf;
+	while(1){
+		STime_Buf = (_STimes*)STimeListHead;
+		while(STime_Buf != NULL){
+			STime_Buf -> Flag -= 1;
+			if(STime_Buf -> Flag == 0){
+				Jump((uint32_t*)STime_Buf -> Addr);
+				switch(STime_Buf -> Config){
+					case STimeConfig_Restart:STime_Buf -> Flag =  STime_Buf -> Flagb;break;
+					case STimeConfig_NRestartL: break;
+					case STimeConfig_NRestart: break;
+				}
+			}
+			STime_Buf = (_STimes*)STime_Buf -> DownAddr;
+		}
+		osTaskDelayMs(1);
+	}
+	
+}
 
 

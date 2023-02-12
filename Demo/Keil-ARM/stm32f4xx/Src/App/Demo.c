@@ -46,6 +46,8 @@ void Task1_Func(char* a)
 
 	osTaskSIRQLogin(&SIRQ_RTC[0],RTC_Func);
 
+	osTimeLogin("RPost",1000,STimeConfig_Restart,Time_Func);
+
 	while(1) 
 	{
 		osSignalUseWait(timebz);
@@ -178,10 +180,15 @@ void Task4_Func(u32* a)
 
 void RTC_Func(void)
 {
+	osSignalFree(timebz);
+	osSignalFree(timebz);
+	osSignalFree(timebz);
+	
+}
+
+void Time_Func(void)
+{
 	u32 _tr0;
-	osSignalFree(timebz);
-	osSignalFree(timebz);
-	osSignalFree(timebz);
 	for(_tr0 = 0;_tr0 < 500;_tr0++){
 		osPostSend((u32*)"hello",TaskHandle_Main);
 	}

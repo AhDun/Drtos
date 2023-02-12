@@ -42,6 +42,7 @@ void Task1_Func(char* a)
 	LCD_ShowString(10,10,tftlcd_data.width,tftlcd_data.height,16,"softos Demo");
 	RTC_Config();
 	RTC_Set_WakeUp(RTC_WakeUpClock_CK_SPRE_16bits,0);//配置WAKE UP中断,1秒钟中断一次
+	RTC_Set_Time(0,0,0,0);
 	timebz = osSignalLogin(Signal_Count);
 
 	osTaskSIRQLogin(&SIRQ_RTC[0],RTC_Func);
@@ -53,7 +54,7 @@ void Task1_Func(char* a)
 		osSignalUseWait(timebz);
         RTC_GetTime(RTC_Format_BIN,&RTC_TimeStruct);
 		osMemoryReset(buf,' ');
-        sprint((char *)buf,"RTC:%2d:%2d:%2d",RTC_TimeStruct.RTC_Hours,RTC_TimeStruct.RTC_Minutes,RTC_TimeStruct.RTC_Seconds);
+        sprint((char *)buf,"MCU RTC:%2d:%2d:%2d",RTC_TimeStruct.RTC_Hours,RTC_TimeStruct.RTC_Minutes,RTC_TimeStruct.RTC_Seconds);
 		FRONT_COLOR=GRAYBLUE;
 		BACK_COLOR=BLACK;
 		LCD_ShowString(10,90,tftlcd_data.width,tftlcd_data.height,16,buf);	
@@ -88,14 +89,14 @@ void Task2_Func(void)
 //		}
 		osMemoryReset(buf,' ');
 		sprint((char *)buf,"Memory F: %dB P: %dB S:%d",osMemoryGetFreeValue(),osMemoryGetPassValue(),osMemorySum());
-		LCD_ShowString(10,120,tftlcd_data.width,tftlcd_data.height,16,buf);
+		LCD_ShowString(10,180,tftlcd_data.width,tftlcd_data.height,16,buf);
 
 		osMemoryReset(buf,' ');
 		sprint((char *)buf,"CPU: %d%% = T %d%% + I %d%% + S %d%%",PS.CTO+PS.CISRO+PS.CSO,PS.CTO,PS.CISRO,PS.CSO);
 		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
 		osMemoryReset(buf,' ');
-		sprint((char *)buf,"R:%d:%2d:%2d:%2d",(OsTimeGetSystemRunTime() / 1000) /86400,((OsTimeGetSystemRunTime() / 1000) /3600) % 24,((OsTimeGetSystemRunTime() / 1000) /60) % 60,(OsTimeGetSystemRunTime() / 1000) % 60);
-		LCD_ShowString(10,180,tftlcd_data.width,tftlcd_data.height,16,buf);
+		sprint((char *)buf,"OS RTC:%d:%2d:%2d:%2d",(OsTimeGetSystemRunTime() / 1000) /86400,((OsTimeGetSystemRunTime() / 1000) /3600) % 24,((OsTimeGetSystemRunTime() / 1000) /60) % 60,(OsTimeGetSystemRunTime() / 1000) % 60);
+		LCD_ShowString(10,120,tftlcd_data.width,tftlcd_data.height,16,buf);
 		LCD_ShowString(10,210,tftlcd_data.width,tftlcd_data.height,16,"------------TaskList--------------");
 		LCD_ShowString(10,240,tftlcd_data.width,tftlcd_data.height,16,"Name  CPU  Class ");
 		a = 0;

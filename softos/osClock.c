@@ -112,17 +112,17 @@ void osClockTimePulse(void)
 			//TaskHandleListBuf -> OccupyRatio = TaskHandleListBuf -> OccupyTime / (TaskOccupyRatioSamplingTime / 100);//计算这个任务占用比
 			TaskHandleListBuf -> OccupyRatio = TaskHandleListBuf -> OccupyTime;//计算这个任务占用比
 			//计算公式：占用比 = 单位时间内的占用时长 / (单位时间 / 100)
-            PS.CTO += (TaskHandleListBuf -> OccupyRatio / (TaskOccupyRatioSamplingTime / 100));//计算CPU占用量
+            PS.CTO += TaskHandleListBuf -> OccupyRatio / (TaskOccupyRatioSamplingTime / 100);//计算CPU占用量
 			//计算公式：CPU占用量 = CPU占用量 + 每个任务的占用量
             TaskHandleListBuf -> OccupyTime = 0;//清空单位时间内的占用时长
 
 			TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
 		}while(TaskHandleListBuf != osTaskGetTaskHandleListHead());
 		if(OsTimeGetTaskISRTime() > NULL){
-			PS.CISRO = (OsTimeGetTaskISRTime() / (TaskOccupyRatioSamplingTime / 100));//计算CPU占用量
+			PS.CISRO = OsTimeGetTaskISRTime() / (TaskOccupyRatioSamplingTime / 100);//计算CPU占用量
 			OsTimeGetTaskISRTime() = 0;
 		}
-		PS.CSO = ((PS.TSC * PS.TSSU) / (TaskOccupyRatioSamplingTime)) / 10;
+		PS.CSO = (PS.TSC * PS.TSSU) / (TaskOccupyRatioSamplingTime /100) /1000;
 		PS.TSCb = PS.TSC;
 		PS.TSC = 0;
     }

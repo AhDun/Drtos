@@ -94,11 +94,11 @@ typedef struct
  */
 _Signal* osSignalLogin(_SignalType SP);
 #else
-osErrorValue osSignalLogin(_Signal* ST,_SignalType SP);
+OsErrorValue osSignalLogin(_Signal* ST,_SignalType SP);
 #endif
 
-osErrorValue osSignalUseWait(_Signal* ST);
-osErrorValue osSignalFree(_Signal* ST);
+OsErrorValue osSignalUseWait(_Signal* ST);
+OsErrorValue osSignalFree(_Signal* ST);
 
 
 #endif

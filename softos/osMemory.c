@@ -40,7 +40,7 @@ _MemoryInfoHandle	MemoryInfoHandle;
 
 
 
-osErrorValue  osMemoryInit(void)
+OsErrorValue  osMemoryInit(void)
 {
 	#if (osMemoryInitReset_Enable > 0)
 	uint32_t addr;
@@ -87,12 +87,12 @@ uint32_t osMemoryGetPassValue(void)
 {
 	return osMemoryGetFreeValue();
 }
-osErrorValue osMemoryFree(void* addr)
+OsErrorValue osMemoryFree(void* addr)
 {
 	return (OK);
 }
 
-osErrorValue osMemorySum(void)
+OsErrorValue osMemorySum(void)
 {
 	return (100);
 }
@@ -226,7 +226,7 @@ void* osMemoryReset(void* addr,uint8_t data)
 }
 
 
-osErrorValue osMemoryFree(void* addr)
+OsErrorValue osMemoryFree(void* addr)
 {
 	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)addr - sizeof(MemoryStruct));
 	#if( osMemoryFreeTest_Enable > 0)
@@ -323,7 +323,7 @@ uint32_t osMemoryGetPassValue(void)
 	return (Vaule >= sizeof(MemoryStruct)? Vaule - sizeof(MemoryStruct) : NULL);
 }
 
-osErrorValue osMemorySum(void)
+OsErrorValue osMemorySum(void)
 {
 	_MemoryUnit* MemoryAddr = MemoryInfoHandle -> HeadAddr;
 	MemoryStruct* _MemoryStruct;

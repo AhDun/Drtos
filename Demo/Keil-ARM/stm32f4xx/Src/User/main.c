@@ -58,7 +58,7 @@ int main(void)
 	//osMemoryMalloc(25000);
 //	_tr0 = -2;
 //	print("%2.2f\n\n",1.24);
-	osSTimeInit();
+
 	TaskHandle_Task1 = osTaskLogin(
 	"RTC", 			                    //任务名称
 	Task1_Func,			            //任务地址

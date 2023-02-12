@@ -37,30 +37,92 @@
 #define STimeConfig_NRestartL	0x02
 #define STimeConfig_NRestart	0x03
 
-#define osClockGetTimePulse()		osTime.TSRT//获取系统的时钟数
+/*
+ *
+ * @函数名称: osClockGetTimePulse
+ *
+ * @函数功能: 获取系统的时钟数
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osClockGetTimePulse()		osTime.TSRT
+
+
+
+
+/*
+ *
+ * @函数名称: osClockGetTimePulse
+ *
+ * @函数功能: 获取系统的时钟数
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define OsTimeGetSystemRunTime()		OsTimeSystemRunTime
+/*
+ *
+ * @函数名称: osClockGetTimePulse
+ *
+ * @函数功能: 获取系统的时钟数
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define OsTimeGetTaskISRTime()			OsTimeTaskISRTime
+
+/*
+ *
+ * @函数名称: osClockGetTimePulse
+ *
+ * @函数功能: 获取系统的时钟数
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define OsTimeGetTaskTimeWheel()			OsTimeTaskTimeWheel
+/*
+ *
+ * @函数名称: osClockGetTimePulse
+ *
+ * @函数功能: 获取系统的时钟数
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define OsTimeGetPeriodValue()			OsTimePeriodValue
 
 
 //系统时间{
 #if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
-typedef uint32_t _TotalSystemRunningTime;//系统运行时间
+typedef uint32_t _SystemRunningTime;//系统运行时间
+extern _SystemRunningTime 		OsTimeSystemRunTime;//系统运行时间
 typedef uint32_t _TaskISRRunningTime;//系统运行时间
+extern _TaskISRRunningTime		OsTimeTaskISRTime;//系统运行时长
 #endif
 typedef	uint32_t	_TaskTimeWheelMargin;//任务轮片时间
+extern _TaskTimeWheelMargin	   OsTimeTaskTimeWheel;//任务轮片时间
 #if (osClockTimePeriod < osClockTimePeriodStandard)
 typedef uint32_t _ClockTimePeriodValue; //时间周期计数
+extern _ClockTimePeriodValue      OsTimePeriodValue;//时间周期计数
 #endif
-typedef struct
-{
-	#if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
-	_TotalSystemRunningTime 	TSRT;//系统运行时间
-	_TaskISRRunningTime			TISRRT;//系统运行时长
-	#endif
-	_TaskTimeWheelMargin	   TTWM;//任务轮片时间
-	#if (osClockTimePeriod < osClockTimePeriodStandard)
-	_ClockTimePeriodValue      CTPV;//时间周期计数
-	#endif
-}osTIME;
-//}
+
 
 //性能统计{
 #if (osPerformanceStatistics_Enable > 0)
@@ -68,7 +130,7 @@ typedef  uint8_t  	_CPUTaskOccupy;//任务占用比
 typedef  uint8_t  	_CPUISROccupy;//中断占用比
 typedef	 uint8_t 	_CPUSwitchOccupy;//切换占用比
 typedef	 uint32_t	_TaskSwitchConut;//任务调度次数
-typedef	 uint8_t	_TaskSwitchSpeedUs;//任务切换速度测试
+typedef	 double		_TaskSwitchSpeedUs;//任务切换速度测试
 typedef struct
 {
  
@@ -93,7 +155,7 @@ typedef struct
 	_STimeConfig  	Config;
 	_STimeAddr*	  	Addr;
 	_STimeFlag		Flag;
-}_STime;
+}_STime;//不可重载
 
 typedef struct
 {
@@ -103,16 +165,17 @@ typedef struct
 	_STimeAddr*	  	Addr;
 	_STimeFlag		Flag;
 	_STimeFlag		Flagb;
-}_STimes;
+}_STimes;//可重载
 //}
 #endif
 
 extern _PerformanceStatistics PS;//性能统计
 
 extern _NextAddr STimeListHead;
+
 extern _TaskHandle* TaskHandle_STime;
 
-extern osTIME osTime;
+
 
 /*
  *
@@ -127,7 +190,7 @@ extern osTIME osTime;
  * @注    释: 无
  *
  */
-osErrorValue osClockInit(void);
+OsErrorValue osClockInit(void);
 /*
  *
  * @函数名称: osClockTimePulse
@@ -143,13 +206,72 @@ osErrorValue osClockInit(void);
  */
 void osClockTimePulse(void);
 
-
+/*
+ *
+ * @函数名称: osTimeLogin_Static
+ *
+ * @函数功能: 软定时器注册
+ *
+ * @输入参数: ListAddr	软定时器句柄地址
+ * @输入参数: Name	软定时器名称
+ * @输入参数: Flag	软定时器类型标志
+ * @输入参数: Config	软定时器句柄配置
+ * @输入参数: Addr	回调函数地址
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 _STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr);
+/*
+ *
+ * @函数名称: osTimeLogin
+ *
+ * @函数功能: 软定时器注册
+ *
+ * @输入参数: Name	软定时器名称
+ * @输入参数: Flag	软定时器类型标志
+ * @输入参数: Config	软定时器句柄配置
+ * @输入参数: Addr	回调函数地址
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 _STimes* osTimeLogin(_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr);
-osErrorValue osSTimeInit(void);
+/*
+ *
+ * @函数名称: osSTimeInit
+ *
+ * @函数功能: 软定时器初始化
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
+OsErrorValue osSTimeInit(void);
+/*
+ *
+ * @函数名称: osSTime
+ *
+ * @函数功能: 软定时器响应程序
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 void osSTime(void);
 
 
 #endif
+
 
 

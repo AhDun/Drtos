@@ -23,6 +23,7 @@ del JLinkLog.txt /s
 del JLinkSettings.ini/s
 del *.scvd/s
 del *.dbgconf/s
+del *.Scr/s
 
 del *.iex /s
 del *.htm /s

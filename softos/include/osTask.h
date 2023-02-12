@@ -161,7 +161,7 @@
  *
  * @注    释: 无
 */
-#define osTaskSwitch_Enable() 			do{TaskSwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);
+#define osTaskSwitch_Enable() 			do{osTaskGetSwitchState() = TaskSwitch_Wait; ISR_Touch();}while(0);
 /*
  *
  * @函数名称: osTaskSwitchConfig_Enable
@@ -174,7 +174,7 @@
  *
  * @注    释: 无
 */
-#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b;TaskSwitchState = TaskSwitch_Wait; ISR_Touch();}while(0);
+#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b;osTaskGetSwitchState() = TaskSwitch_Wait; ISR_Touch();}while(0);
 /*
  *
  * @函数名称: osTaskEnterIRQ
@@ -187,7 +187,7 @@
  *
  * @注    释: 无
 */
-#define osTaskEnterIRQ()			ISRFlag += 1;
+#define osTaskEnterIRQ()			osTaskGetOIRQFlag() += 1;
 /*
  *
  * @函数名称: osTaskExitIRQ
@@ -200,14 +200,14 @@
  *
  * @注    释: 无
 */
-#define osTaskExitIRQ()				ISRFlag -= 1;
+#define osTaskExitIRQ()				osTaskGetOIRQFlag() -= 1;
 /*
  *
  * @函数名称: osTaskErrorDebug
  *
  * @函数功能: 进入中断
  *
- * @输入参数: 退出中断	
+ * @输入参数: 	
  *
  * @返 回 值: 无
  *
@@ -215,6 +215,83 @@
 */
 
 #define osTaskErrorDebug 		osDebugError
+/*
+ *
+ * @函数名称: osTaskGetRunTaskHandle
+ *
+ * @函数功能: 获取正在运行的任务句柄
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+
+#define osTaskGetRunTaskHandle()		OsTaskRunTaskHandle
+
+/*
+ *
+ * @函数名称: osTaskGetRunTaskHandle
+ *
+ * @函数功能: 获取正在任务切换状态
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+
+#define osTaskGetSwitchState()			OsTaskSwitchState
+
+
+/*
+ *
+ * @函数名称: osTaskGetRunTaskHandle
+ *
+ * @函数功能: 获取正在任务切换状态
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+
+#define osTaskGetOIRQFlag()			OsTaskISRFlag
+
+/*
+ *
+ * @函数名称: osTaskGetRunTaskHandle
+ *
+ * @函数功能: 获取正在任务切换状态
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+
+#define osTaskGetNextTaskHandle()			OsTaskNextTaskHandle
+
+
+/*
+ *
+ * @函数名称: osTaskGetRunTaskHandle
+ *
+ * @函数功能: 获取正在任务切换状态
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+
+#define osTaskGetTaskHandleListHead()			OsTaskTaskHandleListHead
+
 
 
 
@@ -267,34 +344,23 @@ typedef struct
 	_NextTaskHandle*	 NextTaskHandle;	
 } _TaskHandle;
 //}
-
-//任务轮询表{
-typedef struct
-{
-	_TaskHandle*		TaskHandle;	  //任务信息表 地址(任务句柄)
-} _TaskList;
-//}
-
-//任务调度状态表{
 typedef		uint8_t		_TaskListMaximumActivity;//任务最大活动量
 typedef 	uint8_t		_TaskDispatchNum;//任务调度状态
 typedef     uint8_t      _SwitchState;//任务调度计数
 typedef		uint8_t		_TaskISRFlag;
 
-//}
+typedef _TaskAddr 	_SIRQList;
 
-typedef _TaskAddr _SIRQList;
+extern _TaskHandle*		TaskHandle_Main;
 
-extern _TaskISRFlag				ISRFlag;//中断状态
-extern _TaskHandle*	RunTaskHandle;//当前正在运行的任务表指针
+extern _TaskHandle* 	OsTaskRunTaskHandle;
+extern _SwitchState	    OsTaskSwitchState;//任务调度状态
+extern _TaskISRFlag		OsTaskISRFlag;//中断状态
+extern _TaskHandle* 	OsTaskNextTaskHandle;
+extern _TaskHandle* 	OsTaskTaskHandleListHead;
 
 
-extern _TaskHandle*	TaskHandle_Main;
 
-extern _TaskHandle* 	TaskHandleListHead;
-extern _TaskHandle* 	NextTaskHandle;
-
-extern 	_SwitchState	TaskSwitchState;//任务调度状态
 
 
 	
@@ -306,13 +372,13 @@ extern 	_SwitchState	TaskSwitchState;//任务调度状态
  *
  * @输入参数: 无	
  *
- * @返 回 值: osErrorValue - 函数错误返回值 (0:表示初始化成功，-1:表示初始化成功)
+ * @返 回 值: OsErrorValue - 函数错误返回值 (0:表示初始化成功，-1:表示初始化成功)
  *
  * @注    释: 无
 */
-osErrorValue osTaskInit(void);	
+OsErrorValue osTaskInit(void);	
 
-osErrorValue osTaskSIRQInit(void);	
+OsErrorValue osTaskSIRQInit(void);	
 
 /*
  *
@@ -357,9 +423,9 @@ _TaskHandle* osTaskLogin_Static(
 	#endif
     _TaskConfig  TC
 );
-osErrorValue  osTaskLogout(_TaskHandle* TaskHandle);
+OsErrorValue  osTaskLogout(_TaskHandle* TaskHandle);
 
-osErrorValue	osTaskLogout_Static(_TaskHandle* TaskHandle);
+OsErrorValue	osTaskLogout_Static(_TaskHandle* TaskHandle);
 
 /*
  *
@@ -404,7 +470,7 @@ void osTaskDelayMs(uint32_t ms);
  */
 void osTaskDelayUs(uint32_t us);
 
-//extern osErrorValue osTaskSwitch_State(void);
+//extern OsErrorValue osTaskSwitch_State(void);
 ///*
 
 // * @函数名称: osTaskAddrReplace
@@ -420,7 +486,7 @@ void osTaskDelayUs(uint32_t us);
 // * @注    释: 无
 
 //*/
-//extern osErrorValue osTaskISR(_TaskHandle* TaskHandle);
+//extern OsErrorValue osTaskISR(_TaskHandle* TaskHandle);
 /*
  *
  * @函数名称: osTaskAddrReplace
@@ -434,7 +500,7 @@ void osTaskDelayUs(uint32_t us);
  * @注    释: 无
  *
  */
-osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv);
+OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv);
 /*
  *
  * @函数名称: osTaskAddrReplace
@@ -448,7 +514,7 @@ osErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv);
  * @注    释: 无
  *
  */
-osErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA);
+OsErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA);
 /*
  *
  * @函数名称: osTaskExit
@@ -462,19 +528,19 @@ osErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA);
  * @注    释: 无
  *
  */
-osErrorValue osTaskExit(void);
+OsErrorValue osTaskExit(void);
 
-osErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp);
+OsErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp);
 
 
-osErrorValue osTaskSpeedTest(void);
+OsErrorValue osTaskSpeedTest(void);
 
-osErrorValue osTaskMonitor(void);
+OsErrorValue osTaskMonitor(void);
 
 
 void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr);
 
-osErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr);
+OsErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr);
 
 void osTaskSIRQ(void);
 #endif

@@ -64,7 +64,7 @@ void Task1_Func(char* a)
 
 void Task2_Func(void)
 {
-	_TaskHandle* TaskHandleListBuf = TaskHandleListHead;
+	_TaskHandle* TaskHandleListBuf = osTaskGetTaskHandleListHead();
 	u8 a;
 	u8* buf = osMemoryMalloc(50);
 	
@@ -81,7 +81,7 @@ void Task2_Func(void)
     LCD_ShowString(10,60,tftlcd_data.width,tftlcd_data.height,16,osNameVersionNumberS);
 	while(1){
 
-//		sprint((char *)buf,"TaskCount: %d TaskSwitchTime: %dus",TaskSwitchState.TSC,TaskSwitchState.TSC*TaskSwitchState.TSSU);
+//		sprint((char *)buf,"TaskCount: %d TaskSwitchTime: %dus",osTaskGetSwitchState().TSC,osTaskGetSwitchState().TSC*osTaskGetSwitchState().TSSU);
 //		LCD_ShowString(10,120,tftlcd_data.width,tftlcd_data.height,16,buf);
 //		for(b = 0; b < 50;b++){
 //				buf[b] = ' ';
@@ -94,7 +94,7 @@ void Task2_Func(void)
 		sprint((char *)buf,"CPU: %d%% = T %d%% + I %d%% + S %d%%",PS.CTO+PS.CISRO+PS.CSO,PS.CTO,PS.CISRO,PS.CSO);
 		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
 		osMemoryReset(buf,' ');
-		sprint((char *)buf,"R:%d:%2d:%2d:%2d",(osTime. TSRT / 1000) /86400,((osTime. TSRT / 1000) /3600) % 24,((osTime. TSRT / 1000) /60) % 60,(osTime. TSRT / 1000) % 60);
+		sprint((char *)buf,"R:%d:%2d:%2d:%2d",(OsTimeGetSystemRunTime() / 1000) /86400,((OsTimeGetSystemRunTime() / 1000) /3600) % 24,((OsTimeGetSystemRunTime() / 1000) /60) % 60,(OsTimeGetSystemRunTime() / 1000) % 60);
 		LCD_ShowString(10,180,tftlcd_data.width,tftlcd_data.height,16,buf);
 		LCD_ShowString(10,210,tftlcd_data.width,tftlcd_data.height,16,"------------TaskList--------------");
 		LCD_ShowString(10,240,tftlcd_data.width,tftlcd_data.height,16,"Name  CPU  Class ");
@@ -105,7 +105,7 @@ void Task2_Func(void)
 			LCD_ShowString(10,270+(a*25),tftlcd_data.width,tftlcd_data.height,16,buf);
 			a++;
 			TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
-		}while(TaskHandleListBuf != TaskHandleListHead);
+		}while(TaskHandleListBuf != osTaskGetTaskHandleListHead());
 		osSignalUseWait(timebz);
 	}
 }

@@ -16,9 +16,9 @@
  */
 /*
  *
- * @文件名称: osCPU.c
+ * @文件名称: osLink.c
  *
- * @文件内容: 系统"CPU内核操作"文件
+ * @文件内容: 链接(衔接)文件
  *
  * @注    释: 
  *
@@ -224,7 +224,7 @@ __asm void PendSV_Handler(void)
 {
 	PRESERVE8
 
-	extern RunTaskHandle
+	extern osTaskGetRunTaskHandle()
 	extern osTaskNext
 
 	CPSID   I			//禁用所有中断
@@ -238,7 +238,7 @@ __asm void PendSV_Handler(void)
 
     STMDB R1!,	{R4-R11,LR}	//压栈R4-R11
 
-	LDR   R0,	=RunTaskHandle
+	LDR   R0,	=osTaskGetRunTaskHandle()
 	LDR	  R0,	[R0]
     STR   R1,   [R0]	
 	
@@ -249,7 +249,7 @@ __asm void PendSV_Handler(void)
 
 	CPSID   I			//禁用所有中断
 
-	LDR   R0,	=RunTaskHandle
+	LDR   R0,	=osTaskGetRunTaskHandle()
 	LDR	  R0,	[R0]
 	LDR   R1,   [R0]	
 

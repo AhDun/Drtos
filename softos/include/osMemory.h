@@ -122,7 +122,7 @@ typedef  struct
  * @注    释: 无
  *
  */
-osErrorValue  osMemoryInit(void);
+OsErrorValue  osMemoryInit(void);
 /*
  *
  * @函数名称: osMemoryMalloc
@@ -165,7 +165,7 @@ void* osMemoryReset(void* addr,uint8_t data);
  * @注    释: 无
  *
  */
-osErrorValue osMemoryFree(void* addr);
+OsErrorValue osMemoryFree(void* addr);
 /*
  *
  * @函数名称: osMemoryGetFreeValue
@@ -221,7 +221,7 @@ uint32_t osMemoryGetAllValue(void);
  * @注    释: 无
  *
  */
-osErrorValue osMemorySum(void);
+OsErrorValue osMemorySum(void);
 
 
 

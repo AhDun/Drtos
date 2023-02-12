@@ -69,7 +69,7 @@ typedef struct
  * @×¢   ÊÍ: ÎÞ
  *
  */
-osErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle);
+OsErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle);
 /*
  *
  * @º¯ÊýÃû³Æ: osPostRead

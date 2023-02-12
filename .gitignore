@@ -21,6 +21,7 @@
 *.dbgconf
 *.i
 *._ia
+*.Scr 
 
 *.iex 
 *.htm 

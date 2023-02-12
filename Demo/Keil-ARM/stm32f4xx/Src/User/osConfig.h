@@ -48,6 +48,8 @@
 #define osCompileTime 		 	__TIME__//系统编译时间
 #define osCPU_Name				"STM32F407ZG"//CPU名称
 #define osCPU_Freq				168u//CPU主频
+#define osCPU_Period			5.95f//CPU时钟周期
+#define osCPU_Period_Times		1000//CPU时钟周期的单位到
 #define osCPU_Bit				sizeof(void*)
 //}
 
@@ -96,6 +98,7 @@
 						osInfoDebug();\
 						osTaskSpeedTest();\
 						osTaskSIRQInit();\
+						osSTimeInit();\
 					}while(0);//系统初始化
 
 
@@ -143,7 +146,7 @@
 //}
 
 
-typedef int32_t osErrorValue;//函数错误返回值
+typedef int32_t OsErrorValue;//函数错误返回值
 
 
 #include "osLink.h"

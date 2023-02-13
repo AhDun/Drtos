@@ -29,19 +29,11 @@
 
 
 
-#define osTask_Enable 	//启用任务 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
+
 
 
 
 //任务状态{
-#define Task_State_Up_TD  0x05u//轮片挂起(挂起态)
-/*
-	在超时或出现错误时任务，会被轮片挂起，并设为轮片挂起
-*/
-#define Task_State_Up_IN  0x06u//主动挂起(挂起态)
-/*
-	任务通过暂停函数，会设为主动挂起
-*/
 #define Task_State_Up_DT  0x07u//延时挂起(等待态)
 /*
 	任务通过延时函数，会设为延时挂起
@@ -68,17 +60,12 @@
 终止态: 
 这个任务曾经运行过，现在以后不再运行了
 */
-#define Task_State_RB	  0x01u//重启态
+#define Task_State_RB	  0x01u//创建态
 /*
 重启态: 
 这个任务正在等待重启中
 */
 #define Task_State_OP	  0x03u//运行态
-/*
-运行态: 
-这个任务现在正在运行，正在占用CPU
-*/
-#define Task_State_Up     0x04u//挂起态
 /*
 运行态: 
 这个任务现在正在运行，正在占用CPU
@@ -110,17 +97,10 @@
 
 
 
-#define osTaskDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 
-#define osTaskRunError_Enable 1 //任务运行时发生致命错误 1:开启Debug输出 0:关闭Debug输出
 
-//------------------------默认轮片时间-----------------------------
-#define TaskTimeWheelDefault        100u//默认轮片时间(单位ms)
-
-//--------------------------默认栈大小------------------
-#define Default_Stack_Size             1000u//默认栈大小
      
-//--------------------------函数替换----------------------
+
 #if (osCriticalToProtect_Enable > 0)//启用了临界保护
 /*
  *
@@ -296,7 +276,7 @@
 
 
 
-
+//任务句柄{
 typedef 	uint8_t 	_TaskName;//任务名称
 typedef 	uint8_t 	_TaskConfig;//任务控制量
 typedef 	uint32_t 	_TaskStackSize;//任务栈长度
@@ -315,7 +295,6 @@ typedef     uint32_t     _TaskParameterPass;//任务传参
 typedef     uint16_t     _TaskOccupyTime;//任务占用时长
 typedef     uint16_t      _TaskOccupyRatio;//任务占用比
 #endif
-
 
 typedef struct
 {
@@ -344,12 +323,13 @@ typedef struct
 	_NextTaskHandle*	 NextTaskHandle;	
 } _TaskHandle;
 //}
+
 typedef		uint8_t		_TaskListMaximumActivity;//任务最大活动量
 typedef 	uint8_t		_TaskDispatchNum;//任务调度状态
 typedef     uint8_t      _SwitchState;//任务调度计数
 typedef		uint8_t		_TaskISRFlag;
 
-typedef _TaskAddr 	_SIRQList;
+
 
 extern _TaskHandle*		TaskHandle_Main;
 
@@ -361,7 +341,7 @@ extern _TaskHandle* 	OsTaskTaskHandleListHead;
 
 
 
-
+typedef _TaskAddr 		_SIRQList;
 
 	
 /*
@@ -382,22 +362,22 @@ OsErrorValue osTaskSIRQInit(void);
 
 /*
  *
- * @函数名称: osTaskNameToTable
+ * @函数名称: osTaskLogin
  *
- * @函数功能: 根据任务名称查询任务表地址
+ * @函数功能: 任务注册(自动分配内存)
  *
- * @输入参数: TN		任务名称	
-			 TA		任务地址
-			 TSS  	任务栈长度
-			 TTW  	任务时间轮片
-			 TPL    任务优先级
-			 TPP 	任务传参
-			 TC 	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
-	 *
+ * @输入参数: TN	任务名称	
+ * @输入参数: TA	任务地址
+ * @输入参数: TSS  	任务栈长度
+ * @输入参数: TTW  	任务时间轮片
+ * @输入参数: TPL   任务优先级
+ * @输入参数: TPP 	任务传参
+ * @输入参数: TC 	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
+ *
  * @返 回 值: 0:注册失败		任务句柄值:注册成功
-			  *
+ *
  * @注    释: 无
-*/
+ */
 _TaskHandle* osTaskLogin(
 	_TaskName *TN,
 	void*  TA,	
@@ -409,6 +389,25 @@ _TaskHandle* osTaskLogin(
 	#endif
     _TaskConfig  TC
 );
+/*
+ *
+ * @函数名称: osTaskLogin_Static
+ *
+ * @函数功能: 任务注册(手动提供内存)
+ *
+ * @输入参数: TaskHandle 任务句柄(存储地址)
+ * @输入参数: TN	任务名称	
+ * @输入参数: TA	任务地址
+ * @输入参数: TSS  	任务栈长度
+ * @输入参数: TTW  	任务时间轮片
+ * @输入参数: TPL   任务优先级
+ * @输入参数: TPP 	任务传参
+ * @输入参数: TC 	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
+ *
+ * @返 回 值: 0:注册失败		任务句柄值:注册成功
+ *
+ * @注    释: 无
+ */
 
 _TaskHandle* osTaskLogin_Static(
 
@@ -423,9 +422,34 @@ _TaskHandle* osTaskLogin_Static(
 	#endif
     _TaskConfig  TC
 );
-OsErrorValue  osTaskLogout(_TaskHandle* TaskHandle);
 
-OsErrorValue	osTaskLogout_Static(_TaskHandle* TaskHandle);
+/*
+ *
+ * @函数名称: osTaskLogout
+ *
+ * @函数功能: 任务注销(自动释放内存)
+ *
+ * @输入参数: TaskHandle 任务句柄
+ *
+ * @返 回 值: 0:注册失败		任务句柄值:注册成功
+ *
+ * @注    释: 无
+ */
+OsErrorValue  osTaskLogout(_TaskHandle* TaskHandle);
+/*
+ *
+ * @函数名称: osTaskLogout_Static
+ *
+ * @函数功能: 任务注销(不释放内存)
+ *
+ * @输入参数: TaskHandle 任务句柄
+ *
+ * @返 回 值: 0:注册失败		任务句柄值:注册成功
+ *
+ * @注    释: 无
+ */
+
+OsErrorValue  osTaskLogout_Static(_TaskHandle* TaskHandle);
 
 /*
  *
@@ -470,23 +494,6 @@ void osTaskDelayMs(uint32_t ms);
  */
 void osTaskDelayUs(uint32_t us);
 
-//extern OsErrorValue osTaskSwitch_State(void);
-///*
-
-// * @函数名称: osTaskAddrReplace
-
-// * @函数版本: 1.0.0
-
-// * @函数功能: 任务配置
-
-// * @输入参数: 无	
-
-// * @返 回 值: -1:配置时出现错误，0: 配置成功
-
-// * @注    释: 无
-
-//*/
-//extern OsErrorValue osTaskISR(_TaskHandle* TaskHandle);
 /*
  *
  * @函数名称: osTaskAddrReplace

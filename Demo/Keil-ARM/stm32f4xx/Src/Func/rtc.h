@@ -4,8 +4,8 @@
 #include "main.h"
 #include "osConfig.h"
 
-extern _Signal* s1;
-extern _Signal* timebz;
+extern _SignalHandle* s1;
+extern _SignalHandle* timebz;
 
 
 u8 RTC_Config(void);						//RTC≥ı ºªØ

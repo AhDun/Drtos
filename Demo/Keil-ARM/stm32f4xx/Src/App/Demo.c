@@ -8,7 +8,7 @@
 #include "math.h"
 
 
-_Signal* s1;
+_SignalHandle* s1;
 
 _TaskHandle*	TaskHandle_Task1;
 _TaskHandle*	TaskHandle_Task2;
@@ -150,6 +150,9 @@ void Task4_Func(u32* a)
 	u8 b=0;
 	u8 c;
 	LED_Init();
+	while(1){
+		osTaskSwitch_Enable();//¥•∑¢»ŒŒÒ«–ªª   
+	}
 	while(1){
 		for(c = 0; c < 50; c++){
 			LED1 = 0;

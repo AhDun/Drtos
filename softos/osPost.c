@@ -29,9 +29,6 @@
 
 
 
-
-
-
 /*
  *
  * @函数名称: osPostSend
@@ -49,7 +46,7 @@ OsErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 {
 	_Post* PostForm;
 
-	PostForm = osMemoryMalloc(sizeof(_Post));//申请内存
+	PostForm = osPostMemoryMalloc(sizeof(_Post));//申请内存
 	if(PostForm == NULL){//如果返回为空,说明申请失败
 		#if (osPostDebugError_Enable > 0)
 		osPostDebugError("发送邮件时申请内存失败 %s\n",osTaskGetRunTaskHandle() -> Name);
@@ -63,14 +60,14 @@ OsErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 	}
 	if(TaskHandle -> Config == Task_State_Up_PT){
 		if(TaskHandle -> PriorityLevel <  osTaskGetRunTaskHandle() -> PriorityLevel){//如果这个任务高于当前工作运行任务栏的优先级，就占用
-			TaskHandle -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
-			osTaskGetRunTaskHandle() -> Config = Task_State_Up_TD;//将正在运行任务的状态设为轮片挂起(挂起态)
+			TaskHandle -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
+			osTaskGetRunTaskHandle() -> Config = Task_State_RE;//将正在运行任务的状态设为轮片挂起(挂起态)
 			if(osTaskGetSwitchState() == TaskSwitch_Ready){
 				osTaskGetNextTaskHandle() = TaskHandle;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
 				osTaskSwitch_Enable();//触发任务切换
 			} 
 		}else{
-			TaskHandle -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
+			TaskHandle -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
 		}
 	}
 	return (OK);//发送成功，返回OK
@@ -102,7 +99,7 @@ uint32_t* osPostRead(void)
 		PostForm  =  (_Post*)uLinkListTailRead(&osTaskGetRunTaskHandle() -> PF);
 		#endif
 		Buf = PostForm -> Body;
-		if(osMemoryFree(PostForm) != OK){
+		if(osPostMemoryFree(PostForm) != OK){
 			#if (osPostDebugError_Enable > 0)
 			osPostDebugError("读取邮件时释放内存失败 %s\n",osTaskGetRunTaskHandle() -> Name);
 			#endif

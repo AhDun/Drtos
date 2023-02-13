@@ -36,11 +36,11 @@
 
 #define osPost_Enable 		//启用邮箱 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 
-#define osPostHead		1	 //读邮件顺序  1：正序 0：倒序
 
-#define osPostDebugError_Enable 1 //邮箱错误DeBug  1:开启Debug输出 0:关闭Debug输出
 
-#define osPostDebugError	osDebugError 
+
+#define 	osPostMemoryMalloc		osMemoryMalloc
+#define 	osPostMemoryFree		osMemoryFree
 
 
 

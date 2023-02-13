@@ -65,9 +65,8 @@ OsErrorValue osTaskInit(void)
 	
 
 
-	TaskHandle_Main = osTaskLogin("Main",(void*)0,Default_Stack_Size,TaskTimeWheelDefault,0,(void*)0,Task_Set_Default ); 
+	TaskHandle_Main = osTaskLogin("Main",(void*)0,Default_Stack_Size,TaskTimeWheelDefault,0,(void*)0,Task_Set_Default); 
 	if(TaskHandle_Main == NULL){
-
 		#if (osTaskDebug_Enable > 0)
 		osTaskErrorDebug("Main 任务创建失败\n");
 		#endif
@@ -76,7 +75,8 @@ OsErrorValue osTaskInit(void)
 
 
 	osTaskGetNextTaskHandle() = TaskHandle_Main; 
-	osTaskGetRunTaskHandle() = TaskHandle_Main;//将即将运行的任务信息表的指针传送给正在运行任务表    
+	osTaskGetRunTaskHandle() = TaskHandle_Main;//将即将运行的任务信息表的指针传送给正在运行任务表 
+	osTaskGetNextTaskHandle() -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
 	OsTimeGetTaskTimeWheel() = osTaskGetRunTaskHandle() -> TaskTimeWheel;//将当前任务的时间轮片写入到时间记录器
 	osTASK_START(&osTaskGetRunTaskHandle() -> RealSP);//启动第一个任务
 
@@ -434,10 +434,9 @@ void osTaskNext(void)
 		switch(osTaskGetNextTaskHandle() -> Config){//进行状态码分离操作，并传输给switch语句
 				case Task_State_RB:
 									osTaskGetNextTaskHandle() -> RealSP = osTaskGetNextTaskHandle() -> RealSPb;
+									osTaskGetNextTaskHandle() -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
 									osTASK_Stack_Init(osTaskGetNextTaskHandle() -> ParameterPass,(void* )osTaskGetNextTaskHandle() -> Addr,(void* )osTaskExit,&osTaskGetNextTaskHandle() -> RealSP);//启动任务
-				case Task_State_Up_IN://这个任务是主动挂起(挂起态)
-				case Task_State_Up_TD://这个任务是轮片挂起(挂起态)	
-				case Task_State_RE:	  //这个任务就绪了
+				case Task_State_RE:	  //就绪态
 									osTaskGetRunTaskHandle() = osTaskGetNextTaskHandle();//将即将运行的任务信息表的指针传送给正在运行任务表
 									osTaskGetNextTaskHandle() = (_TaskHandle*)osTaskGetNextTaskHandle() -> NextTaskHandle;
 									OsTimeGetTaskTimeWheel() = osTaskGetRunTaskHandle() -> TaskTimeWheel;//将当前任务的时间轮片写入到时间记录器
@@ -475,7 +474,7 @@ OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 									return (OK);//返回OK
 
 			case Task_Set_Cont://继续任务
-									TaskHandle -> Config = Task_State_Up_IN;//设为挂起态
+									TaskHandle -> Config = Task_State_RE;//设为挂起态
 									return (OK);//返回OK
 
 			case Task_Set_Reboot://重启任务									
@@ -484,7 +483,7 @@ OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 			case Task_Set_Start://立即启动任务
 									while(osTaskGetSwitchState() != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
 									osTaskGetNextTaskHandle() = TaskHandle;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
-									osTaskSwitchConfig_Enable(TaskHandle,Task_State_Up_IN);
+									osTaskSwitchConfig_Enable(TaskHandle,Task_State_RE);
 									return (OK);//返回OK
 			case Task_Set_Up://挂起任务
 								return (OK);
@@ -509,7 +508,7 @@ OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 									return (OK);//返回OK
 			case Task_Set_Up://挂起任务
 								while(osTaskGetSwitchState() != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态								
-								osTaskSwitchConfig_Enable(osTaskGetRunTaskHandle(),Task_State_Up_IN);//触发任务切换
+								osTaskSwitchConfig_Enable(osTaskGetRunTaskHandle(),Task_State_RE);//触发任务切换
 								return (OK);
 
 									
@@ -581,8 +580,6 @@ OsErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
 		osTaskErrorDebug("任务延时剩余时间:%d%ms\n任务单次最大运行时长:%dms\n",osTaskGetRunTaskHandle() -> TimeFlag,osTaskGetRunTaskHandle() -> TaskTimeWheel);
 		osTaskErrorDebug("任务最一近状态:",0,0);
 		switch(osTaskGetRunTaskHandle() -> Config){
-			case Task_State_Up_TD:osTaskErrorDebug("轮片挂起\n");break;
-			case Task_State_Up_IN:osTaskErrorDebug("主动挂起\n");break;
 			case Task_State_Up_DT:osTaskErrorDebug("延时挂起\n");break;
 			case Task_State_Up_SI:osTaskErrorDebug("信号挂起\n");break;
 			case Task_State_Up_PT:osTaskErrorDebug("邮件挂起\n");break;
@@ -590,7 +587,7 @@ OsErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
 			case Task_State_ST:osTaskErrorDebug("终止态\n");break;
 			case Task_State_RB:osTaskErrorDebug("重启态\n");break;
 			case Task_State_OP:osTaskErrorDebug("运行态\n");break;
-			case Task_State_Up:osTaskErrorDebug("挂起态\n");break;
+			case Task_State_RE:osTaskErrorDebug("就绪态\n");break;
 		}
 		osTaskErrorDebug("任务邮箱状态:");
 		if(osTaskGetRunTaskHandle() -> PF == NULL){
@@ -630,7 +627,7 @@ OsErrorValue osTaskSpeedTest(void)
 {
 	#if (osSpeedTest_Enable > 0)
 	uint32_t t0,t1;
-	osTaskGetRunTaskHandle() -> Config = Task_State_Up_IN;
+	osTaskGetRunTaskHandle() -> Config = Task_State_RE;
 	t0 = SysTick->VAL;
 	osTaskSwitch_Enable();//触发任务切换
 	t1 = SysTick->VAL;
@@ -652,8 +649,6 @@ OsErrorValue osTaskMonitor(void)
 		print("任务<%s>的使用量为:占用时长:%dms | 任务优先级:%d | 任务状态:",TaskHandleListBuf -> Name,TaskHandleListBuf -> OccupyRatio,TaskHandleListBuf -> PriorityLevel);
 		if(TaskHandleListBuf != osTaskGetRunTaskHandle() || osTaskGetSwitchState() != TaskSwitch_Ready){
 			switch(TaskHandleListBuf -> Config){
-				case Task_State_Up_TD:print("轮片挂起\n");break;
-				case Task_State_Up_IN:print("主动挂起\n");break;
 				case Task_State_Up_DT:print("延时挂起\n");break;
 				case Task_State_Up_SI:print("信号挂起\n");break;
 				case Task_State_Up_PT:print("邮件挂起\n");break;
@@ -661,7 +656,7 @@ OsErrorValue osTaskMonitor(void)
 				case Task_State_ST:print("终止态\n");break;
 				case Task_State_RB:print("重启态\n");break;
 				case Task_State_OP:print("运行态\n");break;
-				case Task_State_Up:print("挂起态\n");break;
+				case Task_State_RE:print("就绪态\n");break;
 			}
 		}
 		else{
@@ -709,7 +704,7 @@ void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr)
 {
 	TaskHandle_SIRQ -> ParameterPass = (_TaskParameterPass*)SIRQList_Addr;
 	osTaskGetNextTaskHandle() = TaskHandle_SIRQ;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
-	osTaskSwitchConfig_Enable(TaskHandle_SIRQ,Task_State_Up_IN);
+	osTaskSwitchConfig_Enable(TaskHandle_SIRQ,Task_State_RE);
 }
 /*
  *

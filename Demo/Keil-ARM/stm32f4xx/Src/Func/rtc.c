@@ -4,7 +4,7 @@
 #include "usart.h"
 
 
-_Signal* timebz;
+_SignalHandle* timebz;
 
 
 //RTC ±º‰…Ë÷√
@@ -174,7 +174,7 @@ void RTC_Alarm_IRQHandler(void)
 }
 
 
-//_Signal LEDINITS;
+//_SignalHandle LEDINITS;
 u8 buf[40];
 RTC_TimeTypeDef RTC_TimeStruct;
 RTC_DateTypeDef RTC_DateStruct;

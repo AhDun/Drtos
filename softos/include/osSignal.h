@@ -33,25 +33,14 @@
 #include "osConfig.h"
 
 #define osSignal_Enable //启用队列 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
-
+//信号量类型{
 #define Signal_Mutual       0x01u//互斥信号量
-//什么是互斥信号量?
-//
 #define Signal_Binary       0x02u//二值信号量
-//什么是二值信号量?
-
 #define Signal_Count        0x03u//计数信号量
-//什么是互斥信号量?
-#define Signal_Logout		0x04u//无效信号量
+//}
 
-
-#define osSignalMutual_Enable //启用互斥信号量
-#define osSignalBinary_Enable //启用二值信号量
-#define osSignalCount_Enable  //启用计数信号量
-
-#define osSignalDebugError_Enable 1 //信号量错误DeBug  1:开启Debug输出 0:关闭Debug输出
-
-#define osSignalDebugError	osDebugError 
+#define 	osSignalMemoryMalloc	osMemoryMalloc
+#define 	osSignalMemoryFree		osMemoryFree
 
 
 //信号量令牌{
@@ -63,7 +52,7 @@ typedef struct
 }_SignalToken;
 //}
 
-//信号量{
+//信号量句柄{
 typedef     uint8_t     _SignalValue;
 typedef     uint8_t     _SignalType;
 typedef struct
@@ -71,7 +60,7 @@ typedef struct
     _SignalValue 	 Value;//信号值
     _SignalType   	 Type;//信号的类型
 	_NextAddr		 NextAddr;//信号量令牌链头
-}_Signal;
+}_SignalHandle;
 //}
 
 
@@ -85,20 +74,59 @@ typedef struct
  *
  * @函数功能: 信号量注册
  *
- * @输入参数: _Signal* ST(信号量结构体)
+ * @输入参数: _SignalHandle* ST(信号量结构体)
  *
  * @返 回 值: 无
  *
  * @注    释: 无
  *
  */
-_Signal* osSignalLogin(_SignalType SP);
+_SignalHandle* osSignalLogin(_SignalType SP);
 #else
-OsErrorValue osSignalLogin(_Signal* ST,_SignalType SP);
+OsErrorValue osSignalLogin(_SignalHandle* ST,_SignalType SP);
 #endif
-
-OsErrorValue osSignalUseWait(_Signal* ST);
-OsErrorValue osSignalFree(_Signal* ST);
+/*
+ *
+ * @函数名称: osSignalUseWait
+ *
+ * @函数功能: 信号量等待式占用
+ *
+ * @输入参数: ST	信号量句柄
+ *
+ * @返 回 值: 0:占用成功  -1:占用失败
+ *
+ * @注    释: 无
+ *
+ */
+OsErrorValue osSignalUseWait(_SignalHandle* ST);
+/*
+ *
+ * @函数名称: osSignalUse
+ *
+ * @函数功能: 信号量非等待式占用
+ *
+ * @输入参数: ST	信号量句柄
+ *
+ * @返 回 值: 0:占用成功  -1:占用失败
+ *
+ * @注    释: 无
+ *
+ */
+OsErrorValue osSignalUse(_SignalHandle* ST);
+/*
+ *
+ * @函数名称: osSignalFree
+ *
+ * @函数功能: 信号量释放
+ *
+ * @输入参数:  ST	信号量句柄
+ *
+ * @返 回 值: 0:释放成功  -1:释放失败
+ *
+ * @注    释: 无
+ *
+ */
+OsErrorValue osSignalFree(_SignalHandle* ST);
 
 
 #endif

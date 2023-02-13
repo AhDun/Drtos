@@ -30,6 +30,9 @@
 #include "Demo.h"
 #include "print.h"
 
+uint8_t CCRAM[MemTank_Max] __attribute__((at(0x10000000)));
+
+_MemoryInfo  Memory_CCRAM = {&CCRAM[0],&CCRAM[0],&CCRAM[MemTank_Max]};
 
 
 

@@ -130,17 +130,8 @@ void osClockTimePulse(void)
     /*----------------------------------轮片---------------------------------------*/
     if(OsTimeGetTaskTimeWheel() > 0 && osTaskGetSwitchState() == TaskSwitch_Ready && osTaskGetOIRQFlag() == NULL){ //时间轮片
 	   //当前正在运行的任务的轮片时间大于0并且调度状态为未调度状态
-        OsTimeGetTaskTimeWheel()--;//当前正在运行的任务的轮片时间减一
-        if(OsTimeGetTaskTimeWheel() == 0){//当目前正在运行的任务的轮片时间为零时
-            //osTaskGetRunTaskHandle() -> Config &= TIT_Task_State_TC_RST;//清除正在运行的任务的状态位
-            osTaskGetRunTaskHandle() -> Config = Task_State_Up_TD;//将正在运行的任务的状态设为位轮片挂起(挂起态)
-            if(osTaskGetSwitchState() == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
-                osTaskSwitch_Enable();//触发任务切换
-            }
-            else{//如果已经悬起了
-                OsTimeGetTaskTimeWheel() = 1;//当前正在运行的任务的轮片时间置为一，意味着轮片时间向后推迟一秒
-            }
-             
+        if(--OsTimeGetTaskTimeWheel() == 0){//当目前正在运行的任务的轮片时间为零时
+			osTaskSwitch_Enable();//触发任务切换   
         }
     }
 	TaskHandleListBuf = osTaskGetTaskHandleListHead();
@@ -151,19 +142,17 @@ void osClockTimePulse(void)
             if(TaskHandleListBuf -> TimeFlag == 0){	//当这个任务时间标志中内容为零时
                 if(osTaskGetSwitchState() != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)
                     //TaskHandleListBuf  -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
-                    TaskHandleListBuf  -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
+                    TaskHandleListBuf  -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
                 }
                 else if(TaskHandleListBuf -> PriorityLevel <  osTaskGetRunTaskHandle() -> PriorityLevel){//如果这个任务高于当前工作运行任务栏的优先级，就占用
-                    //TaskHandleListBuf -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
-                    TaskHandleListBuf -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
+                    TaskHandleListBuf -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
                     if(osTaskGetSwitchState() == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
                         osTaskGetNextTaskHandle() = TaskHandleListBuf;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
                         osTaskSwitch_Enable(); //触发任务切换
                     }
                 }
                 else{//意外之料的情况
-                        //TaskHandleListBuf -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
-                        TaskHandleListBuf -> Config = Task_State_Up_TD;//将这个任务的状态设为轮片挂起(挂起态)
+                        TaskHandleListBuf -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
                 }
             }
         }

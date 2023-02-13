@@ -31,7 +31,7 @@
 #define osClock_Enable 	//启用时钟 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 
 
-#define TaskOccupyRatioSamplingTime 		1000 //任务统计时间，单位ms
+
 
 #define STimeConfig_Restart		0x01
 #define STimeConfig_NRestartL	0x02
@@ -52,6 +52,71 @@
 #define osClockGetTimePulse()		osTime.TSRT
 
 
+/*
+ *
+ * @函数名称: osClockGetOsRTC
+ *
+ * @函数功能: 获取OSRTC
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osClockGetOsRTC()	osTime.TSRT		
+/*
+ *
+ * @函数名称: osClockGetOsRTCD
+ *
+ * @函数功能: 获取OSRTC天数
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osClockGetOsRTCD()	(osClockGetOsRTC() / 1000) /86400
+/*
+ *
+ * @函数名称: osClockRTCGetH
+ *
+ * @函数功能: 获取OSRTC小时数
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osClockGetOsRTCH()		((osClockGetOsRTC() / 1000) /3600) % 24
+/*
+ *
+ * @函数名称: osClockRTCGetH
+ *
+ * @函数功能: 获取OSRTC分钟数
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osClockGetOsRTCM()	((osClockGetOsRTC() / 1000) /60) % 60
+/*
+ *
+ * @函数名称: osClockRTCGetH
+ *
+ * @函数功能: 获取OSRTC秒数
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+*/
+#define osClockGetOsRTCS()	(osClockGetOsRTC() / 1000) % 60
 
 
 /*

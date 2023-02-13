@@ -42,41 +42,6 @@
 #define Memory_Free   					0x02 //该内存块已释放
 //}
 
-//内存配置{
-#define MemTank_Max 					16 * 1024 //内存池大小配置
-
-
-#define MemoryProtect_Enable 			0 // 内存保护配置 	1:开启保护 0:关闭保护	
-										//启用保护申请内存与释放内存所用的时长将会增加
-										//内存保护也不一定保证内存块一定不会发生错误!!!,只会降低内存发生错误的概率
-
-#define osMemoryInitReset_Enable 		0 //初始化内存时复位内存 1:开启 0:关闭
-
-#define osMemorySequence_Enable 		0 //内存顺序分配   1：启用 0：禁用
-
-
-#if (osMemorySequence_Enable == 0)
-
-#define osMemoryFreeReset_Enable 		0 //释放内存时复位内存 1:开启 0:关闭
-
-#define osMemoryFreeTest_Enable 		1 //释放内存时检查内存 1:开启 0:关闭
-
-#define osMemoryPart_Enable				1 //块分割  1:开启 0:关闭
-
-#define osMemoryMerge_Enable			1 //块合并  1:开启 0:关闭
-
-#endif
-
-#define osMemoryDebug_Enable 			1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
-
-#define osMemoryErrorDebug osDebugError//DeBug输出函数
-
-
-
-//}
-
-
-
 
 
 typedef uint8_t	_MemoryUnit;//
@@ -88,12 +53,13 @@ typedef _MemoryUnit 	_MemoryNextAddr;
 typedef  struct
 { 
 	_MemoryPoolAddr*			HeadAddr;//内存头地址
-	const _MemoryPoolAddr*		TailAddr;//内存尾地址
 	_MemoryNextAddr*			NextAddr;//内存
+	const _MemoryPoolAddr*		TailAddr;//内存尾地址
 
 }_MemoryInfo;
 //}
 typedef	_MemoryInfo*	_MemoryInfoHandle;
+extern _MemoryInfoHandle	MemoryInfoHandle;
 #if (osMemorySequence_Enable == 0)
 //内存块结构{
 typedef uint8_t 	_MemoryFlag;
@@ -107,8 +73,20 @@ typedef  struct
 }MemoryStruct;
 #endif
 //}
-
-
+/*
+ *
+ * @函数名称: osMemorySwitch
+ *
+ * @函数功能: 内存池切换
+ *
+ * @输入参数: a 内存信息句柄
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
+#define osMemorySwitch(a) MemoryInfoHandle = a
 /*
  *
  * @函数名称: osMemoryInit
@@ -122,7 +100,7 @@ typedef  struct
  * @注    释: 无
  *
  */
-OsErrorValue  osMemoryInit(void);
+OsErrorValue  osMemoryInit(_MemoryInfo* MemoryInfo);
 /*
  *
  * @函数名称: osMemoryMalloc

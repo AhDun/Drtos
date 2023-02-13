@@ -29,30 +29,23 @@
 #include "osMemory.h"
 #include "sram.h"
 
-
-
-uint8_t CCRAM[MemTank_Max] __attribute__((at(0x10000000)));
-
-_MemoryInfo 	Memory_CCRAM = {&CCRAM[0],&CCRAM[MemTank_Max],&CCRAM[0]};
-
 _MemoryInfoHandle	MemoryInfoHandle;
 
-
-
-
-OsErrorValue  osMemoryInit(void)
+OsErrorValue  osMemoryInit(_MemoryInfo* MemoryInfo)
 {
 	#if (osMemoryInitReset_Enable > 0)
 	uint32_t addr;
-	MemoryInfoHandle = &Memory_CCRAM; 
+	osMemorySwitch(MemoryInfo); 
 	for(addr = 0;(MemoryInfoHandle -> HeadAddr + addr) < MemoryInfoHandle -> TailAddr;addr++){
 		*(MemoryInfoHandle -> HeadAddr + addr) = 0x00;
 	}
 	#else
-	MemoryInfoHandle = &Memory_CCRAM; 
+	osMemorySwitch(MemoryInfo);
 	#endif
 	return (OK);
 }
+
+
 
 #if( osMemorySequence_Enable > 0)
 void* osMemoryMalloc(uint32_t MemSize)

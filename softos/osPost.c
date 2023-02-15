@@ -48,7 +48,7 @@ OsErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 
 	PostForm = osPostMemoryMalloc(sizeof(_Post));//申请内存
 	if(PostForm == NULL){//如果返回为空,说明申请失败
-		#if (osPostDebugError_Enable > 0)
+		#if (osPostDebugError_Config > 0)
 		osPostDebugError("发送邮件时申请内存失败 %s\n",osTaskGetRunTaskHandle() -> Name);
 		#endif
 		return (Error);//返回错误
@@ -56,15 +56,15 @@ OsErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 		PostForm -> Body = PB;
 		PostForm -> DownAddr = NULL;
 
-		uLinkListTailWrtie(&TaskHandle -> PF,(uint32_t*)PostForm);
+		uLinkListTailWrtie(&TaskHandle -> Arg1,(uint32_t*)PostForm);
 	}
 	if(TaskHandle -> Config == Task_State_Up_PT){
-		if(TaskHandle -> PriorityLevel <  osTaskGetRunTaskHandle() -> PriorityLevel){//如果这个任务高于当前工作运行任务栏的优先级，就占用
+		if(TaskHandle -> Level <  osTaskGetRunTaskHandle() -> Level){//如果这个任务高于当前工作运行任务栏的优先级，就占用
 			TaskHandle -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
 			osTaskGetRunTaskHandle() -> Config = Task_State_RE;//将正在运行任务的状态设为轮片挂起(挂起态)
 			if(osTaskGetSwitchState() == TaskSwitch_Ready){
 				osTaskGetNextTaskHandle() = TaskHandle;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
-				osTaskSwitch_Enable();//触发任务切换
+				osTaskSwitch_Config();//触发任务切换
 			} 
 		}else{
 			TaskHandle -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
@@ -92,15 +92,15 @@ uint32_t* osPostRead(void)
 	_Post* PostForm;
 	uint32_t*	Buf;
 
-	if(osTaskGetRunTaskHandle() -> PF != NULL){
+	if(osTaskGetRunTaskHandle() -> Arg1 != NULL){
 		#if (osPostHead > 0)
-		PostForm = (_Post*)uLinkListHeadRead(&osTaskGetRunTaskHandle() -> PF);
+		PostForm = (_Post*)uLinkListHeadRead(&osTaskGetRunTaskHandle() -> Arg1);
 		#else
-		PostForm  =  (_Post*)uLinkListTailRead(&osTaskGetRunTaskHandle() -> PF);
+		PostForm  =  (_Post*)uLinkListTailRead(&osTaskGetRunTaskHandle() -> Arg1);
 		#endif
 		Buf = PostForm -> Body;
 		if(osPostMemoryFree(PostForm) != OK){
-			#if (osPostDebugError_Enable > 0)
+			#if (osPostDebugError_Config > 0)
 			osPostDebugError("读取邮件时释放内存失败 %s\n",osTaskGetRunTaskHandle() -> Name);
 			#endif
 			return (Buf);
@@ -126,9 +126,9 @@ uint32_t* osPostRead(void)
  */
 uint32_t* osPostReadWait(void)
 {
-	if(osTaskGetRunTaskHandle() -> PF == 0){//没有邮件,进行等待
+	if(osTaskGetRunTaskHandle() -> Arg1 == 0){//没有邮件,进行等待
 		while(osTaskGetSwitchState() != TaskSwitch_Ready);//查询任务可切换态,如果是不可切换,无限循环,直到可切换态
-		osTaskSwitchConfig_Enable(osTaskGetRunTaskHandle(),Task_State_Up_PT);//触发异常,进行任务切换
+		osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_Up_PT);//触发异常,进行任务切换
 	}
 	return (osPostRead());//通过非阻塞式读取邮件
 }

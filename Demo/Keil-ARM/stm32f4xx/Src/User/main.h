@@ -20,15 +20,15 @@
 
 
 
-#define ActionValue_Enable 	1	//操作值  1：启用 0：禁用
+#define ActionValue_Config 	1	//操作值  1：启用 0：禁用
 
-#define DataTypeSize_Enabled 0	//数据类型长度  1：启用 0：禁用
+#define DataTypeSize_Configd 0	//数据类型长度  1：启用 0：禁用
 		/*如果使用标准的数据类型库，如:stdint.h，就无需启用此数据类型长度*/
-#define DataType_Enabled 	0	//数据类型  1：启用 0：禁用
+#define DataType_Configd 	0	//数据类型  1：启用 0：禁用
 		/*如果使用标准的数据类型库，如:stdint.h，就无需启用此数据类型*/
 
 
-#if (ActionValue_Enable > 0)
+#if (ActionValue_Config > 0)
 //操作值{
 //布尔判断{
 #define true 					  1u //真
@@ -59,7 +59,7 @@
 #endif
 
 
-#if (DataType_Enabled > 0)
+#if (DataType_Configd > 0)
 //数据类型{
 
 //布尔型{
@@ -121,7 +121,7 @@ typedef double  					d64_t;
 #endif
 
 
-#if (DataTypeSize_Enabled > 0)
+#if (DataTypeSize_Configd > 0)
 
 //布尔型{
 #define BOOL_MIN						0u

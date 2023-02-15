@@ -35,14 +35,14 @@
 */
 _NextAddr STimeListHead;
 _TaskHandle* TaskHandle_STime;
-#if (osPerformanceStatistics_Enable > 0)
+#if (osPerformanceStatistics_Config > 0)
 _PerformanceStatistics PS;//性能统计
 #endif
-#if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
+#if (os_TotalSystemRunningTime_Config > 0)//开启了系统运行时长
 _SystemRunningTime 		OsTimeSystemRunTime;//系统运行时间
 _TaskISRRunningTime		OsTimeTaskISRTime;//系统运行时长
 #endif
-_TaskTimeWheelMargin	   OsTimeTaskTimeWheel;//任务轮片时间
+_TaskWheelMargin	   OsTimeTaskTimeWheel;//任务轮片时间
 #if (osClockTimePeriod < osClockTimePeriodStandard)
 _ClockTimePeriodValue      OsTimePeriodValue;//时间周期计数
 #endif
@@ -90,7 +90,7 @@ void osClockTimePulse(void)
 		OsTimeGetPeriodValue() = NULL;
 	#endif
     /*----------------------------------计时---------------------------------------*/
-	#if (os_TotalSystemRunningTime_Enable > 0)//开启了系统运行时长
+	#if (os_TotalSystemRunningTime_Config > 0)//开启了系统运行时长
 	#if (osClockTimePeriod > osClockTimePeriodStandard)
 	OsTimeGetSystemRunTime() += (osClockTimePeriod / osClockTimePeriodStandard);//系统运行时长进行计时
 	#else
@@ -98,7 +98,7 @@ void osClockTimePulse(void)
 	#endif
 	#endif
      /*----------------------------------统计---------------------------------------*/
-	#if (osPerformanceStatistics_Enable > 0) //开启了性能统计
+	#if (osPerformanceStatistics_Config > 0) //开启了性能统计
 	if(osTaskGetOIRQFlag() > NULL){
 		OsTimeGetTaskISRTime()++;
 	}
@@ -131,7 +131,7 @@ void osClockTimePulse(void)
     if(OsTimeGetTaskTimeWheel() > 0 && osTaskGetSwitchState() == TaskSwitch_Ready && osTaskGetOIRQFlag() == NULL){ //时间轮片
 	   //当前正在运行的任务的轮片时间大于0并且调度状态为未调度状态
         if(--OsTimeGetTaskTimeWheel() == 0){//当目前正在运行的任务的轮片时间为零时
-			osTaskSwitch_Enable();//触发任务切换   
+			osTaskSwitch_Config();//触发任务切换   
         }
     }
 	TaskHandleListBuf = osTaskGetTaskHandleListHead();
@@ -143,11 +143,11 @@ void osClockTimePulse(void)
                 if(osTaskGetSwitchState() != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)
                     TaskHandleListBuf  -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
                 }
-                else if(TaskHandleListBuf -> PriorityLevel <  osTaskGetRunTaskHandle() -> PriorityLevel){//如果这个任务高于当前工作运行任务栏的优先级，就占用
+                else if(TaskHandleListBuf -> Level <  osTaskGetRunTaskHandle() -> Level){//如果这个任务高于当前工作运行任务栏的优先级，就占用
                     TaskHandleListBuf -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
                     if(osTaskGetSwitchState() == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
                         osTaskGetNextTaskHandle() = TaskHandleListBuf;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
-                        osTaskSwitch_Enable(); //触发任务切换
+                        osTaskSwitch_Config(); //触发任务切换
                     }
                 }
                 else{//意外之料的情况
@@ -189,7 +189,7 @@ _STimes* osTimeLogin(_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* 
 		Addr1 = osMemoryMalloc(sizeof(_STimes));//为任务表分配内存
 	}
 //	if(Addr1 == NULL){//如果为空，就说明内存分配失败
-//		#if (osTaskDebug_Enable > 0)
+//		#if (osTaskDebug_Config > 0)
 //		osTaskErrorDebug("注册任务时,任务分配内存失败 %s\n",TN);
 //		#endif
 //		return (NULL);//返回错误
@@ -206,10 +206,17 @@ OsErrorValue osSTimeLogout(_STimes* STimes)
 OsErrorValue osSTimeInit(void)
 {
 	STimeListHead = NULL;
-	TaskHandle_STime = osTaskLogin("STime",osSTime,400,TaskTimeWheelDefault,-126,(void*)0,Task_Set_Default); 
+	TaskHandle_STime = osTaskLogin(
+						STimeName_Config,
+						osSTime,
+						STimeStackSize_Config,
+						STimeTimeWheel_Config,
+						STimePriorityLevel_Config,
+						STimePass_Config,
+						STimeSet_Config); 
 	if(TaskHandle_STime == NULL){
 
-		#if (osTaskDebug_Enable > 0)
+		#if (osTaskDebug_Config > 0)
 		osTaskErrorDebug("SIRQ 任务创建失败\n");
 		#endif
 		return (Error);//返回Error

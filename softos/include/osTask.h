@@ -101,7 +101,7 @@
 
      
 
-#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+#if (osCriticalToProtect_Config > 0)//启用了临界保护
 /*
  *
  * @函数名称: osProtect_DISABLE
@@ -114,7 +114,7 @@
  *
  * @注    释: 无
 */
-#define osProtect_DISABLE() 			ISR_Enable()
+#define osProtect_DISABLE() 			ISR_Config()
 /*
  *
  * @函数名称: osProtect_DISABLE
@@ -131,7 +131,7 @@
 #endif
 /*
  *
- * @函数名称: osTaskSwitch_Enable
+ * @函数名称: osTaskSwitch_Config
  *
  * @函数功能: 触发任务上下文切换
  *
@@ -141,10 +141,10 @@
  *
  * @注    释: 无
 */
-#define osTaskSwitch_Enable() 			do{osTaskGetSwitchState() = TaskSwitch_Wait; ISR_Touch();}while(0);
+#define osTaskSwitch_Config() 			do{osTaskGetSwitchState() = TaskSwitch_Wait; ISR_Touch();}while(0);
 /*
  *
- * @函数名称: osTaskSwitchConfig_Enable
+ * @函数名称: osTaskSwitchConfig_Config
  *
  * @函数功能: 带配置触发任务上下文切换
  *
@@ -154,7 +154,7 @@
  *
  * @注    释: 无
 */
-#define osTaskSwitchConfig_Enable(a,b)  do{a -> Config = b;osTaskGetSwitchState() = TaskSwitch_Wait; ISR_Touch();}while(0);
+#define osTaskSwitchConfig_Config(a,b)  do{a -> Config = b;osTaskGetSwitchState() = TaskSwitch_Wait; ISR_Touch();}while(0);
 /*
  *
  * @函数名称: osTaskEnterIRQ
@@ -277,21 +277,23 @@
 
 
 //任务句柄{
+#if (osTaskName_Config > 0)
 typedef 	uint8_t 	_TaskName;//任务名称
+#endif
 typedef 	uint8_t 	_TaskConfig;//任务控制量
 typedef 	uint32_t 	_TaskStackSize;//任务栈长度
 typedef 	uint32_t 	_TaskSemaphore;//任务信号量
-typedef 	uint32_t 	_TaskTimeWheel;//任务时间轮片
-typedef 	int8_t 		_TaskPriorityLevel;//任务优先级
+typedef 	uint32_t 	_TaskWheel;//任务时间轮片
+typedef 	int8_t 		_TaskLevel;//任务优先级
 typedef		uint32_t	_PostFormT;//任务邮箱
 typedef 	uint32_t 	_TaskAddr;//任务地址
 typedef		uint32_t	_TaskRealSP;//任务实时栈指针
 typedef		uint32_t	_TaskTimeFlag;//任务时间标志
 typedef		uint32_t	_NextTaskHandle;//任务时间标志
-#if (osTaskParameterPass_Enable > 0)
-typedef     uint32_t     _TaskParameterPass;//任务传参
+#if (osTaskArg_Config > 0)
+typedef     uint32_t     _TaskArg;//任务传参
 #endif
-#if (osPerformanceStatistics_Enable > 0) //开启了性能统计
+#if (osPerformanceStatistics_Config > 0) //开启了性能统计
 typedef     uint16_t     _TaskOccupyTime;//任务占用时长
 typedef     uint16_t      _TaskOccupyRatio;//任务占用比
 #endif
@@ -300,23 +302,25 @@ typedef struct
 {
 	_TaskRealSP			RealSP;				//任务实时栈指针
 	_TaskRealSP			RealSPb;			//任务实时栈指针
+#if (osTaskName_Config > 0)
 	_TaskName*			Name; 				//任务名称
+#endif
 	_TaskConfig 		Config;  			//任务控制量	
-#ifdef osSignalMutual_Enable
-	_TaskPriorityLevel	PriorityLevelb;   	//任务备用优先级
+#ifdef osSignalMutual_Config
+	_TaskLevel			Levelb;   	//任务备用优先级
 #endif
-//#ifdef osPost_Enable
-	_PostFormT			PF;					//任务邮箱
+	_TaskWheel 		TaskWheel;			//任务时间轮片
+	_TaskLevel 		Level;			//任务优先级
+	_TaskAddr*		Addr;					//任务地址
+	_TaskTimeFlag	TimeFlag;			//任务时间标志
+#if (osTaskArg_Config > 0)
+	_TaskArg*  Arg;    //任务传参	
+#endif
+//#ifdef osPost_Config
+	_TaskArg			Arg1;					//任务邮箱
 //#endif
-	_TaskTimeWheel 		TaskTimeWheel;			//任务时间轮片
-	_TaskPriorityLevel 	PriorityLevel;			//任务优先级
-	_TaskAddr*			Addr;					//任务地址
-	_TaskTimeFlag		TimeFlag;			//任务时间标志
-#if (osTaskParameterPass_Enable > 0)
-	_TaskParameterPass*  ParameterPass;    //任务传参	
-#endif
 
-#if (osPerformanceStatistics_Enable > 0) //开启了性能统计
+#if (osPerformanceStatistics_Config > 0) //开启了性能统计
     _TaskOccupyTime      OccupyTime;    //任务占用时长
     _TaskOccupyRatio     OccupyRatio;    //任务占用比
 #endif			
@@ -379,12 +383,14 @@ OsErrorValue osTaskSIRQInit(void);
  * @注    释: 无
  */
 _TaskHandle* osTaskLogin(
+#if (osTaskName_Config > 0)
 	_TaskName *TN,
+#endif
 	void*  TA,	
 	_TaskStackSize  TSS,
-	_TaskTimeWheel  TTW,
-	_TaskPriorityLevel  TPL,
-	#if (osTaskParameterPass_Enable > 0)
+	_TaskWheel  TTW,
+	_TaskLevel  TPL,
+	#if (osTaskArg_Config > 0)
     void*  TPP, 
 	#endif
     _TaskConfig  TC
@@ -412,14 +418,16 @@ _TaskHandle* osTaskLogin(
 _TaskHandle* osTaskLogin_Static(
 
 	_TaskHandle* TaskHandle,
+#if (osTaskName_Config > 0)
 	_TaskName *TN,
+#endif
 	void*  TA,
 	_TaskStackSize  TSS,
-	_TaskTimeWheel  TTW,
-	_TaskPriorityLevel  TPL,
-	#if (osTaskParameterPass_Enable > 0)
+	_TaskWheel  TTW,
+	_TaskLevel  TPL,
+#if (osTaskArg_Config > 0)
     void*  TPP, 
-	#endif
+#endif
     _TaskConfig  TC
 );
 
@@ -545,7 +553,7 @@ OsErrorValue osTaskSpeedTest(void);
 OsErrorValue osTaskMonitor(void);
 
 
-void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr);
+void osTaskSIRQ_Config(_SIRQList* SIRQList_Addr);
 
 OsErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr);
 

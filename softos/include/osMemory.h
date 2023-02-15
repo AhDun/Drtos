@@ -34,7 +34,7 @@
 
 
 
-#define osMemory_Enable //启用内存 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
+#define osMemory_Config //启用内存 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 
 
 //内存块标志{
@@ -60,7 +60,7 @@ typedef  struct
 //}
 typedef	_MemoryInfo*	_MemoryInfoHandle;
 extern _MemoryInfoHandle	MemoryInfoHandle;
-#if (osMemorySequence_Enable == 0)
+#if (osMemorySequence_Config == 0)
 //内存块结构{
 typedef uint8_t 	_MemoryFlag;
 typedef uint16_t 	_MemoryLength;

@@ -55,12 +55,12 @@ int main(void)
 	u32 _tr0;
 
 	osInit();
-
+	osTaskSpeedTest();
 
 
 	//osMemoryMalloc(25000);
 //	_tr0 = -2;
-	print("%x\n\n",0xFFFF1);
+//	print("%x\n\n",0xFFFF1);
 
 	TaskHandle_Task1 = osTaskLogin(
 	"RTC", 			                    //ÈÎÎñÃû³Æ

@@ -187,7 +187,7 @@ void RTC_WKUP_IRQHandler(void)
 	{ 
 		RTC_ClearFlag(RTC_FLAG_WUTF);	//清除中断标志
 	
-		osTaskSIRQ_Enable(&SIRQ_RTC[0]);
+		osTaskSIRQ_Config(&SIRQ_RTC[0]);
 
 
 

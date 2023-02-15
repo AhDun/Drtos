@@ -195,39 +195,67 @@
 //}
 
 //任务配置{
-#define osTaskDebug_Enable 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
-#define osCriticalToProtect_Enable   1  //临界保护  1：启用 0：禁用
+#define osTaskDebug_Config 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
+#define osCriticalToProtect_Config   1  //临界保护  1：启用 0：禁用
+#define osTaskName_Config			1// 任务的名称 1：启用 0：禁用
+#define osTaskUseStack_Config 1//启用进程栈  1：启用 0：禁用
 #if (__FPU_USED == 1)
-#define osFPU_Enable                    1//启用FPU硬件   1：启用 0：禁用
+#define osFPU_Config                    1//启用FPU硬件   1：启用 0：禁用
 		/*启用后会进行了对FPU压栈操作，同时也需要在编译器中开启浮点硬件才可以支持
 		  如果你的编译器或MCU不支持浮点硬件，请禁用！
 		*/
 #else
-#define osFPU_Enable                    0//启用FPU硬件   1：启用 0：禁用
+#define osFPU_Config                    0//启用FPU硬件   1：启用 0：禁用
 #endif
 
-#define osTaskNewR_Enable				1//加载任务时新寄存器   1：启用 0：禁用
+#define osTaskNewR_Config				1//加载任务时新寄存器   1：启用 0：禁用
 										/*可以通过关闭加载任务时新寄存器，加快新任务的启动速度，但是可能会影响任务的稳定性*/
 
 #define TaskTimeWheelDefault        	100u//默认轮片时间(单位ms)
 #define Default_Stack_Size             1000u//默认栈大小
 //}
+//主任务配置{
+#define MainName_Config 			"Main"
+#define MainStackSize_Config 		400
+#define MainTimeWheel_Config 		TaskTimeWheelDefault
+#define MainPriorityLevel_Config 	0
+#define MainPass_Config 			(void*)0
+#define MainSet_Config 				Task_Set_Default
+//}
+//软中断配置{
+#define SIRQName_Config 			"SIRQ"
+#define SIRQStackSize_Config 		400
+#define SIRQTimeWheel_Config 		TaskTimeWheelDefault
+#define SIRQPriorityLevel_Config 	-127
+#define SIRQPass_Config 			(void*)0
+#define SIRQSet_Config 				Task_Set_Default
+//}
+//软中断配置{
+#define STimeName_Config 			"STime"
+#define STimeStackSize_Config 		400
+#define STimeTimeWheel_Config 		TaskTimeWheelDefault
+#define STimePriorityLevel_Config 	-126
+#define STimePass_Config 			(void*)0
+#define STimeSet_Config 			Task_Set_Default
+//}
+
+
 
 
 
 //错误配置{
-#define osTaskRunError_Enable 1 //任务运行时发生致命错误 1:开启Debug输出 0:关闭Debug输出
+#define osTaskRunError_Config 1 //任务运行时发生致命错误 1:开启Debug输出 0:关闭Debug输出
 #define	osTaskErrorSet					0//任务运行时发生致命错误后处理 1：重启这个任务 0：暂停这个任务
 typedef int32_t OsErrorValue;//函数错误返回值
 //}
 
 
 //统计配置{
-#define osPerformanceStatistics_Enable 1//任务统计  1：启用 0：禁用
-#define os_TotalSystemRunningTime_Enable 1//记录系统运行时长  1：启用 0：禁用
+#define osPerformanceStatistics_Config 1//任务统计  1：启用 0：禁用
+#define os_TotalSystemRunningTime_Config 1//记录系统运行时长  1：启用 0：禁用
 #define TaskOccupyRatioSamplingTime 		1000 //任务统计时间，单位ms
-#define osSpeedTest_Enable 				1//启动时测试任务切换速度 1：启用 0：禁用
-#define osTaskParameterPass_Enable 		1//启动时测试任务切换速度 1：启用 0：禁用
+#define osSpeedTest_Config 				1//启动时测试任务切换速度 1：启用 0：禁用
+#define osTaskArg_Config 		1//启动时测试任务切换速度 1：启用 0：禁用
 //}
 
 
@@ -239,42 +267,42 @@ typedef int32_t OsErrorValue;//函数错误返回值
 //}
 
 //信号量配置{
-#define osSignalAutoApply_Enable		1//信号量自动分配   1：启用 0：禁用
+#define osSignalAutoApply_Config		1//信号量自动分配   1：启用 0：禁用
 		/*启用后会为信号量自动分配内存*/
-#define osSignalMutual_Enable //启用互斥信号量
-#define osSignalBinary_Enable //启用二值信号量
-#define osSignalCount_Enable  //启用计数信号量
-#define osSignalDebugError_Enable 1 //信号量错误DeBug  1:开启Debug输出 0:关闭Debug输出
+#define osSignalMutual_Config //启用互斥信号量
+#define osSignalBinary_Config //启用二值信号量
+#define osSignalCount_Config  //启用计数信号量
+#define osSignalDebugError_Config 1 //信号量错误DeBug  1:开启Debug输出 0:关闭Debug输出
 #define osSignalDebugError	osDebugError
 
 //}
 
 //邮箱配置{
 #define osPostHead		1	 //读邮件方式  1:队列式  0:栈式
-#define osPostDebugError_Enable 1 //邮箱错误DeBug  1:开启Debug输出 0:关闭Debug输出
+#define osPostDebugError_Config 1 //邮箱错误DeBug  1:开启Debug输出 0:关闭Debug输出
 #define osPostDebugError	osDebugError 
 //}
 
 //内存配置{
 #define MemTank_Max 					16 * 1024 //内存池大小配置
 
-#define MemoryProtect_Enable 			0 // 内存保护配置 	1:开启保护 0:关闭保护	
+#define MemoryProtect_Config 			0 // 内存保护配置 	1:开启保护 0:关闭保护	
 										//启用保护申请内存与释放内存所用的时长将会增加
 										//内存保护也不一定保证内存块一定不会发生错误!!!,只会降低内存发生错误的概率
 
-#define osMemoryInitReset_Enable 		0 //初始化内存时复位内存 1:开启 0:关闭
-#define osMemorySequence_Enable 		0 //内存顺序分配   1：启用 0：禁用
+#define osMemoryInitReset_Config 		0 //初始化内存时复位内存 1:开启 0:关闭
+#define osMemorySequence_Config 		0 //内存顺序分配   1：启用 0：禁用
 
-#if (osMemorySequence_Enable == 0)
+#if (osMemorySequence_Config == 0)
 
-#define osMemoryFreeReset_Enable 		0 //释放内存时复位内存 1:开启 0:关闭
-#define osMemoryFreeTest_Enable 		1 //释放内存时检查内存 1:开启 0:关闭
-#define osMemoryPart_Enable				1 //块分割  1:开启 0:关闭
-#define osMemoryMerge_Enable			1 //块合并  1:开启 0:关闭
+#define osMemoryFreeReset_Config 		0 //释放内存时复位内存 1:开启 0:关闭
+#define osMemoryFreeTest_Config 		1 //释放内存时检查内存 1:开启 0:关闭
+#define osMemoryPart_Config				1 //块分割  1:开启 0:关闭
+#define osMemoryMerge_Config			1 //块合并  1:开启 0:关闭
 
 #endif
 
-#define osMemoryDebug_Enable 			1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
+#define osMemoryDebug_Config 			1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
 #define osMemoryErrorDebug osDebugError//DeBug输出函数
 //}
 

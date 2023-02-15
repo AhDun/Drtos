@@ -33,12 +33,19 @@
 #include "main.h"
 
 
-
 #define xPSR_INIT_VALUE 0x01000000//xPSR寄存器初始化变量
-#if (osFPU_Enable > 0) //启用了FPU
+#if (osTaskUseStack_Config > 0)
+#if (osFPU_Config > 0) //启用了FPU
 #define LR_INIT_VALUE 0xFFFFFFED//xPSR寄存器初始化变量
 #else
 #define LR_INIT_VALUE 0xFFFFFFFD//xPSR寄存器初始化变量
+#endif
+#else
+#if (osFPU_Config > 0) //启用了FPU
+#define LR_INIT_VALUE 0xFFFFFFE9//xPSR寄存器初始化变量
+#else
+#define LR_INIT_VALUE 0xFFFFFFF9//xPSR寄存器初始化变量
+#endif
 #endif
 
 
@@ -60,7 +67,7 @@
 void ISR_Disable(void);
 /*
  *
- * @函数名称: ISR_Enable
+ * @函数名称: ISR_Config
  *
  * @函数功能: 开启所有中断
  *
@@ -71,7 +78,7 @@ void ISR_Disable(void);
  * @注    释: 无
  *
  */
-void ISR_Enable(void);
+void ISR_Config(void);
 /*
  *
  * @函数名称: Jump
@@ -113,7 +120,7 @@ void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
  * @注    释: 无
  *
  */
-void osTASK_START(uint32_t* tsas);
+__asm void osLinkUseEnable(void);
 /*
  *
  * @函数名称: ISR_Touch

@@ -30,8 +30,6 @@ void Task1_Func(char* a)
 {
 	RTC_TimeTypeDef RTC_TimeStruct;
 	_STimes* a1;
-	_STimes* a2;
-	_STimes* a3;
 	u8* buf = osMemoryMalloc(20);
 	TFTLCD_Init();			//LCD初始化
 	print(a);
@@ -50,7 +48,7 @@ void Task1_Func(char* a)
 
 	osTaskSIRQLogin(&SIRQ_RTC[0],RTC_Func);
 
-	a1 = osTimeLogin("RPost",1000,STimeConfig_NRestartL,Time_Func);
+	a1 = osTimeLogin("RPost",1000,STimeConfig_Restart,Time_Func);
 
 	for(;;) 
 	{
@@ -105,7 +103,7 @@ void Task2_Func(void)
 		a = 0;
 		do{
 			osMemoryReset(buf,' ');
-			sprint((char *)buf,"%s  %d%ms  %d ",TaskHandleListBuf -> Name,TaskHandleListBuf -> OccupyRatio,TaskHandleListBuf -> PriorityLevel);
+			sprint((char *)buf,"%s  %d%ms  %d ",TaskHandleListBuf -> Name,TaskHandleListBuf -> OccupyRatio,TaskHandleListBuf -> Level);
 			LCD_ShowString(10,270+(a*25),tftlcd_data.width,tftlcd_data.height,16,buf);
 			a++;
 			TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
@@ -154,7 +152,7 @@ void Task4_Func(u32* a)
 	u8 c;
 	LED_Init();
 	for(;;){
-		osTaskSwitch_Enable();//触发任务切换   
+		osTaskSwitch_Config();//触发任务切换   
 	}
 	for(;;){
 		for(c = 0; c < 50; c++){

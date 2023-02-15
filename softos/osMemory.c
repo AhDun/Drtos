@@ -33,7 +33,7 @@ _MemoryInfoHandle	MemoryInfoHandle;
 
 OsErrorValue  osMemoryInit(_MemoryInfo* MemoryInfo)
 {
-	#if (osMemoryInitReset_Enable > 0)
+	#if (osMemoryInitReset_Config > 0)
 	uint32_t addr;
 	osMemorySwitch(MemoryInfo); 
 	for(addr = 0;(MemoryInfoHandle -> HeadAddr + addr) < MemoryInfoHandle -> TailAddr;addr++){
@@ -47,14 +47,14 @@ OsErrorValue  osMemoryInit(_MemoryInfo* MemoryInfo)
 
 
 
-#if( osMemorySequence_Enable > 0)
+#if( osMemorySequence_Config > 0)
 void* osMemoryMalloc(uint32_t MemSize)
 {
 	void*  MemoryNewAddr  = (void *)(MemoryInfoHandle -> NextAddr);
 	if((MemoryInfoHandle -> NextAddr  + MemSize) <= MemoryInfoHandle -> TailAddr){//检查内存池是否已满
 		MemoryInfoHandle -> NextAddr = (uint8_t* )( MemoryInfoHandle -> NextAddr + MemSize);
 	}else{
-		#if (osMemoryDebug_Enable > 0)//开启了内存保护配置
+		#if (osMemoryDebug_Config > 0)//开启了内存保护配置
 		osMemoryErrorDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
 		#endif
 		return (NULL);
@@ -99,8 +99,8 @@ void* osMemoryMalloc(uint32_t MemSize)
 	_MemoryUnit* MemoryAddr2;
 	int32_t Length;
 
-	#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-		#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+	#if (MemoryProtect_Config > 0)//开启了内存保护配置
+		#if (osCriticalToProtect_Config > 0)//启用了临界保护
 		osProtect_ENABLE();//进入临界保护
 		#endif
 		if(osMemorySum() == Error){
@@ -117,8 +117,8 @@ void* osMemoryMalloc(uint32_t MemSize)
 		
 		MemoryNewAddr = (void *)(MemoryInfoHandle -> NextAddr + sizeof(MemoryStruct));
 		MemoryInfoHandle -> NextAddr = (uint8_t* )( MemoryInfoHandle -> NextAddr + MemSize);
-		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+		#if (MemoryProtect_Config > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Config > 0)//启用了临界保护
 			osProtect_DISABLE();//退出临界保护
 			#endif
 		#endif
@@ -131,7 +131,7 @@ void* osMemoryMalloc(uint32_t MemSize)
 		do{
 			_MemoryStruct = (MemoryStruct*)MemoryAddr1;
 			if(_MemoryStruct -> MemoryFlag == Memory_Free){
-				#if( osMemoryMerge_Enable > 0)
+				#if( osMemoryMerge_Config > 0)
 				if(Length == 0){//只有在长度为零时,才记录
 					MemoryAddr2 = MemoryAddr1;//记录邻头块的地址
 				}
@@ -141,7 +141,7 @@ void* osMemoryMalloc(uint32_t MemSize)
 				Length = _MemoryStruct -> MemoryLength;
 				#endif
 				if( Length >= MemSize){
-					#if (osMemoryPart_Enable > 0)
+					#if (osMemoryPart_Config > 0)
 					if((Length - MemSize) > sizeof(MemoryStruct)){//进行切块操作
 						_MemoryStruct = (MemoryStruct*)(MemoryAddr2 + MemSize);	
 						_MemoryStruct -> MemoryFlag = Memory_Free;//设为释放态
@@ -153,8 +153,8 @@ void* osMemoryMalloc(uint32_t MemSize)
 					_MemoryStruct = (MemoryStruct*)MemoryAddr2;
 					_MemoryStruct -> MemoryLength  = (_MemoryLength)Length;//输入块长度
 					_MemoryStruct -> MemoryFlag = Memory_Occupy;//设为占用态
-					#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-						#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+					#if (MemoryProtect_Config > 0)//开启了内存保护配置
+						#if (osCriticalToProtect_Config > 0)//启用了临界保护
 						osProtect_DISABLE();//退出临界保护
 						#endif
 					#endif
@@ -166,26 +166,26 @@ void* osMemoryMalloc(uint32_t MemSize)
 			}
 			MemoryAddr1 += _MemoryStruct -> MemoryLength;
 		}while(MemoryAddr1 < MemoryInfoHandle -> NextAddr);//
-		#if( osMemoryMerge_Enable > 0)
+		#if( osMemoryMerge_Config > 0)
 		if((Length + ( MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> NextAddr)) >= MemSize){
 			_MemoryStruct = (MemoryStruct*)MemoryAddr2;
 			_MemoryStruct -> MemoryLength  = (_MemoryLength)MemSize;
 			_MemoryStruct -> MemoryFlag = Memory_Occupy;//设为占用态
 
 			MemoryInfoHandle -> NextAddr += MemSize;
-			#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-				#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+			#if (MemoryProtect_Config > 0)//开启了内存保护配置
+				#if (osCriticalToProtect_Config > 0)//启用了临界保护
 				osProtect_DISABLE();//退出临界保护
 				#endif
 			#endif
 			return MemoryAddr2 + sizeof(MemoryStruct); //返回申请到地址并进行内存复位操作
 		}
 		#endif
-		#if (osMemoryDebug_Enable > 0)//开启了内存保护配置
+		#if (osMemoryDebug_Config > 0)//开启了内存保护配置
 		osMemoryErrorDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
 		#endif
-		#if (MemoryProtect_Enable > 0)
-			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+		#if (MemoryProtect_Config > 0)
+			#if (osCriticalToProtect_Config > 0)//启用了临界保护
 			osProtect_DISABLE();//退出临界保护
 			#endif
 		#endif
@@ -200,7 +200,7 @@ void* osMemoryReset(void* addr,uint8_t data)
 	int32_t Length = (_MemoryStruct1 -> MemoryLength) - sizeof(MemoryStruct);
 	_MemoryUnit* addr_Buf = (_MemoryUnit*)addr;
 
-	#if (MemoryProtect_Enable > 0)//开启了内存保护配置
+	#if (MemoryProtect_Config > 0)//开启了内存保护配置
 		if(osMemorySum() == Error){
 			return (NULL);
 		}
@@ -222,10 +222,10 @@ void* osMemoryReset(void* addr,uint8_t data)
 OsErrorValue osMemoryFree(void* addr)
 {
 	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)addr - sizeof(MemoryStruct));
-	#if( osMemoryFreeTest_Enable > 0)
+	#if( osMemoryFreeTest_Config > 0)
 	MemoryStruct* _MemoryStruct2 = (MemoryStruct*)((uint8_t*)addr - sizeof(MemoryStruct) + _MemoryStruct1 -> MemoryLength);
-	#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-		#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+	#if (MemoryProtect_Config > 0)//开启了内存保护配置
+		#if (osCriticalToProtect_Config > 0)//启用了临界保护
 		osProtect_ENABLE();//进入临界保护
 		#endif
 		if(osMemorySum() == Error){
@@ -233,11 +233,11 @@ OsErrorValue osMemoryFree(void* addr)
 		}
 	#endif
 	if(_MemoryStruct1 -> MemoryFlag == Memory_Free){//检查这个要释放的块状态,如果已经释放,就会返回错误
-		#if (osMemoryDebug_Enable > 0)
+		#if (osMemoryDebug_Config > 0)
 		osMemoryErrorDebug("内存已释放! 勿重复释放 %X\n",addr);
 		#endif
-		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+		#if (MemoryProtect_Config > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Config > 0)//启用了临界保护
 			osProtect_DISABLE();//退出临界保护
 			#endif
 		#endif
@@ -245,22 +245,22 @@ OsErrorValue osMemoryFree(void* addr)
 	}else if( (_MemoryUnit*)_MemoryStruct2 >= MemoryInfoHandle -> NextAddr || _MemoryStruct2 -> MemoryFlag == Memory_Occupy || _MemoryStruct2 -> MemoryFlag == Memory_Free){
 			 //检查这个要释放的块,所指向下一个块的状态是否为释放态或占用态,再或者这个要释放的块的尾地址大于新地址,这个块才可以被释放
 		_MemoryStruct1 -> MemoryFlag = Memory_Free;//设为释放态
-		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+		#if (MemoryProtect_Config > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Config > 0)//启用了临界保护
 			osProtect_DISABLE();//退出临界保护
 			#endif
 		#endif
-		#if (osMemoryFreeReset_Enable > 0)
+		#if (osMemoryFreeReset_Config > 0)
 		osMemoryReset(addr,0x00);
 		#endif
 		return (OK);//返回正常
 	}
 	else{
-		#if (osMemoryDebug_Enable > 0)
+		#if (osMemoryDebug_Config > 0)
 		osMemoryErrorDebug("内存释放失败! 内存地址不正确 %X,%d\n",addr,_MemoryStruct2 -> MemoryLength );
 		#endif
-		#if (MemoryProtect_Enable > 0)//开启了内存保护配置
-			#if (osCriticalToProtect_Enable > 0)//启用了临界保护
+		#if (MemoryProtect_Config > 0)//开启了内存保护配置
+			#if (osCriticalToProtect_Config > 0)//启用了临界保护
 			osProtect_DISABLE();//退出临界保护
 			#endif
 		#endif
@@ -268,7 +268,7 @@ OsErrorValue osMemoryFree(void* addr)
 	}
 	#else
 	_MemoryStruct1 -> MemoryFlag = Memory_Free;//设为释放态
-	#if (osMemoryFreeReset_Enable > 0)
+	#if (osMemoryFreeReset_Config > 0)
 	osMemoryReset(addr,0x00);
 	#endif
 	return (OK);//返回正常
@@ -326,7 +326,7 @@ OsErrorValue osMemorySum(void)
 		if(_MemoryStruct -> MemoryFlag == Memory_Occupy || _MemoryStruct -> MemoryFlag == Memory_Free){
 			Count += 1;
 		}else{
-			#if (osMemoryDebug_Enable > 0)
+			#if (osMemoryDebug_Config > 0)
 			osMemoryErrorDebug("内存块异常! %X\n",_MemoryStruct);
 			#endif
 			return (Error);

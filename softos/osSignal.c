@@ -62,13 +62,13 @@
  * @注    释: 无
  *
  */
-#if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
+#if (osSignalAutoApply_Config > 0)//启用了信号量自动分配
 _SignalHandle* osSignalLogin(_SignalType SP)
 {
-	#if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
+	#if defined osSignalMutual_Config || defined osSignalBinary_Config || defined osSignalCount_Config
 		_SignalHandle* ST = osSignalMemoryMalloc(sizeof(_SignalHandle));//为信号量结构体申请内存
 		if(ST == NULL){//如果内存申请函数返回为零,说明申请失败
-			#if (osSignalDebugError_Enable > 0)
+			#if (osSignalDebugError_Config > 0)
 			osSignalDebugError("注册信号量时内存申请失败 %s\n",osTaskGetRunTaskHandle() -> Name);
 			#endif
 			return (NULL);//返回空,表示错误
@@ -77,7 +77,7 @@ _SignalHandle* osSignalLogin(_SignalType SP)
 		if(SP == Signal_Mutual || SP == Signal_Binary || SP == Signal_Count){
 			ST -> Type = SP;//写入信号类型
 		}else{
-			#if (osSignalDebugError_Enable > 0)
+			#if (osSignalDebugError_Config > 0)
 			osSignalDebugError("注册信号量时类型错误 %s\n",osTaskGetRunTaskHandle() -> Name);
 			#endif
 			return (NULL);
@@ -105,26 +105,26 @@ _SignalHandle* osSignalLogin(_SignalType SP)
 OsErrorValue osSignalLogin(_SignalHandle* ST,_SignalType SP)
 {
     switch(SP){
-#ifdef osSignalMutual_Enable 
+#ifdef osSignalMutual_Config 
         case Signal_Mutual://互斥信号量
                             ST ->SV = false;//将信号值设为假
                             ST ->SP = NULL;//写入信号类型
                             return (OK);
 #endif
-#ifdef osSignalBinary_Enable 
+#ifdef osSignalBinary_Config 
         case Signal_Binary://二值信号量
                             ST ->SV = false;//将信号值设为假
 							ST ->SP = NULL;//写入信号类型
 							return (OK);
 #endif
-#ifdef osSignalCount_Enable
+#ifdef osSignalCount_Config
         case Signal_Count://计数信号量
 							ST ->SV = 0;//将信号值设为零
                             ST ->SP = NULL;//写入信号类型
                             return (OK);
 #endif
         default:
-				#if (osSignalDebugError_Enable > 0)
+				#if (osSignalDebugError_Config > 0)
 				osSignalDebugError("注册信号量时类型错误 %s\n",osTaskGetRunTaskHandle() -> Name);
 				#endif
 				return (Error);//break;
@@ -150,7 +150,7 @@ static OsErrorValue osSignalApplyToken(_SignalHandle* ST)
 {
 	_SignalToken* SemaphoreToken_Buf = osSignalMemoryMalloc(sizeof(_SignalToken));//为信号量结构体申请内存
 	if(SemaphoreToken_Buf == NULL){
-		#if (osSignalDebugError_Enable > 0)
+		#if (osSignalDebugError_Config > 0)
 		osSignalDebugError("申请占用信号量令牌时内存申请失败 %s\n",osTaskGetRunTaskHandle() -> Name);
 		#endif
 		return (Error);
@@ -185,7 +185,7 @@ static OsErrorValue osSignalWaitToken(_SignalHandle* ST)
 	_TaskHandle*	TaskInfoTable_Buf;
 	_SignalToken* SemaphoreToken_Buf = osSignalMemoryMalloc(sizeof(_SignalToken));//为信号量结构体申请内存
 	if(SemaphoreToken_Buf == NULL){
-		#if (osSignalDebugError_Enable > 0)
+		#if (osSignalDebugError_Config > 0)
 		osSignalDebugError("申请等待信号量令牌时内存申请失败 %s\n",osTaskGetRunTaskHandle() -> Name);
 		#endif
 		return (Error);
@@ -198,7 +198,7 @@ static OsErrorValue osSignalWaitToken(_SignalHandle* ST)
 		while(*NextAddr_Buf != NULL){
 			SemaphoreToken_Buf1 = (_SignalToken*)*NextAddr_Buf;
 			TaskInfoTable_Buf = (_TaskHandle*)SemaphoreToken_Buf1 -> TaskInfo;
-			if(osTaskGetRunTaskHandle() -> PriorityLevel < TaskInfoTable_Buf -> PriorityLevel){
+			if(osTaskGetRunTaskHandle() -> Level < TaskInfoTable_Buf -> Level){
 				NextAddr_Buf1 = (_NextAddr)*NextAddr_Buf;
 				*NextAddr_Buf = (_NextAddr)SemaphoreToken_Buf;
 				SemaphoreToken_Buf -> DownAddr = NextAddr_Buf1;
@@ -206,13 +206,13 @@ static OsErrorValue osSignalWaitToken(_SignalHandle* ST)
 					TaskInfoTable_Buf -> Config = Task_State_Up_SI;
 					return (OK);
 				}
-				osTaskSwitchConfig_Enable(osTaskGetRunTaskHandle(),Task_State_Up_SI);//触发异常,进行任务切换 //修改为信号挂起(等待态)
+				osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_Up_SI);//触发异常,进行任务切换 //修改为信号挂起(等待态)
 				return (OK);
 			}
 			NextAddr_Buf = (_NextAddr*)*NextAddr_Buf;
 		}
 		*NextAddr_Buf = (_NextAddr)SemaphoreToken_Buf;
-		osTaskSwitchConfig_Enable(osTaskGetRunTaskHandle(),Task_State_Up_SI);//触发异常,进行任务切换 //修改为信号挂起(等待态)
+		osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_Up_SI);//触发异常,进行任务切换 //修改为信号挂起(等待态)
 		return(OK);
 	}
 }
@@ -220,11 +220,11 @@ static OsErrorValue osSignalWaitToken(_SignalHandle* ST)
 
 OsErrorValue osSignalUseWait(_SignalHandle* ST)
 {
-#if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
+#if defined osSignalMutual_Config || defined osSignalBinary_Config || defined osSignalCount_Config
 	_TaskHandle* TaskHandle;
 	_SignalToken* SemaphoreToken_Buf;
 	switch(ST -> Type){
-#ifdef osSignalBinary_Enable 
+#ifdef osSignalBinary_Config 
 		case Signal_Binary:	
 							if(ST -> NextAddr != NULL){
 								return osSignalWaitToken(ST);
@@ -233,20 +233,20 @@ OsErrorValue osSignalUseWait(_SignalHandle* ST)
 								return osSignalApplyToken(ST);
 							}
 #endif
-#ifdef osSignalMutual_Enable 
+#ifdef osSignalMutual_Config 
 		case Signal_Mutual:
 							if(ST -> NextAddr != NULL){
 								SemaphoreToken_Buf = (_SignalToken*)ST -> NextAddr;
 								TaskHandle = (_TaskHandle*)SemaphoreToken_Buf -> TaskInfo;
-								if(osTaskGetRunTaskHandle() -> PriorityLevel < TaskHandle -> PriorityLevel){
-									TaskHandle -> PriorityLevel = osTaskGetRunTaskHandle() -> PriorityLevel;//
+								if(osTaskGetRunTaskHandle() -> Level < TaskHandle -> Level){
+									TaskHandle -> Level = osTaskGetRunTaskHandle() -> Level;//
 								}
 								return osSignalWaitToken(ST);
 							}else{
 								return osSignalApplyToken(ST);
 							}
 #endif
-#ifdef osSignalCount_Enable
+#ifdef osSignalCount_Config
 		case Signal_Count:
 							if(ST -> Value > 0){
 								ST -> Value =  ST -> Value - 1;
@@ -260,7 +260,7 @@ OsErrorValue osSignalUseWait(_SignalHandle* ST)
 							}
 #endif
 		default:
-				#if (osSignalDebugError_Enable > 0)
+				#if (osSignalDebugError_Config > 0)
 				osSignalDebugError("占用信号量时输入类型错误 %s\n",osTaskGetRunTaskHandle() -> Name);
 				#endif
 				return(Error);
@@ -294,21 +294,21 @@ OsErrorValue osSignalUse(_SignalHandle* ST)
  */
 OsErrorValue osSignalFree(_SignalHandle* ST)
 {
-#if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
+#if defined osSignalMutual_Config || defined osSignalBinary_Config || defined osSignalCount_Config
 	_SignalToken* SemaphoreToken_Buf;
 	_TaskHandle*	TaskInfoTable_Buf;
 
 	switch(ST -> Type){
-#ifdef osSignalBinary_Enable
+#ifdef osSignalBinary_Config
 		case Signal_Binary:
 							break;
 #endif
-#ifdef osSignalMutual_Enable
+#ifdef osSignalMutual_Config
 		case Signal_Mutual:
-							osTaskGetRunTaskHandle() -> PriorityLevel = osTaskGetRunTaskHandle() -> PriorityLevelb;
+							osTaskGetRunTaskHandle() -> Level = osTaskGetRunTaskHandle() -> Levelb;
 							break;
 #endif
-#ifdef osSignalCount_Enable
+#ifdef osSignalCount_Config
 		case Signal_Count:	
 							if(ST -> NextAddr == NULL){
 								ST -> Value = ST -> Value + 1;
@@ -317,7 +317,7 @@ OsErrorValue osSignalFree(_SignalHandle* ST)
 							break;
 #endif
 		default:
-				#if (osSignalDebugError_Enable > 0)
+				#if (osSignalDebugError_Config > 0)
 				osSignalDebugError("释放信号量时类型错误 %s\n",osTaskGetRunTaskHandle() -> Name);
 				#endif
 				return(Error);
@@ -327,17 +327,17 @@ OsErrorValue osSignalFree(_SignalHandle* ST)
 		TaskInfoTable_Buf = (_TaskHandle*)SemaphoreToken_Buf  -> TaskInfo;
 		TaskInfoTable_Buf -> Config = Task_State_RE;  //主动挂起(挂起态)
 		if(osSignalMemoryFree(SemaphoreToken_Buf) != OK){
-			#if (osSignalDebugError_Enable > 0)
+			#if (osSignalDebugError_Config > 0)
 			osSignalDebugError("释放信号量时释放内存错误 %s\n",osTaskGetRunTaskHandle() -> Name);
 			#endif
 			return (Error);
 		}
-		if(TaskInfoTable_Buf -> PriorityLevel < osTaskGetRunTaskHandle() -> PriorityLevel){
-			osTaskSwitch_Enable();//触发异常,进行任务切换
+		if(TaskInfoTable_Buf -> Level < osTaskGetRunTaskHandle() -> Level){
+			osTaskSwitch_Config();//触发异常,进行任务切换
 		}
 		return (OK);
 	}else{
-		#if (osSignalDebugError_Enable > 0)
+		#if (osSignalDebugError_Config > 0)
 		osSignalDebugError("释放信号量时已经为空 %s\n",osTaskGetRunTaskHandle() -> Name);
 		#endif
 		return (Error);
@@ -360,12 +360,12 @@ OsErrorValue osSignalFree(_SignalHandle* ST)
  */
 OsErrorValue osSignalLogout(_SignalHandle* ST)
 {
-	#if defined osSignalMutual_Enable || defined osSignalBinary_Enable || defined osSignalCount_Enable
+	#if defined osSignalMutual_Config || defined osSignalBinary_Config || defined osSignalCount_Config
 	ST -> NextAddr =  ST -> Type =  ST -> Value = 0;
-	#if (osSignalAutoApply_Enable > 0)//启用了信号量自动分配
+	#if (osSignalAutoApply_Config > 0)//启用了信号量自动分配
 
 	if(osSignalMemoryFree((uint8_t*)ST) == Error){//需要把信号量的所占内存释放
-		#if (osSignalDebugError_Enable > 0)
+		#if (osSignalDebugError_Config > 0)
 		osSignalDebugError("注销信号量时释放内存错误 %s\n",osTaskGetRunTaskHandle() -> Name);
 		#endif
 		return (Error);//释放内存时,发生错误,返回错误

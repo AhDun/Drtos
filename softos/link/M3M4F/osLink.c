@@ -51,7 +51,7 @@ __asm void ISR_Disable(void)
 	BX      LR	//退出函数，跳转到BX寄存器中所存的地址
 }
 
-__asm void ISR_Enable(void)
+__asm void ISR_Config(void)
 {
 
 	CPSIE   I	//禁用所有中断
@@ -80,7 +80,7 @@ __asm void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t*
 	MOV   R4,   SP		//将SP寄存器备份到R4寄存器中
 	LDR   SP,   [R3]		//以R3寄存器中的值做为指针，取值到SP寄存器中
 		
-	#if (osFPU_Enable > 0) //启用了FPU
+	#if (osFPU_Config > 0) //启用了FPU
 	MOV   R5,   #0x00		//将0x00传给R5寄存器
 	PUSH  {R5}			//FPSCR
 	SUB   SP,    SP,#0x40	//SP寄存器中的值减去0x40
@@ -100,7 +100,7 @@ __asm void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t*
 	PUSH   {R0}	//R0(0x00)
 
 
-	#if (osFPU_Enable > 0) //启用了FPU
+	#if (osFPU_Config > 0) //启用了FPU
 	SUB   SP,    SP,#0x40	//SP寄存器中的值减去0x40
 
 	#endif
@@ -126,9 +126,9 @@ __asm void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t*
 }
 /*
  *
- * @函数名称: osTASK_FIRST_START
+ * @函数名称: osLinkUseEnable
  *
- * @函数功能: 启动第一个任务
+ * @函数功能: 启用进程栈
  *
  * @输入参数: uint32_t *tsas(任务栈地址)
  *
@@ -137,21 +137,25 @@ __asm void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t*
  * @注   释: 无
  *
  */
-__asm void osTASK_START(uint32_t* tsas)
+__asm void osLinkUseEnable(void)
 								//R0
 								//C编译器函数各个传参对应的寄存器
 {
+#if (osTaskUseStack_Config > 0)
   MOV	R1,	  SP
   MSR   PSP,  R1		//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
-  LDR   R0,     [R0]	//以R3寄存器中的值做为指针，取值到SP寄存器中
+  LDR	R0,	  =osTaskGetRunTaskHandle()
+  LDR	R0,	  [R0]
+  LDR	R0,	  [R0]
   MSR   MSP,  R0		//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
  /*使能进程栈{*/
   MRS	R0,		CONTROL 	//通过MRS命令读取控制寄存器到R0寄存器
   ORR	R0,		R0,#0x02	//R0寄存器与0x02进行或运算，使的bit1位 置1
   MSR	CONTROL,R0			//再通过MSR命令将R0寄存器中的内容写回控制寄存器中
   /*}*/
-
+#endif
   BX    LR	//退出函数，跳转到BX寄存器中所存的地址
+  NOP
 }
 
 
@@ -220,6 +224,7 @@ __asm void SysTick_Handler(void)
  * @注   释: 无
  *
  */
+#if (osTaskUseStack_Config > 0)
 __asm void PendSV_Handler(void)
 {
 	PRESERVE8
@@ -230,7 +235,7 @@ __asm void PendSV_Handler(void)
 	CPSID   I			//禁用所有中断
  
 	MRS	  R1,	PSP		//通过MRS命令将PSP（进程栈）寄存器中的内容读到R1寄存器中
-#if (osFPU_Enable > 0) //启用了FPU
+#if (osFPU_Config > 0) //启用了FPU
     TST		LR, #0x10
     IT		EQ
     VSTMDBEQ R1!,{S16-S31}
@@ -254,7 +259,7 @@ __asm void PendSV_Handler(void)
 	LDR   R1,   [R0]	
 
 	LDMIA R1! ,{R4-R11,LR}	//弹栈R4-R11
-#if (osFPU_Enable > 0) //启用了FPU
+#if (osFPU_Config > 0) //启用了FPU
 	TST		LR, #0x10
     IT		EQ
     VLDMIAEQ R1!,{S16-S31}
@@ -265,12 +270,59 @@ __asm void PendSV_Handler(void)
 	CPSIE   I			//启用所有中断
     BX	  LR
 	NOP
-	NOP
-#if (osFPU_Enable > 0) //启用了FPU
+#if (osFPU_Config > 0) //启用了FPU
 	NOP
 #endif
 }
+#else
+__asm void PendSV_Handler(void)
+{
+	PRESERVE8
 
+	extern osTaskGetRunTaskHandle()
+	extern osTaskNext
+
+	CPSID   I			//禁用所有中断
+ 
+#if (osFPU_Config > 0) //启用了FPU
+    TST		LR, #0x10
+    IT		EQ
+    VSTMDBEQ SP!,{S16-S31}
+#endif
+
+    STMDB SP!,	{R4-R11,LR}	//压栈R4-R11
+
+	LDR   R0,	=osTaskGetRunTaskHandle()
+	LDR	  R0,	[R0]
+    STR   SP,   [R0]	
+	
+
+	CPSIE   I
+
+	BL.W	osTaskNext
+
+	CPSID   I			//禁用所有中断
+
+	LDR   R0,	=osTaskGetRunTaskHandle()
+	LDR	  R0,	[R0]
+	LDR   SP,   [R0]	
+
+	LDMIA SP! ,{R4-R11,LR}	//弹栈R4-R11
+#if (osFPU_Config > 0) //启用了FPU
+	TST		LR, #0x10
+    IT		EQ
+    VLDMIAEQ SP!,{S16-S31}
+#endif
+
+	CPSIE   I			//启用所有中断
+    BX	  LR
+	NOP
+	NOP
+#if (osFPU_Config > 0) //启用了FPU
+	NOP
+#endif
+}
+#endif
 
 __asm void print(const char* s,...)
 {

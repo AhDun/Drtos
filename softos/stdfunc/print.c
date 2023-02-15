@@ -150,7 +150,7 @@ static void _printS10(int num,int ctl,int* s)
  */
 static void _printSring(int p,int* s)
 {
-	while(1){
+	for(;;){
 		if(*(char*)p != '\0'){
 			_spchar(*(char*)p,s);
 		}
@@ -186,14 +186,13 @@ static void _print16(int num,int c,int* s)
 		_spchar(0 + 48,s);
 		_spchar(0 + 48,s);
 	}else{
-		while(1){
+		for(;;){
 			_BUF = ((num >> _FLAG) & 0x0F);
-			if(_BUF > 0 || _FLAG1 > 0){
+			if(_BUF >= 10){
 				_spchar(c + (_BUF - 10),s);
 				_FLAG1 = 1;
-			}
-			else if(_BUF >= 10){
-				_spchar(c + (_BUF - 10),s);
+			}else if(_BUF > 0 || _FLAG1 > 0){
+				_spchar(_BUF + 48,s);
 				_FLAG1 = 1;
 			}
 			if(_FLAG <= 0){
@@ -228,7 +227,7 @@ static void _print8(int num,int* s)
 		_spchar(_BUF + 48,s);
 		_FLAG1 = 1;
 	}
-	while(1){
+	for(;;){
 		_BUF = ((num >> _FLAG) & 0x07);
 		if(_BUF > 0 || _FLAG1 > 0){
 			_spchar(_BUF + 48,s);
@@ -328,7 +327,7 @@ void xprint(int sp,int c)
 		_SP = _SP + 0x04;
 		s1 = 0;
 	}
-	while(1)
+	for(;;)
 	{
 		switch(*_CONTROL){
 			case '%':
@@ -428,47 +427,7 @@ void xprint(int sp,int c)
 	}
   
 }
-/*
- *
- * @函数名称: 无
- *
- * @函数功能: 无
- *
- * @输入参数: 无
- *
- * @返 回 值: 无
- *
- * @注    释: 无
- *
- */
-void tprint(const char* c,unsigned int s)
-{
-	while(1)
-	{
-		switch(*c){
-			case '%':
-					c++;
-					switch(*c){
-						case 'd':_printS10((s / 1000) /86400,0,0);break;//天			
-						case 'h':_printS10(((s / 1000) /3600) % 24,0,0);break;//时
-						case 'm':_printS10(((s / 1000) /60) % 60,0,0);break;//分
-						case 's':_printS10((s / 1000) % 60,0,0);break;//秒
-						case '%':_spchar('%',0);
-					}
-					break;
-			case '\0':
-					return;
-			case '\n':
-					_spchar('\n',0);
-					break;
-			default:
-					_spchar((char)*c,0);
-					break;
-		}
-		c++;
-	}
 
-}
 
 
 

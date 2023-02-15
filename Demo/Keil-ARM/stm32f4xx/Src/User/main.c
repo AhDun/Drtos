@@ -60,7 +60,7 @@ int main(void)
 
 	//osMemoryMalloc(25000);
 //	_tr0 = -2;
-//	print("%2.2f\n\n",1.24);
+	print("%x\n\n",0xFFFF1);
 
 	TaskHandle_Task1 = osTaskLogin(
 	"RTC", 			                    //ÈÎÎñÃû³Æ
@@ -107,7 +107,7 @@ int main(void)
 
 	//osTaskLogout(TaskHandle_Task3);
 
-	while(1){
+	for(;;){
 		for(_tr0 = 0;_tr0 < 500;_tr0++){
 			osPostReadWait();
 		}

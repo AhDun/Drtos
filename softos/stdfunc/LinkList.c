@@ -51,6 +51,22 @@ _LinkListXError uLinkListHeadWrtie(uint32_t* LinkListHeadAddr,uint32_t*  uListx)
 	}
 	return (OK);
 }
+_LinkListXError uLinkListDel(uint32_t* LinkListHeadAddr,uint32_t*  uListx)
+{
+	uint32_t* LinkListHeadAddr_Buf = (uint32_t*)*LinkListHeadAddr;
+	uint32_t* LinkListHeadAddr_Buf1 = LinkListHeadAddr_Buf;
+	if(*LinkListHeadAddr == (uint32_t)uListx){
+		*LinkListHeadAddr = (uint32_t)*LinkListHeadAddr_Buf;
+		return (OK);
+	}
+	LinkListHeadAddr_Buf = (uint32_t*)*LinkListHeadAddr_Buf;
+	while(LinkListHeadAddr_Buf != uListx){
+		LinkListHeadAddr_Buf1 = LinkListHeadAddr_Buf;
+		LinkListHeadAddr_Buf = (uint32_t*)*LinkListHeadAddr_Buf;
+	}
+	*LinkListHeadAddr_Buf1 = *LinkListHeadAddr_Buf;
+	return (OK);
+}
 
 uint32_t* uLinkListTailRead(uint32_t* LinkListHeadAddr)
 {

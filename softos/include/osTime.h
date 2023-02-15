@@ -32,24 +32,12 @@
 
 
 
+//定时器类型{
+#define STimeConfig_Restart		0x01 // 重复
+#define STimeConfig_NRestartL	0x02 // 一次并删除
+#define STimeConfig_NRestart	0x03 // 一次
+//}
 
-#define STimeConfig_Restart		0x01
-#define STimeConfig_NRestartL	0x02
-#define STimeConfig_NRestart	0x03
-
-/*
- *
- * @函数名称: osClockGetTimePulse
- *
- * @函数功能: 获取系统的时钟数
- *
- * @输入参数: 无	
- *
- * @返 回 值: 无
- *
- * @注    释: 无
-*/
-#define osClockGetTimePulse()		osTime.TSRT
 
 
 /*
@@ -64,7 +52,7 @@
  *
  * @注    释: 无
 */
-#define osClockGetOsRTC()	osTime.TSRT		
+#define osClockGetOsRTC()		OsTimeSystemRunTime		
 /*
  *
  * @函数名称: osClockGetOsRTCD
@@ -291,6 +279,20 @@ void osClockTimePulse(void);
 _STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr);
 /*
  *
+ * @函数名称: osSTimeLogout
+ *
+ * @函数功能: 软定时器注销
+ *
+ * @输入参数: STimes	软定时器地址
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
+OsErrorValue osSTimeLogout(_STimes* STimes);
+/*
+ *
  * @函数名称: osTimeLogin
  *
  * @函数功能: 软定时器注册
@@ -305,6 +307,7 @@ _STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STimeFlag Flag,_
  * @注    释: 无
  *
  */
+
 _STimes* osTimeLogin(_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr);
 /*
  *

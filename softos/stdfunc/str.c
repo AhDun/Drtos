@@ -68,7 +68,7 @@ signed char CharComp(signed char *strs,signed char *strc)
  */
 signed char StrComp(signed char *strs,signed char *strc)
 {
-	while(1){
+	for(;;){
 		if(*strs != *strc){
 			return false;
 		}
@@ -94,7 +94,7 @@ signed char StrComp(signed char *strs,signed char *strc)
  */
 signed char StrCutComp(signed char *strs,signed char *strc,signed char cutchar)
 {
-	while(1){
+	for(;;){
 		if(*strc == cutchar){
 			return true;
 		}
@@ -125,7 +125,7 @@ signed char StrCutComp(signed char *strs,signed char *strc,signed char cutchar)
 unsigned int StrLoca(signed char *strs,signed char locachar)
 {
 	unsigned int Locas = 0;
-	while(1){
+	for(;;){
 		if(*strs == '\0'){
 			return false;
 		}
@@ -152,7 +152,7 @@ unsigned int StrLoca(signed char *strs,signed char locachar)
 unsigned int StrLength(signed char *strs)
 {
 	unsigned int Length = 0;
-	while(1){
+	for(;;){
 		if(*strs == '\0'){
 			return (Length);
 		}else{

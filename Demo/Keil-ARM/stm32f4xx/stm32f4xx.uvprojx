@@ -312,7 +312,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>2</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -403,11 +403,6 @@
           <GroupName>OS</GroupName>
           <Files>
             <File>
-              <FileName>osClock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\softos\osClock.c</FilePath>
-            </File>
-            <File>
               <FileName>osMemory.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\softos\osMemory.c</FilePath>
@@ -426,11 +421,6 @@
               <FileName>osTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\softos\osTask.c</FilePath>
-            </File>
-            <File>
-              <FileName>osClock.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osClock.h</FilePath>
             </File>
             <File>
               <FileName>osMemory.h</FileName>
@@ -471,6 +461,16 @@
               <FileName>osConfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Src\User\osConfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>osTime.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\softos\osTime.c</FilePath>
+            </File>
+            <File>
+              <FileName>osTime.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\softos\include\osTime.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -27,7 +27,7 @@
 
 
 #include "osConfig.h"
-#include "osClock.h"
+#include "osTime.h"
 
 
 /*
@@ -141,7 +141,6 @@ void osClockTimePulse(void)
             TaskHandleListBuf -> TimeFlag--;//把这个任务时间标志中内容减一
             if(TaskHandleListBuf -> TimeFlag == 0){	//当这个任务时间标志中内容为零时
                 if(osTaskGetSwitchState() != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)
-                    //TaskHandleListBuf  -> Config &= TIT_Task_State_TC_RST;//清除这个任务的状态位
                     TaskHandleListBuf  -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
                 }
                 else if(TaskHandleListBuf -> PriorityLevel <  osTaskGetRunTaskHandle() -> PriorityLevel){//如果这个任务高于当前工作运行任务栏的优先级，就占用
@@ -198,6 +197,12 @@ _STimes* osTimeLogin(_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* 
 	return osTimeLogin_Static(Addr1, Name, Flag, Config, Addr);
 }
 
+OsErrorValue osSTimeLogout(_STimes* STimes)
+{
+	return uLinkListDel(&STimeListHead,(uint32_t*)STimes);
+
+}
+
 OsErrorValue osSTimeInit(void)
 {
 	STimeListHead = NULL;
@@ -215,7 +220,7 @@ OsErrorValue osSTimeInit(void)
 void osSTime(void)
 {
 	_STimes* STime_Buf;
-	while(1){
+	for(;;){
 		STime_Buf = (_STimes*)STimeListHead;
 		while(STime_Buf != NULL){
 			STime_Buf -> Flag -= 1;
@@ -223,8 +228,8 @@ void osSTime(void)
 				Jump((uint32_t*)STime_Buf -> Addr);
 				switch(STime_Buf -> Config){
 					case STimeConfig_Restart:STime_Buf -> Flag =  STime_Buf -> Flagb;break;
-					case STimeConfig_NRestartL: break;
-					case STimeConfig_NRestart: break;
+					case STimeConfig_NRestartL:osSTimeLogout(STime_Buf); break;
+//					case STimeConfig_NRestart: break;
 				}
 			}
 			STime_Buf = (_STimes*)STime_Buf -> DownAddr;

@@ -288,7 +288,7 @@ typedef int32_t OsErrorValue;//º¯Êý´íÎó·µ»ØÖµ
 #include "osSignal.h"
 #include "osPost.h"
 #include "osTask.h"
-#include "osClock.h"
+#include "osTime.h"
 #include "osMemory.h"
 #include "osPost.h"
 

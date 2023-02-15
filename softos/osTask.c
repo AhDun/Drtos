@@ -223,7 +223,7 @@ _TaskHandle* osTaskLogin_Static(
 			TaskHandleList_Buf1 -> NextTaskHandle = (_NextTaskHandle*)TaskHandle;
 			osTaskGetTaskHandleListHead() = TaskHandle;
 		}else{
-			while(1){
+			for(;;){
 				if(TaskHandle -> PriorityLevel < TaskHandleList_Buf1 -> PriorityLevel){
 					TaskHandle -> NextTaskHandle = (_NextTaskHandle*)TaskHandleList_Buf1;
 					TaskHandleList_Buf2 -> NextTaskHandle = (_NextTaskHandle*)TaskHandle;
@@ -430,7 +430,7 @@ void osTaskNext(void)
 {  
     osTaskGetSwitchState() = TaskSwitch_Run;
     //osTASK_HANGUP(&osTaskGetRunTaskHandle() -> RealSP);//通过当前运行任务的栈指针,挂起当前的任务
-    while(1){//启动下一个任务
+    for(;;){//启动下一个任务
 		switch(osTaskGetNextTaskHandle() -> Config){//进行状态码分离操作，并传输给switch语句
 				case Task_State_RB:
 									osTaskGetNextTaskHandle() -> RealSP = osTaskGetNextTaskHandle() -> RealSPb;
@@ -646,7 +646,7 @@ OsErrorValue osTaskMonitor(void)
 {
 	_TaskHandle* TaskHandleListBuf = osTaskGetTaskHandleListHead();;
 	do{
-		print("任务<%s>的使用量为:占用时长:%dms | 任务优先级:%d | 任务状态:",TaskHandleListBuf -> Name,TaskHandleListBuf -> OccupyRatio,TaskHandleListBuf -> PriorityLevel);
+		print("任务<%s>占用时长:%dms | 任务优先级:%d | 任务状态:",TaskHandleListBuf -> Name,TaskHandleListBuf -> OccupyRatio,TaskHandleListBuf -> PriorityLevel);
 		if(TaskHandleListBuf != osTaskGetRunTaskHandle() || osTaskGetSwitchState() != TaskSwitch_Ready){
 			switch(TaskHandleListBuf -> Config){
 				case Task_State_Up_DT:print("延时挂起\n");break;
@@ -671,7 +671,7 @@ OsErrorValue osTaskMonitor(void)
 	print("任务调度次数:%d | 预计耗时:%fus(%fms)\n",PS.TSCb,PS.TSCb*PS.TSSU,(PS.TSCb*PS.TSSU) / 1000);
 
 	print("内存 总量:%d字节 | 余量:%d字节 | 可分配:%d字节 | 块数:%d\n",osMemoryGetAllValue(),osMemoryGetFreeValue(),osMemoryGetPassValue(),osMemorySum());
-	tprint("系统已运行: %d天 %h小时 %m分钟 %s秒\n",OsTimeGetSystemRunTime());
+	print("系统已运行: %d天 %d小时 %d分钟 %d秒\n",osClockGetOsRTCD(),osClockGetOsRTCH(),osClockGetOsRTCM(),osClockGetOsRTCS());
 	
 	return (OK);
 }
@@ -742,7 +742,7 @@ void osTaskSIRQ(void)
 	_SIRQList* SIRQList_Addr;
 	uint8_t SIRQList_Count;
 
-	while(1){
+	for(;;){
 		//osTaskGetRunTaskHandle() -> Config = Task_State_Up_SI;//主动挂起(挂起态) 
 		osTaskSwitchConfig_Enable(osTaskGetRunTaskHandle(),Task_State_Up_SI);
 		SIRQList_Addr = (_SIRQList*)osTaskGetRunTaskHandle() -> ParameterPass;

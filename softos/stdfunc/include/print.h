@@ -204,20 +204,6 @@ __asm void print(const char* s,...);
 __asm void sprint(char* s,const char* c,...);
 
 
-/*
- *
- * @函数名称: tprint
- *
- * @函数功能: 输出接口
- *
- * @输入参数: 无
- *
- * @返 回 值: 无
- *
- * @注    释: 无
- *
- */
-void tprint(const char* c,unsigned int s);
 
 
 

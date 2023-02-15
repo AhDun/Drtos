@@ -29,6 +29,9 @@ int Get_Temperture(void);
 void Task1_Func(char* a)
 {
 	RTC_TimeTypeDef RTC_TimeStruct;
+	_STimes* a1;
+	_STimes* a2;
+	_STimes* a3;
 	u8* buf = osMemoryMalloc(20);
 	TFTLCD_Init();			//LCD初始化
 	print(a);
@@ -47,9 +50,9 @@ void Task1_Func(char* a)
 
 	osTaskSIRQLogin(&SIRQ_RTC[0],RTC_Func);
 
-	osTimeLogin("RPost",1000,STimeConfig_Restart,Time_Func);
+	a1 = osTimeLogin("RPost",1000,STimeConfig_NRestartL,Time_Func);
 
-	while(1) 
+	for(;;) 
 	{
 		osSignalUseWait(timebz);
         RTC_GetTime(RTC_Format_BIN,&RTC_TimeStruct);
@@ -80,7 +83,7 @@ void Task2_Func(void)
 
     LCD_ShowString(10,30,tftlcd_data.width,tftlcd_data.height,16,"STM32F407ZGT6@168MHz");
     LCD_ShowString(10,60,tftlcd_data.width,tftlcd_data.height,16,osNameVersionNumberS);
-	while(1){
+	for(;;){
 
 //		sprint((char *)buf,"TaskCount: %d TaskSwitchTime: %dus",osTaskGetSwitchState().TSC,osTaskGetSwitchState().TSC*osTaskGetSwitchState().TSSU);
 //		LCD_ShowString(10,120,tftlcd_data.width,tftlcd_data.height,16,buf);
@@ -116,7 +119,7 @@ void Task3_Func(u32* a)
 	u8 b=0;
 	u8 c;
 	LED_Init();
-	while(1){
+	for(;;){
 		for(c = 0; c < 50; c++){
 			LED2 = 0;
 			osTaskDelayMs(b);
@@ -150,10 +153,10 @@ void Task4_Func(u32* a)
 	u8 b=0;
 	u8 c;
 	LED_Init();
-	while(1){
+	for(;;){
 		osTaskSwitch_Enable();//触发任务切换   
 	}
-	while(1){
+	for(;;){
 		for(c = 0; c < 50; c++){
 			LED1 = 0;
 			osTaskDelayMs(b);

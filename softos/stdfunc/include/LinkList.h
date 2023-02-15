@@ -47,9 +47,10 @@ typedef	uint32_t		_NextAddr;
  *
  * @函数功能: 单向链表从尾写入
  *
- * @输入参数: 无
+ * @输入参数: LinkListHeadAddr 链表头地址
+ * @输入参数: uListx 		   写入链表地址
  *
- * @返 回 值: 无
+ * @返 回 值: -1:写入错误 / 0:写入成功
  *
  * @注   释: 无
  *
@@ -61,9 +62,10 @@ _LinkListXError uLinkListTailWrtie(uint32_t* LinkListHeadAddr,uint32_t*  uListx)
  *
  * @函数功能: 单向链表从头写入
  *
- * @输入参数: 无
+ * @输入参数: LinkListHeadAddr 链表头地址
+ * @输入参数: uListx 		   写入链表地址
  *
- * @返 回 值: -1:发生错误 / 0:发送成功
+ * @返 回 值: -1:写入错误 / 0:写入成功
  *
  * @注   释: 无
  *
@@ -71,13 +73,28 @@ _LinkListXError uLinkListTailWrtie(uint32_t* LinkListHeadAddr,uint32_t*  uListx)
 _LinkListXError uLinkListHeadWrtie(uint32_t* LinkListHeadAddr,uint32_t*  uListx);
 /*
  *
+ * @函数名称: uLinkListDel
+ *
+ * @函数功能: 单向从链表中删除
+ *
+ * @输入参数: LinkListHeadAddr 链表头地址
+ * @输入参数: uListx 		   要删除链表地址
+ *
+ * @返 回 值: -1写入错误 / 0:写入成功
+ *
+ * @注   释: 无
+ *
+ */
+_LinkListXError uLinkListDel(uint32_t* LinkListHeadAddr,uint32_t*  uListx);
+/*
+ *
  * @函数名称: uLinkListTailRead
  *
  * @函数功能: 单向链表从尾读取
  *
- * @输入参数: 无
+ * @输入参数: LinkListHeadAddr 链表头地址
  *
- * @返 回 值: -1:发生错误 / 0:发送成功
+ * @返 回 值: 尾部链表的地址
  *
  * @注   释: 无
  *
@@ -89,9 +106,9 @@ uint32_t* uLinkListTailRead(uint32_t* LinkListHeadAddr);
  *
  * @函数功能: 单向链表从头读取
  *
- * @输入参数: 无
+ * @输入参数: LinkListHeadAddr 链表头地址
  *
- * @返 回 值: -1:发生错误 / 0:发送成功
+ * @返 回 值: 头部链表的地址
  *
  * @注   释: 无
  *

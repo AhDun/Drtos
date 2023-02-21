@@ -40,7 +40,7 @@ void Task1_Func(char* a)
 	LCD_Clear(BLACK);
 	FRONT_COLOR=YELLOW;
 	BACK_COLOR=BRED;
-	LCD_ShowString(10,10,tftlcd_data.width,tftlcd_data.height,16,"softos Demo");
+	LCD_ShowString(10,10,tftlcd_data.width,tftlcd_data.height,16,"buffos Demo");
 	RTC_Config();
 	RTC_Set_WakeUp(RTC_WakeUpClock_CK_SPRE_16bits,0);//配置WAKE UP中断,1秒钟中断一次
 	RTC_Set_Time(0,0,0,0);

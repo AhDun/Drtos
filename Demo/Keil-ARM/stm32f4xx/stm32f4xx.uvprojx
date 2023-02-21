@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>softos arm demo</TargetName>
+      <TargetName>buffos arm demo</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,ARM_MATH_CM4,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Src\App;.\Src\Drive;.\Src\Drive\CMSIS;.\Src\Drive\STM32F4xx_StdPeriph_Driver;.\Src\Func;.\Src\User;..\..\..\SoftOs;..\..\..\softos\stdfunc;..\..\..\softos\include;..\..\..\softos\stdfunc\include;.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc;.\Src\CPU</IncludePath>
+              <IncludePath>.\Src\App;.\Src\Drive;.\Src\Drive\CMSIS;.\Src\Drive\STM32F4xx_StdPeriph_Driver;.\Src\Func;.\Src\User;..\..\..\buffos;..\..\..\buffos\stdfunc;..\..\..\buffos\include;..\..\..\buffos\stdfunc\include;.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc;.\Src\CPU</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -405,57 +405,57 @@
             <File>
               <FileName>osMemory.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\softos\osMemory.c</FilePath>
+              <FilePath>..\..\..\buffos\osMemory.c</FilePath>
             </File>
             <File>
               <FileName>osPost.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\softos\osPost.c</FilePath>
+              <FilePath>..\..\..\buffos\osPost.c</FilePath>
             </File>
             <File>
               <FileName>osSignal.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\softos\osSignal.c</FilePath>
+              <FilePath>..\..\..\buffos\osSignal.c</FilePath>
             </File>
             <File>
               <FileName>osTask.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\softos\osTask.c</FilePath>
+              <FilePath>..\..\..\buffos\osTask.c</FilePath>
             </File>
             <File>
               <FileName>osMemory.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osMemory.h</FilePath>
+              <FilePath>..\..\..\buffos\include\osMemory.h</FilePath>
             </File>
             <File>
               <FileName>osPost.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osPost.h</FilePath>
+              <FilePath>..\..\..\buffos\include\osPost.h</FilePath>
             </File>
             <File>
               <FileName>osSignal.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osSignal.h</FilePath>
+              <FilePath>..\..\..\buffos\include\osSignal.h</FilePath>
             </File>
             <File>
               <FileName>osTask.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osTask.h</FilePath>
+              <FilePath>..\..\..\buffos\include\osTask.h</FilePath>
             </File>
             <File>
               <FileName>osLink.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\softos\link\M3M4F\osLink.c</FilePath>
+              <FilePath>..\..\..\buffos\link\M3M4F\osLink.c</FilePath>
             </File>
             <File>
               <FileName>osLink.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\softos\link\M3M4F\osLink.s</FilePath>
+              <FilePath>..\..\..\buffos\link\M3M4F\osLink.s</FilePath>
             </File>
             <File>
               <FileName>osLink.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osLink.h</FilePath>
+              <FilePath>..\..\..\buffos\include\osLink.h</FilePath>
             </File>
             <File>
               <FileName>osConfig.h</FileName>
@@ -465,12 +465,12 @@
             <File>
               <FileName>osTime.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\softos\osTime.c</FilePath>
+              <FilePath>..\..\..\buffos\osTime.c</FilePath>
             </File>
             <File>
               <FileName>osTime.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\softos\include\osTime.h</FilePath>
+              <FilePath>..\..\..\buffos\include\osTime.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -500,17 +500,17 @@
             <File>
               <FileName>LinkList.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\stdfunc\LinkList.c</FilePath>
+              <FilePath>..\..\..\buffos\stdfunc\LinkList.c</FilePath>
             </File>
             <File>
               <FileName>print.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\stdfunc\print.c</FilePath>
+              <FilePath>..\..\..\buffos\stdfunc\print.c</FilePath>
             </File>
             <File>
               <FileName>str.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\SoftOs\stdfunc\str.c</FilePath>
+              <FilePath>..\..\..\buffos\stdfunc\str.c</FilePath>
             </File>
             <File>
               <FileName>sram.c</FileName>

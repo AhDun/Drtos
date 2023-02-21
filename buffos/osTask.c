@@ -209,11 +209,10 @@ _TaskHandle* osTaskLogin_Static(
 	TaskHandle -> Level = TPL;//写入任务优先级
 	TaskHandle -> Levelb = TPL;//写入任务备用优先级
 
-	if(TC == Task_Set_Default){//如果任务选择了"禁用任务"选项，则生效
-        TaskHandle -> Config = Task_State_RB;//将任务设为创建态
-    }else{
-        osTaskSet(TaskHandle,TC);
-    }
+	switch(TC){
+		case Task_Set_Default:TaskHandle -> Config = Task_State_RB;break;//将任务设为创建态
+		default: osTaskSet(TaskHandle,TC);break;
+	}
 
 	TaskHandle	-> Arg1 = NULL;//任务邮箱消息设为零
 

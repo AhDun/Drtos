@@ -42,7 +42,7 @@
 #define Memory_Free   					0x02 //该内存块已释放
 //}
 
-
+#define MemoryStructLength				sizeof(MemoryStruct)
 
 typedef uint8_t	_MemoryUnit;//
 
@@ -67,8 +67,8 @@ typedef uint16_t 	_MemoryLength;
 
 typedef  struct
 { 
-	_MemoryFlag 	MemoryFlag;//内存标志
 	_MemoryLength	MemoryLength;//内存长度
+	_MemoryFlag 	MemoryFlag;//内存标志
 
 }MemoryStruct;
 #endif

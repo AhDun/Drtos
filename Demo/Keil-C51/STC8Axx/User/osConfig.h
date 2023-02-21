@@ -42,8 +42,8 @@
 #define osMaximumTask 	     	64 //系统最大任务量
 #define osVersionNumber        110 //系统版本号
 #define osVersionNumberS       "v1.1.0" //系统版本号名
-#define osName                 "softos" //系统名称
-#define osNameVersionNumberS   "softos v1.1.0" //系统名称 + 系统版本号名
+#define osName                 "buffos" //系统名称
+#define osNameVersionNumberS   "buffos v1.1.0" //系统名称 + 系统版本号名
 #define osCompileDate		  	__DATE__//系统编译日期
 #define osCompileTime 		 	__TIME__//系统编译时间
 #define osCPU_Name				"STM32F407ZG"//CPU名称

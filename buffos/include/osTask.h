@@ -301,31 +301,59 @@ typedef     uint16_t      _TaskOccupyRatio;//任务占用比
 typedef struct
 {
 	_TaskRealSP			RealSP;				//任务实时栈指针
+	_NextTaskHandle*	NextTaskHandle;
+	_TaskConfig 		Config;  			//任务控制量
+	_TaskWheel 			TaskWheel;			//任务时间轮片
+	_TaskLevel 			Level;			//任务优先级
+	_TaskAddr*			Addr;					//任务地址
 	_TaskRealSP			RealSPb;			//任务实时栈指针
+	_TaskTimeFlag		TimeFlag;			//任务时间标志
 #if (osTaskName_Config > 0)
 	_TaskName*			Name; 				//任务名称
-#endif
-	_TaskConfig 		Config;  			//任务控制量	
+#endif	
 #ifdef osSignalMutual_Config
 	_TaskLevel			Levelb;   	//任务备用优先级
 #endif
-	_TaskWheel 		TaskWheel;			//任务时间轮片
-	_TaskLevel 		Level;			//任务优先级
-	_TaskAddr*		Addr;					//任务地址
-	_TaskTimeFlag	TimeFlag;			//任务时间标志
 #if (osTaskArg_Config > 0)
-	_TaskArg*  Arg;    //任务传参	
+	_TaskArg*  			Arg;    //任务传参	
 #endif
-//#ifdef osPost_Config
+#if (osPost_Config > 0)
 	_TaskArg			Arg1;					//任务邮箱
-//#endif
-
+#endif
 #if (osPerformanceStatistics_Config > 0) //开启了性能统计
     _TaskOccupyTime      OccupyTime;    //任务占用时长
     _TaskOccupyRatio     OccupyRatio;    //任务占用比
-#endif			
-	_NextTaskHandle*	 NextTaskHandle;	
+#endif				
 } _TaskHandle;
+
+typedef struct
+{
+	_TaskRealSP			RealSP;				//任务实时栈指针
+	_NextTaskHandle*	NextTaskHandle;
+	_TaskConfig 		Config;  			//任务控制量
+	_TaskWheel 			TaskWheel;			//任务时间轮片
+	_TaskLevel 			Level;			//任务优先级
+	_TaskAddr*			Addr;					//任务地址
+	_TaskRealSP			RealSPb;			//任务实时栈指针
+	_TaskTimeFlag		TimeFlag;			//任务时间标志
+#if (osTaskName_Config > 0)
+	_TaskName*			Name; 				//任务名称
+#endif	
+#ifdef osSignalMutual_Config
+	_TaskLevel			Levelb;   	//任务备用优先级
+#endif
+#if (osTaskArg_Config > 0)
+	_TaskArg*  			Arg;    //任务传参	
+#endif
+#if (osPost_Config > 0)
+	_TaskArg			Arg1;					//任务邮箱
+#endif
+#if (osPerformanceStatistics_Config > 0) //开启了性能统计
+    _TaskOccupyTime      OccupyTime;    //任务占用时长
+    _TaskOccupyRatio     OccupyRatio;    //任务占用比
+#endif				
+} _QuickTaskHandle;
+
 //}
 
 typedef		uint8_t		_TaskListMaximumActivity;//任务最大活动量
@@ -335,13 +363,13 @@ typedef		uint8_t		_TaskISRFlag;
 
 
 
-extern _TaskHandle*		TaskHandle_Main;
+extern _TaskHandle*		TaskHandle_Main;//Main任务句柄
 
-extern _TaskHandle* 	OsTaskRunTaskHandle;
+extern _TaskHandle* 	OsTaskRunTaskHandle;//正在运行的任务句柄
 extern _SwitchState	    OsTaskSwitchState;//任务调度状态
 extern _TaskISRFlag		OsTaskISRFlag;//中断状态
-extern _TaskHandle* 	OsTaskNextTaskHandle;
-extern _TaskHandle* 	OsTaskTaskHandleListHead;
+extern _TaskHandle* 	OsTaskNextTaskHandle;//下一个要运行的任务句柄
+extern _TaskHandle* 	OsTaskTaskHandleListHead;//任务句柄链表表头
 
 
 

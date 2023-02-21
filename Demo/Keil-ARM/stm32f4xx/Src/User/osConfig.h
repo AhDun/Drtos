@@ -42,8 +42,8 @@
 //系统信息{
 #define osVersionNumber        110 //系统版本号
 #define osVersionNumberS       "v1.1.0" //系统版本号名
-#define osName                 "softos" //系统名称
-#define osNameVersionNumberS   "softos v1.1.0" //系统名称 + 系统版本号名
+#define osName                 "buffos" //系统名称
+#define osNameVersionNumberS   "buffos v1.1.0" //系统名称 + 系统版本号名
 #define osCompileDate		  	__DATE__//系统编译日期
 #define osCompileTime 		 	__TIME__//系统编译时间
 #define osCPU_Name				"STM32F407ZG"//CPU名称
@@ -255,7 +255,7 @@ typedef int32_t OsErrorValue;//函数错误返回值
 #define os_TotalSystemRunningTime_Config 1//记录系统运行时长  1：启用 0：禁用
 #define TaskOccupyRatioSamplingTime 		1000 //任务统计时间，单位ms
 #define osSpeedTest_Config 				1//启动时测试任务切换速度 1：启用 0：禁用
-#define osTaskArg_Config 		1//启动时测试任务切换速度 1：启用 0：禁用
+#define osTaskArg_Config 		1//启用任务传参 1：启用 0：禁用
 //}
 
 
@@ -278,6 +278,7 @@ typedef int32_t OsErrorValue;//函数错误返回值
 //}
 
 //邮箱配置{
+#define osPost_Config	1 	 //启用邮箱 1：启用 0：禁用
 #define osPostHead		1	 //读邮件方式  1:队列式  0:栈式
 #define osPostDebugError_Config 1 //邮箱错误DeBug  1:开启Debug输出 0:关闭Debug输出
 #define osPostDebugError	osDebugError 

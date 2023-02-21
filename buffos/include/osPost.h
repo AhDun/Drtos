@@ -34,7 +34,6 @@
 #include "osConfig.h"
 #include "osTask.h"
 
-#define osPost_Config 		//启用邮箱 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 
 
 

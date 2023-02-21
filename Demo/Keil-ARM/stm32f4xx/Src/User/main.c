@@ -57,10 +57,9 @@ int main(void)
 	osInit();
 	osTaskSpeedTest();
 
-
 	//osMemoryMalloc(25000);
 //	_tr0 = -2;
-//	print("%x\n\n",0xFFFF1);
+	print("%d\n\n",MemoryStructLength);
 
 	TaskHandle_Task1 = osTaskLogin(
 	"RTC", 			                    //ÈÎÎñÃû³Æ

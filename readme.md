@@ -1,8 +1,8 @@
-## softos
+## buffos
 
 ```makefile
 全中文注释、轻量RTOS
-感谢您softos的支持
+感谢您buffos的支持
 本程序使用Apache License 2.0开源协议
 本系统稳定性尚不明确，请勿用到重要的开发上！！！
 所有源码均使用GB2312编码
@@ -19,7 +19,7 @@
   |-- AhDun.png					 logo
   |-- DHS_logo.png				 logo
   |-- DHS_logo_r.png			 logo
-|- softos					    系统源码
+|- buffos					    系统源码
   |-- osClock.c					系统时钟文件, 提供基本的系统时钟服务
   |-- osMemory.c				系统内存管理文件,提供内存申请、释放
   |-- osPost.c					系统邮箱文件,提供邮箱服务
@@ -58,7 +58,7 @@
 
 
 ```livescript
-具体内容请参考 /softos/link/ 文件中内容
+具体内容请参考 /softbufosk/ 文件中内容
 ```
 
 ### 开源协议

@@ -108,14 +108,14 @@ void* osMemoryMalloc(uint32_t MemSize)
 		}
 	#endif
 
-	MemSize += sizeof(MemoryStruct);
+	MemSize += MemoryStructLength;
 	if((MemoryInfoHandle -> NextAddr  + MemSize) <= MemoryInfoHandle -> TailAddr){//检查内存池是否已满
 
 		_MemoryStruct = (MemoryStruct*)MemoryInfoHandle -> NextAddr;
 		_MemoryStruct -> MemoryFlag = Memory_Occupy;//设为占用态
 		_MemoryStruct -> MemoryLength = (_MemoryLength)MemSize;//输入块长度
 		
-		MemoryNewAddr = (void *)(MemoryInfoHandle -> NextAddr + sizeof(MemoryStruct));
+		MemoryNewAddr = (void *)(MemoryInfoHandle -> NextAddr + MemoryStructLength);
 		MemoryInfoHandle -> NextAddr = (uint8_t* )( MemoryInfoHandle -> NextAddr + MemSize);
 		#if (MemoryProtect_Config > 0)//开启了内存保护配置
 			#if (osCriticalToProtect_Config > 0)//启用了临界保护
@@ -142,7 +142,7 @@ void* osMemoryMalloc(uint32_t MemSize)
 				#endif
 				if( Length >= MemSize){
 					#if (osMemoryPart_Config > 0)
-					if((Length - MemSize) > sizeof(MemoryStruct)){//进行切块操作
+					if((Length - MemSize) > MemoryStructLength){//进行切块操作
 						_MemoryStruct = (MemoryStruct*)(MemoryAddr2 + MemSize);	
 						_MemoryStruct -> MemoryFlag = Memory_Free;//设为释放态
 						_MemoryStruct -> MemoryLength = Length - MemSize;//输入块长度
@@ -158,7 +158,7 @@ void* osMemoryMalloc(uint32_t MemSize)
 						osProtect_DISABLE();//退出临界保护
 						#endif
 					#endif
-					return MemoryAddr2 + sizeof(MemoryStruct);//返回申请到地址并进行内存复位操作
+					return MemoryAddr2 + MemoryStructLength;//返回申请到地址并进行内存复位操作
 				}
 				
 			}else if(_MemoryStruct -> MemoryFlag == Memory_Occupy){//这块内存被占用
@@ -178,7 +178,7 @@ void* osMemoryMalloc(uint32_t MemSize)
 				osProtect_DISABLE();//退出临界保护
 				#endif
 			#endif
-			return MemoryAddr2 + sizeof(MemoryStruct); //返回申请到地址并进行内存复位操作
+			return MemoryAddr2 + MemoryStructLength; //返回申请到地址并进行内存复位操作
 		}
 		#endif
 		#if (osMemoryDebug_Config > 0)//开启了内存保护配置
@@ -196,8 +196,8 @@ void* osMemoryMalloc(uint32_t MemSize)
 void* osMemoryReset(void* addr,uint8_t data)
 {
 	
-	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)addr - sizeof(MemoryStruct));
-	int32_t Length = (_MemoryStruct1 -> MemoryLength) - sizeof(MemoryStruct);
+	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)addr - MemoryStructLength);
+	int32_t Length = (_MemoryStruct1 -> MemoryLength) - MemoryStructLength;
 	_MemoryUnit* addr_Buf = (_MemoryUnit*)addr;
 
 	#if (MemoryProtect_Config > 0)//开启了内存保护配置
@@ -221,9 +221,9 @@ void* osMemoryReset(void* addr,uint8_t data)
 
 OsErrorValue osMemoryFree(void* addr)
 {
-	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)addr - sizeof(MemoryStruct));
+	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)addr - MemoryStructLength);
 	#if( osMemoryFreeTest_Config > 0)
-	MemoryStruct* _MemoryStruct2 = (MemoryStruct*)((uint8_t*)addr - sizeof(MemoryStruct) + _MemoryStruct1 -> MemoryLength);
+	MemoryStruct* _MemoryStruct2 = (MemoryStruct*)((uint8_t*)addr - MemoryStructLength + _MemoryStruct1 -> MemoryLength);
 	#if (MemoryProtect_Config > 0)//开启了内存保护配置
 		#if (osCriticalToProtect_Config > 0)//启用了临界保护
 		osProtect_ENABLE();//进入临界保护
@@ -289,7 +289,7 @@ uint32_t osMemoryGetFreeValue(void)
 		MemoryAddr += _MemoryStruct -> MemoryLength;
 	}
 	Vaule += (MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> NextAddr);
-	return (Vaule >= sizeof(MemoryStruct)? Vaule - sizeof(MemoryStruct) : NULL);
+	return (Vaule >= MemoryStructLength? Vaule - MemoryStructLength : NULL);
 }
 
 uint32_t osMemoryGetPassValue(void)
@@ -313,7 +313,7 @@ uint32_t osMemoryGetPassValue(void)
 	if((MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> NextAddr) > Vaule){
 		Vaule = MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> NextAddr;
 	}
-	return (Vaule >= sizeof(MemoryStruct)? Vaule - sizeof(MemoryStruct) : NULL);
+	return (Vaule >= MemoryStructLength? Vaule - MemoryStructLength : NULL);
 }
 
 OsErrorValue osMemorySum(void)

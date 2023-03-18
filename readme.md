@@ -16,9 +16,7 @@
 |-- LICENSE		 				开源协议
 |-- readme.md    				 本文件
 |- Doc						 	文档
-  |-- AhDun.png					 logo
-  |-- DHS_logo.png				 logo
-  |-- DHS_logo_r.png			 logo
+  |-- buffos.png			     logo
 |- buffos					    系统源码
   |-- osClock.c					系统时钟文件, 提供基本的系统时钟服务
   |-- osMemory.c				系统内存管理文件,提供内存申请、释放

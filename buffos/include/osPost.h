@@ -14,8 +14,8 @@
  * limitations under the License.
  * 
  */
-#ifndef _osPOST_H_
-#define _osPOST_H_
+#ifndef __osPOST_H_
+#define __osPOST_H_
 /*
  *
  * @文件名称: osPOST.h
@@ -33,14 +33,6 @@
 #include "main.h"
 #include "osConfig.h"
 #include "osTask.h"
-
-
-
-
-
-#define 	osPostMemoryMalloc		osMemoryMalloc
-#define 	osPostMemoryFree		osMemoryFree
-
 
 
 typedef		uint32_t		 _PostBody;//邮件主体

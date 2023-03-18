@@ -138,8 +138,8 @@ void osClockTimePulse(void)
 	do{//对每一个任务进行遍历
 		/*----------------------------------延时---------------------------------------*/
         if(TaskHandleListBuf -> Config == Task_State_Up_DT){//这个任务是延时挂起(等待态)，才进入
-            TaskHandleListBuf -> TimeFlag--;//把这个任务时间标志中内容减一
-            if(TaskHandleListBuf -> TimeFlag == 0){	//当这个任务时间标志中内容为零时
+            TaskHandleListBuf -> TaskDelay--;//把这个任务时间标志中内容减一
+            if(TaskHandleListBuf -> TaskDelay == 0){	//当这个任务时间标志中内容为零时
                 if(osTaskGetSwitchState() != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)
                     TaskHandleListBuf  -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
                 }
@@ -161,8 +161,58 @@ void osClockTimePulse(void)
 	}
 	#endif
 }
+#if (STime_Config > 0)
+/*
+ *
+ * @函数名称: osSTimeInit
+ *
+ * @函数功能: 软件定时器初始化
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
+OsErrorValue osSTimeInit(void)
+{
+	STimeListHead = NULL;
+	TaskHandle_STime = osTaskLogin(
+						STimeName_Config,
+						osSTime,
+						STimeStackSize_Config,
+						STimeTimeWheel_Config,
+						STimePriorityLevel_Config,
+						STimePass_Config,
+						STimeSet_Config); 
+	if(TaskHandle_STime == NULL){
 
-_STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr)
+		#if (osTaskLog_Config > 0)
+		osTaskErrorDebug("SIRQ 任务创建失败\n");
+		#endif
+		return (Error);//返回Error
+	}
+	return (OK);
+}
+/*
+ *
+ * @函数名称: osTimeLogin_Static
+ *
+ * @函数功能: 软定时器静态注册
+ *
+ * @输入参数: ListAddr	句柄链表表头地址		
+ * @输入参数: Name		名字
+ * @输入参数: Flag		时长
+ * @输入参数: Config	配置
+ * @输入参数: Addr		响应地址
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
+_STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
 {
 	_STimes* STime_Buf = (_STimes*)ListAddr;
 	STime_Buf -> Name = Name;
@@ -179,8 +229,23 @@ _STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STimeFlag Flag,_
 	}
 }
 
-
-_STimes* osTimeLogin(_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr)
+/*
+ *
+ * @函数名称: osTimeLogin
+ *
+ * @函数功能: 软件定时器注册
+ *
+ * @输入参数: Name		名字
+ * @输入参数: Flag		时长
+ * @输入参数: Config	配置
+ * @输入参数: Addr		响应地址
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
+_STimes* osTimeLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
 {
 	uint8_t* Addr1;
 	if(Config >= STimeConfig_NRestartL){
@@ -189,41 +254,44 @@ _STimes* osTimeLogin(_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* 
 		Addr1 = osMemoryMalloc(sizeof(_STimes));//为任务表分配内存
 	}
 //	if(Addr1 == NULL){//如果为空，就说明内存分配失败
-//		#if (osTaskDebug_Config > 0)
+//		#if (osTaskLog_Config > 0)
 //		osTaskErrorDebug("注册任务时,任务分配内存失败 %s\n",TN);
 //		#endif
 //		return (NULL);//返回错误
 //	}
 	return osTimeLogin_Static(Addr1, Name, Flag, Config, Addr);
 }
-
+/*
+ *
+ * @函数名称: osClockTimePulse
+ *
+ * @函数功能: 系统时钟脉冲处理
+ *
+ * @输入参数: STimes	软件定时器句柄
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 OsErrorValue osSTimeLogout(_STimes* STimes)
 {
 	return uLinkListDel(&STimeListHead,(uint32_t*)STimes);
 
 }
-
-OsErrorValue osSTimeInit(void)
-{
-	STimeListHead = NULL;
-	TaskHandle_STime = osTaskLogin(
-						STimeName_Config,
-						osSTime,
-						STimeStackSize_Config,
-						STimeTimeWheel_Config,
-						STimePriorityLevel_Config,
-						STimePass_Config,
-						STimeSet_Config); 
-	if(TaskHandle_STime == NULL){
-
-		#if (osTaskDebug_Config > 0)
-		osTaskErrorDebug("SIRQ 任务创建失败\n");
-		#endif
-		return (Error);//返回Error
-	}
-	return (OK);
-}
-
+/*
+ *
+ * @函数名称: osSTime
+ *
+ * @函数功能: 软件定时器处理
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 void osSTime(void)
 {
 	_STimes* STime_Buf;
@@ -232,7 +300,7 @@ void osSTime(void)
 		while(STime_Buf != NULL){
 			STime_Buf -> Flag -= 1;
 			if(STime_Buf -> Flag == 0){
-				Jump((uint32_t*)STime_Buf -> Addr);
+				osLinkJump((uint32_t*)STime_Buf -> Addr);
 				switch(STime_Buf -> Config){
 					case STimeConfig_Restart:STime_Buf -> Flag =  STime_Buf -> Flagb;break;
 					case STimeConfig_NRestartL:osSTimeLogout(STime_Buf); break;
@@ -245,5 +313,4 @@ void osSTime(void)
 	}
 	
 }
-
-
+#endif

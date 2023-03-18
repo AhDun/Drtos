@@ -28,8 +28,6 @@
  */
 
 
-#define osClock_Config 	//启用时钟 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
-
 
 
 //定时器类型{
@@ -198,7 +196,7 @@ typedef struct
 
 //软件定时器{
 typedef	 uint8_t		_STimeName;
-typedef	 uint32_t		_STimeFlag;
+typedef	 uint32_t		_STaskDelay;
 typedef	 uint8_t		_STimeConfig;
 typedef	 uint32_t		_STimeAddr;
 typedef struct
@@ -207,7 +205,7 @@ typedef struct
 	_STimeName* 	Name;
 	_STimeConfig  	Config;
 	_STimeAddr*	  	Addr;
-	_STimeFlag		Flag;
+	_STaskDelay		Flag;
 }_STime;//不可重载
 
 typedef struct
@@ -216,8 +214,8 @@ typedef struct
 	_STimeName* 	Name;
 	_STimeConfig  	Config;
 	_STimeAddr*	  	Addr;
-	_STimeFlag		Flag;
-	_STimeFlag		Flagb;
+	_STaskDelay		Flag;
+	_STaskDelay		Flagb;
 }_STimes;//可重载
 //}
 #endif
@@ -276,7 +274,7 @@ void osClockTimePulse(void);
  * @注    释: 无
  *
  */
-_STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr);
+_STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
 /*
  *
  * @函数名称: osSTimeLogout
@@ -308,7 +306,7 @@ OsErrorValue osSTimeLogout(_STimes* STimes);
  *
  */
 
-_STimes* osTimeLogin(_STimeName* Name,_STimeFlag Flag,_STimeConfig Config,void* Addr);
+_STimes* osTimeLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
 /*
  *
  * @函数名称: osSTimeInit

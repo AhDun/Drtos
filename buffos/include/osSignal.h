@@ -25,22 +25,18 @@
  */
 
 
-#ifndef __osSignalH_
-#define __osSignalH_
+#ifndef __osSignal_H_
+#define __osSignal_H_
 
 
 #include "main.h"
 #include "osConfig.h"
 
-#define osSignal_Config //启用队列 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
 //信号量类型{
 #define Signal_Mutual       0x01u//互斥信号量
 #define Signal_Binary       0x02u//二值信号量
 #define Signal_Count        0x03u//计数信号量
 //}
-
-#define 	osSignalMemoryMalloc	osMemoryMalloc
-#define 	osSignalMemoryFree		osMemoryFree
 
 
 //信号量令牌{

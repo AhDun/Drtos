@@ -57,6 +57,8 @@ int main(void)
 	osInit();
 	osTaskSpeedTest();
 
+	osLog(osLogClass_Debug,"main","hello");
+
 	//osMemoryMalloc(25000);
 //	_tr0 = -2;
 	print("%d\n\n",MemoryStructLength);

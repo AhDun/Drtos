@@ -151,9 +151,9 @@ void Task4_Func(u32* a)
 	u8 b=0;
 	u8 c;
 	LED_Init();
-	for(;;){
-		osTaskSwitch_Config();//触发任务切换   
-	}
+//	for(;;){
+//		osTaskSwitch_Config();//触发任务切换   
+//	}
 	for(;;){
 		for(c = 0; c < 50; c++){
 			LED1 = 0;

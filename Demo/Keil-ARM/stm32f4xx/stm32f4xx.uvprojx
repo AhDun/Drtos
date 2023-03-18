@@ -472,6 +472,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\buffos\include\osTime.h</FilePath>
             </File>
+            <File>
+              <FileName>osTool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\buffos\osTool.c</FilePath>
+            </File>
+            <File>
+              <FileName>osTool.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\buffos\include\osTool.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

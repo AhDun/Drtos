@@ -34,8 +34,6 @@
 
 
 
-#define osMemory_Config //启用内存 ！这个定义无需手动配置，用于自动标记文件，自动增减功能
-
 
 //内存块标志{
 #define Memory_Occupy 					0x01 //该内存块占用中

@@ -189,13 +189,33 @@
 
 
 //Debug配置{
-#define osDebugError 		print
-#define osDebugInfo 		print
-#define osDebugWarning 		print
+#define osDebugError 		print	//错误Debug输出方法
+#define osDebugInfo 		print	//信息Debug输出方法
+#define osDebugWarning 		print	//警告Debug输出方法
+
+#define osDebugClass_Error			1	
+#define osDebugClass_Warning		2
+#define osDebugClass_Info			3
+
+//}
+
+//log配置{
+#define osLogClass_Fatal			1 // 严重级
+#define osLogClass_Error			2 // 错误级
+#define osLogClass_Warn				3 // 警告级
+#define osLogClass_Info				4 // 信息级
+#define osLogClass_Debug			5 // 调试级
+
+#define osLogClassFatalOutput	print			
+#define osLogClassErrorOutput	print			
+#define osLogClassWarnOutput	print				
+#define osLogClassInfoOutput	print				
+#define osLogClassDebugOutput	print			
+	
 //}
 
 //任务配置{
-#define osTaskDebug_Config 1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
+#define osTaskLog_Config 1 //Debug配置 1:开启Log输出 0:关闭Log输出
 #define osCriticalToProtect_Config   1  //临界保护  1：启用 0：禁用
 #define osTaskName_Config			1// 任务的名称 1：启用 0：禁用
 #define osTaskUseStack_Config 1//启用进程栈  1：启用 0：禁用
@@ -215,8 +235,8 @@
 #define Default_Stack_Size             1000u//默认栈大小
 //}
 //主任务配置{
-#define MainName_Config 			"Main"
-#define MainStackSize_Config 		400
+#define MainName_Config 			"Main"//任务名称
+#define MainStackSize_Config 		400	
 #define MainTimeWheel_Config 		TaskTimeWheelDefault
 #define MainPriorityLevel_Config 	0
 #define MainPass_Config 			(void*)0
@@ -229,14 +249,16 @@
 #define SIRQPriorityLevel_Config 	-127
 #define SIRQPass_Config 			(void*)0
 #define SIRQSet_Config 				Task_Set_Default
+#define SIRQ_Config					1 //软中断配置  0:禁用  1:启用
 //}
-//软中断配置{
+//软定时器配置{
 #define STimeName_Config 			"STime"
 #define STimeStackSize_Config 		400
 #define STimeTimeWheel_Config 		TaskTimeWheelDefault
 #define STimePriorityLevel_Config 	-126
 #define STimePass_Config 			(void*)0
 #define STimeSet_Config 			Task_Set_Default
+#define STime_Config				1 //软定时器配置  0:禁用  1:启用
 //}
 
 
@@ -244,7 +266,7 @@
 
 
 //错误配置{
-#define osTaskRunError_Config 1 //任务运行时发生致命错误 1:开启Debug输出 0:关闭Debug输出
+#define osTaskRunError_Config 1 //任务运行时发生致命错误 1:开启Log输出 0:关闭Log输出
 #define	osTaskErrorSet					0//任务运行时发生致命错误后处理 1：重启这个任务 0：暂停这个任务
 typedef int32_t OsErrorValue;//函数错误返回值
 //}
@@ -272,16 +294,18 @@ typedef int32_t OsErrorValue;//函数错误返回值
 #define osSignalMutual_Config //启用互斥信号量
 #define osSignalBinary_Config //启用二值信号量
 #define osSignalCount_Config  //启用计数信号量
-#define osSignalDebugError_Config 1 //信号量错误DeBug  1:开启Debug输出 0:关闭Debug输出
-#define osSignalDebugError	osDebugError
+#define osSignalLog_Config 1 //信号量错误DeBug  1:开启Log输出 0:关闭Log输出
+#define osSignalMemoryMalloc	osMemoryMalloc	//内存申请方法
+#define osSignalMemoryFree		osMemoryFree	//内存释放方法
 
 //}
 
 //邮箱配置{
 #define osPost_Config	1 	 //启用邮箱 1：启用 0：禁用
 #define osPostHead		1	 //读邮件方式  1:队列式  0:栈式
-#define osPostDebugError_Config 1 //邮箱错误DeBug  1:开启Debug输出 0:关闭Debug输出
-#define osPostDebugError	osDebugError 
+#define osPostLog_Config 1 //邮箱错误DeBug  1:开启Log输出 0:关闭Log输出
+#define osPostMemoryMalloc		osMemoryMalloc	//内存申请方法
+#define osPostMemoryFree		osMemoryFree	//内存释放方法
 //}
 
 //内存配置{
@@ -303,11 +327,9 @@ typedef int32_t OsErrorValue;//函数错误返回值
 
 #endif
 
-#define osMemoryDebug_Config 			1 //Debug配置 1:开启Debug输出 0:关闭Debug输出
-#define osMemoryErrorDebug osDebugError//DeBug输出函数
+#define osMemoryDebug_Config 			1 //Debug配置 1:开启Log输出 0:关闭Log输出
+#define osMemoryErrorDebug osDebugError	//DeBug输出方法
 //}
-
-
 
 
 
@@ -320,6 +342,7 @@ typedef int32_t OsErrorValue;//函数错误返回值
 #include "osTime.h"
 #include "osMemory.h"
 #include "osPost.h"
+#include "osTool.h"
 
 #endif
 

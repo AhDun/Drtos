@@ -48,8 +48,8 @@ OsErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 
 	PostForm = osPostMemoryMalloc(sizeof(_Post));//申请内存
 	if(PostForm == NULL){//如果返回为空,说明申请失败
-		#if (osPostDebugError_Config > 0)
-		osPostDebugError("发送邮件时申请内存失败 %s\n",osTaskGetRunTaskHandle() -> Name);
+		#if (osPostLog_Config > 0)
+		osLog(osLogClass_Error,"osPostSend","发送邮件时申请内存失败");
 		#endif
 		return (Error);//返回错误
 	}else{
@@ -100,8 +100,8 @@ uint32_t* osPostRead(void)
 		#endif
 		Buf = PostForm -> Body;
 		if(osPostMemoryFree(PostForm) != OK){
-			#if (osPostDebugError_Config > 0)
-			osPostDebugError("读取邮件时释放内存失败 %s\n",osTaskGetRunTaskHandle() -> Name);
+			#if (osPostLog_Config > 0)
+			osLog(osLogClass_Error,"osPostRead","读取邮件时释放内存失败");
 			#endif
 			return (Buf);
 		}

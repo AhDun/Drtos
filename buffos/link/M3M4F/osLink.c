@@ -38,20 +38,20 @@
 //const uint32_t NVIC_PendSV_SET = 0x10000000;
 
 
-__asm void Jump(uint32_t* addr)
+__asm void osLinkJump(uint32_t* addr)
 {
 	PUSH {R0}
 	POP	{PC}
 }
 
-__asm void ISR_Disable(void)
+__asm void osLinkISRDisable(void)
 {
 
 	CPSID   I	//禁用所有中断
 	BX      LR	//退出函数，跳转到BX寄存器中所存的地址
 }
 
-__asm void ISR_Config(void)
+__asm void osLinkISREnable(void)
 {
 
 	CPSIE   I	//禁用所有中断
@@ -60,7 +60,7 @@ __asm void ISR_Config(void)
 
 /*
  *
- * @函数名称: osTASK_Stack_Init
+ * @函数名称: osLinkTaskStackInit
  *
  * @函数功能: 任务栈初始化
  *
@@ -71,43 +71,43 @@ __asm void ISR_Config(void)
  * @注    释: 无
  *
  */
-__asm void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
+__asm void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
 						  //R0      ,R1      ,R2      ,R3
 						  //C编译器函数各个传参对应的寄存器
 {	
 	PUSH{R4-R5}
 
-	MOV   R4,   SP		//将SP寄存器备份到R4寄存器中
-	LDR   SP,   [R3]		//以R3寄存器中的值做为指针，取值到SP寄存器中
+	MOV   R4,   SP//将SP寄存器备份到R4寄存器中
+	LDR   SP,   [R3]//以R3寄存器中的值做为指针，取值到SP寄存器中
 		
-	#if (osFPU_Config > 0) //启用了FPU
-	MOV   R5,   #0x00		//将0x00传给R5寄存器
-	PUSH  {R5}			//FPSCR
-	SUB   SP,    SP,#0x40	//SP寄存器中的值减去0x40
+	#if (osFPU_Config > 0)//启用了FPU
+	MOV   R5,   #0x00//将0x00传给R5寄存器
+	PUSH  {R5}//FPSCR
+	SUB   SP,    SP,#0x40//SP寄存器中的值减去0x40
 
 	#endif
 
 	LDR    R5,   =xPSR_INIT_VALUE //xPSR寄存器初始化变量加载到R5寄存器中
 	//|指令|寄存器|弹栈时所在的寄存器  
-	PUSH   {R5}  					//xPSR(xPSR_INIT_VALUE)
-	PUSH   {R1}  					//PC(任务开始地址)
-	PUSH   {R2}  					//LR(任务结束回调地址)
-	MOV    R2,#0x00				//将0x00值加载到R2寄存器中
-	PUSH   {R2}  	//R12(0x00)
-	PUSH   {R2}  	//R3(0x00)
-	PUSH   {R2}	//R2(0x00)
-	PUSH   {R2}	//R1(0x00)
-	PUSH   {R0}	//R0(0x00)
+	PUSH   {R5}//xPSR(xPSR_INIT_VALUE)
+	PUSH   {R1}//PC(任务开始地址)
+	PUSH   {R2}//LR(任务结束回调地址)
+	MOV    R2,#0x00//将0x00值加载到R2寄存器中
+	PUSH   {R2}//R12(0x00)
+	PUSH   {R2}//R3(0x00)
+	PUSH   {R2}//R2(0x00)
+	PUSH   {R2}//R1(0x00)
+	PUSH   {R0}//R0(0x00)
 
 
-	#if (osFPU_Config > 0) //启用了FPU
-	SUB   SP,    SP,#0x40	//SP寄存器中的值减去0x40
+	#if (osFPU_Config > 0)//启用了FPU
+	SUB   SP,    SP,#0x40//SP寄存器中的值减去0x40
 
 	#endif
 
 	LDR		R5,	=LR_INIT_VALUE
 	PUSH   {R5}//R11
-	MOV   R5,   #0x00		//将0x00传给R5寄存器
+	MOV   R5,   #0x00//将0x00传给R5寄存器
 	PUSH   {R5}//R4
 	PUSH   {R5}//R5
 	PUSH   {R5}//R6
@@ -119,7 +119,7 @@ __asm void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t*
 
 
 	STR	  SP,	[R3]
-	MOV   SP,   R4				//将R4寄存器中的值加载到SP寄存器中，上半部分程序备份的SP值
+	MOV   SP,   R4//将R4寄存器中的值加载到SP寄存器中，上半部分程序备份的SP值
 	POP{R4-R5}
 
 	BX	  LR
@@ -138,23 +138,21 @@ __asm void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t*
  *
  */
 __asm void osLinkUseEnable(void)
-								//R0
-								//C编译器函数各个传参对应的寄存器
 {
 #if (osTaskUseStack_Config > 0)
   MOV	R1,	  SP
-  MSR   PSP,  R1		//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
+  MSR   PSP,  R1//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
   LDR	R0,	  =osTaskGetRunTaskHandle()
   LDR	R0,	  [R0]
   LDR	R0,	  [R0]
-  MSR   MSP,  R0		//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
+  MSR   MSP,  R0//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
  /*使能进程栈{*/
-  MRS	R0,		CONTROL 	//通过MRS命令读取控制寄存器到R0寄存器
-  ORR	R0,		R0,#0x02	//R0寄存器与0x02进行或运算，使的bit1位 置1
-  MSR	CONTROL,R0			//再通过MSR命令将R0寄存器中的内容写回控制寄存器中
+  MRS	R0,		CONTROL//通过MRS命令读取控制寄存器到R0寄存器
+  ORR	R0,		R0,#0x02//R0寄存器与0x02进行或运算，使的bit1位 置1
+  MSR	CONTROL,R0//再通过MSR命令将R0寄存器中的内容写回控制寄存器中
   /*}*/
 #endif
-  BX    LR	//退出函数，跳转到BX寄存器中所存的地址
+  BX    LR//退出函数，跳转到BX寄存器中所存的地址
   NOP
 }
 
@@ -163,7 +161,7 @@ __asm void osLinkUseEnable(void)
  *
  * @函数名称: HardFault_Handler
  *
- * @函数功能: 启动第一个任务
+ * @函数功能: 任务错误入口
  *
  * @输入参数: 无
  *
@@ -190,7 +188,7 @@ __asm void HardFault_Handler(void)
  *
  * @函数名称: SysTick_Handler
  *
- * @函数功能: 启动第一个任务
+ * @函数功能: 系统时钟入口
  *
  * @输入参数: 无
  *
@@ -324,6 +322,19 @@ __asm void PendSV_Handler(void)
 }
 #endif
 
+/*
+ *
+ * @函数名称: print
+ *
+ * @函数功能: print函数入口
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注   释: 无
+ *
+ */
 __asm void print(const char* s,...)
 {
 	PRESERVE8
@@ -346,6 +357,20 @@ __asm void print(const char* s,...)
 	POP		{R3}
 	BX		LR
 }
+/*
+ *
+ * @函数名称: sprint
+ *
+ * @函数功能: sprint函数入口
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注   释: 无
+ *
+ */
+
 __asm void sprint(char* s,const char* c,...)
 {
 	PRESERVE8

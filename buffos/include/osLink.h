@@ -15,8 +15,8 @@
  * 
  */
 
-#ifndef __osCPU_H_
-#define __osCPU_H_
+#ifndef __osLink_H_
+#define __osLink_H_
 
 /*
  *
@@ -53,7 +53,7 @@
 
 /*
  *
- * @函数名称: ISR_Disable
+ * @函数名称: osLinkISRDisable
  *
  * @函数功能: 关闭所有中断
  *
@@ -64,10 +64,10 @@
  * @注    释: 无
  *
  */
-void ISR_Disable(void);
+void osLinkISRDisable(void);
 /*
  *
- * @函数名称: ISR_Config
+ * @函数名称: osLinkISREnable
  *
  * @函数功能: 开启所有中断
  *
@@ -78,7 +78,7 @@ void ISR_Disable(void);
  * @注    释: 无
  *
  */
-void ISR_Config(void);
+void osLinkISREnable(void);
 /*
  *
  * @函数名称: Jump
@@ -92,12 +92,12 @@ void ISR_Config(void);
  * @注    释: 无
  *
  */
-void Jump(uint32_t* addr);
+void osLinkJump(uint32_t* addr);
 /*
  *
- * @函数名称: INTX_ENABLE
+ * @函数名称: osLinkTaskStackInit
  *
- * @函数功能: 开启所有中断
+ * @函数功能: 任务栈初始化
  *
  * @输入参数: 无
  *
@@ -106,7 +106,7 @@ void Jump(uint32_t* addr);
  * @注    释: 无
  *
  */
-void osTASK_Stack_Init(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas);
+void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas);
 /*
  *
  * @函数名称: INTX_ENABLE

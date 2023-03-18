@@ -14,8 +14,8 @@
  * limitations under the License.
  * 
  */
-#ifndef __osTaskH_
-#define __osTaskH_
+#ifndef __osTask_H_
+#define __osTask_H_
 /*
  *
  * @文件名称: osTask.h
@@ -114,7 +114,7 @@
  *
  * @注    释: 无
 */
-#define osProtect_DISABLE() 			ISR_Config()
+#define osProtect_DISABLE() 			osLinkISREnable()
 /*
  *
  * @函数名称: osProtect_DISABLE
@@ -127,7 +127,7 @@
  *
  * @注    释: 无
 */
-#define osProtect_ENABLE() 				ISR_Disable()
+#define osProtect_ENABLE() 				osLinkISRDisable()
 #endif
 /*
  *
@@ -288,7 +288,7 @@ typedef 	int8_t 		_TaskLevel;//任务优先级
 typedef		uint32_t	_PostFormT;//任务邮箱
 typedef 	uint32_t 	_TaskAddr;//任务地址
 typedef		uint32_t	_TaskRealSP;//任务实时栈指针
-typedef		uint32_t	_TaskTimeFlag;//任务时间标志
+typedef		uint32_t	_TaskDelay;//任务时间标志
 typedef		uint32_t	_NextTaskHandle;//任务时间标志
 #if (osTaskArg_Config > 0)
 typedef     uint32_t     _TaskArg;//任务传参
@@ -300,53 +300,53 @@ typedef     uint16_t      _TaskOccupyRatio;//任务占用比
 
 typedef struct
 {
-	_TaskRealSP			RealSP;				//任务实时栈指针
+	_TaskRealSP			RealSP;//任务实时栈指针
 	_NextTaskHandle*	NextTaskHandle;
-	_TaskConfig 		Config;  			//任务控制量
-	_TaskWheel 			TaskWheel;			//任务时间轮片
-	_TaskLevel 			Level;			//任务优先级
-	_TaskAddr*			Addr;					//任务地址
-	_TaskRealSP			RealSPb;			//任务实时栈指针
-	_TaskTimeFlag		TimeFlag;			//任务时间标志
+	_TaskConfig 		Config;//任务控制量
+	_TaskWheel 			TaskWheel;//任务时间轮片
+	_TaskLevel 			Level;//任务优先级
+	_TaskAddr*			Addr;//任务地址
+	_TaskRealSP			RealSPb;//任务实时栈指针
+	_TaskDelay			TaskDelay;//任务时间标志
 #if (osTaskName_Config > 0)
-	_TaskName*			Name; 				//任务名称
+	_TaskName*			Name;//任务名称
 #endif	
 #ifdef osSignalMutual_Config
-	_TaskLevel			Levelb;   	//任务备用优先级
+	_TaskLevel			Levelb;//任务备用优先级
 #endif
 #if (osTaskArg_Config > 0)
-	_TaskArg*  			Arg;    //任务传参	
+	_TaskArg*  			Arg;//任务传参	
 #endif
 #if (osPost_Config > 0)
-	_TaskArg			Arg1;					//任务邮箱
+	_TaskArg			Arg1;//任务邮箱
 #endif
-#if (osPerformanceStatistics_Config > 0) //开启了性能统计
-    _TaskOccupyTime      OccupyTime;    //任务占用时长
-    _TaskOccupyRatio     OccupyRatio;    //任务占用比
+#if (osPerformanceStatistics_Config > 0)//开启了性能统计
+    _TaskOccupyTime      OccupyTime;//任务占用时长
+    _TaskOccupyRatio     OccupyRatio;//任务占用比
 #endif				
 } _TaskHandle;
 
 typedef struct
 {
-	_TaskRealSP			RealSP;				//任务实时栈指针
+	_TaskRealSP			RealSP;//任务实时栈指针
 	_NextTaskHandle*	NextTaskHandle;
-	_TaskConfig 		Config;  			//任务控制量
-	_TaskWheel 			TaskWheel;			//任务时间轮片
-	_TaskLevel 			Level;			//任务优先级
-	_TaskAddr*			Addr;					//任务地址
-	_TaskRealSP			RealSPb;			//任务实时栈指针
-	_TaskTimeFlag		TimeFlag;			//任务时间标志
+	_TaskConfig 		Config;//任务控制量
+	_TaskWheel 			TaskWheel;//任务时间轮片
+	_TaskLevel 			Level;//任务优先级
+	_TaskAddr*			Addr;//任务地址
+	_TaskRealSP			RealSPb;//任务实时栈指针
+	_TaskDelay		   TaskDelay;//任务时间标志
 #if (osTaskName_Config > 0)
-	_TaskName*			Name; 				//任务名称
+	_TaskName*			Name;//任务名称
 #endif	
 #ifdef osSignalMutual_Config
-	_TaskLevel			Levelb;   	//任务备用优先级
+	_TaskLevel			Levelb;//任务备用优先级
 #endif
 #if (osTaskArg_Config > 0)
-	_TaskArg*  			Arg;    //任务传参	
+	_TaskArg*  			Arg;//任务传参	
 #endif
 #if (osPost_Config > 0)
-	_TaskArg			Arg1;					//任务邮箱
+	_TaskArg			Arg1;//任务邮箱
 #endif
 #if (osPerformanceStatistics_Config > 0) //开启了性能统计
     _TaskOccupyTime      OccupyTime;    //任务占用时长
@@ -581,7 +581,7 @@ OsErrorValue osTaskSpeedTest(void);
 OsErrorValue osTaskMonitor(void);
 
 
-void osTaskSIRQ_Config(_SIRQList* SIRQList_Addr);
+void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr);
 
 OsErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr);
 

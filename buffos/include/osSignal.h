@@ -36,6 +36,8 @@
 #define Signal_Mutual       0x01u//互斥信号量
 #define Signal_Binary       0x02u//二值信号量
 #define Signal_Count        0x03u//计数信号量
+#define Signal_AndGroup		0x04u//与组
+#define Signal_OrGroup		0x05u//或组
 //}
 
 
@@ -49,14 +51,20 @@ typedef struct
 //}
 
 //信号量句柄{
-typedef     uint8_t     _SignalValue;
+typedef     uint32_t    _SignalValue;
 typedef     uint8_t     _SignalType;
 typedef struct
 {
-    _SignalValue 	 Value;//信号值
     _SignalType   	 Type;//信号的类型
 	_NextAddr		 NextAddr;//信号量令牌链头
 }_SignalHandle;
+typedef struct
+{
+    _SignalType   	 Type;//信号的类型
+	_NextAddr		 NextAddr;//信号量令牌链头
+	_SignalValue 	 Value;//信号值
+}_SignalHandleValue;
+
 //}
 
 
@@ -123,6 +131,12 @@ OsErrorValue osSignalUse(_SignalHandle* ST);
  *
  */
 OsErrorValue osSignalFree(_SignalHandle* ST);
+
+
+OsErrorValue osSignalSetGroup(_SignalHandle* ST,uint8_t Bits,uint8_t SetBit,uint8_t SetValue);
+
+
+
 
 
 #endif

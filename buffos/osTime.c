@@ -35,10 +35,10 @@
 */
 _NextAddr STimeListHead;
 _TaskHandle* TaskHandle_STime;
-#if (osPerformanceStatistics_Config > 0)
+#if (osPerf_Config > 0)
 _PerformanceStatistics PS;//性能统计
 #endif
-#if (os_TotalSystemRunningTime_Config > 0)//开启了系统运行时长
+#if (osRunTime_Config > 0)//开启了系统运行时长
 _SystemRunningTime 		OsTimeSystemRunTime;//系统运行时间
 _TaskISRRunningTime		OsTimeTaskISRTime;//系统运行时长
 #endif
@@ -82,7 +82,6 @@ OsErrorValue osClockInit(void)
  */
 void osClockTimePulse(void)
 {
-	/*本函数已在中断响应入口中，下面是这个函数的副本*/
 	_TaskHandle* TaskHandleListBuf;
 
 	#if (osClockTimePeriod < osClockTimePeriodStandard) //
@@ -90,7 +89,7 @@ void osClockTimePulse(void)
 		OsTimeGetPeriodValue() = NULL;
 	#endif
     /*----------------------------------计时---------------------------------------*/
-	#if (os_TotalSystemRunningTime_Config > 0)//开启了系统运行时长
+	#if (osRunTime_Config > 0)//开启了系统运行时长
 	#if (osClockTimePeriod > osClockTimePeriodStandard)
 	OsTimeGetSystemRunTime() += (osClockTimePeriod / osClockTimePeriodStandard);//系统运行时长进行计时
 	#else
@@ -98,55 +97,60 @@ void osClockTimePulse(void)
 	#endif
 	#endif
      /*----------------------------------统计---------------------------------------*/
-	#if (osPerformanceStatistics_Config > 0) //开启了性能统计
+	#if (osPerf_Config > 0) //开启了性能统计
 	if(osTaskGetOIRQFlag() > NULL){
 		OsTimeGetTaskISRTime()++;
 	}
 	else if(osTaskGetSwitchState() == TaskSwitch_Ready){//任务调度状态为未调度，进行计时
         osTaskGetRunTaskHandle() -> OccupyTime++;//任务占用时长计数
     }
-    if(OsTimeGetSystemRunTime() % TaskOccupyRatioSamplingTime == 0){//系统每过一定时长，就进行占用比例统计
+    if(OsTimeGetSystemRunTime() % osTaskRunTime_Config == 0){//系统每过一定时长，就进行占用比例统计
         PS.CTO = 0;//CPU占用量设为0
 		TaskHandleListBuf = osTaskGetTaskHandleListHead();
 		do{//对每一个任务进行遍历
-			//TaskHandleListBuf -> OccupyRatio = TaskHandleListBuf -> OccupyTime / (TaskOccupyRatioSamplingTime / 100);//计算这个任务占用比
+			//TaskHandleListBuf -> OccupyRatio = TaskHandleListBuf -> OccupyTime / (osTaskRunTime_Config / 100);//计算这个任务占用比
 			TaskHandleListBuf -> OccupyRatio = TaskHandleListBuf -> OccupyTime;//计算这个任务占用比
 			//计算公式：占用比 = 单位时间内的占用时长 / (单位时间 / 100)
-            PS.CTO += TaskHandleListBuf -> OccupyRatio / (TaskOccupyRatioSamplingTime / 100);//计算CPU占用量
+            PS.CTO += TaskHandleListBuf -> OccupyRatio / (osTaskRunTime_Config / 100);//计算CPU占用量
 			//计算公式：CPU占用量 = CPU占用量 + 每个任务的占用量
             TaskHandleListBuf -> OccupyTime = 0;//清空单位时间内的占用时长
 
 			TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
 		}while(TaskHandleListBuf != osTaskGetTaskHandleListHead());
 		if(OsTimeGetTaskISRTime() > NULL){
-			PS.CISRO = OsTimeGetTaskISRTime() / (TaskOccupyRatioSamplingTime / 100);//计算CPU占用量
+			PS.CISRO = OsTimeGetTaskISRTime() / (osTaskRunTime_Config / 100);//计算CPU占用量
 			OsTimeGetTaskISRTime() = 0;
 		}
-		PS.CSO = (PS.TSC * PS.TSSU) / (TaskOccupyRatioSamplingTime /100) /1000;
+		PS.CSO = (PS.TSC * PS.TSSU) / (osTaskRunTime_Config /100) /1000;
 		PS.TSCb = PS.TSC;
 		PS.TSC = 0;
     }
 	#endif
-    /*----------------------------------轮片---------------------------------------*/
-    if(OsTimeGetTaskTimeWheel() > 0 && osTaskGetSwitchState() == TaskSwitch_Ready && osTaskGetOIRQFlag() == NULL){ //时间轮片
+    /*----------------------------------时间轮片---------------------------------------*/
+    if(OsTimeGetTaskTimeWheel() > 0 && osTaskGetSwitchState() == TaskSwitch_Ready && osTaskGetOIRQFlag() == NULL){
+		/*满足三个条件，才可以触发轮片计时
+		 *1.任务轮片时间大于零
+		 *2.任务切换状态为就绪态
+		 *3.中断状态为零
+		 */
 	   //当前正在运行的任务的轮片时间大于0并且调度状态为未调度状态
         if(--OsTimeGetTaskTimeWheel() == 0){//当目前正在运行的任务的轮片时间为零时
 			osTaskSwitch_Config();//触发任务切换   
         }
     }
-	TaskHandleListBuf = osTaskGetTaskHandleListHead();
+	TaskHandleListBuf = osTaskGetTaskHandleListHead();//获取任务句柄链表头部指针
 	do{//对每一个任务进行遍历
 		/*----------------------------------延时---------------------------------------*/
         if(TaskHandleListBuf -> Config == Task_State_Up_DT){//这个任务是延时挂起(等待态)，才进入
             TaskHandleListBuf -> TaskDelay--;//把这个任务时间标志中内容减一
             if(TaskHandleListBuf -> TaskDelay == 0){	//当这个任务时间标志中内容为零时
-                if(osTaskGetSwitchState() != TaskSwitch_Ready){//如果已经正在调度中，就把这个任务设为轮片挂起(挂起态)
-                    TaskHandleListBuf  -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
+                if(osTaskGetSwitchState() != TaskSwitch_Ready){//查询切换状态是否为就绪态
+                    TaskHandleListBuf  -> Config = Task_State_RE;//将这个任务的状态设为就绪态
                 }
-                else if(TaskHandleListBuf -> Level <  osTaskGetRunTaskHandle() -> Level){//如果这个任务高于当前工作运行任务栏的优先级，就占用
-                    TaskHandleListBuf -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
-                    if(osTaskGetSwitchState() == TaskSwitch_Ready){//查询是否己被悬起，如果没有就触发任务切换
-                        osTaskGetNextTaskHandle() = TaskHandleListBuf;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
+                else if(TaskHandleListBuf -> Level <  osTaskGetRunTaskHandle() -> Level){//如果这个任务高于当前工作运行任务的优先级，就抢占
+                    TaskHandleListBuf -> Config = Task_State_RE;//将这个任务的状态设为就绪态
+                    if(osTaskGetSwitchState() == TaskSwitch_Ready){//查询切换状态是否为就绪态
+                        osTaskGetNextTaskHandle() = TaskHandleListBuf;//把这个任务句柄加载到新任务句柄中
                         osTaskSwitch_Config(); //触发任务切换
                     }
                 }
@@ -155,8 +159,8 @@ void osClockTimePulse(void)
                 }
             }
         }
-		TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
-	}while(TaskHandleListBuf != osTaskGetTaskHandleListHead());
+		TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;//加载下一个指针
+	}while(TaskHandleListBuf != osTaskGetTaskHandleListHead());//根据任务链表，进行任务遍历
 	#if (osClockTimePeriod < osClockTimePeriodStandard)
 	}
 	#endif
@@ -189,7 +193,7 @@ OsErrorValue osSTimeInit(void)
 	if(TaskHandle_STime == NULL){
 
 		#if (osTaskLog_Config > 0)
-		osTaskErrorDebug("SIRQ 任务创建失败\n");
+		osLogE("osSTimeInit","SIRQ 任务创建失败\n");
 		#endif
 		return (Error);//返回Error
 	}
@@ -197,7 +201,7 @@ OsErrorValue osSTimeInit(void)
 }
 /*
  *
- * @函数名称: osTimeLogin_Static
+ * @函数名称: osTimeLoginStatic
  *
  * @函数功能: 软定时器静态注册
  *
@@ -212,7 +216,7 @@ OsErrorValue osSTimeInit(void)
  * @注    释: 无
  *
  */
-_STimes* osTimeLogin_Static(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
+_STimes* osTimeLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
 {
 	_STimes* STime_Buf = (_STimes*)ListAddr;
 	STime_Buf -> Name = Name;
@@ -259,7 +263,7 @@ _STimes* osTimeLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void*
 //		#endif
 //		return (NULL);//返回错误
 //	}
-	return osTimeLogin_Static(Addr1, Name, Flag, Config, Addr);
+	return osTimeLoginStatic(Addr1, Name, Flag, Config, Addr);
 }
 /*
  *

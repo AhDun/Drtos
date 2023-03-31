@@ -29,7 +29,10 @@
 #include "osMemory.h"
 #include "sram.h"
 
+uint32_t abc[128];
+
 _MemoryInfoHandle	MemoryInfoHandle;
+_MemoryInfoStaticHandle	MemoryInfoStaticHandle;
 
 OsErrorValue  osMemoryInit(_MemoryInfo* MemoryInfo)
 {
@@ -54,8 +57,8 @@ void* osMemoryMalloc(uint32_t MemSize)
 	if((MemoryInfoHandle -> NextAddr  + MemSize) <= MemoryInfoHandle -> TailAddr){//检查内存池是否已满
 		MemoryInfoHandle -> NextAddr = (uint8_t* )( MemoryInfoHandle -> NextAddr + MemSize);
 	}else{
-		#if (osMemoryDebug_Config > 0)//开启了内存保护配置
-		osMemoryErrorDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
+		#if (osMemoryLog_Config > 0)//开启了内存保护配置
+		osLogE("osMemoryMalloc","内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
 		#endif
 		return (NULL);
 	}
@@ -181,8 +184,8 @@ void* osMemoryMalloc(uint32_t MemSize)
 			return MemoryAddr2 + MemoryStructLength; //返回申请到地址并进行内存复位操作
 		}
 		#endif
-		#if (osMemoryDebug_Config > 0)//开启了内存保护配置
-		osMemoryErrorDebug("内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
+		#if (osMemoryLog_Config > 0)//开启了内存保护配置
+		osLogE("osMemoryMalloc","内存申请失败! 剩余可申请内存为%d字节\n",osMemoryGetPassValue());
 		#endif
 		#if (MemoryProtect_Config > 0)
 			#if (osCriticalToProtect_Config > 0)//启用了临界保护
@@ -233,8 +236,8 @@ OsErrorValue osMemoryFree(void* addr)
 		}
 	#endif
 	if(_MemoryStruct1 -> MemoryFlag == Memory_Free){//检查这个要释放的块状态,如果已经释放,就会返回错误
-		#if (osMemoryDebug_Config > 0)
-		osMemoryErrorDebug("内存已释放! 勿重复释放 %X\n",addr);
+		#if (osMemoryLog_Config > 0)
+		osLogE("osMemoryMalloc","内存已释放! 勿重复释放 %X\n",addr);
 		#endif
 		#if (MemoryProtect_Config > 0)//开启了内存保护配置
 			#if (osCriticalToProtect_Config > 0)//启用了临界保护
@@ -256,8 +259,8 @@ OsErrorValue osMemoryFree(void* addr)
 		return (OK);//返回正常
 	}
 	else{
-		#if (osMemoryDebug_Config > 0)
-		osMemoryErrorDebug("内存释放失败! 内存地址不正确 %X,%d\n",addr,_MemoryStruct2 -> MemoryLength );
+		#if (osMemoryLog_Config > 0)
+		osLogE("osMemoryFree","内存释放失败! 内存地址不正确 %X\n",addr);
 		#endif
 		#if (MemoryProtect_Config > 0)//开启了内存保护配置
 			#if (osCriticalToProtect_Config > 0)//启用了临界保护
@@ -326,8 +329,8 @@ OsErrorValue osMemorySum(void)
 		if(_MemoryStruct -> MemoryFlag == Memory_Occupy || _MemoryStruct -> MemoryFlag == Memory_Free){
 			Count += 1;
 		}else{
-			#if (osMemoryDebug_Config > 0)
-			osMemoryErrorDebug("内存块异常! %X\n",_MemoryStruct);
+			#if (osMemoryLog_Config > 0)
+			osLogE("osMemorySum","内存块异常! %X\n",_MemoryStruct);
 			#endif
 			return (Error);
 		}
@@ -342,5 +345,56 @@ uint32_t osMemoryGetAllValue(void)
 	return MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> HeadAddr;
 }
 
+OsErrorValue osMemoryInitStatic(_MemoryInfoStatic* MemoryInfoStatic)
+{
+	uint32_t* NextAddr;
+	MemoryInfoStaticHandle = MemoryInfoStatic;
+	NextAddr = MemoryInfoStaticHandle -> HeadAddr;
+	while( NextAddr < MemoryInfoStaticHandle -> TailAddr){
+		*NextAddr = NULL;
+		NextAddr++;
+	}
+	return (OK);
+}
 
 
+void* osMemoryMallocStatic(int32_t MemSize)
+{
+	uint32_t* NextAddr = MemoryInfoStaticHandle -> HeadAddr;
+	while( NextAddr < MemoryInfoStaticHandle -> TailAddr){
+		if(NextAddr[osMemoryByteStatic_Config] == 0){
+			return NextAddr;
+		}else{
+			NextAddr += osMemorySizeStatic_Config;
+		}
+	}
+	return (NULL);
+}
+OsErrorValue osMemoryFreeStatic(void* addr)
+{
+	uint32_t size = 0;
+	uint32_t* AddrBuf = (uint32_t*)addr;
+	for(size = 0 ; size < osMemorySizeStatic_Config ; size++){
+		AddrBuf[size] = 0x00;
+	}
+	return (OK);
+}
+
+uint32_t osMemoryStaticGetPassValue(void)
+{
+	uint32_t* NextAddr = MemoryInfoStaticHandle -> HeadAddr;
+	uint32_t size = 0;
+	while( NextAddr < MemoryInfoStaticHandle -> TailAddr){
+		if(NextAddr[osMemoryByteStatic_Config] == 0){
+			size += osMemorySizeStatic_Config;
+		}
+		NextAddr += osMemorySizeStatic_Config;
+
+	}
+	return (size);
+}
+
+uint32_t osMemoryStaticGetAllValue(void)
+{
+	return MemoryInfoStaticHandle -> TailAddr - MemoryInfoStaticHandle -> HeadAddr;
+}

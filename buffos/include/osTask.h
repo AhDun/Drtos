@@ -183,20 +183,6 @@
 #define osTaskExitIRQ()				osTaskGetOIRQFlag() -= 1;
 /*
  *
- * @函数名称: osTaskErrorDebug
- *
- * @函数功能: 进入中断
- *
- * @输入参数: 	
- *
- * @返 回 值: 无
- *
- * @注    释: 无
-*/
-
-#define osTaskErrorDebug 		osDebugError
-/*
- *
  * @函数名称: osTaskGetRunTaskHandle
  *
  * @函数功能: 获取正在运行的任务句柄
@@ -228,9 +214,9 @@
 
 /*
  *
- * @函数名称: osTaskGetRunTaskHandle
+ * @函数名称: osTaskGetOIRQFlag
  *
- * @函数功能: 获取正在任务切换状态
+ * @函数功能: 获取中断状态
  *
  * @输入参数: 无	
  *
@@ -261,7 +247,7 @@
  *
  * @函数名称: osTaskGetRunTaskHandle
  *
- * @函数功能: 获取正在任务切换状态
+ * @函数功能: 获取任务句柄链表头部指针
  *
  * @输入参数: 无	
  *
@@ -293,7 +279,7 @@ typedef		uint32_t	_NextTaskHandle;//任务时间标志
 #if (osTaskArg_Config > 0)
 typedef     uint32_t     _TaskArg;//任务传参
 #endif
-#if (osPerformanceStatistics_Config > 0) //开启了性能统计
+#if (osPerf_Config > 0) //开启了性能统计
 typedef     uint16_t     _TaskOccupyTime;//任务占用时长
 typedef     uint16_t      _TaskOccupyRatio;//任务占用比
 #endif
@@ -320,7 +306,7 @@ typedef struct
 #if (osPost_Config > 0)
 	_TaskArg			Arg1;//任务邮箱
 #endif
-#if (osPerformanceStatistics_Config > 0)//开启了性能统计
+#if (osPerf_Config > 0)//开启了性能统计
     _TaskOccupyTime      OccupyTime;//任务占用时长
     _TaskOccupyRatio     OccupyRatio;//任务占用比
 #endif				
@@ -348,7 +334,7 @@ typedef struct
 #if (osPost_Config > 0)
 	_TaskArg			Arg1;//任务邮箱
 #endif
-#if (osPerformanceStatistics_Config > 0) //开启了性能统计
+#if (osPerf_Config > 0) //开启了性能统计
     _TaskOccupyTime      OccupyTime;    //任务占用时长
     _TaskOccupyRatio     OccupyRatio;    //任务占用比
 #endif				
@@ -425,7 +411,7 @@ _TaskHandle* osTaskLogin(
 );
 /*
  *
- * @函数名称: osTaskLogin_Static
+ * @函数名称: osTaskLoginStatic
  *
  * @函数功能: 任务注册(手动提供内存)
  *
@@ -443,7 +429,7 @@ _TaskHandle* osTaskLogin(
  * @注    释: 无
  */
 
-_TaskHandle* osTaskLogin_Static(
+_TaskHandle* osTaskLoginStatic(
 
 	_TaskHandle* TaskHandle,
 #if (osTaskName_Config > 0)
@@ -474,7 +460,7 @@ _TaskHandle* osTaskLogin_Static(
 OsErrorValue  osTaskLogout(_TaskHandle* TaskHandle);
 /*
  *
- * @函数名称: osTaskLogout_Static
+ * @函数名称: osTaskLogoutStatic
  *
  * @函数功能: 任务注销(不释放内存)
  *
@@ -485,7 +471,7 @@ OsErrorValue  osTaskLogout(_TaskHandle* TaskHandle);
  * @注    释: 无
  */
 
-OsErrorValue  osTaskLogout_Static(_TaskHandle* TaskHandle);
+OsErrorValue  osTaskLogoutStatic(_TaskHandle* TaskHandle);
 
 /*
  *

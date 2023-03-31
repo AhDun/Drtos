@@ -51,12 +51,19 @@ typedef _MemoryUnit 	_MemoryNextAddr;
 typedef  struct
 { 
 	_MemoryPoolAddr*			HeadAddr;//内存头地址
-	_MemoryNextAddr*			NextAddr;//内存
+	_MemoryNextAddr*			NextAddr;//内存可分配的地址
 	const _MemoryPoolAddr*		TailAddr;//内存尾地址
 
 }_MemoryInfo;
+typedef  struct
+{ 
+	uint32_t*			HeadAddr;//内存头地址
+	const uint32_t*		TailAddr;//内存尾地址
+
+}_MemoryInfoStatic;
 //}
 typedef	_MemoryInfo*	_MemoryInfoHandle;
+typedef	_MemoryInfoStatic*	_MemoryInfoStaticHandle;
 extern _MemoryInfoHandle	MemoryInfoHandle;
 #if (osMemorySequence_Config == 0)
 //内存块结构{
@@ -198,8 +205,52 @@ uint32_t osMemoryGetAllValue(void);
  *
  */
 OsErrorValue osMemorySum(void);
+/*
+ *
+ * @函数名称: osMemoryGetAllValue
+ *
+ * @函数功能: 获取总内存长度
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 总内存长度
+ *
+ * @注    释: 无
+ *
+ */
+OsErrorValue osMemoryInitStatic(_MemoryInfoStatic* MemoryInfoStatic);
+/*
+ *
+ * @函数名称: osMemoryGetAllValue
+ *
+ * @函数功能: 获取总内存长度
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 总内存长度
+ *
+ * @注    释: 无
+ *
+ */
+void* osMemoryMallocStatic(int32_t MemSize);
+/*
+ *
+ * @函数名称: osMemoryFreeStatic
+ *
+ * @函数功能: 静态内存释放
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 总内存长度
+ *
+ * @注    释: 无
+ *
+ */
+OsErrorValue osMemoryFreeStatic(void* addr);
 
+uint32_t osMemoryStaticGetPassValue(void);
 
+uint32_t osMemoryStaticGetAllValue(void);
 
 #endif
 

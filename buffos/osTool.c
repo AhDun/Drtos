@@ -42,25 +42,4 @@
  *
  */
 
-OsErrorValue	osLog(uint8_t Class,char* FuncName,char* Text)
-{
-		switch(Class){
-			case osLogClass_Fatal://严重级
-									osLogClassDebugOutput("[Fatal] %s - %s\n",FuncName,Text);
-									break;
-			case osLogClass_Error://错误级
-									osLogClassDebugOutput("[Error] %s - %s\n",FuncName,Text);
-									break;
-			case osLogClass_Warn://警告级
-									osLogClassDebugOutput("[Warn] %s - %s\n",FuncName,Text);
-									break;
-			case osLogClass_Info://信息级
-									osLogClassDebugOutput("[Info] %s - %s\n",FuncName,Text);
-									break;
-			case osLogClass_Debug://调试级
-									osLogClassDebugOutput("[Debug] %s - %s\n",FuncName,Text);
-									break;
-		}
-		return (OK);
-}
 

@@ -44,6 +44,7 @@
 //}
 //反馈{
 #define Error  					  -1 //错误
+#define FAIL  					  -1 //错误
 #define Exception				  -1 //异常
 #define ON 						  -1 //不正确
 #define NReady					  -1 //未就绪

@@ -66,24 +66,37 @@
 _SignalHandle* osSignalLogin(_SignalType SP)
 {
 	#if defined osSignalMutual_Config || defined osSignalBinary_Config || defined osSignalCount_Config
-		_SignalHandle* ST = osSignalMemoryMalloc(sizeof(_SignalHandle));//为信号量结构体申请内存
-		if(ST == NULL){//如果内存申请函数返回为零,说明申请失败
-			#if (osSignalLog_Config > 0)
-			osLog(osLogClass_Error,"osSignalLogin","注册信号量时内存申请失败");
-			#endif
-			return (NULL);//返回空,表示错误
-		}
-		ST -> Value = 0;//将信号值设为零
-		if(SP == Signal_Mutual || SP == Signal_Binary || SP == Signal_Count){
-			ST -> Type = SP;//写入信号类型
+		_SignalHandle* ST;
+		_SignalHandleValue* STV;
+		if(SP >= Signal_Mutual && SP <= Signal_OrGroup){
+			if(SP >=Signal_Count){
+				STV = osSignalMemoryMalloc(sizeof(_SignalHandleValue));//为信号量结构体申请内存
+			}else{
+				ST = osSignalMemoryMalloc(sizeof(_SignalHandle));//为信号量结构体申请内存
+			}
+			if(ST == NULL && STV == NULL){//如果内存申请函数返回为零,说明申请失败
+				#if (osSignalLog_Config > 0)
+				osLogE("osSignalLogin","注册信号量时内存申请失败\n");
+				#endif
+				return (NULL);//返回空,表示错误
+			}
+			if(SP >=Signal_Count){
+				STV -> Value = 0;//将信号值设为零
+				STV -> Type = SP;//写入信号类型
+				STV -> NextAddr = NULL;
+				return (_SignalHandle*)STV;
+			}else{
+				ST -> Type = SP;//写入信号类型
+				ST -> NextAddr = NULL;
+				return (ST);
+			}
+			
 		}else{
 			#if (osSignalLog_Config > 0)
-			osLog(osLogClass_Error,"osSignalLogin","注册信号量时遇到未知类型");
+			osLogE("osSignalLogin","注册信号量时遇到未知类型\n");
 			#endif
 			return (NULL);
 		}
-		ST -> NextAddr = NULL;
-		return (ST);
 	#else
 		return (NULL);
 	#endif 
@@ -125,7 +138,7 @@ OsErrorValue osSignalLogin(_SignalHandle* ST,_SignalType SP)
 #endif
         default:
 				#if (osSignalLog_Config > 0)
-				osLog(osLogClass_Error,"osSignalLogin","注册信号量时遇到未知类型");
+				osLogE("osSignalLogin","注册信号量时遇到未知类型\n");
 				#endif
 				return (Error);//break;
     }
@@ -151,7 +164,7 @@ static OsErrorValue osSignalApplyToken(_SignalHandle* ST)
 	_SignalToken* SemaphoreToken_Buf = osSignalMemoryMalloc(sizeof(_SignalToken));//为信号量结构体申请内存
 	if(SemaphoreToken_Buf == NULL){
 		#if (osSignalLog_Config > 0)
-		osLog(osLogClass_Error,"osSignalApplyToken","申请占用信号量令牌时内存申请失败");
+		osLogE("osSignalApplyToken","申请占用信号量令牌时内存申请失败\n");
 		#endif
 		return (Error);
 	}else{
@@ -186,7 +199,7 @@ static OsErrorValue osSignalWaitToken(_SignalHandle* ST)
 	_SignalToken* SemaphoreToken_Buf = osSignalMemoryMalloc(sizeof(_SignalToken));//为信号量结构体申请内存
 	if(SemaphoreToken_Buf == NULL){
 		#if (osSignalLog_Config > 0)
-		osLog(osLogClass_Error,"osSignalWaitToken","申请等待信号量令牌时内存申请失败");
+		osLogE("osSignalWaitToken","申请等待信号量令牌时内存申请失败\n");
 		#endif
 		return (Error);
 	}else{
@@ -223,6 +236,7 @@ OsErrorValue osSignalUseWait(_SignalHandle* ST)
 #if defined osSignalMutual_Config || defined osSignalBinary_Config || defined osSignalCount_Config
 	_TaskHandle* TaskHandle;
 	_SignalToken* SemaphoreToken_Buf;
+	_SignalHandleValue* STV = (_SignalHandleValue*)ST;
 	switch(ST -> Type){
 #ifdef osSignalBinary_Config 
 		case Signal_Binary:	
@@ -248,11 +262,11 @@ OsErrorValue osSignalUseWait(_SignalHandle* ST)
 #endif
 #ifdef osSignalCount_Config
 		case Signal_Count:
-							if(ST -> Value > 0){
-								ST -> Value =  ST -> Value - 1;
+							if(STV -> Value > 0){
+								STV -> Value =  STV -> Value - 1;
 								return (OK);	
 							}else{
-								if(ST -> NextAddr != NULL){
+								if(STV -> NextAddr != NULL){
 									return osSignalWaitToken(ST);
 								}else{
 									return osSignalApplyToken(ST);
@@ -261,7 +275,7 @@ OsErrorValue osSignalUseWait(_SignalHandle* ST)
 #endif
 		default:
 				#if (osSignalLog_Config > 0)
-				osLog(osLogClass_Error,"osSignalUseWait","占用信号量时输入未知类型");
+				osLogE("osSignalUseWait","占用信号量时输入未知类型\n");
 				#endif
 				return(Error);
 	}
@@ -297,7 +311,7 @@ OsErrorValue osSignalFree(_SignalHandle* ST)
 #if defined osSignalMutual_Config || defined osSignalBinary_Config || defined osSignalCount_Config
 	_SignalToken* SemaphoreToken_Buf;
 	_TaskHandle*	TaskInfoTable_Buf;
-
+	_SignalHandleValue* STV = (_SignalHandleValue*)ST;
 	switch(ST -> Type){
 #ifdef osSignalBinary_Config
 		case Signal_Binary:
@@ -310,15 +324,17 @@ OsErrorValue osSignalFree(_SignalHandle* ST)
 #endif
 #ifdef osSignalCount_Config
 		case Signal_Count:	
-							if(ST -> NextAddr == NULL){
-								ST -> Value = ST -> Value + 1;
+							if(STV -> NextAddr == NULL){
+								STV -> Value = STV -> Value + 1;
 								return (OK);
 							}
+		case Signal_AndGroup:
+		case Signal_OrGroup:
 							break;
 #endif
 		default:
 				#if (osSignalLog_Config > 0)
-				osLog(osLogClass_Error,"osSignalFree","释放信号量时类型错误");
+				osLogE("osSignalFree","释放信号量时类型错误\n");
 				#endif
 				return(Error);
 	}
@@ -328,7 +344,7 @@ OsErrorValue osSignalFree(_SignalHandle* ST)
 		TaskInfoTable_Buf -> Config = Task_State_RE;  //主动挂起(挂起态)
 		if(osSignalMemoryFree(SemaphoreToken_Buf) != OK){
 			#if (osSignalLog_Config > 0)
-			osLog(osLogClass_Error,"osSignalFree","释放信号量时释放内存错误");
+			osLogE("osSignalFree","释放信号量时释放内存错误\n");
 			#endif
 			return (Error);
 		}
@@ -338,7 +354,7 @@ OsErrorValue osSignalFree(_SignalHandle* ST)
 		return (OK);
 	}else{
 		#if (osSignalLog_Config > 0)
-		osLog(osLogClass_Warn,"osSignalFree","释放信号量时已经为空");
+		osLogW("osSignalFree","释放信号量时已经为空\n");
 		#endif
 		return (Error);
 	}
@@ -361,12 +377,12 @@ OsErrorValue osSignalFree(_SignalHandle* ST)
 OsErrorValue osSignalLogout(_SignalHandle* ST)
 {
 	#if defined osSignalMutual_Config || defined osSignalBinary_Config || defined osSignalCount_Config
-	ST -> NextAddr =  ST -> Type =  ST -> Value = 0;
+	ST -> NextAddr =  ST -> Type = 0;
 	#if (osSignalAutoApply_Config > 0)//启用了信号量自动分配
 
 	if(osSignalMemoryFree((uint8_t*)ST) == Error){//需要把信号量的所占内存释放
 		#if (osSignalLog_Config > 0)
-		osLog(osLogClass_Error,"osSignalLogout","注销信号量时释放内存错误");
+		osLogE("osSignalLogout","注销信号量时释放内存错误\n");
 		#endif
 		return (Error);//释放内存时,发生错误,返回错误
 	}
@@ -375,6 +391,48 @@ OsErrorValue osSignalLogout(_SignalHandle* ST)
 	#else 
 	return (Error);//注销成功!返回OK
 	#endif
+
+}
+OsErrorValue osSignalSetGroup(_SignalHandle* ST,uint8_t Bits,uint8_t SetBit,uint8_t SetValue)
+{
+	_SignalHandleValue* STV = (_SignalHandleValue*)ST;
+	uint32_t Bit,Precision;
+	if(ST -> Type >= Signal_AndGroup && ST -> Type <= Signal_AndGroup){
+		Bit = 0x00000001;
+		for(Precision = 32 / Bits;Precision > 1;Precision--){
+			Bit = (Bit << 1) | 0x01;
+		}
+		Bit <<= (32 / Bits) * (SetBit - 1);
+		if(SetValue){
+			STV -> Value |=  Bit;
+		}else{
+			STV -> Value &= ~Bit;
+		}
+		switch(STV -> Type){
+			case Signal_AndGroup:
+				 if(STV -> Value != 0xFFFFFFFF){
+					return (OK);
+				 }
+				 break;
+			case Signal_OrGroup:
+				 if(STV -> Value == 0x00000000){
+					return (OK);
+				 }
+				 break;
+			default:
+				break;
+			
+		}
+		STV -> Value = 0x00000000;
+		osSignalFree(ST);
+		return (OK);
+
+	}else{
+		#if (osSignalLog_Config > 0)
+		osLogE("osSignalSetAndGroup","未知类型\n");
+		#endif
+		return (Error);
+	}
 
 }
 

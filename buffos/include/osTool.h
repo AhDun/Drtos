@@ -31,7 +31,7 @@
  */
 
 
-OsErrorValue	osLog(uint8_t Class,char* FuncName,char* Text);
+
 
 
 

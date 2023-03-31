@@ -423,24 +423,14 @@
               <FilePath>..\..\..\buffos\osTask.c</FilePath>
             </File>
             <File>
-              <FileName>osMemory.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\buffos\include\osMemory.h</FilePath>
+              <FileName>osTime.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\buffos\osTime.c</FilePath>
             </File>
             <File>
-              <FileName>osPost.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\buffos\include\osPost.h</FilePath>
-            </File>
-            <File>
-              <FileName>osSignal.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\buffos\include\osSignal.h</FilePath>
-            </File>
-            <File>
-              <FileName>osTask.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\buffos\include\osTask.h</FilePath>
+              <FileName>osTool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\buffos\osTool.c</FilePath>
             </File>
             <File>
               <FileName>osLink.c</FileName>
@@ -453,34 +443,9 @@
               <FilePath>..\..\..\buffos\link\M3M4F\osLink.s</FilePath>
             </File>
             <File>
-              <FileName>osLink.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\buffos\include\osLink.h</FilePath>
-            </File>
-            <File>
               <FileName>osConfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Src\User\osConfig.h</FilePath>
-            </File>
-            <File>
-              <FileName>osTime.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osTime.c</FilePath>
-            </File>
-            <File>
-              <FileName>osTime.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\buffos\include\osTime.h</FilePath>
-            </File>
-            <File>
-              <FileName>osTool.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osTool.c</FilePath>
-            </File>
-            <File>
-              <FileName>osTool.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\buffos\include\osTool.h</FilePath>
             </File>
           </Files>
         </Group>

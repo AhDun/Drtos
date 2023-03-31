@@ -31,8 +31,10 @@
 #include "print.h"
 
 uint8_t CCRAM[MemTank_Max] __attribute__((at(0x10000000)));
+uint32_t RAM[1000];
 
 _MemoryInfo  Memory_CCRAM = {&CCRAM[0],&CCRAM[0],&CCRAM[MemTank_Max]};
+_MemoryInfoStatic  Memory_RAM = {&RAM[0],&RAM[999]};
 
 
 
@@ -53,15 +55,20 @@ int main(void)
 {
 /*--------------------------------------demo---------------------------------------------------------*/
 	u32 _tr0;
+	_SignalHandle* a;
 
 	osInit();
 	osTaskSpeedTest();
-
-	osLog(osLogClass_Debug,"main","hello");
-
+	osMemoryInitStatic(&Memory_RAM);
+	print("2323:%d\n",osMemoryStaticGetPassValue());
+	a = osSignalLogin(Signal_AndGroup);
+	osSignalSetGroup(a,2,2,1);
+	osSignalSetGroup(a,2,1,1);
+	//print("%M","%d\n",10);
+	//osLogF("ad","A:%d",100);
 	//osMemoryMalloc(25000);
 //	_tr0 = -2;
-	print("%d\n\n",MemoryStructLength);
+	//print("%d\n\n",MemoryStructLength);
 
 	TaskHandle_Task1 = osTaskLogin(
 	"RTC", 			                    //ÈÎÎñÃû³Æ

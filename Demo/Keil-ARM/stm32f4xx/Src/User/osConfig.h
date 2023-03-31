@@ -43,7 +43,7 @@
 #define osVersionNumber        110 //系统版本号
 #define osVersionNumberS       "v1.1.0" //系统版本号名
 #define osName                 "buffos" //系统名称
-#define osNameVersionNumberS   "buffos v1.1.0" //系统名称 + 系统版本号名
+#define osNameAndVersion  "buffos v1.1.0" //系统名称 + 系统版本号名
 #define osCompileDate		  	__DATE__//系统编译日期
 #define osCompileTime 		 	__TIME__//系统编译时间
 #define osCPU_Name				"STM32F407ZG"//CPU名称
@@ -140,7 +140,7 @@
 
 /*
  *
- * @函数名称: osInfoDebug
+ * @函数名称: osInfoPrint
  *
  * @函数功能: 系统信息打印
  *
@@ -150,7 +150,7 @@
  *
  * @注    释: 无
 */
-#define osInfoDebug()  		do{\
+#define osInfoPrint()  		do{\
 							print("系统名称: %s\n",osName);\
 							print("系统版本号: %s\n",osVersionNumberS);\
 							print("系统编译日期: %s\n",osCompileDate);\
@@ -178,39 +178,20 @@
 						osMemoryInit(&Memory_CCRAM);\
 						osTaskInit();\
 						osClockInit();\
-						osInfoDebug();\
+						osInfoPrint();\
 						osTaskSIRQInit();\
 						osSTimeInit();\
-					}while(0);//系统初始化
+					}while(0);
 
-
-
-
-
-
-//Debug配置{
-#define osDebugError 		print	//错误Debug输出方法
-#define osDebugInfo 		print	//信息Debug输出方法
-#define osDebugWarning 		print	//警告Debug输出方法
-
-#define osDebugClass_Error			1	
-#define osDebugClass_Warning		2
-#define osDebugClass_Info			3
 
 //}
 
 //log配置{
-#define osLogClass_Fatal			1 // 严重级
-#define osLogClass_Error			2 // 错误级
-#define osLogClass_Warn				3 // 警告级
-#define osLogClass_Info				4 // 信息级
-#define osLogClass_Debug			5 // 调试级
-
-#define osLogClassFatalOutput	print			
-#define osLogClassErrorOutput	print			
-#define osLogClassWarnOutput	print				
-#define osLogClassInfoOutput	print				
-#define osLogClassDebugOutput	print			
+#define osLogF(a,...)				print("[Fatal] %s - %M",a,##__VA_ARGS__)// 严重级
+#define osLogE(a,...)				print("[Error] %s - %M",a,##__VA_ARGS__)// 错误级
+#define osLogW(a,...)				print("[Warn] %s - %M",a,##__VA_ARGS__)// 警告级
+#define osLogI(a,...)				print("[Info] %s - %M",a,##__VA_ARGS__)// 信息级
+#define osLogD(a,...)				print("[Debug] %s - %M",a,##__VA_ARGS__)// 调试级
 	
 //}
 
@@ -233,6 +214,9 @@
 
 #define TaskTimeWheelDefault        	100u//默认轮片时间(单位ms)
 #define Default_Stack_Size             1000u//默认栈大小
+#define osTaskArg_Config 			1 //启用任务传参 1：启用 0：禁用
+
+#define osTaskStackDir_Config		1 //		任务栈生长方向  1:递减 0:递增
 //}
 //主任务配置{
 #define MainName_Config 			"Main"//任务名称
@@ -273,11 +257,10 @@ typedef int32_t OsErrorValue;//函数错误返回值
 
 
 //统计配置{
-#define osPerformanceStatistics_Config 1//任务统计  1：启用 0：禁用
-#define os_TotalSystemRunningTime_Config 1//记录系统运行时长  1：启用 0：禁用
-#define TaskOccupyRatioSamplingTime 		1000 //任务统计时间，单位ms
+#define osPerf_Config 				1//任务统计  1：启用 0：禁用
+#define osRunTime_Config 			1	//记录系统运行时长  1：启用 0：禁用
+#define osTaskRunTime_Config 		1000 //任务统计时间，单位ms
 #define osSpeedTest_Config 				1//启动时测试任务切换速度 1：启用 0：禁用
-#define osTaskArg_Config 		1//启用任务传参 1：启用 0：禁用
 //}
 
 
@@ -294,7 +277,7 @@ typedef int32_t OsErrorValue;//函数错误返回值
 #define osSignalMutual_Config //启用互斥信号量
 #define osSignalBinary_Config //启用二值信号量
 #define osSignalCount_Config  //启用计数信号量
-#define osSignalLog_Config 1 //信号量错误DeBug  1:开启Log输出 0:关闭Log输出
+#define osSignalLog_Config		 1 //信号量错误DeBug  1:开启Log输出 0:关闭Log输出
 #define osSignalMemoryMalloc	osMemoryMalloc	//内存申请方法
 #define osSignalMemoryFree		osMemoryFree	//内存释放方法
 
@@ -302,10 +285,10 @@ typedef int32_t OsErrorValue;//函数错误返回值
 
 //邮箱配置{
 #define osPost_Config	1 	 //启用邮箱 1：启用 0：禁用
-#define osPostHead		1	 //读邮件方式  1:队列式  0:栈式
+#define osPostHead_Config		1	 //读邮件方式  1:队列式  0:栈式
 #define osPostLog_Config 1 //邮箱错误DeBug  1:开启Log输出 0:关闭Log输出
-#define osPostMemoryMalloc		osMemoryMalloc	//内存申请方法
-#define osPostMemoryFree		osMemoryFree	//内存释放方法
+#define osPostMemoryMalloc		osMemoryMallocStatic	//内存申请方法
+#define osPostMemoryFree		osMemoryFreeStatic	//内存释放方法
 //}
 
 //内存配置{
@@ -327,8 +310,12 @@ typedef int32_t OsErrorValue;//函数错误返回值
 
 #endif
 
-#define osMemoryDebug_Config 			1 //Debug配置 1:开启Log输出 0:关闭Log输出
-#define osMemoryErrorDebug osDebugError	//DeBug输出方法
+#define osMemoryLog_Config 			1 //Debug配置 1:开启Log输出 0:关闭Log输出
+
+
+#define osMemoryByteStatic_Config	1 //
+
+#define osMemorySizeStatic_Config	2 //
 //}
 
 

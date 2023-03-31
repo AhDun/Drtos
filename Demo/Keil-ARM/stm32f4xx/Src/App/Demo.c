@@ -80,7 +80,7 @@ void Task2_Func(void)
 //	osSignalApply_Wait(s1);
 
     LCD_ShowString(10,30,tftlcd_data.width,tftlcd_data.height,16,"STM32F407ZGT6@168MHz");
-    LCD_ShowString(10,60,tftlcd_data.width,tftlcd_data.height,16,osNameVersionNumberS);
+    LCD_ShowString(10,60,tftlcd_data.width,tftlcd_data.height,16,osNameAndVersion);
 	for(;;){
 
 //		sprint((char *)buf,"TaskCount: %d TaskSwitchTime: %dus",osTaskGetSwitchState().TSC,osTaskGetSwitchState().TSC*osTaskGetSwitchState().TSSU);

@@ -150,14 +150,8 @@ static void _printS10(int num,int ctl,int* s)
  */
 static void _printSring(int p,int* s)
 {
-	for(;;){
-		if(*(char*)p != '\0'){
-			_spchar(*(char*)p,s);
-		}
-		else{
-			return;
-		}
-		p++;
+	while(*(char*)p != '\0'){
+		_spchar(*(char*)p++,s);
 	}
 } 
 /*
@@ -334,6 +328,11 @@ void xprint(int sp,int c)
 						_CONTROL++;
 						xprintc:
 						switch(*_CONTROL){
+							case 'M'://切换控制字符
+									_CONTROL = (char*)*((int*)(_SP));
+									_CONTROL --;
+									_SP = _SP + 0x04;
+									break;
 							case 'd'://以十进制形式输出带符号整数(正数不输出符号)
 									_printS10(*((int*)(_SP)),LeftValue,s1);
 									_SP = _SP + 0x04;

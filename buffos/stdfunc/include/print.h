@@ -66,7 +66,7 @@ int pchar(const char ch);
  * @注    释: 该函数可以用于重定向
  *
  */
-static int _spchar(const char ch,int* s);
+static void _spchar(const char ch,int* s);
 /*
  *
  * @函数名称: _printU10
@@ -171,37 +171,10 @@ static void _print_lf(double* num,char ctrl,int* s);
  * @注    释: 无
  *
  */
-void xprint(int sp,int c);
+void xprint(int* s,char* con,int sp);
 
 
-/*
- *
- * @函数名称: print
- *
- * @函数功能: 与printf函数一致
- *
- * @输入参数: 无
- *
- * @返 回 值: 无
- *
- * @注    释: 无
- *
- */
-__asm void print(const char* s,...);
-/*
- *
- * @函数名称: sprint
- *
- * @函数功能: 与sprintf函数一致
- *
- * @输入参数: 无
- *
- * @返 回 值: 无
- *
- * @注    释: 无
- *
- */
-__asm void sprint(char* s,const char* c,...);
+
 
 
 

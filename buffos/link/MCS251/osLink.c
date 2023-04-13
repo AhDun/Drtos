@@ -92,11 +92,15 @@ __asm void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_
 	PUSH   {R5}//xPSR(xPSR_INIT_VALUE)
 	PUSH   {R1}//PC(任务开始地址)
 	PUSH   {R2}//LR(任务结束回调地址)
+	#if (osTaskInitRegister_Config > 0)
 	MOV    R2,#0x00//将0x00值加载到R2寄存器中
 	PUSH   {R2}//R12(0x00)
 	PUSH   {R2}//R3(0x00)
 	PUSH   {R2}//R2(0x00)
 	PUSH   {R2}//R1(0x00)
+	#else
+	SUB		SP,SP,#0x18
+	#endif
 	PUSH   {R0}//R0(0x00)
 
 
@@ -107,7 +111,8 @@ __asm void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_
 
 	LDR		R5,	=LR_INIT_VALUE
 	PUSH   {R5}//R11
-	MOV   R5,   #0x00//将0x00传给R5寄存器
+	#if (osTaskInitRegister_Config > 0)
+	MOV   	R5,   #0x00//将0x00传给R5寄存器
 	PUSH   {R5}//R4
 	PUSH   {R5}//R5
 	PUSH   {R5}//R6
@@ -116,12 +121,15 @@ __asm void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_
 	PUSH   {R5}//R9
 	PUSH   {R5}//R10
 	PUSH   {R5}//R11
+	#else
+	SUB		SP,SP,#0x40
+	#endif
 
 
 	STR	  SP,	[R3]
 	MOV   SP,   R4//将R4寄存器中的值加载到SP寄存器中，上半部分程序备份的SP值
-	POP{R4-R5}
 
+	POP{R4-R5}
 	BX	  LR
 }
 /*
@@ -336,6 +344,8 @@ __asm void PendSV_Handler(void)
  * @注   释: 无
  *
  */
+
+
 __asm void print(const char* c,...)
 {
 	PRESERVE8

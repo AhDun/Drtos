@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,ARM_MATH_CM4,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Src\App;.\Src\Drive;.\Src\Drive\CMSIS;.\Src\Drive\STM32F4xx_StdPeriph_Driver;.\Src\Func;.\Src\User;..\..\..\buffos;..\..\..\buffos\stdfunc;..\..\..\buffos\include;..\..\..\buffos\stdfunc\include;.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc;.\Src\CPU</IncludePath>
+              <IncludePath>.\Src\App;.\Src\Drive;.\Src\Drive\CMSIS;.\Src\Drive\STM32F4xx_StdPeriph_Driver;.\Src\Func;.\Src\User;..\..\..\buffos;..\..\..\buffos\stdfunc;..\..\..\buffos\include;..\..\..\buffos\stdfunc\include;.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc;.\Src\CPU;..\..\..\buffos\link\M3M4F</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

@@ -30,8 +30,7 @@
 
 
 #include "main.h"
-#include "SysTick.h"
-#include "usart.h"
+
 #include "Str.h"
 #include "print.h"
 #include "LinkList.h"
@@ -200,16 +199,16 @@
 #define osCriticalToProtect_Config   1  //临界保护  1：启用 0：禁用
 #define osTaskName_Config			1// 任务的名称 1：启用 0：禁用
 #define osTaskUseStack_Config 1//启用进程栈  1：启用 0：禁用
-#if (__FPU_USED == 1)
-#define osFPU_Config                    1//启用FPU硬件   1：启用 0：禁用
-		/*启用后会进行了对FPU压栈操作，同时也需要在编译器中开启浮点硬件才可以支持
-		  如果你的编译器或MCU不支持浮点硬件，请禁用！
-		*/
-#else
-#define osFPU_Config                    0//启用FPU硬件   1：启用 0：禁用
-#endif
+//#if (__FPU_USED == 1)
+//#define osFPU_Config                    1//启用FPU硬件   1：启用 0：禁用
+//		/*启用后会进行了对FPU压栈操作，同时也需要在编译器中开启浮点硬件才可以支持
+//		  如果你的编译器或MCU不支持浮点硬件，请禁用！
+//		*/
+//#else
+//#define osFPU_Config                    0//启用FPU硬件   1：启用 0：禁用
+//#endif
 
-#define osTaskNewR_Config				1//加载任务时新寄存器   1：启用 0：禁用
+#define osTaskInitRegister_Config	   0//加载任务时新寄存器   1：启用 0：禁用
 										/*可以通过关闭加载任务时新寄存器，加快新任务的启动速度，但是可能会影响任务的稳定性*/
 
 #define TaskTimeWheelDefault        	100u//默认轮片时间(单位ms)
@@ -259,8 +258,8 @@ typedef int32_t OsErrorValue;//函数错误返回值
 //统计配置{
 #define osPerf_Config 				1//任务统计  1：启用 0：禁用
 #define osRunTime_Config 			1	//记录系统运行时长  1：启用 0：禁用
-#define osTaskRunTime_Config 		1000 //任务统计时间，单位ms
-#define osSpeedTest_Config 				1//启动时测试任务切换速度 1：启用 0：禁用
+#define osTaskRunTime_Config 		1000 //任务统计周期，单位ms
+#define osSpeedTest_Config 			1//启动时测试任务切换速度 1：启用 0：禁用
 //}
 
 
@@ -274,9 +273,9 @@ typedef int32_t OsErrorValue;//函数错误返回值
 //信号量配置{
 #define osSignalAutoApply_Config		1//信号量自动分配   1：启用 0：禁用
 		/*启用后会为信号量自动分配内存*/
-#define osSignalMutual_Config //启用互斥信号量
-#define osSignalBinary_Config //启用二值信号量
-#define osSignalCount_Config  //启用计数信号量
+#define osSignalMutual_Config 			//启用互斥信号量
+#define osSignalBinary_Config 			//启用二值信号量
+#define osSignalCount_Config 			//启用计数信号量
 #define osSignalLog_Config		 1 //信号量错误DeBug  1:开启Log输出 0:关闭Log输出
 #define osSignalMemoryMalloc	osMemoryMalloc	//内存申请方法
 #define osSignalMemoryFree		osMemoryFree	//内存释放方法
@@ -285,7 +284,7 @@ typedef int32_t OsErrorValue;//函数错误返回值
 
 //邮箱配置{
 #define osPost_Config	1 	 //启用邮箱 1：启用 0：禁用
-#define osPostHead_Config		1	 //读邮件方式  1:队列式  0:栈式
+#define osPostRead_Config		1	 //读邮件方式  1:队列式  0:栈式
 #define osPostLog_Config 1 //邮箱错误DeBug  1:开启Log输出 0:关闭Log输出
 #define osPostMemoryMalloc		osMemoryMallocStatic	//内存申请方法
 #define osPostMemoryFree		osMemoryFreeStatic	//内存释放方法
@@ -312,9 +311,8 @@ typedef int32_t OsErrorValue;//函数错误返回值
 
 #define osMemoryLog_Config 			1 //Debug配置 1:开启Log输出 0:关闭Log输出
 
-#define osMemoryByteStatic_Config	1 //
 
-#define osMemorySizeStatic_Config	2 //
+
 //}
 
 

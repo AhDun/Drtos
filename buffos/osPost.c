@@ -27,7 +27,7 @@
 
 #include "osPost.h"
 
-
+#if (osPost_Config > 0)
 
 /*
  *
@@ -132,5 +132,7 @@ uint32_t* osPostReadWait(void)
 	}
 	return (osPostRead());//通过非阻塞式读取邮件
 }
+
+#endif
 
 

@@ -19,6 +19,7 @@
 //}
 
 
+#define CPUStackDir			1   //堆栈增长方向 1: 负向 0: 正向
 
 #define ActionValue_Config 	1	//操作值  1：启用 0：禁用
 
@@ -89,10 +90,10 @@ typedef unsigned short int  		UINT16;
 typedef unsigned short int  		uint16_t;	
 //}
 //带符号短整型与整型{
-typedef signed  int  				s16;	
-typedef signed  int  				sint;	
-typedef signed  int  				INT16;
-typedef signed  int  				int16_t;
+typedef signed  short int  				s16;	
+typedef signed  short int  				sint;	
+typedef signed  short int  				INT16;
+typedef signed  short int  				int16_t;
 //}
 //无符号长整型{
 typedef unsigned long int  			u32;	

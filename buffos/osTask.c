@@ -33,10 +33,10 @@
 _TaskHandle*	TaskHandle_Main;
 _TaskHandle*	TaskHandle_SIRQ;
 
-_TaskHandle* 	OsTaskRunTaskHandle;
+ _TaskHandle* 	volatile OsTaskRunTaskHandle;
+ _TaskHandle* 	volatile OsTaskNextTaskHandle;
 _SwitchState	OsTaskSwitchState;//任务调度状态
 _TaskISRFlag	OsTaskISRFlag;//中断状态
-_TaskHandle* 	OsTaskNextTaskHandle;
 _TaskHandle* 	OsTaskTaskHandleListHead;
 
 
@@ -129,10 +129,24 @@ _TaskHandle* osTaskLogin(
 )
 {
 	uint8_t* Addr1;
+
+	if(TSS < osTaskMinimumStackSize){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
+		#if (osTaskLog_Config > 0)
+		osLogE("osTaskLogin","任务栈内存太小\n");
+		#endif
+		return (NULL);//返回错误
+	}
+	if((TSS % 2) != 0){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
+		#if (osTaskLog_Config > 0)
+		osLogE("osTaskLogin","任务栈长度必须为偶数\n");
+		#endif
+		return (NULL);//返回错误
+	}
+
 	Addr1 = osMemoryMalloc(sizeof(_TaskHandle) + TSS);//为任务表分配内存
 	if(Addr1 == NULL){//如果为空，就说明内存分配失败
 		#if (osTaskLog_Config > 0)
-		osLogE("osTaskLogin","注册任务时,任务分配内存失败\n");
+		osLogE("osTaskLogin","任务分配内存失败\n");
 		#endif
 		return (NULL);//返回错误
 	}
@@ -184,21 +198,20 @@ _TaskHandle* osTaskLoginStatic(
 #if (osCriticalToProtect_Config > 0)//启用了临界保护
 	osProtect_ENABLE();//进入保护
 #endif
-#if (osFPU_Config > 0) //启用了FPU
-	if(TSS < 320 || (TSS % 2) != 0){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
+
+	if(TSS < osTaskMinimumStackSize){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
 		#if (osTaskLog_Config > 0)
-		osLogE("osTaskLoginStatic","注册任务时任务栈内存太小\n");
+		osLogE("osTaskLoginStatic","任务栈内存太小\n");
 		#endif
 		goto osTaskLoginStatic_Error;
 	}
-#else
-    if(TSS < 200 || (TSS % 2) != 0){//如果没有启用了浮点硬件，至少任务栈大小也应大于50*4字节
+	if((TSS % 2) != 0){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
 		#if (osTaskLog_Config > 0)
-		osLogE("osTaskLoginStatic","注册任务时任务栈内存太小\n");
+		osLogE("osTaskLoginStatic","任务栈长度必须为偶数\n");
 		#endif
 		goto osTaskLoginStatic_Error;
 	}
-#endif
+
 #if (osTaskName_Config > 0)
 	TaskHandle -> Name = TN;//写入任务名称
 #endif
@@ -217,6 +230,8 @@ _TaskHandle* osTaskLoginStatic(
 		case Task_Set_Default:TaskHandle -> Config = Task_State_RB;break;//将任务设为创建态
 		default: osTaskSet(TaskHandle,TC);break;
 	}
+	
+
 
 	TaskHandle	-> Arg1 = NULL;//任务邮箱消息设为零
 
@@ -465,13 +480,14 @@ void osTaskNext(void)
 									OsTimeGetTaskTimeWheel() = osTaskGetRunTaskHandle() -> TaskWheel;//将当前任务的时间轮片写入到时间记录器
 									osTaskGetSwitchState() = TaskSwitch_Ready;//将调度状态设为"未调度"
 									#if (osPerf_Config > 0)
-									PS.TSC += 1;
+									PerformanceStatistics.TSC += 1;
 									#endif
 									return;//退出函数
 
 				default:break;//意料之外!
 			}
 			osTaskGetNextTaskHandle() = (_TaskHandle*)osTaskGetNextTaskHandle() -> NextTaskHandle;
+			
     }
 }
 /*
@@ -558,7 +574,7 @@ OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 OsErrorValue osTaskExit(void)
 {
 	for(;;){
-		osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_ST);//触发任务切换
+		osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_ST);//触发任务切换m
 	}
 }
 /*
@@ -591,115 +607,6 @@ OsErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA)
 
 }
 
-OsErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
-{
-	#if (osTaskRunError_Config > 0)
-	uint8_t Count = 1;
-	osTaskEnterIRQ();
-	while(Count--){
-		#if (osTaskName_Config > 0)
-		print("\n\n\n名称为%s的任务发生“硬件错误”异常!!!\n",osTaskGetRunTaskHandle() -> Name);
-		#endif
-		print("任务优先级:%d\n",osTaskGetRunTaskHandle() -> Level);
-		print("任务当前使用量:%d%%\n",osTaskGetRunTaskHandle() -> OccupyRatio);
-		print("任务延时剩余时间:%d%ms\n任务单次最大运行时长:%dms\n",osTaskGetRunTaskHandle() -> TaskDelay,osTaskGetRunTaskHandle() -> TaskWheel);
-		print("任务最一近状态:",0,0);
-		switch(osTaskGetRunTaskHandle() -> Config){
-			case Task_State_Up_DT:print("延时挂起\n");break;
-			case Task_State_Up_SI:print("信号挂起\n");break;
-			case Task_State_Up_PT:print("邮件挂起\n");break;
-			case Task_State_DI:print("禁用态\n");break;
-			case Task_State_ST:print("终止态\n");break;
-			case Task_State_RB:print("重启态\n");break;
-			case Task_State_OP:print("运行态\n");break;
-			case Task_State_RE:print("就绪态\n");break;
-		}
-		print("任务邮箱状态:");
-		if(osTaskGetRunTaskHandle() -> Arg1 == NULL){
-			print("空的\n");
-		}
-		else{
-			print("非空\n");
-		}
-		print("任务栈总大小:%d字节\n任务栈剩余:%d字节\n",(uint32_t)osTaskGetRunTaskHandle() -> RealSPb - (uint32_t)osTaskGetRunTaskHandle() -  sizeof(_TaskHandle),psp - ((uint32_t)osTaskGetRunTaskHandle() +  sizeof(_TaskHandle)));
-		print("任务异常处:%X\n",pc);
-		print("内存总量:%d字节\n内存余量:%d字节",osMemoryGetAllValue(),osMemoryGetFreeValue());
-	}
-	#endif
-	#if (osTaskErrorSet == 1)
-	osTaskSet(NULL,Task_Set_Reboot);
-	#elif(osTaskErrorSet == 0)
-	osTaskSet(NULL,Task_Set_Pause);
-	#endif
-	osTaskExitIRQ();
-	return (OK);
-}
-/*
- *
- * @函数名称: osTaskSpeedTest
- *
- * @函数功能: 任务切换速度测试
- *
- * @输入参数: 无	
- *
- * @返 回 值: -1:创建错误，0: 创建成功
- *
- * @注    释: 无
- *
- */
-
-OsErrorValue osTaskSpeedTest(void)
-{
-	#if (osSpeedTest_Config > 0)
-	uint32_t t0,t1;
-	osTaskGetRunTaskHandle() -> Config = Task_State_RE;
-	t0 = SysTick->VAL;
-	osTaskSwitch_Config();//触发任务切换
-	t1 = SysTick->VAL;
-	#if (osPerf_Config > 0)
-	PS.TSSU = (osCPU_Period*(t0 - t1)*8)/osCPU_Period_Times;
-	#endif
-	#if (osTaskLog_Config > 0)
-	print("任务切换速度测试: t0 %d - t1 %d = %d个时钟周期(%fus)\n",t0,t1,(t0 - t1)*8,(osCPU_Period*(t0 - t1)*8)/osCPU_Period_Times);
-	#endif
-	#endif
-	return (OK);
-}
-
-OsErrorValue osTaskMonitor(void)
-
-{
-	_TaskHandle* TaskHandleListBuf = osTaskGetTaskHandleListHead();;
-	do{
-		print("任务<%s>占用时长:%dms | 任务优先级:%d | 任务状态:",TaskHandleListBuf -> Name,TaskHandleListBuf -> OccupyRatio,TaskHandleListBuf -> Level);
-		if(TaskHandleListBuf != osTaskGetRunTaskHandle() || osTaskGetSwitchState() != TaskSwitch_Ready){
-			switch(TaskHandleListBuf -> Config){
-				case Task_State_Up_DT:print("延时挂起\n");break;
-				case Task_State_Up_SI:print("信号挂起\n");break;
-				case Task_State_Up_PT:print("邮件挂起\n");break;
-				case Task_State_DI:print("禁用态\n");break;
-				case Task_State_ST:print("终止态\n");break;
-				case Task_State_RB:print("重启态\n");break;
-				case Task_State_OP:print("运行态\n");break;
-				case Task_State_RE:print("就绪态\n");break;
-			}
-		}
-		else{
-			print("正在运行\n");
-		}
-		TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
-	}while(TaskHandleListBuf != osTaskGetTaskHandleListHead());
-
-	
-	print("CPU总使用量:%d%% = 任务 %d%% + 中断%d%% + 调度%d%%\n",PS.CTO + PS.CISRO + PS.CSO,PS.CTO,PS.CISRO,PS.CSO);
-
-	print("任务调度次数:%d | 预计耗时:%fus(%fms)\n",PS.TSCb,PS.TSCb*PS.TSSU,(PS.TSCb*PS.TSSU) / 1000);
-
-	print("内存 总量:%d字节 | 余量:%d字节 | 可分配:%d字节 | 块数:%d\n",osMemoryGetAllValue(),osMemoryGetFreeValue(),osMemoryGetPassValue(),osMemorySum());
-	print("系统已运行: %d天 %d小时 %d分钟 %d秒\n",osClockGetOsRTCD(),osClockGetOsRTCH(),osClockGetOsRTCM(),osClockGetOsRTCS());
-	
-	return (OK);
-}
 #if (SIRQ_Config > 0)
 /*
  *

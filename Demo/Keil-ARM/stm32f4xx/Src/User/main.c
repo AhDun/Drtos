@@ -23,7 +23,6 @@
  * @注    释: 
 */
 
-
 #include "main.h"
 #include "SysTick.h"
 #include "osConfig.h"
@@ -34,7 +33,7 @@ uint8_t CCRAM[MemTank_Max] __attribute__((at(0x10000000)));
 uint32_t RAM[1000];
 
 _MemoryInfo  Memory_CCRAM = {&CCRAM[0],&CCRAM[0],&CCRAM[MemTank_Max]};
-_MemoryInfoStatic  Memory_RAM = {&RAM[0],&RAM[999]};
+_MemoryInfoStatic  Memory_RAM = {&RAM[0],&RAM[999],1,2};
 
 
 
@@ -55,20 +54,33 @@ int main(void)
 {
 /*--------------------------------------demo---------------------------------------------------------*/
 	u32 _tr0;
-	_SignalHandle* a;
+	//_SignalHandle* a;
 
 	osInit();
 	osTaskSpeedTest();
-	osMemoryInitStatic(&Memory_RAM);
-	print("2323:%d\n",osMemoryStaticGetPassValue());
-	a = osSignalLogin(Signal_AndGroup);
-	osSignalSetGroup(a,2,2,1);
-	osSignalSetGroup(a,2,1,1);
+	osMemoryInstallStatic(osMemoryInitStatic(&Memory_RAM));
+	print("static memory:%d\n",osMemoryStaticGetPassValue());
+//	a = osSignalLogin(Signal_AndGroup);
+//	osSignalSetGroup(a,2,2,1);
+//	osSignalSetGroup(a,2,1,1);
+//	print("\n\n\n\n\n\n");
+//	print("有符号整数测试:%d\n",-123456);
+//	print("无符号整数测试:%lu\n",-123456);
+//	print("浮点数测试:%f\n",1234.5678);
+//	print("大写十六进制测试:%X\n",0x1234ABCD);
+//	print("小写十六进制测试:%x\n",0x1234ABCD);
+//	print("八进制测试:%o\n",0123456);
+//	print("字符测试:%c\n",'a');
+//	print("字符串测试:%s\n","Hello World");
+//	print("整数测试:%3d\n",99);
+//	print("浮点数测试:%.2f\n",1234.5678);
+//	print("\n\n\n\n\n\n");
 	//print("%M","%d\n",10);
 	//osLogF("ad","A:%d",100);
 	//osMemoryMalloc(25000);
 //	_tr0 = -2;
 	//print("%d\n\n",MemoryStructLength);
+	//print("%f %d %f %d %f %s\n",123.456,123,12.123,456,456.789,"very");
 
 	TaskHandle_Task1 = osTaskLogin(
 	"RTC", 			                    //任务名称

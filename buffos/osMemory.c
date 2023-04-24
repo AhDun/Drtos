@@ -27,25 +27,20 @@
 
 #include "Main.h"
 #include "osMemory.h"
-#include "sram.h"
 
-uint32_t abc[128];
 
 _MemoryInfoHandle	MemoryInfoHandle;
 _MemoryInfoStaticHandle	MemoryInfoStaticHandle;
 
-OsErrorValue  osMemoryInit(_MemoryInfo* MemoryInfo)
+_MemoryInfo*  osMemoryInit(_MemoryInfo* MemoryInfo)
 {
 	#if (osMemoryInitReset_Config > 0)
-	uint32_t addr;
-	osMemorySwitch(MemoryInfo); 
-	for(addr = 0;(MemoryInfoHandle -> HeadAddr + addr) < MemoryInfoHandle -> TailAddr;addr++){
-		*(MemoryInfoHandle -> HeadAddr + addr) = 0x00;
+	uint32_t Addr;
+	for(Addr = 0;(MemoryInfoHandle -> HeadAddr + Addr) < MemoryInfoHandle -> TailAddr;Addr++){
+		*(MemoryInfoHandle -> HeadAddr + Addr) = 0x00;
 	}
-	#else
-	osMemorySwitch(MemoryInfo);
 	#endif
-	return (OK);
+	return (MemoryInfo);
 }
 
 
@@ -65,13 +60,13 @@ void* osMemoryMalloc(uint32_t MemSize)
 
 	return (MemoryNewAddr);
 }
-void* osMemoryReset(void* addr,uint8_t data)
+void* osMemoryReset(void* Addr,uint8_t Data)
 {
 //	while(Length--){
-//		*addr_Buf =  data;
+//		*addr_Buf =  Data;
 //		addr_Buf++;
 //	}
-	return addr;
+	return Addr;
 }
 
 uint32_t osMemoryGetFreeValue(void)
@@ -83,7 +78,7 @@ uint32_t osMemoryGetPassValue(void)
 {
 	return osMemoryGetFreeValue();
 }
-OsErrorValue osMemoryFree(void* addr)
+OsErrorValue osMemoryFree(void* Addr)
 {
 	return (OK);
 }
@@ -94,6 +89,7 @@ OsErrorValue osMemorySum(void)
 }
 
 #else
+
 void* osMemoryMalloc(uint32_t MemSize)
 {
 	MemoryStruct* _MemoryStruct;
@@ -196,12 +192,12 @@ void* osMemoryMalloc(uint32_t MemSize)
 	}
 
 }
-void* osMemoryReset(void* addr,uint8_t data)
+void* osMemoryReset(void* Addr,uint8_t Data)
 {
 	
-	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)addr - MemoryStructLength);
+	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)Addr - MemoryStructLength);
 	int32_t Length = (_MemoryStruct1 -> MemoryLength) - MemoryStructLength;
-	_MemoryUnit* addr_Buf = (_MemoryUnit*)addr;
+	_MemoryUnit* addr_Buf = (_MemoryUnit*)Addr;
 
 	#if (MemoryProtect_Config > 0)//开启了内存保护配置
 		if(osMemorySum() == Error){
@@ -210,10 +206,10 @@ void* osMemoryReset(void* addr,uint8_t data)
 	#endif
 	if(_MemoryStruct1 -> MemoryFlag == Memory_Free || _MemoryStruct1 -> MemoryFlag == Memory_Occupy){
 		while(Length--){
-			*addr_Buf =  data;
+			*addr_Buf =  Data;
 			addr_Buf++;
 		}
-		return addr;
+		return Addr;
 	}
 	else{
 		return (NULL);
@@ -222,11 +218,11 @@ void* osMemoryReset(void* addr,uint8_t data)
 }
 
 
-OsErrorValue osMemoryFree(void* addr)
+OsErrorValue osMemoryFree(void* Addr)
 {
-	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)addr - MemoryStructLength);
+	MemoryStruct* _MemoryStruct1 = (MemoryStruct*)((uint8_t*)Addr - MemoryStructLength);
 	#if( osMemoryFreeTest_Config > 0)
-	MemoryStruct* _MemoryStruct2 = (MemoryStruct*)((uint8_t*)addr - MemoryStructLength + _MemoryStruct1 -> MemoryLength);
+	MemoryStruct* _MemoryStruct2 = (MemoryStruct*)((uint8_t*)Addr - MemoryStructLength + _MemoryStruct1 -> MemoryLength);
 	#if (MemoryProtect_Config > 0)//开启了内存保护配置
 		#if (osCriticalToProtect_Config > 0)//启用了临界保护
 		osProtect_ENABLE();//进入临界保护
@@ -237,7 +233,7 @@ OsErrorValue osMemoryFree(void* addr)
 	#endif
 	if(_MemoryStruct1 -> MemoryFlag == Memory_Free){//检查这个要释放的块状态,如果已经释放,就会返回错误
 		#if (osMemoryLog_Config > 0)
-		osLogE("osMemoryMalloc","内存已释放! 勿重复释放 %X\n",addr);
+		osLogE("osMemoryMalloc","内存已释放! 勿重复释放 %X\n",Addr);
 		#endif
 		#if (MemoryProtect_Config > 0)//开启了内存保护配置
 			#if (osCriticalToProtect_Config > 0)//启用了临界保护
@@ -254,13 +250,13 @@ OsErrorValue osMemoryFree(void* addr)
 			#endif
 		#endif
 		#if (osMemoryFreeReset_Config > 0)
-		osMemoryReset(addr,0x00);
+		osMemoryReset(Addr,0x00);
 		#endif
 		return (OK);//返回正常
 	}
 	else{
 		#if (osMemoryLog_Config > 0)
-		osLogE("osMemoryFree","内存释放失败! 内存地址不正确 %X\n",addr);
+		osLogE("osMemoryFree","内存释放失败! 内存地址不正确 %X\n",Addr);
 		#endif
 		#if (MemoryProtect_Config > 0)//开启了内存保护配置
 			#if (osCriticalToProtect_Config > 0)//启用了临界保护
@@ -272,7 +268,7 @@ OsErrorValue osMemoryFree(void* addr)
 	#else
 	_MemoryStruct1 -> MemoryFlag = Memory_Free;//设为释放态
 	#if (osMemoryFreeReset_Config > 0)
-	osMemoryReset(addr,0x00);
+	osMemoryReset(Addr,0x00);
 	#endif
 	return (OK);//返回正常
 	#endif
@@ -345,16 +341,17 @@ uint32_t osMemoryGetAllValue(void)
 	return MemoryInfoHandle -> TailAddr - MemoryInfoHandle -> HeadAddr;
 }
 
-OsErrorValue osMemoryInitStatic(_MemoryInfoStatic* MemoryInfoStatic)
+#if (osMemoryStatic_Config > 0)
+
+_MemoryInfoStatic* osMemoryInitStatic(_MemoryInfoStatic* MemoryInfoStatic)
 {
 	uint32_t* NextAddr;
-	MemoryInfoStaticHandle = MemoryInfoStatic;
 	NextAddr = MemoryInfoStaticHandle -> HeadAddr;
 	while( NextAddr < MemoryInfoStaticHandle -> TailAddr){
 		*NextAddr = NULL;
 		NextAddr++;
 	}
-	return (OK);
+	return (MemoryInfoStatic);
 }
 
 
@@ -362,19 +359,19 @@ void* osMemoryMallocStatic(int32_t MemSize)
 {
 	uint32_t* NextAddr = MemoryInfoStaticHandle -> HeadAddr;
 	while( NextAddr < MemoryInfoStaticHandle -> TailAddr){
-		if(NextAddr[osMemoryByteStatic_Config] == 0){
+		if(NextAddr[MemoryInfoStaticHandle -> Byte] == 0){
 			return NextAddr;
 		}else{
-			NextAddr += osMemorySizeStatic_Config;
+			NextAddr += MemoryInfoStaticHandle -> Size;
 		}
 	}
 	return (NULL);
 }
-OsErrorValue osMemoryFreeStatic(void* addr)
+OsErrorValue osMemoryFreeStatic(void* Addr)
 {
 	uint32_t size = 0;
-	uint32_t* AddrBuf = (uint32_t*)addr;
-	for(size = 0 ; size < osMemorySizeStatic_Config ; size++){
+	uint32_t* AddrBuf = (uint32_t*)Addr;
+	for(size = 0 ; size < MemoryInfoStaticHandle -> Size ; size++){
 		AddrBuf[size] = 0x00;
 	}
 	return (OK);
@@ -385,10 +382,10 @@ uint32_t osMemoryStaticGetPassValue(void)
 	uint32_t* NextAddr = MemoryInfoStaticHandle -> HeadAddr;
 	uint32_t size = 0;
 	while( NextAddr < MemoryInfoStaticHandle -> TailAddr){
-		if(NextAddr[osMemoryByteStatic_Config] == 0){
-			size += osMemorySizeStatic_Config;
+		if(NextAddr[MemoryInfoStaticHandle -> Byte] == 0){
+			size += MemoryInfoStaticHandle -> Size;
 		}
-		NextAddr += osMemorySizeStatic_Config;
+		NextAddr += MemoryInfoStaticHandle -> Size;
 
 	}
 	return (size);
@@ -398,3 +395,4 @@ uint32_t osMemoryStaticGetAllValue(void)
 {
 	return MemoryInfoStaticHandle -> TailAddr - MemoryInfoStaticHandle -> HeadAddr;
 }
+#endif

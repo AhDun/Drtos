@@ -55,16 +55,25 @@ typedef  struct
 	const _MemoryPoolAddr*		TailAddr;//内存尾地址
 
 }_MemoryInfo;
+typedef	_MemoryInfo*	_MemoryInfoHandle;
+extern _MemoryInfoHandle	MemoryInfoHandle;
+//}
+//静态内存信息块{
+#if (osMemoryStatic_Config > 0)
 typedef  struct
 { 
 	uint32_t*			HeadAddr;//内存头地址
 	const uint32_t*		TailAddr;//内存尾地址
+	const uint8_t		Byte;
+	const uint8_t		Size;
 
 }_MemoryInfoStatic;
-//}
-typedef	_MemoryInfo*	_MemoryInfoHandle;
 typedef	_MemoryInfoStatic*	_MemoryInfoStaticHandle;
-extern _MemoryInfoHandle	MemoryInfoHandle;
+extern _MemoryInfoStaticHandle	MemoryInfoStaticHandle;
+#endif
+//}
+
+
 #if (osMemorySequence_Config == 0)
 //内存块结构{
 typedef uint8_t 	_MemoryFlag;
@@ -91,7 +100,7 @@ typedef  struct
  * @注    释: 无
  *
  */
-#define osMemorySwitch(a) MemoryInfoHandle = a
+#define osMemoryInstall(a) MemoryInfoHandle = a
 /*
  *
  * @函数名称: osMemoryInit
@@ -105,7 +114,7 @@ typedef  struct
  * @注    释: 无
  *
  */
-OsErrorValue  osMemoryInit(_MemoryInfo* MemoryInfo);
+_MemoryInfo*  osMemoryInit(_MemoryInfo* MemoryInfo);
 /*
  *
  * @函数名称: osMemoryMalloc
@@ -126,15 +135,15 @@ void* osMemoryMalloc(uint32_t MemSize);
  *
  * @函数功能: 内存块复位
  *
- * @输入参数: addr	内存块地址
-			 data	复位内容
+ * @输入参数: Addr	内存块地址
+			 Data	复位内容
  *
- * @返 回 值: 与addr变量输入相同的内存块地址
+ * @返 回 值: 与Addr变量输入相同的内存块地址
  *
  * @注    释: 无
  *
  */
-void* osMemoryReset(void* addr,uint8_t data);
+void* osMemoryReset(void* Addr,uint8_t Data);
 /*
  *
  * @函数名称: osMemoryFree
@@ -148,7 +157,7 @@ void* osMemoryReset(void* addr,uint8_t data);
  * @注    释: 无
  *
  */
-OsErrorValue osMemoryFree(void* addr);
+OsErrorValue osMemoryFree(void* Addr);
 /*
  *
  * @函数名称: osMemoryGetFreeValue
@@ -218,16 +227,30 @@ OsErrorValue osMemorySum(void);
  * @注    释: 无
  *
  */
-OsErrorValue osMemoryInitStatic(_MemoryInfoStatic* MemoryInfoStatic);
+_MemoryInfoStatic* osMemoryInitStatic(_MemoryInfoStatic* MemoryInfoStatic);
 /*
  *
- * @函数名称: osMemoryGetAllValue
+ * @函数名称: osMemorySwitchoverStatic
  *
- * @函数功能: 获取总内存长度
+ * @函数功能: 静态内存切换
  *
  * @输入参数: 无
  *
  * @返 回 值: 总内存长度
+ *
+ * @注    释: 无
+ *
+ */
+#define osMemoryInstallStatic(a) MemoryInfoStaticHandle = a;
+/*
+ *
+ * @函数名称: osMemoryMallocStatic
+ *
+ * @函数功能: 申请静态内存
+ *
+ * @输入参数: MemSize 要要申请的字节数
+ *
+ * @返 回 值: 申请到可用的内存地址
  *
  * @注    释: 无
  *
@@ -246,10 +269,34 @@ void* osMemoryMallocStatic(int32_t MemSize);
  * @注    释: 无
  *
  */
-OsErrorValue osMemoryFreeStatic(void* addr);
-
+OsErrorValue osMemoryFreeStatic(void* Addr);
+/*
+ *
+ * @函数名称: osMemoryStaticGetPassValue
+ *
+ * @函数功能: 获取静态内存可申请字节数
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 总内存长度
+ *
+ * @注    释: 无
+ *
+ */
 uint32_t osMemoryStaticGetPassValue(void);
-
+/*
+ *
+ * @函数名称: osMemoryStaticGetAllValue
+ *
+ * @函数功能: 获取静态内存容量字节数
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 总内存长度
+ *
+ * @注    释: 无
+ *
+ */
 uint32_t osMemoryStaticGetAllValue(void);
 
 #endif

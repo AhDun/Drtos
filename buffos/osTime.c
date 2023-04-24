@@ -36,7 +36,7 @@
 _NextAddr STimeListHead;
 _TaskHandle* TaskHandle_STime;
 #if (osPerf_Config > 0)
-_PerformanceStatistics PS;//性能统计
+_PerformanceStatistics PerformanceStatistics;//性能统计
 #endif
 #if (osRunTime_Config > 0)//开启了系统运行时长
 _SystemRunningTime 		OsTimeSystemRunTime;//系统运行时间
@@ -105,25 +105,25 @@ void osClockTimePulse(void)
         osTaskGetRunTaskHandle() -> OccupyTime++;//任务占用时长计数
     }
     if(OsTimeGetSystemRunTime() % osTaskRunTime_Config == 0){//系统每过一定时长，就进行占用比例统计
-        PS.CTO = 0;//CPU占用量设为0
+        PerformanceStatistics.CTO = 0;//CPU占用量设为0
 		TaskHandleListBuf = osTaskGetTaskHandleListHead();
 		do{//对每一个任务进行遍历
 			//TaskHandleListBuf -> OccupyRatio = TaskHandleListBuf -> OccupyTime / (osTaskRunTime_Config / 100);//计算这个任务占用比
 			TaskHandleListBuf -> OccupyRatio = TaskHandleListBuf -> OccupyTime;//计算这个任务占用比
 			//计算公式：占用比 = 单位时间内的占用时长 / (单位时间 / 100)
-            PS.CTO += TaskHandleListBuf -> OccupyRatio / (osTaskRunTime_Config / 100);//计算CPU占用量
+            PerformanceStatistics.CTO += TaskHandleListBuf -> OccupyRatio / (osTaskRunTime_Config / 100);//计算CPU占用量
 			//计算公式：CPU占用量 = CPU占用量 + 每个任务的占用量
             TaskHandleListBuf -> OccupyTime = 0;//清空单位时间内的占用时长
 
 			TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
 		}while(TaskHandleListBuf != osTaskGetTaskHandleListHead());
 		if(OsTimeGetTaskISRTime() > NULL){
-			PS.CISRO = OsTimeGetTaskISRTime() / (osTaskRunTime_Config / 100);//计算CPU占用量
+			PerformanceStatistics.CISRO = OsTimeGetTaskISRTime() / (osTaskRunTime_Config / 100);//计算CPU占用量
 			OsTimeGetTaskISRTime() = 0;
 		}
-		PS.CSO = (PS.TSC * PS.TSSU) / (osTaskRunTime_Config /100) /1000;
-		PS.TSCb = PS.TSC;
-		PS.TSC = 0;
+		PerformanceStatistics.CSO = (PerformanceStatistics.TSC * PerformanceStatistics.TSSU) / (osTaskRunTime_Config /100) /1000;
+		PerformanceStatistics.TSCb = PerformanceStatistics.TSC;
+		PerformanceStatistics.TSC = 0;
     }
 	#endif
     /*----------------------------------时间轮片---------------------------------------*/
@@ -179,12 +179,12 @@ void osClockTimePulse(void)
  * @注    释: 无
  *
  */
-OsErrorValue osSTimeInit(void)
+OsErrorValue osSTimerInit(void)
 {
 	STimeListHead = NULL;
 	TaskHandle_STime = osTaskLogin(
 						STimeName_Config,
-						osSTime,
+						osSTimer,
 						STimeStackSize_Config,
 						STimeTimeWheel_Config,
 						STimePriorityLevel_Config,
@@ -216,7 +216,7 @@ OsErrorValue osSTimeInit(void)
  * @注    释: 无
  *
  */
-_STimes* osTimeLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
+_STimes* osTimerLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
 {
 	_STimes* STime_Buf = (_STimes*)ListAddr;
 	STime_Buf -> Name = Name;
@@ -249,7 +249,7 @@ _STimes* osTimeLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_
  * @注    释: 无
  *
  */
-_STimes* osTimeLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
+_STimes* osTimerLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
 {
 	uint8_t* Addr1;
 	if(Config >= STimeConfig_NRestartL){
@@ -263,7 +263,7 @@ _STimes* osTimeLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void*
 //		#endif
 //		return (NULL);//返回错误
 //	}
-	return osTimeLoginStatic(Addr1, Name, Flag, Config, Addr);
+	return osTimerLoginStatic(Addr1, Name, Flag, Config, Addr);
 }
 /*
  *
@@ -278,7 +278,7 @@ _STimes* osTimeLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void*
  * @注    释: 无
  *
  */
-OsErrorValue osSTimeLogout(_STimes* STimes)
+OsErrorValue osSTimerLogout(_STimes* STimes)
 {
 	return uLinkListDel(&STimeListHead,(uint32_t*)STimes);
 
@@ -296,7 +296,7 @@ OsErrorValue osSTimeLogout(_STimes* STimes)
  * @注    释: 无
  *
  */
-void osSTime(void)
+void osSTimer(void)
 {
 	_STimes* STime_Buf;
 	for(;;){
@@ -307,7 +307,7 @@ void osSTime(void)
 				osLinkJump((uint32_t*)STime_Buf -> Addr);
 				switch(STime_Buf -> Config){
 					case STimeConfig_Restart:STime_Buf -> Flag =  STime_Buf -> Flagb;break;
-					case STimeConfig_NRestartL:osSTimeLogout(STime_Buf); break;
+					case STimeConfig_NRestartL:osSTimerLogout(STime_Buf); break;
 //					case STimeConfig_NRestart: break;
 				}
 			}

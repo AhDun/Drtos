@@ -193,6 +193,10 @@ typedef struct
 	_TaskSwitchSpeedUs	TSSU;//任务切换速度测试
 
 }_PerformanceStatistics;
+extern _PerformanceStatistics PerformanceStatistics;//性能统计
+
+//}
+#endif
 
 //软件定时器{
 typedef	 uint8_t		_STimeName;
@@ -217,10 +221,7 @@ typedef struct
 	_STaskDelay		Flag;
 	_STaskDelay		Flagb;
 }_STimes;//可重载
-//}
-#endif
 
-extern _PerformanceStatistics PS;//性能统计
 
 extern _NextAddr STimeListHead;
 
@@ -274,7 +275,7 @@ void osClockTimePulse(void);
  * @注    释: 无
  *
  */
-_STimes* osTimeLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
+_STimes* osTimerLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
 /*
  *
  * @函数名称: osSTimeLogout
@@ -288,7 +289,7 @@ _STimes* osTimeLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_
  * @注    释: 无
  *
  */
-OsErrorValue osSTimeLogout(_STimes* STimes);
+OsErrorValue osSTimerLogout(_STimes* STimes);
 /*
  *
  * @函数名称: osTimeLogin
@@ -306,7 +307,7 @@ OsErrorValue osSTimeLogout(_STimes* STimes);
  *
  */
 
-_STimes* osTimeLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
+_STimes* osTimerLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
 /*
  *
  * @函数名称: osSTimeInit
@@ -320,7 +321,7 @@ _STimes* osTimeLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void*
  * @注    释: 无
  *
  */
-OsErrorValue osSTimeInit(void);
+OsErrorValue osSTimerInit(void);
 /*
  *
  * @函数名称: osSTime
@@ -334,7 +335,7 @@ OsErrorValue osSTimeInit(void);
  * @注    释: 无
  *
  */
-void osSTime(void);
+void osSTimer(void);
 
 
 #endif

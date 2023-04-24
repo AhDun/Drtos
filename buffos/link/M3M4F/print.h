@@ -37,6 +37,24 @@
 
 
 
+#define offsetUChar(a)  a + sizeof(unsigned char)
+#define offsetChar(a)  a + sizeof(char)
+#define offsetUInt(a)  a + sizeof(unsigned int)
+#define offsetInt(a)  a + sizeof(signed int)
+#define offsetFloat(a)  a + sizeof(float)
+#define offsetDouble(a)  a + sizeof(double)
+
+#define offsetUCharp(a)  a + sizeof(unsigned char*)
+#define offsetCharp(a)  a + sizeof(char*)
+#define offsetUIntp(a)  a + sizeof(unsigned int*)
+#define offsetIntp(a)  a + sizeof(signed int*)
+#define offsetFloatp(a)  a + sizeof(float*)
+#define offsetDoublep(a)  a + sizeof(double*)
+
+
+
+
+
 
 /*
  *
@@ -80,7 +98,7 @@ static void _spchar(const char ch,int* s);
  * @注    释: 无
  *
  */
-static void _printU10(unsigned int num,int ctl,int* s);
+void _printU10(unsigned int num,int ctl,int* s);
 /*
  *
  * @函数名称: _printS10
@@ -111,7 +129,7 @@ static void _printS10(int num,int ctl,int* s);
  * @注    释: 无
  *
  */
-static void _printSring(int p,int* s);
+void _printSring(int p,int* s);
 /*
  *
  * @函数名称: _print16

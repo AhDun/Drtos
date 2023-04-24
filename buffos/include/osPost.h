@@ -35,6 +35,8 @@
 #include "osTask.h"
 
 
+#if (osPost_Config > 0)
+
 typedef		uint32_t		 _PostBody;//邮件主体
 //邮箱表单{
 typedef struct 
@@ -89,6 +91,8 @@ uint32_t* osPostRead(void);
  *
  */
 uint32_t* osPostReadWait(void);
+
+#endif
 
 #endif
 

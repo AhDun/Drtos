@@ -32,7 +32,6 @@
 
 #include "main.h"
 
-
 //#define xPSR_INIT_VALUE 0x01000000//xPSR寄存器初始化变量
 //#if (osTaskUseStack_Config > 0)
 //#if (osFPU_Config > 0) //启用了FPU
@@ -64,7 +63,8 @@
  * @注    释: 无
  *
  */
-void osLinkISRDisable(void);
+//void osLinkISRDisable(void);
+#define osLinkISRDisable() 	EA = 0
 /*
  *
  * @函数名称: osLinkISREnable
@@ -78,7 +78,8 @@ void osLinkISRDisable(void);
  * @注    释: 无
  *
  */
-void osLinkISREnable(void);
+//void osLinkISREnable(void);
+#define osLinkISREnable() 	EA = 1
 /*
  *
  * @函数名称: Jump
@@ -134,7 +135,8 @@ void osLinkUseEnable(void);
  * @注    释: 无
  *
  */
-void ISR_Touch(void);
+//void ISR_Touch(void);
+#define ISR_Touch() IE0 = 1
 /*
  * 
  * @函数名称: ISR_Touch1

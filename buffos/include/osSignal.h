@@ -29,15 +29,15 @@
 #define __osSignal_H_
 
 
+
 #include "main.h"
 #include "osConfig.h"
 
+
+#if (osSignal_Config > 0)
+
 //信号量类型{
-#define Signal_Mutual       0x01u//互斥信号量
-#define Signal_Binary       0x02u//二值信号量
-#define Signal_Count        0x03u//计数信号量
-#define Signal_AndGroup		0x04u//与组
-#define Signal_OrGroup		0x05u//或组
+
 //}
 
 
@@ -137,6 +137,6 @@ OsErrorValue osSignalSetGroup(_SignalHandle* ST,uint8_t Bits,uint8_t SetBit,uint
 
 
 
-
+#endif
 
 #endif

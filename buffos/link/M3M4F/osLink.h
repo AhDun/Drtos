@@ -149,6 +149,52 @@ void ISR_Touch(void);
  *
  */
 void ISR_Touch1(void);
+/*
+ * 
+ * @函数名称: osTaskErrorHardFault
+ *
+ * @函数功能: 任务发生错误
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
+
+OsErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp);
+/*
+ * 
+ * @函数名称: osTaskSpeedTest
+ *
+ * @函数功能: 任务上下文切换速度测试
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
+
+OsErrorValue osTaskSpeedTest(void);
+
+/*
+ * 
+ * @函数名称: osTaskMonitor
+ *
+ * @函数功能: 任务监视器
+ *
+ * @输入参数: 无
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
+OsErrorValue osTaskMonitor(void);
+
 
 /*
  *

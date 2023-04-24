@@ -29,7 +29,7 @@ int Get_Temperture(void);
 void Task1_Func(char* a)
 {
 	RTC_TimeTypeDef RTC_TimeStruct;
-	_STimes* a1;
+
 	u8* buf = osMemoryMalloc(20);
 	TFTLCD_Init();			//LCD≥ı ºªØ
 	print(a);
@@ -48,7 +48,7 @@ void Task1_Func(char* a)
 
 	osTaskSIRQLogin(&SIRQ_RTC[0],RTC_Func);
 
-	a1 = osTimeLogin("RPost",1000,STimeConfig_Restart,Time_Func);
+	osTimerLogin("RPost",1000,STimeConfig_Restart,Time_Func);
 
 	for(;;) 
 	{
@@ -93,7 +93,7 @@ void Task2_Func(void)
 		LCD_ShowString(10,180,tftlcd_data.width,tftlcd_data.height,16,buf);
 
 		osMemoryReset(buf,' ');
-		sprint((char *)buf,"CPU: %d%% = T %d%% + I %d%% + S %d%%",PS.CTO+PS.CISRO+PS.CSO,PS.CTO,PS.CISRO,PS.CSO);
+		sprint((char *)buf,"CPU: %d%% = T %d%% + I %d%% + S %d%%",PerformanceStatistics.CTO+PerformanceStatistics.CISRO+PerformanceStatistics.CSO,PerformanceStatistics.CTO,PerformanceStatistics.CISRO,PerformanceStatistics.CSO);
 		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
 		osMemoryReset(buf,' ');
 		sprint((char *)buf,"OS RTC:%d:%2d:%2d:%2d",(OsTimeGetSystemRunTime() / 1000) /86400,((OsTimeGetSystemRunTime() / 1000) /3600) % 24,((OsTimeGetSystemRunTime() / 1000) /60) % 60,(OsTimeGetSystemRunTime() / 1000) % 60);

@@ -28,11 +28,6 @@
 
 
 
-
-
-
-
-
 //任务状态{
 #define Task_State_Up_DT  0x07u//延时挂起(等待态)
 /*
@@ -85,6 +80,8 @@
 #define Task_Set_Reboot 	0x03u//重启任务
 #define Task_Set_Start  	0x04u//立即启动任务
 #define Task_Set_Up  		0x05u//挂起任务
+
+#define Task_Set_StopAutoFree	0x80
 //}
 
 //调度状态{
@@ -94,12 +91,6 @@
 //}
 
 
-
-
-
-
-
-     
 
 #if (osCriticalToProtect_Config > 0)//启用了临界保护
 /*
@@ -281,7 +272,7 @@ typedef     uint32_t     _TaskArg;//任务传参
 #endif
 #if (osPerf_Config > 0) //开启了性能统计
 typedef     uint16_t     _TaskOccupyTime;//任务占用时长
-typedef     uint16_t      _TaskOccupyRatio;//任务占用比
+typedef     uint16_t     _TaskOccupyRatio;//任务占用比
 #endif
 
 typedef struct
@@ -297,7 +288,7 @@ typedef struct
 #if (osTaskName_Config > 0)
 	_TaskName*			Name;//任务名称
 #endif	
-#ifdef osSignalMutual_Config
+#if (osSignal_Config & Signal_Mutual)
 	_TaskLevel			Levelb;//任务备用优先级
 #endif
 #if (osTaskArg_Config > 0)
@@ -325,7 +316,7 @@ typedef struct
 #if (osTaskName_Config > 0)
 	_TaskName*			Name;//任务名称
 #endif	
-#ifdef osSignalMutual_Config
+#if (osSignal_Config & Signal_Mutual)
 	_TaskLevel			Levelb;//任务备用优先级
 #endif
 #if (osTaskArg_Config > 0)
@@ -342,8 +333,7 @@ typedef struct
 
 //}
 
-typedef		uint8_t		_TaskListMaximumActivity;//任务最大活动量
-typedef 	uint8_t		_TaskDispatchNum;//任务调度状态
+
 typedef     uint8_t      _SwitchState;//任务调度计数
 typedef		uint8_t		_TaskISRFlag;
 
@@ -351,10 +341,10 @@ typedef		uint8_t		_TaskISRFlag;
 
 extern _TaskHandle*		TaskHandle_Main;//Main任务句柄
 
-extern _TaskHandle* 	OsTaskRunTaskHandle;//正在运行的任务句柄
+extern  _TaskHandle* 	volatile OsTaskRunTaskHandle;//正在运行的任务句柄
+extern  _TaskHandle* 	volatile OsTaskNextTaskHandle;//下一个要运行的任务句柄
 extern _SwitchState	    OsTaskSwitchState;//任务调度状态
 extern _TaskISRFlag		OsTaskISRFlag;//中断状态
-extern _TaskHandle* 	OsTaskNextTaskHandle;//下一个要运行的任务句柄
 extern _TaskHandle* 	OsTaskTaskHandleListHead;//任务句柄链表表头
 
 
@@ -559,19 +549,51 @@ OsErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA);
  */
 OsErrorValue osTaskExit(void);
 
-OsErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp);
-
-
-OsErrorValue osTaskSpeedTest(void);
-
-OsErrorValue osTaskMonitor(void);
-
-
+/*
+ *
+ * @函数名称: osTaskSIRQ_Enable
+ *
+ * @函数功能: 软中断使能
+ *
+ * @输入参数:	SIRQList_Addr	软中断表表头
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr);
-
+/*
+ *
+ * @函数名称: osTaskSIRQLogin
+ *
+ * @函数功能: 软中断注册
+ *
+ * @输入参数:	SIRQList_Addr	软中断表表头
+ * @输入参数:	Addr			软中断响应函数地址	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 OsErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr);
-
+/*
+ *
+ * @函数名称: osTaskSIRQ
+ *
+ * @函数功能: 软中断响应
+ *
+ * @输入参数: 无	
+ *
+ * @返 回 值: 无
+ *
+ * @注    释: 无
+ *
+ */
 void osTaskSIRQ(void);
+
+
 #endif
 
 

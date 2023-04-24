@@ -25,13 +25,13 @@ uint8_t WakeUpSource;
 // 返回: none.
 // 版本: V1.0, 2020-09-23
 //========================================================================
-void INT0_ISR_Handler (void) interrupt INT0_VECTOR		//进中断时已经清除标志
-{
-	// TODO: 在此处添加用户代码
-//	P00 = ~P00;
-	//WakeUpSource = 1;
-	P0 = 0x0F;
-}
+//void INT0_ISR_Handler (void) interrupt INT0_VECTOR		//进中断时已经清除标志
+//{
+//	// TODO: 在此处添加用户代码
+////	P00 = ~P00;
+//	//WakeUpSource = 1;
+//	P1 = 0x00;
+//}
 
 //========================================================================
 // 函数: INT1_ISR_Handler

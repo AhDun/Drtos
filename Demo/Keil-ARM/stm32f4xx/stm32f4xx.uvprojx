@@ -387,6 +387,11 @@
               <FileType>1</FileType>
               <FilePath>.\Src\User\main.c</FilePath>
             </File>
+            <File>
+              <FileName>osConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Src\User\osConfig.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -428,11 +433,6 @@
               <FilePath>..\..\..\buffos\osTime.c</FilePath>
             </File>
             <File>
-              <FileName>osTool.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osTool.c</FilePath>
-            </File>
-            <File>
               <FileName>osLink.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\buffos\link\M3M4F\osLink.c</FilePath>
@@ -441,11 +441,6 @@
               <FileName>osLink.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\buffos\link\M3M4F\osLink.s</FilePath>
-            </File>
-            <File>
-              <FileName>osConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Src\User\osConfig.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -478,11 +473,6 @@
               <FilePath>..\..\..\buffos\stdfunc\LinkList.c</FilePath>
             </File>
             <File>
-              <FileName>print.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\stdfunc\print.c</FilePath>
-            </File>
-            <File>
               <FileName>str.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\buffos\stdfunc\str.c</FilePath>
@@ -491,6 +481,11 @@
               <FileName>sram.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Src\Func\sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>print.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\buffos\link\M3M4F\print.c</FilePath>
             </File>
           </Files>
         </Group>

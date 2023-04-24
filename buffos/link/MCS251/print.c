@@ -33,25 +33,25 @@
                                                   变量初始化区
 */
 
-/*
- *
- * @函数名称: pchar
- *
- * @函数功能: 输出接口
- *
- * @输入参数: ch	字符
- *
- * @返 回 值: 无
- *
- * @注    释: 该函数可以用于重定向
- *
- */
-int pchar(const char ch)
-{
-	USART_SendData(USART1,ch);
-	while(USART_GetFlagStatus(USART1,USART_FLAG_TXE)==RESET);
-	return (ch);
-}
+///*
+// *
+// * @函数名称: pchar
+// *
+// * @函数功能: 输出接口
+// *
+// * @输入参数: ch	字符
+// *
+// * @返 回 值: 无
+// *
+// * @注    释: 该函数可以用于重定向
+// *
+// */
+//int pchar(const char ch)
+//{
+////	USART_SendData(USART1,ch);//发送到串口
+////	while(USART_GetFlagStatus(USART1,USART_FLAG_TXE)==RESET);
+////	return (ch);
+//}
 /*
  *
  * @函数名称: pchar
@@ -69,8 +69,8 @@ int pchar(const char ch)
 static void _spchar(const char ch,int* s)
 {
 	if(s){//如果s传参不为零,就表明有输出地址
-		*((char*)*s) = ch;
-		*s = (int)*s + 1;
+		*((char*)*s) = ch;//将字符写入到回流地址中
+		*s = (int)*s + 1;//将回流地址向后移一位
 	}
 	else{
 		pchar(ch);//直接输出
@@ -89,9 +89,9 @@ static void _spchar(const char ch,int* s)
  * @注    释: 无
  *
  */
-static void _printU10(unsigned int num,int ctl,int* s)
+void _printU10(unsigned long int num,int ctl,int* s)
 {
-	int _FLAG = 100000000;//初始化第十位除数
+	long int _FLAG = 100000000;//初始化第十位除数
 	char _FLAG1 = 0;//用于表示前一位是否有输出
 	if((num / 1000000000) % 10 > 0){//如果第十位数大于零,就输出第十位
 		_spchar((char)(num / 1000000000) % 10 + 48,s);
@@ -125,8 +125,9 @@ static void _printU10(unsigned int num,int ctl,int* s)
  * @注    释: 无
  *
  */
-static void _printS10(int num,int ctl,int* s)
+static void _printS10(long int num,int ctl,int* s)
 {
+
 	if(num < 0){//是否为负值
 		num = (~num) + 1;//取绝对值
 		_spchar('-',s);//输出负号
@@ -147,7 +148,7 @@ static void _printS10(int num,int ctl,int* s)
  * @注    释: 无
  *
  */
-static void _printSring(int p,int* s)
+void _printSring(long int p,int* s)
 {
 	while(*(char*)p != '\0'){//遇到结束符时结束循环
 		_spchar(*(char*)p++,s);//逐个输出字符
@@ -168,7 +169,7 @@ static void _printSring(int p,int* s)
  * @注    释: 无
  *
  */
-static void _print16(int num,int c,int* s)
+static void _print16(long int num,int c,int* s)
 {
 	char _Bit = 28;//初始化当前位数
 	char _Flag = 0;//用于表示前一位是否有输出
@@ -213,7 +214,7 @@ static void _print16(int num,int c,int* s)
  * @注    释: 无
  *
  */
-static void _print8(int num,int* s)
+static void _print8(long int num,int* s)
 {
 	char _Bit = 30;//初始化当前位数
 	char _Flag = 0;//用于表示前一位是否有输出
@@ -256,12 +257,12 @@ static void _print8(int num,int* s)
  */
 static void _print_lf(double* num,char ctrl,int* s)
 {
-	int c = 0;
-	int m;
-	char x;
-	int k = 0;
-	double Buf;
-	char p;
+	int _Value = 0;//
+	int m;//倍数
+	char _Count;//
+	int _Zero = 0;//
+	double _Buf;//浮点缓冲
+	char p;//精度
 
 	if(ctrl > 0){//如果对输出精度有要求
 		p =  ctrl;//使用指定精度
@@ -269,32 +270,32 @@ static void _print_lf(double* num,char ctrl,int* s)
 		p = _print_lf_retain;//使用默认精度
 	}
 
-	Buf = *num;
+	_Buf = *num;
 	m = 10;
-	_printS10((int)Buf,0,s);//输出整数部分
+	_printS10((int)_Buf,0,s);//输出整数部分
 	_spchar('.',s);//输出小数点
-	for(x = 1; x < (p + 1); x++){//将小数部分转换成整数
+	for(_Count = 1; _Count < (p + 1); _Count++){//将小数部分转换成整数
 		/*
 			例如: 1.2345 转换后为: 2345
 		*/
-		c = (c * 10) + ((unsigned int)(Buf * m) % 10);
-		if(c == 0){//如果为零,
-			k = k + 1;
+		_Value = (_Value * 10) + ((unsigned int)(_Buf * m) % 10);
+		if(_Value == 0){//如果为零,则记录下来
+			_Zero = _Zero + 1;
 		}
 		m = m * 10;
 	}
-	for(x = 1; x < 20;x++){
-		if((c % 10) == 0){
-			c = c / 10;
-		}else{
-			for(;k > 0;k--){
+	for(_Count = 1; _Count < 20;_Count++){//检测小数部分是否为空值
+		if((_Value % 10) == 0){//如果小数部分是空值,继续向后搜索
+			_Value = _Value / 10;
+		}else{//如果小数部分不是空值,就需要步零
+			for(;_Zero > 0;_Zero--){
 				_spchar('0',s);
 			}
 			break;
 		}
 	}
 	
-	_printU10(c,0,s);
+	_printU10(_Value,0,s);//输出小数部分
 	
 	
 }
@@ -324,63 +325,55 @@ void xprint(int* s,char* con,int sp)
 		switch(*con){
 			case '%':
 						con++;
+						sp -= 2;
 						xprintc:
 						switch(*con){
 							case 'M'://切换控制字符
 									con = (char*)*((int*)(sp));
 									con --;
-									sp = sp + sizeof(char*);//指向下一个传参
+									sp = offsetCharp(sp);//指向下一个传参
 									break;
 							case 'd'://以十进制形式输出带符号整数(正数不输出符号)
-									_printS10(*((int*)(sp)),LeftValue,s);
-									sp = sp + sizeof(signed int);//指向下一个传参
+									_printS10((*((long int*)(sp))) & 0x0000FFFF,LeftValue,s);
+									sp = offsetUInt(sp);//指向下一个传参
 									break;
 							case 'l'://输出无符号整数
 									if(*(con + 1) != 'u'){
 										_spchar((char)*con,s);
 										break;
 									}
-							case 'u'://输出无符号整数
 									con++;
-									_printU10((*((unsigned int*)(sp))),LeftValue,s);
-									sp = sp + sizeof(unsigned int);//指向下一个传参
+							case 'u'://输出无符号整数
+									_printU10((*((unsigned long int*)(sp))),LeftValue,s);
+									sp = offsetUInt(sp);//指向下一个传参
 									break;									
 							case 'p'://输出指针地址
-									
-									_printU10((int)(sp),LeftValue,s);
-									sp = sp + sizeof(int*);//指向下一个传参
+									_printU10((long int)(sp),LeftValue,s);
+									sp = offsetIntp(sp);//指向下一个传参
 									break;
 							case 's'://输出字符串
-									
-									_printSring(*((int*)(sp)),s);
-									sp = sp + sizeof(char*);//指向下一个传参
+									_printSring(*((long int*)(sp)),s);
+									sp = offsetCharp(sp);//指向下一个传参
 									break;
 							case 'c'://输出单个字符
-									
-									_spchar((char)(*((int*)(sp))),s);
-									sp = sp + sizeof(char*);//指向下一个传参
+									_spchar((char)(*((long int*)(sp))),s);
+									sp = offsetCharp(sp);//指向下一个传参
 									break;
 							case 'X'://以十六进制大写形式输出无符号整数(输出前缀0x)
-									
-									_print16(*((int*)(sp)),'A',s);
-									sp = sp + sizeof(unsigned int);//指向下一个传参
+									_print16(*((long int*)(sp)),'A',s);
+									sp = offsetUInt(sp);//指向下一个传参
 									break;
 							case 'x'://以十六进制小写形式输出无符号整数(输出前缀0x)
-									
-									_print16(*((int*)(sp)),'a',s);
-									sp = sp + sizeof(unsigned int);//指向下一个传参
+									_print16(*((long int*)(sp)),'a',s);
+									sp = offsetUInt(sp);//指向下一个传参
 									break;
 							case 'o'://以八进制形式输出无符号整数(输出前缀0)
-									
-									_print8(*((int*)(sp)),s);
-									sp = sp + sizeof(unsigned int);//指向下一个传参
+									_print8(*((long int*)(sp)),s);
+									sp = offsetUInt(sp);//指向下一个传参
 									break;
 							case 'f'://输出双精度浮点
-									if((sp % 8) != 0){//检查指针是否8位对齐,如果没有对齐将偏移
-										sp = sp + sizeof(unsigned int);//指向下一个传参
-									}
 									_print_lf((double*)(sp),RightValue,s);
-									sp = sp + sizeof(double);//指向下一个传参
+									sp = offsetUInt(sp);//指向下一个传参
 									break;
 							case '.'://右值
 									con++;//向后移动,指向ASCII数字

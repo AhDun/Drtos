@@ -43,7 +43,7 @@
 #define osVersionNumber        110 //系统版本号
 #define osVersionNumberS       "v1.1.0" //系统版本号名
 #define osName                 "buffos" //系统名称
-#define osNameAndVersion  "buffos v1.1.0" //系统名称 + 系统版本号名
+#define osNameAndVersion  		"buffos v1.1.0" //系统名称 + 系统版本号名
 #define osCompileDate		  	__DATE__//系统编译日期
 #define osCompileTime 		 	__TIME__//系统编译时间
 #define osCPU_Name				"STM32F407ZG"//CPU名称
@@ -175,12 +175,12 @@
 #define osInit()    do{\
 						osIRQ_Init();\
 						osDebug_Init();\
-						osMemoryInit(&Memory_CCRAM);\
+						osMemoryInstall(osMemoryInit(&Memory_CCRAM));\
 						osTaskInit();\
 						osClockInit();\
 						osInfoPrint();\
 						osTaskSIRQInit();\
-						osSTimeInit();\
+						osSTimerInit();\
 					}while(0);
 
 
@@ -196,10 +196,10 @@
 //}
 
 //任务配置{
-#define osTaskLog_Config 1 //Debug配置 1:开启Log输出 0:关闭Log输出
+#define osTaskLog_Config 			 1 //Debug配置 1:开启Log输出 0:关闭Log输出
 #define osCriticalToProtect_Config   1  //临界保护  1：启用 0：禁用
-#define osTaskName_Config			1// 任务的名称 1：启用 0：禁用
-#define osTaskUseStack_Config 1//启用进程栈  1：启用 0：禁用
+#define osTaskName_Config			 1// 任务的名称 1：启用 0：禁用
+#define osTaskUseStack_Config 		 1//启用进程栈  1：启用 0：禁用
 #if (__FPU_USED == 1)
 #define osFPU_Config                    1//启用FPU硬件   1：启用 0：禁用
 		/*启用后会进行了对FPU压栈操作，同时也需要在编译器中开启浮点硬件才可以支持
@@ -216,7 +216,14 @@
 #define Default_Stack_Size             1000u//默认栈大小
 #define osTaskArg_Config 			1 //启用任务传参 1：启用 0：禁用
 
-#define osTaskStackDir_Config		1 //		任务栈生长方向  1:递减 0:递增
+#define osTaskStackDir_Config		CPUStackDir //		任务栈生长方向  1:递减 0:递增
+
+#if( osFPU_Config > 0)
+#define osTaskMinimumStackSize		40*4 //如果启用了浮点硬件，任务栈大小至少40*4字节
+#else
+#define osTaskMinimumStackSize		20*4 //如果没有启用了浮点硬件，任务栈大小至少20*4字节
+#endif
+
 //}
 //主任务配置{
 #define MainName_Config 			"Main"//任务名称
@@ -227,22 +234,22 @@
 #define MainSet_Config 				Task_Set_Default
 //}
 //软中断配置{
+#define SIRQ_Config					1 //软中断配置  0:禁用  1:启用
 #define SIRQName_Config 			"SIRQ"
 #define SIRQStackSize_Config 		400
 #define SIRQTimeWheel_Config 		TaskTimeWheelDefault
 #define SIRQPriorityLevel_Config 	-127
 #define SIRQPass_Config 			(void*)0
 #define SIRQSet_Config 				Task_Set_Default
-#define SIRQ_Config					1 //软中断配置  0:禁用  1:启用
 //}
 //软定时器配置{
+#define STime_Config				1 //软定时器配置  0:禁用  1:启用
 #define STimeName_Config 			"STime"
 #define STimeStackSize_Config 		400
 #define STimeTimeWheel_Config 		TaskTimeWheelDefault
 #define STimePriorityLevel_Config 	-126
 #define STimePass_Config 			(void*)0
 #define STimeSet_Config 			Task_Set_Default
-#define STime_Config				1 //软定时器配置  0:禁用  1:启用
 //}
 
 
@@ -250,7 +257,7 @@
 
 
 //错误配置{
-#define osTaskRunError_Config 1 //任务运行时发生致命错误 1:开启Log输出 0:关闭Log输出
+#define osTaskRunError_Config 		1 //任务运行时发生致命错误 1:开启Log输出 0:关闭Log输出
 #define	osTaskErrorSet					0//任务运行时发生致命错误后处理 1：重启这个任务 0：暂停这个任务
 typedef int32_t OsErrorValue;//函数错误返回值
 //}
@@ -260,7 +267,6 @@ typedef int32_t OsErrorValue;//函数错误返回值
 #define osPerf_Config 				1//任务统计  1：启用 0：禁用
 #define osRunTime_Config 			1	//记录系统运行时长  1：启用 0：禁用
 #define osTaskRunTime_Config 		1000 //任务统计时间，单位ms
-#define osSpeedTest_Config 				1//启动时测试任务切换速度 1：启用 0：禁用
 //}
 
 
@@ -272,11 +278,17 @@ typedef int32_t OsErrorValue;//函数错误返回值
 //}
 
 //信号量配置{
-#define osSignalAutoApply_Config		1//信号量自动分配   1：启用 0：禁用
-		/*启用后会为信号量自动分配内存*/
-#define osSignalMutual_Config //启用互斥信号量
-#define osSignalBinary_Config //启用二值信号量
-#define osSignalCount_Config  //启用计数信号量
+#define osSignalAutoApply_Config		1//信号量自动内存分配   1：启用 0：禁用
+
+#define Signal_Mutual       0x01u//互斥信号量
+#define Signal_Binary       0x02u//二值信号量
+#define Signal_Count        0x04u//计数信号量
+#define Signal_AndGroup		0x08u//与组
+#define Signal_OrGroup		0x10u//或组
+
+#define osSignal_Config		Signal_Mutual | Signal_Binary | Signal_Count | Signal_AndGroup | Signal_OrGroup
+							/*通过或配置*/
+
 #define osSignalLog_Config		 1 //信号量错误DeBug  1:开启Log输出 0:关闭Log输出
 #define osSignalMemoryMalloc	osMemoryMalloc	//内存申请方法
 #define osSignalMemoryFree		osMemoryFree	//内存释放方法
@@ -284,9 +296,9 @@ typedef int32_t OsErrorValue;//函数错误返回值
 //}
 
 //邮箱配置{
-#define osPost_Config	1 	 //启用邮箱 1：启用 0：禁用
+#define osPost_Config			1 	 //启用邮箱 1：启用 0：禁用
 #define osPostHead_Config		1	 //读邮件方式  1:队列式  0:栈式
-#define osPostLog_Config 1 //邮箱错误DeBug  1:开启Log输出 0:关闭Log输出
+#define osPostLog_Config 		1 	//邮箱错误DeBug  1:开启Log输出 0:关闭Log输出
 #define osPostMemoryMalloc		osMemoryMallocStatic	//内存申请方法
 #define osPostMemoryFree		osMemoryFreeStatic	//内存释放方法
 //}
@@ -298,7 +310,7 @@ typedef int32_t OsErrorValue;//函数错误返回值
 										//启用保护申请内存与释放内存所用的时长将会增加
 										//内存保护也不一定保证内存块一定不会发生错误!!!,只会降低内存发生错误的概率
 
-#define osMemoryInitReset_Config 		0 //初始化内存时复位内存 1:开启 0:关闭
+#define osMemoryInitReset_Config 		1 //初始化内存时复位内存 1:开启 0:关闭
 #define osMemorySequence_Config 		0 //内存顺序分配   1：启用 0：禁用
 
 #if (osMemorySequence_Config == 0)
@@ -310,11 +322,10 @@ typedef int32_t OsErrorValue;//函数错误返回值
 
 #endif
 
-#define osMemoryLog_Config 			1 //Debug配置 1:开启Log输出 0:关闭Log输出
+#define	osMemoryStatic_Config			1 //静态内存 1:开启 0: 关闭
 
-#define osMemoryByteStatic_Config	1 //
+#define osMemoryLog_Config 				1 //Debug配置 1:开启Log输出 0:关闭Log输出
 
-#define osMemorySizeStatic_Config	2 //
 //}
 
 
@@ -328,7 +339,7 @@ typedef int32_t OsErrorValue;//函数错误返回值
 #include "osTime.h"
 #include "osMemory.h"
 #include "osPost.h"
-#include "osTool.h"
+
 
 #endif
 

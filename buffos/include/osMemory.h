@@ -58,7 +58,7 @@ typedef  struct
 typedef	_MemoryInfo*	_MemoryInfoHandle;
 extern _MemoryInfoHandle	MemoryInfoHandle;
 //}
-//静态内存信息块{
+//结构内存信息块{
 #if (osMemoryStatic_Config > 0)
 typedef  struct
 { 

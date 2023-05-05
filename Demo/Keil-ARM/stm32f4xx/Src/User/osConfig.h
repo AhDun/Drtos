@@ -212,8 +212,8 @@
 #define osTaskNewR_Config				1//加载任务时新寄存器   1：启用 0：禁用
 										/*可以通过关闭加载任务时新寄存器，加快新任务的启动速度，但是可能会影响任务的稳定性*/
 
-#define TaskTimeWheelDefault        	100u//默认轮片时间(单位ms)
-#define Default_Stack_Size             1000u//默认栈大小
+#define TaskTimeWheelDefault        100u//默认轮片时间(单位ms)
+#define Default_Stack_Size          1000u//默认栈大小
 #define osTaskArg_Config 			1 //启用任务传参 1：启用 0：禁用
 
 #define osTaskStackDir_Config		CPUStackDir //		任务栈生长方向  1:递减 0:递增
@@ -223,6 +223,9 @@
 #else
 #define osTaskMinimumStackSize		20*4 //如果没有启用了浮点硬件，任务栈大小至少20*4字节
 #endif
+
+
+#define osTaskIDE
 
 //}
 //主任务配置{
@@ -311,6 +314,7 @@ typedef int32_t OsErrorValue;//函数错误返回值
 										//内存保护也不一定保证内存块一定不会发生错误!!!,只会降低内存发生错误的概率
 
 #define osMemoryInitReset_Config 		1 //初始化内存时复位内存 1:开启 0:关闭
+
 #define osMemorySequence_Config 		0 //内存顺序分配   1：启用 0：禁用
 
 #if (osMemorySequence_Config == 0)

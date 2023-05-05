@@ -47,6 +47,18 @@ uint8_t CCRAM[MemTank_Max];
 
 _MemoryInfo  Memory_CCRAM = {&CCRAM[0],&CCRAM[0],&CCRAM[MemTank_Max]};
 
+
+void delay(unsigned long t)
+{
+	unsigned long i;
+	while(t--){
+		_nop_();
+		i = 5528UL;
+		while (i) i--;
+	}
+
+}
+
 void func()
 {
 	P1 = 0x00;
@@ -87,14 +99,58 @@ void MCUInit()
  * @注    释: 无
  *
  */
+uint32_t s = 0x123;
 
 void main(void)
 {
+	char i = 0;
 	COMx_InitDefine		COMx_InitStructure;					//结构定义
 	TIM_InitTypeDef		TIM_InitStructure;
 	_TaskHandle* TaskHandleListBuf = osTaskGetTaskHandleListHead();
-	//osLinkJump(func);
+	_TaskHandle* a;
+
 	MCUInit();
+
+	P0 = 0x00;
+	P1 = 0x00;
+	P2 = 0x00;
+	P3 = 0x00;
+	P4 = 0x00;
+	P5 = 0x00;
+	P6 = 0x00;
+	P7 = 0x00;
+//	while(1){
+//		delay(100);
+//		P34 = P33 = 0;
+//		delay(100);
+//		P34 = P33 = 1;
+//	}
+	P3 = 0x00;
+
+//	WKTCL	= 4095 & 0xFF;
+//	WKTCH	= (4095 >> 8) & 0xFF | 0x80;
+	while(1){
+
+		if(i < 1){
+			WKTCL	= 4095 & 0xFF;
+			WKTCH	= (4095 >> 8) & 0xFF | 0x80;
+			PCON	|= 0x02;
+			P3 = 0xFF;
+		}else{
+			WKTCL	= 99 & 0xFF;
+			WKTCH	= (99 >> 8) & 0xFF | 0x80;
+			PCON	|= 0x02;
+			P3 = 0x00 ;
+		}
+		i++;
+		if(i > 2){
+			i = 0;
+		}
+	}
+		OsTaskRunTaskHandle = &s;
+	osLinkTaskStackInit((uint32_t*)0,(uint32_t*)func,(uint32_t*)34,&s);
+	//osLinkJump(func);
+	
 	osIRQ_Init();
 	//ES = 1;
 
@@ -114,10 +170,16 @@ void main(void)
 	//osInit();
 	osMemoryInstall(osMemoryInit(&Memory_CCRAM));
 	osIRQ_Init();
-		osTaskLogin(MainName_Config,func,MainStackSize_Config,MainTimeWheel_Config,MainPriorityLevel_Config,MainPass_Config,MainSet_Config); 
-	
-	ISR_Touch();
 
+
+	a = osTaskLogin(MainName_Config,func,MainStackSize_Config,MainTimeWheel_Config,MainPriorityLevel_Config,MainPass_Config,MainSet_Config); 
+	osTaskGetNextTaskHandle() = a; 
+	osTaskGetRunTaskHandle() = a;//将即将运行的任务信息表的指针传送给正在运行任务表 
+	//osTaskGetNextTaskHandle() -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
+	OsTimeGetTaskTimeWheel() = osTaskGetRunTaskHandle() -> TaskWheel;//将当前任务的时间轮片写入到时间记录器
+	//print("任务<%s>\n",TaskHandleListBuf -> Name);
+	ISR_Touch();
+	
 
 
 //	print("有符号整测试:%d\n",-123456);
@@ -131,7 +193,7 @@ void main(void)
 //	print("%3d\n",1);
 //	print("浮点测试:%.1f\n",1234.5678); 
 	//print("%d\n",osMemoryGetFreeValue());
-
+	TaskHandleListBuf = osTaskGetTaskHandleListHead();
 	do{
 		print("任务<%s>\n",TaskHandleListBuf -> Name);
 		TaskHandleListBuf = (_TaskHandle*)TaskHandleListBuf -> NextTaskHandle;
@@ -140,6 +202,7 @@ void main(void)
 //osInit();
 
 }
+
 
 
 

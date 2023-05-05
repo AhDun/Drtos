@@ -84,12 +84,12 @@
 #define Task_Set_StopAutoFree	0x80
 //}
 
-//调度状态{
-#define TaskSwitch_Ready  		0x00u//就绪
-#define TaskSwitch_Wait   		0x01u//等待
-#define TaskSwitch_Run    		0x02u//运行
-//}
 
+//装载设置{
+#define Load_Only	0x00
+#define Load_Create	0x01
+#define Load_Stack	0x02
+//}
 
 
 #if (osCriticalToProtect_Config > 0)//启用了临界保护
@@ -122,7 +122,7 @@
 #endif
 /*
  *
- * @函数名称: osTaskSwitch_Config
+ * @函数名称: osTaskSwitch
  *
  * @函数功能: 触发任务上下文切换
  *
@@ -132,7 +132,7 @@
  *
  * @注    释: 无
 */
-#define osTaskSwitch_Config() 			do{osTaskGetSwitchState() = TaskSwitch_Wait; ISR_Touch();}while(0);
+#define osTaskSwitch() 			do{osTaskGetSwitchQueue()++; ISR_Touch();}while(0);
 /*
  *
  * @函数名称: osTaskSwitchConfig_Config
@@ -145,7 +145,7 @@
  *
  * @注    释: 无
 */
-#define osTaskSwitchConfig_Config(a,b)  do{a -> Config = b;osTaskGetSwitchState() = TaskSwitch_Wait; ISR_Touch();}while(0);
+#define osTaskSwitchConfig(a,b)  do{a -> Config = b;osTaskGetSwitchQueue()++; ISR_Touch();}while(0);
 /*
  *
  * @函数名称: osTaskEnterIRQ
@@ -200,7 +200,8 @@
  * @注    释: 无
 */
 
-#define osTaskGetSwitchState()			OsTaskSwitchState
+
+#define osTaskGetSwitchQueue()			OsTaskSwitchQueue//任务调度请求队列
 
 
 /*
@@ -277,14 +278,16 @@ typedef     uint16_t     _TaskOccupyRatio;//任务占用比
 
 typedef struct
 {
+	/*基本*/
 	_TaskRealSP			RealSP;//任务实时栈指针
 	_NextTaskHandle*	NextTaskHandle;
-	_TaskConfig 		Config;//任务控制量
-	_TaskWheel 			TaskWheel;//任务时间轮片
-	_TaskLevel 			Level;//任务优先级
 	_TaskAddr*			Addr;//任务地址
-	_TaskRealSP			RealSPb;//任务实时栈指针
-	_TaskDelay			TaskDelay;//任务时间标志
+	_TaskConfig 		Config;//任务控制量
+	/*扩展*/
+	_TaskRealSP			Length;//任务实时栈指针
+	_TaskLevel 			Level;//任务优先级
+	_TaskWheel 			Wheel;//任务时间轮片
+	_TaskDelay			Delay;//延时时间标志
 #if (osTaskName_Config > 0)
 	_TaskName*			Name;//任务名称
 #endif	
@@ -302,51 +305,21 @@ typedef struct
     _TaskOccupyRatio     OccupyRatio;//任务占用比
 #endif				
 } _TaskHandle;
-
-typedef struct
-{
-	_TaskRealSP			RealSP;//任务实时栈指针
-	_NextTaskHandle*	NextTaskHandle;
-	_TaskConfig 		Config;//任务控制量
-	_TaskWheel 			TaskWheel;//任务时间轮片
-	_TaskLevel 			Level;//任务优先级
-	_TaskAddr*			Addr;//任务地址
-	_TaskRealSP			RealSPb;//任务实时栈指针
-	_TaskDelay		   TaskDelay;//任务时间标志
-#if (osTaskName_Config > 0)
-	_TaskName*			Name;//任务名称
-#endif	
-#if (osSignal_Config & Signal_Mutual)
-	_TaskLevel			Levelb;//任务备用优先级
-#endif
-#if (osTaskArg_Config > 0)
-	_TaskArg*  			Arg;//任务传参	
-#endif
-#if (osPost_Config > 0)
-	_TaskArg			Arg1;//任务邮箱
-#endif
-#if (osPerf_Config > 0) //开启了性能统计
-    _TaskOccupyTime      OccupyTime;    //任务占用时长
-    _TaskOccupyRatio     OccupyRatio;    //任务占用比
-#endif				
-} _QuickTaskHandle;
-
 //}
 
 
-typedef     uint8_t      _SwitchState;//任务调度计数
+typedef     uint8_t     _SwitchState;//任务调度计数
 typedef		uint8_t		_TaskISRFlag;
+typedef		uint8_t 	_TaskSwitchQueue;
 
 
-
-extern _TaskHandle*		TaskHandle_Main;//Main任务句柄
-
+extern 	_TaskHandle*	TaskHandle_Main;//Main任务句柄
 extern  _TaskHandle* 	volatile OsTaskRunTaskHandle;//正在运行的任务句柄
 extern  _TaskHandle* 	volatile OsTaskNextTaskHandle;//下一个要运行的任务句柄
-extern _SwitchState	    OsTaskSwitchState;//任务调度状态
+extern  _TaskSwitchQueue	OsTaskSwitchQueue;//任务调度请求队列
 extern _TaskISRFlag		OsTaskISRFlag;//中断状态
 extern _TaskHandle* 	OsTaskTaskHandleListHead;//任务句柄链表表头
-
+extern	uint8_t			OsTaskSum;
 
 
 typedef _TaskAddr 		_SIRQList;
@@ -356,7 +329,7 @@ typedef _TaskAddr 		_SIRQList;
  *
  * @函数名称: osTaskInit
  *
- * @函数功能: 根据任务名称查询任务表地址
+ * @函数功能: 根据任务名称查询任务句柄地址
  *
  * @输入参数: 无	
  *
@@ -367,6 +340,9 @@ typedef _TaskAddr 		_SIRQList;
 OsErrorValue osTaskInit(void);	
 
 OsErrorValue osTaskSIRQInit(void);	
+
+
+_TaskHandle* osTaskLoad(_TaskHandle* TaskHandle,uint8_t Config);
 
 /*
  *
@@ -387,17 +363,17 @@ OsErrorValue osTaskSIRQInit(void);
  * @注    释: 无
  */
 _TaskHandle* osTaskLogin(
-#if (osTaskName_Config > 0)
-	_TaskName *TN,
-#endif
-	void*  TA,	
-	_TaskStackSize  TSS,
-	_TaskWheel  TTW,
-	_TaskLevel  TPL,
+	void*  Addr,//任务地址	
+	_TaskStackSize  StackSize,//任务栈长度
+	_TaskLevel  Level,//任务优先级
+	_TaskWheel  Wheel,//任务时间轮片
 	#if (osTaskArg_Config > 0)
-    void*  TPP, 
+    void*  Arg, //任务传参
 	#endif
-    _TaskConfig  TC
+	#if (osTaskName_Config > 0)
+	_TaskName *Name,
+	#endif
+    _TaskConfig  Config//任务配置
 );
 /*
  *
@@ -420,19 +396,18 @@ _TaskHandle* osTaskLogin(
  */
 
 _TaskHandle* osTaskLoginStatic(
-
-	_TaskHandle* TaskHandle,
-#if (osTaskName_Config > 0)
-	_TaskName *TN,
+	_TaskHandle* TaskHandle,//任务句柄
+	void*  Addr,//任务地址
+	_TaskStackSize  StackSize,//任务栈长度
+	_TaskLevel  Level,//任务优先级
+	_TaskWheel  Wheel,//任务时间轮片
+	#if (osTaskArg_Config > 0)
+    void*  Arg, //任务传参
+	#endif
+	#if (osTaskName_Config > 0)
+	_TaskName *Name,
 #endif
-	void*  TA,
-	_TaskStackSize  TSS,
-	_TaskWheel  TTW,
-	_TaskLevel  TPL,
-#if (osTaskArg_Config > 0)
-    void*  TPP, 
-#endif
-    _TaskConfig  TC
+    _TaskConfig  Config//任务配置
 );
 
 /*

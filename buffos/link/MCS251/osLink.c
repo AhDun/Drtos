@@ -73,10 +73,69 @@ void osLinkJump(uint32_t* addr)
  *
  */
 void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
-						  //R0      ,R1      ,R2      ,R3
-						  //C编译器函数各个传参对应的寄存器
 {	
+	__asm	{ MOV		DR8,DR60}
+	__asm	{ MOV		DR12,DR60}
+	__asm	{ SUB		DR12,#0x07}
+	__asm	{ MOV		WR14,@DR12}
+	__asm	{ ADD		WR14,#0x02}
+	__asm	{ MOV		WR14,@WR14}
+	__asm	{ MOV		DR60,DR12}
 
+
+	__asm	{ MOV		DR12,DR8}
+	__asm	{ SUB		DR12,#0x03}
+	__asm	{ MOV		WR14,@DR12}
+	__asm   { PUSH  	WR14}
+	//__asm   { PUSH  	WR6}
+		__asm	{PUSH		R6}
+	__asm	{PUSH		R7}
+
+	__asm   { PUSH     DR28 }
+	__asm   { PUSH     DR24 }
+	__asm   { PUSH     DR20 }
+	__asm   { PUSH     DR16 }
+	__asm   { PUSH     DR8 }
+	__asm   { PUSH     DR4 }
+	__asm   { PUSH     DR0 }
+	__asm   { PUSH     PSW }
+	__asm   { PUSH     DPH }
+	__asm   { PUSH     DPL }
+
+	__asm	{ MOV		DR12,DR8}
+	__asm	{ SUB		DR12,#0x07}
+	__asm	{ MOV		WR14,@DR12}
+	__asm	{ ADD		WR14,#0x02}
+	__asm	{ MOV		DR4,DR60}
+	__asm	{ MOV		@WR14,WR6}
+
+	__asm   { CLR	EA      }
+	__asm   { MOV   DR4,#OsTaskRunTaskHandle}   
+	__asm	{ ADD	WR6,#0x02}
+    __asm   { MOV   WR6,@WR6    }
+	__asm	{ ADD	WR6,#0x02}
+	__asm   { MOV   WR2,@WR6    }
+    __asm   { XRL   WR0,WR0     }           
+    __asm   { MOV   DR60,DR0    }                                      
+    __asm   { SETB  EA    	}
+
+	#pragma asm
+        POP      DPL                            ; WORD0(DR56)=DPTR
+        POP      DPH                            ; WORD0(DR56)=DPTR
+        POP      PSW
+        POP      DR0
+        POP      DR4
+        POP      DR8
+        POP      DR16
+        POP      DR20
+        POP      DR24
+        POP      DR28
+        RETI  
+	#pragma endasm
+
+	OsTaskRunTaskHandle;
+
+	//__asm	{MOV	   DR60,DR8}
 }
 /*
  *
@@ -95,6 +154,7 @@ void osLinkUseEnable(void)
 {
 
 }
+
 
 
  
@@ -119,40 +179,20 @@ void INT0_ISR_Handler (void) interrupt INT0_VECTOR
 #else
 void INT0_ISR_Handler (void) interrupt INT0_VECTOR	
 {
-
-	__asm   { CLR	EA      }
-	__asm   { PUSH  DR56    }               
-    __asm   { PUSH  DR28    }               
-    __asm   { PUSH  DR24    }               
-    __asm   { PUSH  DR20    }               
-    __asm   { PUSH  DR16    }               
-    __asm   { PUSH  DR12    }               
-    __asm   { PUSH  DR8     }               
-    __asm   { PUSH  DR4     }               
-    __asm   { PUSH  DR0     }               
-    __asm   { PUSH  PSW     }
+	__asm   { CLR	EA      }                   
     __asm   { MOV   DR0,DR60}           
-    __asm   { MOV   DR4,OsTaskRunTaskHandle}   
+    __asm   { MOV   DR4,#OsTaskRunTaskHandle}   
     __asm   { MOV   @WR6,WR2} 
 	__asm   { SETB  EA    } 
 	osTaskNext(); 
 	__asm   { CLR	EA      }
-	__asm   { MOV   DR4,OsTaskRunTaskHandle}   
+	__asm   { MOV   DR4,#OsTaskRunTaskHandle}   
     __asm   { MOV   WR2,@WR6    }   
     __asm   { XRL   WR0,WR0     }           
-    __asm   { MOV   DR60,DR0    }           
-	__asm   { POP   PSW     }               
-    __asm   { POP   DR0     }               
-    __asm   { POP   DR4     }               
-    __asm   { POP   DR8     }               
-    __asm   { POP   DR12    }               
-    __asm   { POP   DR16    }               
-    __asm   { POP   DR20    }               
-    __asm   { POP   DR24    }               
-    __asm   { POP   DR28    }               
-    __asm   { POP   DR56    }  
+    __asm   { MOV   DR60,DR0    }                                      
     __asm   { SETB  EA    	} 
-	OsTaskRunTaskHandle;
+
+	
 }
 
 #endif

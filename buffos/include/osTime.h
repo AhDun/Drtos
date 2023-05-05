@@ -220,12 +220,8 @@ typedef struct
 	_STimeAddr*	  	Addr;
 	_STaskDelay		Flag;
 	_STaskDelay		Flagb;
-}_STimes;//可重载
+}_STimer;//可重载
 
-
-extern _NextAddr STimeListHead;
-
-extern _TaskHandle* TaskHandle_STime;
 
 
 
@@ -275,21 +271,21 @@ void osClockTimePulse(void);
  * @注    释: 无
  *
  */
-_STimes* osTimerLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
+_STimer* osTimerLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
 /*
  *
  * @函数名称: osSTimeLogout
  *
  * @函数功能: 软定时器注销
  *
- * @输入参数: STimes	软定时器地址
+ * @输入参数: STimer	软定时器地址
  *
  * @返 回 值: 无
  *
  * @注    释: 无
  *
  */
-OsErrorValue osSTimerLogout(_STimes* STimes);
+OsErrorValue osSTimerLogout(_STimer* STimer);
 /*
  *
  * @函数名称: osTimeLogin
@@ -307,7 +303,7 @@ OsErrorValue osSTimerLogout(_STimes* STimes);
  *
  */
 
-_STimes* osTimerLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
+_STimer* osTimerLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
 /*
  *
  * @函数名称: osSTimeInit

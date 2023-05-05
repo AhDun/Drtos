@@ -335,7 +335,7 @@ OsErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
 		#endif
 		print("任务优先级:%d\n",osTaskGetRunTaskHandle() -> Level);
 		print("任务当前使用量:%d%%\n",osTaskGetRunTaskHandle() -> OccupyRatio);
-		print("任务延时剩余时间:%d%ms\n任务单次最大运行时长:%dms\n",osTaskGetRunTaskHandle() -> TaskDelay,osTaskGetRunTaskHandle() -> TaskWheel);
+		print("任务延时剩余时间:%d%ms\n任务单次最大运行时长:%dms\n",osTaskGetRunTaskHandle() -> Delay,osTaskGetRunTaskHandle() -> Wheel);
 		print("任务最一近状态:",0,0);
 		switch(osTaskGetRunTaskHandle() -> Config){
 			case Task_State_Up_DT:print("延时挂起\n");break;
@@ -354,7 +354,7 @@ OsErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
 		else{
 			print("非空\n");
 		}
-		print("任务栈总大小:%d字节\n任务栈剩余:%d字节\n",(uint32_t)osTaskGetRunTaskHandle() -> RealSPb - (uint32_t)osTaskGetRunTaskHandle() -  sizeof(_TaskHandle),psp - ((uint32_t)osTaskGetRunTaskHandle() +  sizeof(_TaskHandle)));
+		print("任务栈总大小:%d字节\n任务栈剩余:%d字节\n",(uint32_t)osTaskGetRunTaskHandle() -> Length - (uint32_t)osTaskGetRunTaskHandle() -  sizeof(_TaskHandle),psp - ((uint32_t)osTaskGetRunTaskHandle() +  sizeof(_TaskHandle)));
 		print("任务异常处:%X\n",pc);
 		print("内存总量:%d字节\n内存余量:%d字节",osMemoryGetAllValue(),osMemoryGetFreeValue());
 	}
@@ -386,7 +386,7 @@ OsErrorValue osTaskSpeedTest(void)
 	uint32_t t0,t1;
 	osTaskGetRunTaskHandle() -> Config = Task_State_RE;
 	t0 = SysTick->VAL;
-	osTaskSwitch_Config();//触发任务切换
+	osTaskSwitch();//触发任务切换
 	t1 = SysTick->VAL;
 	#if (osPerf_Config > 0)
 	PerformanceStatistics.TSSU = (osCPU_Period*(t0 - t1)*8)/osCPU_Period_Times;
@@ -403,7 +403,7 @@ OsErrorValue osTaskMonitor(void)
 	_TaskHandle* TaskHandleListBuf = osTaskGetTaskHandleListHead();;
 	do{
 		print("任务<%s>占用时长:%dms | 任务优先级:%d | 任务状态:",TaskHandleListBuf -> Name,TaskHandleListBuf -> OccupyRatio,TaskHandleListBuf -> Level);
-		if(TaskHandleListBuf != osTaskGetRunTaskHandle() || osTaskGetSwitchState() != TaskSwitch_Ready){
+		if(TaskHandleListBuf != osTaskGetRunTaskHandle() || osTaskGetSwitchQueue()){
 			switch(TaskHandleListBuf -> Config){
 				case Task_State_Up_DT:print("延时挂起\n");break;
 				case Task_State_Up_SI:print("信号挂起\n");break;

@@ -19,7 +19,7 @@
  *
  * @文件名称: osClock.c
  *
- * @文件内容: 系统时钟文件
+ * @文件内容: 系统"时钟"文件
  *
  * @注    释: 
  *
@@ -33,8 +33,11 @@
 /*
                                                   变量初始化区
 */
+
+#if (STime_Config > 0)
 _NextAddr STimeListHead;
-_TaskHandle* TaskHandle_STime;
+#endif
+
 #if (osPerf_Config > 0)
 _PerformanceStatistics PerformanceStatistics;//性能统计
 #endif
@@ -88,7 +91,7 @@ void osClockTimePulse(void)
 	if(++OsTimeGetPeriodValue() >= (osClockTimePeriodStandard /osClockTimePeriod)){
 		OsTimeGetPeriodValue() = NULL;
 	#endif
-    /*----------------------------------计时---------------------------------------*/
+    /*计时*/
 	#if (osRunTime_Config > 0)//开启了系统运行时长
 	#if (osClockTimePeriod > osClockTimePeriodStandard)
 	OsTimeGetSystemRunTime() += (osClockTimePeriod / osClockTimePeriodStandard);//系统运行时长进行计时
@@ -96,12 +99,12 @@ void osClockTimePulse(void)
 	OsTimeGetSystemRunTime() += 1;//系统运行时长进行计时
 	#endif
 	#endif
-     /*----------------------------------统计---------------------------------------*/
+     /*统计*/
 	#if (osPerf_Config > 0) //开启了性能统计
 	if(osTaskGetOIRQFlag() > NULL){
 		OsTimeGetTaskISRTime()++;
 	}
-	else if(osTaskGetSwitchState() == TaskSwitch_Ready){//任务调度状态为未调度，进行计时
+	else if(osTaskGetSwitchQueue() == NULL){//任务调度状态为未调度，进行计时
         osTaskGetRunTaskHandle() -> OccupyTime++;//任务占用时长计数
     }
     if(OsTimeGetSystemRunTime() % osTaskRunTime_Config == 0){//系统每过一定时长，就进行占用比例统计
@@ -126,8 +129,8 @@ void osClockTimePulse(void)
 		PerformanceStatistics.TSC = 0;
     }
 	#endif
-    /*----------------------------------时间轮片---------------------------------------*/
-    if(OsTimeGetTaskTimeWheel() > 0 && osTaskGetSwitchState() == TaskSwitch_Ready && osTaskGetOIRQFlag() == NULL){
+    /*时间轮片*/
+    if(OsTimeGetTaskTimeWheel() > 0 && osTaskGetSwitchQueue() == NULL && osTaskGetOIRQFlag() == NULL){
 		/*满足三个条件，才可以触发轮片计时
 		 *1.任务轮片时间大于零
 		 *2.任务切换状态为就绪态
@@ -135,23 +138,23 @@ void osClockTimePulse(void)
 		 */
 	   //当前正在运行的任务的轮片时间大于0并且调度状态为未调度状态
         if(--OsTimeGetTaskTimeWheel() == 0){//当目前正在运行的任务的轮片时间为零时
-			osTaskSwitch_Config();//触发任务切换   
+			osTaskSwitch();//触发任务切换   
         }
     }
 	TaskHandleListBuf = osTaskGetTaskHandleListHead();//获取任务句柄链表头部指针
 	do{//对每一个任务进行遍历
 		/*----------------------------------延时---------------------------------------*/
         if(TaskHandleListBuf -> Config == Task_State_Up_DT){//这个任务是延时挂起(等待态)，才进入
-            TaskHandleListBuf -> TaskDelay--;//把这个任务时间标志中内容减一
-            if(TaskHandleListBuf -> TaskDelay == 0){	//当这个任务时间标志中内容为零时
-                if(osTaskGetSwitchState() != TaskSwitch_Ready){//查询切换状态是否为就绪态
+            TaskHandleListBuf -> Delay--;//把这个任务时间标志中内容减一
+            if(TaskHandleListBuf -> Delay == 0){	//当这个任务时间标志中内容为零时
+                if(osTaskGetSwitchQueue() == NULL){//查询切换状态是否为就绪态
                     TaskHandleListBuf  -> Config = Task_State_RE;//将这个任务的状态设为就绪态
                 }
                 else if(TaskHandleListBuf -> Level <  osTaskGetRunTaskHandle() -> Level){//如果这个任务高于当前工作运行任务的优先级，就抢占
                     TaskHandleListBuf -> Config = Task_State_RE;//将这个任务的状态设为就绪态
-                    if(osTaskGetSwitchState() == TaskSwitch_Ready){//查询切换状态是否为就绪态
+                    if(osTaskGetSwitchQueue() == NULL){//查询切换状态是否为就绪态
                         osTaskGetNextTaskHandle() = TaskHandleListBuf;//把这个任务句柄加载到新任务句柄中
-                        osTaskSwitch_Config(); //触发任务切换
+                        osTaskSwitch(); //触发任务切换
                     }
                 }
                 else{//意外之料的情况
@@ -182,15 +185,15 @@ void osClockTimePulse(void)
 OsErrorValue osSTimerInit(void)
 {
 	STimeListHead = NULL;
-	TaskHandle_STime = osTaskLogin(
-						STimeName_Config,
-						osSTimer,
-						STimeStackSize_Config,
-						STimeTimeWheel_Config,
-						STimePriorityLevel_Config,
-						STimePass_Config,
-						STimeSet_Config); 
-	if(TaskHandle_STime == NULL){
+	if(osTaskLogin(
+	osSTimer,
+	STimeStackSize_Config,
+	STimePriorityLevel_Config,
+	STimeTimeWheel_Config,
+	STimePass_Config,
+	STimeName_Config,
+	STimeSet_Config) 
+	== NULL){
 
 		#if (osTaskLog_Config > 0)
 		osLogE("osSTimeInit","SIRQ 任务创建失败\n");
@@ -216,9 +219,9 @@ OsErrorValue osSTimerInit(void)
  * @注    释: 无
  *
  */
-_STimes* osTimerLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
+_STimer* osTimerLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
 {
-	_STimes* STime_Buf = (_STimes*)ListAddr;
+	_STimer* STime_Buf = (_STimer*)ListAddr;
 	STime_Buf -> Name = Name;
 	STime_Buf -> Addr = (_STimeAddr*)Addr;
 	STime_Buf -> Flag = Flag;
@@ -249,13 +252,13 @@ _STimes* osTimerLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,
  * @注    释: 无
  *
  */
-_STimes* osTimerLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
+_STimer* osTimerLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
 {
 	uint8_t* Addr1;
 	if(Config >= STimeConfig_NRestartL){
-		Addr1 = osMemoryMalloc(sizeof(_STime));//为任务表分配内存
+		Addr1 = osMemoryMalloc(sizeof(_STime));//为任务句柄分配内存
 	}else{
-		Addr1 = osMemoryMalloc(sizeof(_STimes));//为任务表分配内存
+		Addr1 = osMemoryMalloc(sizeof(_STimer));//为任务句柄分配内存
 	}
 //	if(Addr1 == NULL){//如果为空，就说明内存分配失败
 //		#if (osTaskLog_Config > 0)
@@ -267,20 +270,20 @@ _STimes* osTimerLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void
 }
 /*
  *
- * @函数名称: osClockTimePulse
+ * @函数名称: osSTimerLogout
  *
- * @函数功能: 系统时钟脉冲处理
+ * @函数功能: 
  *
- * @输入参数: STimes	软件定时器句柄
+ * @输入参数: STimer	软件定时器句柄
  *
  * @返 回 值: 无
  *
  * @注    释: 无
  *
  */
-OsErrorValue osSTimerLogout(_STimes* STimes)
+OsErrorValue osSTimerLogout(_STimer* STimer)
 {
-	return uLinkListDel(&STimeListHead,(uint32_t*)STimes);
+	return uLinkListDel(&STimeListHead,(uint32_t*)STimer);
 
 }
 /*
@@ -298,9 +301,9 @@ OsErrorValue osSTimerLogout(_STimes* STimes)
  */
 void osSTimer(void)
 {
-	_STimes* STime_Buf;
+	_STimer* STime_Buf;
 	for(;;){
-		STime_Buf = (_STimes*)STimeListHead;
+		STime_Buf = (_STimer*)STimeListHead;
 		while(STime_Buf != NULL){
 			STime_Buf -> Flag -= 1;
 			if(STime_Buf -> Flag == 0){
@@ -311,7 +314,7 @@ void osSTimer(void)
 //					case STimeConfig_NRestart: break;
 				}
 			}
-			STime_Buf = (_STimes*)STime_Buf -> DownAddr;
+			STime_Buf = (_STimer*)STime_Buf -> DownAddr;
 		}
 		osTaskDelayMs(1);
 	}

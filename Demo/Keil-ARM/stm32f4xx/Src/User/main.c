@@ -37,6 +37,8 @@ _MemoryInfoStatic  Memory_RAM = {&RAM[0],&RAM[999],1,2};
 
 
 
+
+
 /* *
  * @函数名称: 无
  *
@@ -55,7 +57,7 @@ int main(void)
 /*--------------------------------------demo---------------------------------------------------------*/
 	u32 _tr0;
 	//_SignalHandle* a;
-
+	//_TaskHandle t;
 	osInit();
 	osTaskSpeedTest();
 	osMemoryInstallStatic(osMemoryInitStatic(&Memory_RAM));
@@ -82,45 +84,56 @@ int main(void)
 	//print("%d\n\n",MemoryStructLength);
 	//print("%f %d %f %d %f %s\n",123.456,123,12.123,456,456.789,"very");
 
+
+
+//	t.Name = "RTC";
+//	t.Addr = (void*)Task1_Func;
+//	t.Length = Task1_Stack_size;
+//	t.Wheel = 50;
+//	t.Level = -2;
+//	t.Arg = (void*)"Hello Task1\n";
+
+//	osTaskLoad(&t,Load_Create);
+
 	TaskHandle_Task1 = osTaskLogin(
-	"RTC", 			                    //任务名称
 	Task1_Func,			            //任务地址
-	Task1_Stack_size,		                    //任务栈长度s
-	50,		                            //任务时间轮片
+	Task1_Stack_size,		                    //任务栈长度
 	-2,	                                    //任务优先级
+	50,		                            //任务时间轮片
 	"Hello Task1\n",									//任务传参   
+	"RTC", 			                    //任务名称
 	Task_Set_Default);
 
 	print("%s\n",osPostReadWait());
 
 
 	TaskHandle_Task2 = osTaskLogin(    
-	"TaskList", 			                    //任务名称
 	Task2_Func,			            //任务地址
 	Task2_Stack_size,		                    //任务栈长度
-	50,		                            //任务时间轮片
 	-1,	                                    //任务优先级
+	50,		                            //任务时间轮片
 	"Hello",									//任务传参
+	"TaskList", 			                    //任务名称
 	Task_Set_Default
 	); 
 
 	TaskHandle_Task3 = osTaskLogin( 
-	"LED1", 			                        //任务名称
 	Task3_Func,			                //任务地址
 	Task3_Stack_size,		                        //任务栈长度
-	50,		                                    //任务时间轮片
 	-3,                                          //任务优先级
+	50,		                                    //任务时间轮片
 	"Hello",									//任务传参
+	"LED1", 			                        //任务名称
 	Task_Set_Default                                    
 	);
 
 	TaskHandle_Task4 = osTaskLogin( 
-	"LED2", 			                        //任务名称
 	Task4_Func,			                //任务地址
 	Task4_Stack_size,		                        //任务栈长度
-	50,		                                    //任务时间轮片
 	-3,                                          //任务优先级
+	50,		                                    //任务时间轮片
 	"Hello",									//任务传参
+	"LED2", 			                        //任务名称
 	Task_Set_Default                                    
 	);
 

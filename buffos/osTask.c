@@ -28,16 +28,17 @@
 #include "osConfig.h"
 #include "osTask.h"
 
-
-
-_TaskHandle*	TaskHandle_Main;
+#if (SIRQ_Config > 0)
 _TaskHandle*	TaskHandle_SIRQ;
+#endif
 
- _TaskHandle* 	volatile OsTaskRunTaskHandle;
- _TaskHandle* 	volatile OsTaskNextTaskHandle;
-_SwitchState	OsTaskSwitchState;//任务调度状态
+_TaskHandle*	TaskHandle_Main;//Main任务句柄
+_TaskHandle* 	volatile OsTaskRunTaskHandle;//正在运行的任务句柄
+_TaskHandle* 	volatile OsTaskNextTaskHandle;//下一个要运行的任务句柄
+_TaskSwitchQueue	OsTaskSwitchQueue;//任务调度请求队列
 _TaskISRFlag	OsTaskISRFlag;//中断状态
-_TaskHandle* 	OsTaskTaskHandleListHead;
+_TaskHandle* 	OsTaskTaskHandleListHead;//任务句柄链表表头
+uint8_t			OsTaskSum;
 
 
 
@@ -54,26 +55,27 @@ _TaskHandle* 	OsTaskTaskHandleListHead;
  * @注    释: 无
  *
  */
+
 OsErrorValue osTaskInit(void)
 {
     /***********************************任务轮询表初始化*********************************/
 	osTaskGetTaskHandleListHead() = NULL;
 
 	osTaskGetOIRQFlag() = 0;
-	osTaskGetSwitchState() = TaskSwitch_Ready;
+	osTaskGetSwitchQueue() = NULL;
     /***********************************系统任务初始化**********************************/
 	
 
 
 	TaskHandle_Main = osTaskLogin(
-#if (osTaskName_Config > 0)
-								MainName_Config,
-#endif
 								(void*)0,
 								MainStackSize_Config,
-								MainTimeWheel_Config,
 								MainPriorityLevel_Config,
+								MainTimeWheel_Config,
 								MainPass_Config,
+								#if (osTaskName_Config > 0)
+								MainName_Config,
+								#endif
 								MainSet_Config); 
 	if(TaskHandle_Main == NULL){
 		#if (osTaskLog_Config > 0)
@@ -84,9 +86,9 @@ OsErrorValue osTaskInit(void)
 
 
 	osTaskGetNextTaskHandle() = TaskHandle_Main; 
-	osTaskGetRunTaskHandle() = TaskHandle_Main;//将即将运行的任务信息表的指针传送给正在运行任务表 
+	osTaskGetRunTaskHandle() = TaskHandle_Main;//将即将运行的任务信息表的指针传送给正在运行任务句柄 
 	osTaskGetNextTaskHandle() -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
-	OsTimeGetTaskTimeWheel() = osTaskGetRunTaskHandle() -> TaskWheel;//将当前任务的时间轮片写入到时间记录器
+	OsTimeGetTaskTimeWheel() = osTaskGetRunTaskHandle() -> Wheel;//将当前任务的时间轮片写入到时间记录器
 #if (osTaskUseStack_Config > 0)
 	osLinkUseEnable();//启动进程栈
 #endif
@@ -114,62 +116,156 @@ OsErrorValue osTaskInit(void)
  */	
 
 
-_TaskHandle* osTaskLogin(
-#if (osTaskName_Config > 0)
-	_TaskName *TN,
-#endif
-	void*  TA,//任务地址	
-	_TaskStackSize  TSS,//任务栈长度
-	_TaskWheel  TTW,//任务时间轮片
-	_TaskLevel  TPL,//任务优先级
-	#if (osTaskArg_Config > 0)
-    void*  TPP, //任务传参
+
+
+
+_TaskHandle* osTaskLoad(_TaskHandle* TaskHandle,uint8_t Config)
+{
+	uint8_t* Addr0;
+	uint32_t Length = TaskHandle -> Length;
+	_TaskHandle* TaskHandleList_Buf1;
+	_TaskHandle* TaskHandleList_Buf2;
+	TaskHandle -> Levelb = 	TaskHandle -> Level;
+	switch(Config){
+		case Load_Stack://分配栈内存
+			 Addr0 = osMemoryMalloc(Length);//分配内存
+			if(Addr0 == NULL){//如果为空，就说明内存分配失败
+				#if (osTaskLog_Config > 0)
+				osLogE("osTaskLogin","任务分配内存失败\n");
+				#endif
+				return (NULL);//返回错误
+			}
+			break;			
+		case Load_Create://生成任务
+			TaskHandleList_Buf1 = osMemoryMalloc(Length + sizeof(_TaskHandle));//分配内存
+			if(TaskHandleList_Buf1 == NULL){//如果为空，就说明内存分配失败
+				#if (osTaskLog_Config > 0)
+				osLogE("osTaskLogin","任务分配内存失败\n");
+				#endif
+				return (NULL);//返回错误
+			}
+			//TaskHandleList_Buf1 = TaskHandle;
+
+			TaskHandleList_Buf1 -> Config = TaskHandle -> Config;
+			TaskHandleList_Buf1 -> Wheel = TaskHandle -> Wheel;
+			TaskHandleList_Buf1 -> Level = TaskHandle -> Level;
+			TaskHandleList_Buf1 -> Addr = TaskHandle -> Addr;
+
+			#if (osTaskName_Config > 0)
+			TaskHandleList_Buf1 -> Name = TaskHandle -> Name;
+			#endif
+			#if (osSignal_Config & Signal_Mutual)
+			TaskHandleList_Buf1 -> Levelb = TaskHandle -> Levelb;
+			#endif
+			#if (osTaskArg_Config > 0)
+			TaskHandleList_Buf1 -> Arg = TaskHandle -> Arg;
+			#endif
+			TaskHandle	-> Arg1 = NULL;//任务邮箱消息设为零
+
+			TaskHandle = TaskHandleList_Buf1;
+			Addr0 = (uint8_t*)TaskHandle + sizeof(_TaskHandle);
+			break;	
+	}
+	#if (osTaskStackDir_Config > 0)
+	TaskHandle -> Length = TaskHandle -> RealSP = (uint32_t)((uint32_t)Addr0 + (Length - 1));//写入任务实时栈指针
+	#else
+	TaskHandle -> Length = TaskHandle -> RealSP =  (uint32_t)Addr0;
 	#endif
-    _TaskConfig  TC//任务配置
+
+	if(osTaskGetTaskHandleListHead() == NULL){
+		osTaskGetTaskHandleListHead() = TaskHandle;
+		TaskHandle -> NextTaskHandle = (_NextTaskHandle*)TaskHandle;
+	}else{
+		TaskHandleList_Buf1  = (_TaskHandle*)osTaskGetTaskHandleListHead();
+		if(TaskHandle -> Level < TaskHandleList_Buf1 -> Level){
+			TaskHandle -> NextTaskHandle = (_NextTaskHandle*)TaskHandleList_Buf1;
+			while(TaskHandleList_Buf1 -> NextTaskHandle != (_NextTaskHandle*)osTaskGetTaskHandleListHead()){
+				TaskHandleList_Buf1 = (_TaskHandle*)TaskHandleList_Buf1 -> NextTaskHandle;
+			}
+			TaskHandleList_Buf1 -> NextTaskHandle = (_NextTaskHandle*)TaskHandle;
+			osTaskGetTaskHandleListHead() = TaskHandle;
+		}else{
+			for(;;){
+				if(TaskHandle -> Level < TaskHandleList_Buf1 -> Level){
+					TaskHandle -> NextTaskHandle = (_NextTaskHandle*)TaskHandleList_Buf1;
+					TaskHandleList_Buf2 -> NextTaskHandle = (_NextTaskHandle*)TaskHandle;
+					break;
+				}else if(TaskHandleList_Buf1 -> NextTaskHandle == (_NextTaskHandle*)osTaskGetTaskHandleListHead()){
+					TaskHandleList_Buf1 -> NextTaskHandle = (_NextTaskHandle*)TaskHandle;
+					TaskHandle -> NextTaskHandle = (_NextTaskHandle*)osTaskGetTaskHandleListHead();
+					break;
+				}
+				TaskHandleList_Buf2 = TaskHandleList_Buf1;
+				TaskHandleList_Buf1 = (_TaskHandle*)TaskHandleList_Buf1 -> NextTaskHandle;
+			}
+		}
+	}
+	TaskHandle -> Config = Task_State_RB;
+	return (TaskHandle);
+
+}
+
+
+_TaskHandle* osTaskLogin(
+	void*  Addr,//任务地址	
+	_TaskStackSize  StackSize,//任务栈长度
+	_TaskLevel  Level,//任务优先级
+	_TaskWheel  Wheel,//任务时间轮片
+	#if (osTaskArg_Config > 0)
+    void*  Arg, //任务传参
+	#endif
+	#if (osTaskName_Config > 0)
+	_TaskName *Name,
+	#endif
+    _TaskConfig  Config//任务配置
 )
 {
 	uint8_t* Addr1;
 
-	if(TSS < osTaskMinimumStackSize){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
+	if(StackSize < osTaskMinimumStackSize){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
 		#if (osTaskLog_Config > 0)
 		osLogE("osTaskLogin","任务栈内存太小\n");
 		#endif
 		return (NULL);//返回错误
 	}
-	if((TSS % 2) != 0){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
+	if((StackSize % 2) != 0){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
 		#if (osTaskLog_Config > 0)
 		osLogE("osTaskLogin","任务栈长度必须为偶数\n");
 		#endif
 		return (NULL);//返回错误
 	}
 
-	Addr1 = osMemoryMalloc(sizeof(_TaskHandle) + TSS);//为任务表分配内存
+	Addr1 = osMemoryMalloc(sizeof(_TaskHandle) + StackSize);//为任务句柄分配内存
 	if(Addr1 == NULL){//如果为空，就说明内存分配失败
 		#if (osTaskLog_Config > 0)
 		osLogE("osTaskLogin","任务分配内存失败\n");
 		#endif
 		return (NULL);//返回错误
 	}
-#if (osTaskName_Config > 0)
-	return osTaskLoginStatic((_TaskHandle*)Addr1,TN,TA,TSS,TTW,TPL,TPP, TC);//这个时候内存分配完成，就进行进行普通注册
-#else
-	return osTaskLoginStatic((_TaskHandle*)Addr1,TA,TSS,TTW,TPL,TPP, TC);//这个时候内存分配完成，就进行进行普通注册
-#endif
+	return osTaskLoginStatic((_TaskHandle*)Addr1,
+	Addr,StackSize,Level,Wheel,Arg, 
+	#if (osTaskName_Config > 0)
+	Name,
+	#endif
+	Config);//这个时候内存分配完成，就进行进行普通注册
 }
+
+
+
 /*
  *
  * @函数名称: 
  *
  * @函数功能: 任务创建
  *
- * @输入参数: 	TaskHandle 任务表
- * @输入参数: 	TN 任务名称
- * @输入参数: 	TA 任务地址
- * @输入参数: 	TSS 任务栈长度
- * @输入参数: 	TTW 任务时间轮片
- * @输入参数: 	TPL 任务优先级
- * @输入参数: 	TPP 任务传参
- * @输入参数: 	TC 任务配置	
+ * @输入参数: 	TaskHandle 任务句柄
+ * @输入参数: 	Name 任务名称
+ * @输入参数: 	Addr 任务地址
+ * @输入参数: 	StackSize 任务栈长度
+ * @输入参数: 	Wheel 任务时间轮片
+ * @输入参数: 	Level 任务优先级
+ * @输入参数: 	Arg 任务传参
+ * @输入参数: 	Config 任务配置	
  *
  * @返 回 值: -1:创建错误 / 0: 创建成功
  *
@@ -177,19 +273,18 @@ _TaskHandle* osTaskLogin(
  *
  */
 _TaskHandle* osTaskLoginStatic(
- 
-	_TaskHandle* TaskHandle,//任务表
-#if (osTaskName_Config > 0)
-	_TaskName *TN,
-#endif
-	void*  TA,//任务地址
-	_TaskStackSize  TSS,//任务栈长度
-	_TaskWheel  TTW,//任务时间轮片0
-	_TaskLevel  TPL,//任务优先级
+	_TaskHandle* TaskHandle,//任务句柄
+	void*  Addr,//任务地址
+	_TaskStackSize  StackSize,//任务栈长度
+	_TaskLevel  Level,//任务优先级
+	_TaskWheel  Wheel,//任务时间轮片
 	#if (osTaskArg_Config > 0)
-    void*  TPP, //任务传参
+    void*  Arg, //任务传参
 	#endif
-    _TaskConfig  TC//任务配置
+	#if (osTaskName_Config > 0)
+	_TaskName *Name,
+#endif
+    _TaskConfig  Config//任务配置
 )
 {
 	_TaskHandle* TaskHandleList_Buf1;
@@ -199,13 +294,13 @@ _TaskHandle* osTaskLoginStatic(
 	osProtect_ENABLE();//进入保护
 #endif
 
-	if(TSS < osTaskMinimumStackSize){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
+	if(StackSize < osTaskMinimumStackSize){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
 		#if (osTaskLog_Config > 0)
 		osLogE("osTaskLoginStatic","任务栈内存太小\n");
 		#endif
 		goto osTaskLoginStatic_Error;
 	}
-	if((TSS % 2) != 0){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
+	if((StackSize % 2) != 0){//如果启用了浮点硬件，至少任务栈大小应大于80*4字节
 		#if (osTaskLog_Config > 0)
 		osLogE("osTaskLoginStatic","任务栈长度必须为偶数\n");
 		#endif
@@ -213,37 +308,45 @@ _TaskHandle* osTaskLoginStatic(
 	}
 
 #if (osTaskName_Config > 0)
-	TaskHandle -> Name = TN;//写入任务名称
+	TaskHandle -> Name = Name;//写入任务名称
 #endif
-	TaskHandle -> Addr = TA;////写入任务地址
-	TSS -= 1;
+	TaskHandle -> Addr = Addr;////写入任务地址
+	StackSize -= 1;
 	#if (osTaskStackDir_Config > 0)
-    TaskHandle -> RealSPb = TaskHandle -> RealSP = (uint32_t)((uint32_t)StackAddr + TSS);//写入任务实时栈指针
+    TaskHandle -> Length = TaskHandle -> RealSP = (uint32_t)((uint32_t)StackAddr + StackSize);//写入任务实时栈指针
 	#else
-	TaskHandle -> RealSPb = TaskHandle -> RealSP =  (uint32_t)StackAddr;
+	TaskHandle -> Length = TaskHandle -> RealSP =  (uint32_t)StackAddr;
 	#endif
-    TaskHandle -> Arg = TPP;//写入任务传参
-	TaskHandle -> Level = TPL;//写入任务优先级
-	TaskHandle -> Levelb = TPL;//写入任务备用优先级
 
-	switch(TC){
+	#if (osTaskArg_Config > 0)
+    TaskHandle -> Arg = Arg;//写入任务传参
+	#endif
+
+	TaskHandle -> Level = Level;//写入任务优先级
+
+	#if (osSignal_Config & Signal_Mutual)
+	TaskHandle -> Levelb = Level;//写入任务备用优先级
+	#endif
+
+	switch(Config){
 		case Task_Set_Default:TaskHandle -> Config = Task_State_RB;break;//将任务设为创建态
-		default: osTaskSet(TaskHandle,TC);break;
+		default: osTaskSet(TaskHandle,Config);break;
 	}
 	
 
-
+	#if (osPost_Config > 0)
 	TaskHandle	-> Arg1 = NULL;//任务邮箱消息设为零
-
-	#if (osClockTimePeriod > osClockTimePeriodStandard)//当时钟周期大于1000时，进行转换
-	TTW = TTW / (osClockTimePeriod / osClockTimePeriodStandard);
 	#endif
 
-    if(TTW > 0){//如果任务时间轮片大于零，则直接传输当前时间轮片值
-        TaskHandle -> TaskWheel = TTW;//写入时间轮片
+	#if (osClockTimePeriod > osClockTimePeriodStandard)//当时钟周期大于1000时，进行转换
+	Wheel = Wheel / (osClockTimePeriod / osClockTimePeriodStandard);
+	#endif
+
+    if(Wheel > 0){//如果任务时间轮片大于零，则直接传输当前时间轮片值
+        TaskHandle -> Wheel = Wheel;//写入时间轮片
     }
     else{//否则，则使用默认值
-        TaskHandle -> TaskWheel = TaskTimeWheelDefault;//写入默认值时间轮片
+        TaskHandle -> Wheel = TaskTimeWheelDefault;//写入默认值时间轮片
     }
 
 
@@ -277,7 +380,7 @@ _TaskHandle* osTaskLoginStatic(
 		}
 	}
 
-
+	OsTaskSum++;
 
 #if (osCriticalToProtect_Config > 0)//启用了临界保护
 	osProtect_DISABLE();//退出保护
@@ -310,7 +413,7 @@ OsErrorValue  osTaskLogout(_TaskHandle* TaskHandle)
 
 	if(osTaskLogoutStatic(TaskHandle) != OK){
 		#if (osTaskLog_Config > 0)
-		osLogE("osTaskLogout","任务表注销失败\n");
+		osLogE("osTaskLogout","任务句柄注销失败\n");
 		#endif
 		return (Error);//发生错误，返回错误
 	}
@@ -368,6 +471,7 @@ osTaskLogoutStatic_OK:
   #if (osCriticalToProtect_Config > 0)//启用了临界保护
 	osProtect_DISABLE();//退出保护
   #endif
+	OsTaskSum--;
 	return (OK);//无异常，返回OK
 osTaskLogoutStatic_Error:
   #if (osCriticalToProtect_Config > 0)//启用了临界保护
@@ -379,7 +483,7 @@ osTaskLogoutStatic_Error:
 
 /*
  *
- * @函数名称: osTaskTime_Choke_ms
+ * @函数名称: osTaskDelayMs
  *
  * @函数功能: 毫秒级任务延时
  *
@@ -396,10 +500,10 @@ void osTaskDelayMs(uint32_t ms)
 		#if (osClockTimePeriod > osClockTimePeriodStandard)
 		ms = ms /(osClockTimePeriod / osClockTimePeriodStandard);	
 		#endif
-		while(osTaskGetSwitchState() != TaskSwitch_Ready);//检查查询CPU是否已经被设为悬起态
+		while(osTaskGetSwitchQueue());//检查查询CPU是否已经被设为悬起态
 		//如果悬起了，就会返回真值，就while循环，直到未来悬起
-		osTaskGetRunTaskHandle() -> TaskDelay = ms;
-		osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_Up_DT);
+		osTaskGetRunTaskHandle() -> Delay = ms;
+		osTaskSwitchConfig(osTaskGetRunTaskHandle(),Task_State_Up_DT);
 	}
 }
 /*
@@ -424,35 +528,6 @@ void osTaskDelayUs(uint32_t us)
 
 /*
  *
- * @函数名称: osTaskSwitch_State
- *
- * @函数功能: 查询任务可切换态
- *
- * @输入参数: 无	
- *
- * @返 回 值: -1:创建错误，0: 创建成功
- *
- * @注    释: 无
- *
- */	
-/*
-OsErrorValue osTaskSwitch_State(void)
-{
-    register OsErrorValue _tr0 = 1;
-    CPU_PendSV_STATE();//查询CPU是否已经被设为悬起态
-	//如果悬起了，就会返回真值，就while循环，直到未来悬起
-    if(_tr0){
-        return TaskSwitch_Wait;//返回等待态
-    }
-    else{
-        return TaskSwitch_Ready;///返回就绪态
-    }
-    
-}
-*/
-
-/*
- *
  * @函数名称: osTaskNext
  *
  * @函数功能: 任务切换
@@ -466,19 +541,18 @@ OsErrorValue osTaskSwitch_State(void)
  */	
 void osTaskNext(void)
 {  
-    osTaskGetSwitchState() = TaskSwitch_Run;
     //osTASK_HANGUP(&osTaskGetRunTaskHandle() -> RealSP);//通过当前运行任务的栈指针,挂起当前的任务
     for(;;){//启动下一个任务
 		switch(osTaskGetNextTaskHandle() -> Config){//进行状态码分离操作，并传输给switch语句
 				case Task_State_RB:
-									osTaskGetNextTaskHandle() -> RealSP = osTaskGetNextTaskHandle() -> RealSPb;
+									osTaskGetNextTaskHandle() -> RealSP = osTaskGetNextTaskHandle() -> Length;
 									osTaskGetNextTaskHandle() -> Config = Task_State_RE;//将这个任务的状态设为轮片挂起(挂起态)
 									osLinkTaskStackInit(osTaskGetNextTaskHandle() -> Arg,(void* )osTaskGetNextTaskHandle() -> Addr,(void* )osTaskExit,&osTaskGetNextTaskHandle() -> RealSP);//启动任务
 				case Task_State_RE:	  //就绪态
-									osTaskGetRunTaskHandle() = osTaskGetNextTaskHandle();//将即将运行的任务信息表的指针传送给正在运行任务表
+									osTaskGetRunTaskHandle() = osTaskGetNextTaskHandle();//将即将运行的任务信息表的指针传送给正在运行任务句柄
 									osTaskGetNextTaskHandle() = (_TaskHandle*)osTaskGetNextTaskHandle() -> NextTaskHandle;
-									OsTimeGetTaskTimeWheel() = osTaskGetRunTaskHandle() -> TaskWheel;//将当前任务的时间轮片写入到时间记录器
-									osTaskGetSwitchState() = TaskSwitch_Ready;//将调度状态设为"未调度"
+									OsTimeGetTaskTimeWheel() = osTaskGetRunTaskHandle() -> Wheel;//将当前任务的时间轮片写入到时间记录器
+									osTaskGetSwitchQueue() = NULL;//清空任务切换队列
 									#if (osPerf_Config > 0)
 									PerformanceStatistics.TSC += 1;
 									#endif
@@ -486,8 +560,7 @@ void osTaskNext(void)
 
 				default:break;//意料之外!
 			}
-			osTaskGetNextTaskHandle() = (_TaskHandle*)osTaskGetNextTaskHandle() -> NextTaskHandle;
-			
+			osTaskGetNextTaskHandle() = (_TaskHandle*)osTaskGetNextTaskHandle() -> NextTaskHandle;	
     }
 }
 /*
@@ -520,9 +593,9 @@ OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 									TaskHandle -> Config = Task_State_RB;//
 									return (OK);//返回OK
 			case Task_Set_Start://立即启动任务
-									while(osTaskGetSwitchState() != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
+									while(osTaskGetSwitchQueue());//查询CPU是否已经被设为悬起态
 									osTaskGetNextTaskHandle() = TaskHandle;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
-									osTaskSwitchConfig_Config(TaskHandle,Task_State_RE);
+									osTaskSwitchConfig(TaskHandle,Task_State_RE);
 									return (OK);//返回OK
 			case Task_Set_Up://挂起任务
 								return (OK);
@@ -532,22 +605,22 @@ OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 	}else{//自身
 		switch(Pv){
 			case Task_Set_Pause://暂停任务
-									while(osTaskGetSwitchState() != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
-									osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_DI);
+									while(osTaskGetSwitchQueue());//查询CPU是否已经被设为悬起态
+									osTaskSwitchConfig(osTaskGetRunTaskHandle(),Task_State_DI);
 									return (OK);//返回OK
 
 			case Task_Set_Cont://继续任务
 									return (OK);//返回OK
 
 			case Task_Set_Reboot://重启任务
-									while(osTaskGetSwitchState() != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
-									osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_RB);//触发任务切换
+									while(osTaskGetSwitchQueue());//查询CPU是否已经被设为悬起态
+									osTaskSwitchConfig(osTaskGetRunTaskHandle(),Task_State_RB);//触发任务切换
 									return (OK);//返回OK
 			case Task_Set_Start://立即启动任务
 									return (OK);//返回OK
 			case Task_Set_Up://挂起任务
-								while(osTaskGetSwitchState() != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态								
-								osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_RE);//触发任务切换
+								while(osTaskGetSwitchQueue());//查询CPU是否已经被设为悬起态								
+								osTaskSwitchConfig(osTaskGetRunTaskHandle(),Task_State_RE);//触发任务切换
 								return (OK);
 
 									
@@ -574,7 +647,7 @@ OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 OsErrorValue osTaskExit(void)
 {
 	for(;;){
-		osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_ST);//触发任务切换m
+		osTaskSwitchConfig(osTaskGetRunTaskHandle(),Task_State_ST);//触发任务切换
 	}
 }
 /*
@@ -594,9 +667,9 @@ OsErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA)
 {
 	if(TaskHandle == 0){
 		osTaskGetRunTaskHandle() -> Addr = NewTA;
-		while(osTaskGetSwitchState() != TaskSwitch_Ready);//查询CPU是否已经被设为悬起态
+		while(osTaskGetSwitchQueue());//查询CPU是否已经被设为悬起态
 		osTaskGetRunTaskHandle() -> Config = Task_State_RB;//
-		osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_RB);//触发任务切换
+		osTaskSwitchConfig(osTaskGetRunTaskHandle(),Task_State_RB);//触发任务切换
 		return (OK);//返回OK
 
 	}else{
@@ -624,15 +697,14 @@ OsErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA)
 OsErrorValue osTaskSIRQInit(void)
 {
 	TaskHandle_SIRQ = osTaskLogin(
-							SIRQName_Config,
 							osTaskSIRQ,
 							SIRQStackSize_Config,
-							SIRQTimeWheel_Config,
 							SIRQPriorityLevel_Config,
+							SIRQTimeWheel_Config,
 							SIRQPass_Config,
+							SIRQName_Config,
 							SIRQSet_Config); 
 	if(TaskHandle_SIRQ == NULL){
-
 		#if (osTaskLog_Config > 0)
 		osLogE("osTaskSIRQInit","SIRQ 任务创建失败\n");
 		#endif
@@ -657,7 +729,7 @@ void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr)
 {
 	TaskHandle_SIRQ -> Arg = (_TaskArg*)SIRQList_Addr;
 	osTaskGetNextTaskHandle() = TaskHandle_SIRQ;//把这个任务ID加载到任务调度计数中，这样任务调度才认识这个任务，否则将会向下调度
-	osTaskSwitchConfig_Config(TaskHandle_SIRQ,Task_State_RE);
+	osTaskSwitchConfig(TaskHandle_SIRQ,Task_State_RE);
 }
 /*
  *
@@ -698,7 +770,7 @@ void osTaskSIRQ(void)
 
 	for(;;){
 		//osTaskGetRunTaskHandle() -> Config = Task_State_Up_SI;//主动挂起(挂起态) 
-		osTaskSwitchConfig_Config(osTaskGetRunTaskHandle(),Task_State_Up_SI);
+		osTaskSwitchConfig(osTaskGetRunTaskHandle(),Task_State_Up_SI);
 		SIRQList_Addr = (_SIRQList*)osTaskGetRunTaskHandle() -> Arg;
 		for(SIRQList_Count = 1; SIRQList_Count <= *SIRQList_Addr; SIRQList_Count++){
 			osLinkJump((uint32_t*)SIRQList_Addr[SIRQList_Count]);

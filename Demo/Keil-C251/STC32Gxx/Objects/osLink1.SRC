@@ -5,24 +5,17 @@ $INTR4
 $CASE
 
 ;
-; '.\Objects\osLink.SRC' generated from '..\..\..\buffos\link\MCS251\osLink.c'
+; '.\Objects\osLink1.SRC' generated from '..\..\..\buffos\link\MCS251\osLink1.c'
 ; COMPILER INVOKED BY:
-;        C:\Keil\C251\BIN\C251.EXE ..\..\..\buffos\link\MCS251\osLink.c XSMALL FUNCTIONS(REENTRANT) OPTIMIZE(2,SPEED) BROWSE INCDIR(.\Src\User;.\Src\Drive;.\Src\Func;.\Src\App;.\Src\Drive\inc;.\Src\Drive\isr;.\Src\Drive\lib;.\Src\Drive\src;..\..\..\buffos;..\..\..\buffos\include;..\..\..\buffos\stdfunc\include;..\..\..\buffos\link\MCS251) DEBUG PRINT(.\Listings\osLink.lst) SRC(.\Objects\osLink.SRC) 
+;        C:\Keil\C251\BIN\C251.EXE ..\..\..\buffos\link\MCS251\osLink1.c XSMALL FUNCTIONS(REENTRANT) OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Src\User;.\Src\Drive;.\Src\Func;.\Src\App;.\Src\Drive\inc;.\Src\Drive\isr;.\Src\Drive\lib;.\Src\Drive\src;..\..\..\buffos;..\..\..\buffos\include;..\..\..\buffos\stdfunc\include;..\..\..\buffos\link\MCS251) DEBUG PRINT(.\Listings\osLink1.lst) SRC(.\Objects\osLink1.SRC) 
 ;
-                NAME osLink
+                NAME osLink1
 
         EXTRN         CODE : NEAR (osTaskNext?_)
-        EXTRN         CODE : NEAR (xprint?_)
         EXTRN         EDATA (OsTaskRunTaskHandle)
 
-?PR?INT0_ISR_HANDLER?_?OSLINK  SEGMENT  CODE  
+?PR?INT0_ISR_HANDLER?_?OSLINK1  SEGMENT  CODE  
                  ?PR?IV?0  SEGMENT  CODE OFFS 03H
-       ?PR?PCHAR?_?OSLINK  SEGMENT  CODE  
-  ?PR?OSLINKJUMP?_?OSLINK  SEGMENT  CODE  
-?PR?OSLINKTASKSTACKINIT?_?OSLINK  SEGMENT  CODE  
-      ?PR?SPRINT?_?OSLINK  SEGMENT  CODE  
-       ?PR?PRINT?_?OSLINK  SEGMENT  CODE  
-?PR?OSLINKUSEENABLE?_?OSLINK  SEGMENT  CODE  
 
 ;--- special function registers and bits:
            T2_CT  BIT   08EH.3
@@ -453,12 +446,6 @@ $CASE
 ;--- end of special function registers and bits.
 
         PUBLIC        INT0_ISR_Handler?_
-        PUBLIC        pchar?_
-        PUBLIC        osLinkJump?_
-        PUBLIC        osLinkTaskStackInit?_
-        PUBLIC        sprint?_
-        PUBLIC        print?_
-        PUBLIC        osLinkUseEnable?_
 
 ; line 1: /*
 ; line 2:  * Copyright (c) 2022-2023 AhDun
@@ -497,220 +484,19 @@ $CASE
 ; line 35: 
 ; line 36: 
 ; line 37: 
-; line 38: //const uint32_t NVIC_PendSV = 0xE000ED04;//PendSV
-; line 39: //const uint32_t NVIC_PendSV_SET = 0x10000000;
-; line 40: 
-; line 41: //void ISR_Touch(void)
-; line 42: //{
-; line 43: 
-; line 44: //}
-; line 45: 
-; line 46: void osLinkJump(uint32_t* addr)
-
-        RSEG       ?PR?OSLINKJUMP?_?OSLINK
-        osLinkJump?_ PROC
-; line 47: {
-; line 48: 	__asm {LJMP	@WR2}
-        LJMP	@WR2
-; line 49: }
-        RET      
-        ENDP
-
-        RSEG       ?PR?OSLINKTASKSTACKINIT?_?OSLINK
-        osLinkTaskStackInit?_ PROC
-; line 50: 
-; line 51: //void osLinkISRDisable(void)
-; line 52: //{
-; line 53: 
-; line 54: //}
-; line 55: 
-; line 56: //void osLinkISREnable(void)
-; line 57: //{
-; line 58: 
-; line 59: 
-; line 60: //}
-; line 61: 
-; line 62: /*
-; line 63:  *
-; line 64:  * @函数名称: osLinkTaskStackInit
-; line 65:  *
-; line 66:  * @函数功能: 任务栈初始化
-; line 67:  *
-; line 68:  * @输入参数: uint32_t tta(任务传参) ,uint32_t *tsa(任务开始地址),uint32_t *eca(任务结束回调地址),uint32_t *tsas(任务栈地址)
-; line 69:  *
-; line 70:  * @返 回 值: 无
-; line 71:  *
-; line 72:  * @注    释: 无
-; line 73:  *
-; line 74:  */
-; line 75: void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
-; line 76: {	
-; line 77: 	__asm	{ MOV		DR8,DR60}
-        MOV		DR8,DR60
-; line 78: 	__asm	{ MOV		DR12,DR60}
-        MOV		DR12,DR60
-; line 79: 	__asm	{ SUB		DR12,#0x07}
-        SUB		DR12,#0x07
-; line 80: 	__asm	{ MOV		WR14,@DR12}
-        MOV		WR14,@DR12
-; line 81: 	__asm	{ ADD		WR14,#0x02}
-        ADD		WR14,#0x02
-; line 82: 	__asm	{ MOV		WR14,@WR14}
-        MOV		WR14,@WR14
-; line 83: 	__asm	{ MOV		DR60,DR12}
-        MOV		DR60,DR12
-; line 84: 
-; line 85: 
-; line 86: 	__asm	{ MOV		DR12,DR8}
-        MOV		DR12,DR8
-; line 87: 	__asm	{ SUB		DR12,#0x03}
-        SUB		DR12,#0x03
-; line 88: 	__asm	{ MOV		WR14,@DR12}
-        MOV		WR14,@DR12
-; line 89: 	__asm   { PUSH  	WR14}
-        PUSH  	WR14
-; line 90: 	//__asm   { PUSH  	WR6}
-; line 91: 		__asm	{PUSH		R6}
-        PUSH		R6
-; line 92: 	__asm	{PUSH		R7}
-        PUSH		R7
-; line 93: 
-; line 94: 	__asm   { PUSH     DR28 }
-        PUSH     DR28 
-; line 95: 	__asm   { PUSH     DR24 }
-        PUSH     DR24 
-; line 96: 	__asm   { PUSH     DR20 }
-        PUSH     DR20 
-; line 97: 	__asm   { PUSH     DR16 }
-        PUSH     DR16 
-; line 98: 	__asm   { PUSH     DR8 }
-        PUSH     DR8 
-; line 99: 	__asm   { PUSH     DR4 }
-        PUSH     DR4 
-; line 100: 	__asm   { PUSH     DR0 }
-        PUSH     DR0 
-; line 101: 	__asm   { PUSH     PSW }
-        PUSH     PSW 
-; line 102: 	__asm   { PUSH     DPH }
-        PUSH     DPH 
-; line 103: 	__asm   { PUSH     DPL }
-        PUSH     DPL 
-; line 104: 
-; line 105: 	__asm	{ MOV		DR12,DR8}
-        MOV		DR12,DR8
-; line 106: 	__asm	{ SUB		DR12,#0x07}
-        SUB		DR12,#0x07
-; line 107: 	__asm	{ MOV		WR14,@DR12}
-        MOV		WR14,@DR12
-; line 108: 	__asm	{ ADD		WR14,#0x02}
-        ADD		WR14,#0x02
-; line 109: 	__asm	{ MOV		DR4,DR60}
-        MOV		DR4,DR60
-; line 110: 	__asm	{ MOV		@WR14,WR6}
-        MOV		@WR14,WR6
-; line 111: 
-; line 112: 	__asm   { CLR	EA      }
-        CLR	EA      
-; line 113: 	__asm   { MOV   DR4,#OsTaskRunTaskHandle}   
-        MOV   DR4,#OsTaskRunTaskHandle
-; line 114: 	__asm	{ ADD	WR6,#0x02}
-        ADD	WR6,#0x02
-; line 115:     __asm   { MOV   WR6,@WR6    }
-        MOV   WR6,@WR6    
-; line 116: 	__asm	{ ADD	WR6,#0x02}
-        ADD	WR6,#0x02
-; line 117: 	__asm   { MOV   WR2,@WR6    }
-        MOV   WR2,@WR6    
-; line 118:     __asm   { XRL   WR0,WR0     }           
-        XRL   WR0,WR0     
-; line 119:     __asm   { MOV   DR60,DR0    }                                      
-        MOV   DR60,DR0    
-; line 120:     __asm   { SETB  EA    	}
-        SETB  EA    	
-; line 121: 
-; line 122: 	#pragma asm
-; line 123:         POP      DPL                            ; WORD0(DR56)=DPTR
-        POP      DPL                            ; WORD0(DR56)=DPTR
-; line 124:         POP      DPH                            ; WORD0(DR56)=DPTR
-        POP      DPH                            ; WORD0(DR56)=DPTR
-; line 125:         POP      PSW
-        POP      PSW
-; line 126:         POP      DR0
-        POP      DR0
-; line 127:         POP      DR4
-        POP      DR4
-; line 128:         POP      DR8
-        POP      DR8
-; line 129:         POP      DR16
-        POP      DR16
-; line 130:         POP      DR20
-        POP      DR20
-; line 131:         POP      DR24
-        POP      DR24
-; line 132:         POP      DR28
-        POP      DR28
-; line 133:         RETI  
-        RETI  
-; line 134: 	#pragma endasm
-; line 135: 
-; line 136: 	OsTaskRunTaskHandle;
-; line 137: 
-; line 138: 	//__asm	{MOV	   DR60,DR8}
-; line 139: }
-        RET      
-        ENDP
-
-        RSEG       ?PR?OSLINKUSEENABLE?_?OSLINK
-        osLinkUseEnable?_ PROC
-; line 140: /*
-; line 141:  *
-; line 142:  * @函数名称: osLinkUseEnable
-; line 143:  *
-; line 144:  * @函数功能: 启用进程栈
-; line 145:  *
-; line 146:  * @输入参数: uint32_t *tsas(任务栈地址)
-; line 147:  *
-; line 148:  * @返 回 值: 无
-; line 149:  *
-; line 150:  * @注   释: 无
-; line 151:  *
-; line 152:  */
-; line 153: void osLinkUseEnable(void)
-; line 154: {
-; line 155: 
-; line 156: }
-        RET      
-        ENDP
+; line 38: #if (osTaskUseStack_Config > 0)
+; line 39: void INT0_ISR_Handler (void) interrupt INT0_VECTOR		
+; line 40: {
+; line 41: 
+; line 42: }
+; line 43: #else
+; line 44: void INT0_ISR_Handler (void) interrupt INT0_VECTOR	
 
         RSEG       ?PR?IV?0
         LJMP     INT0_ISR_Handler?_
 
-        RSEG       ?PR?INT0_ISR_HANDLER?_?OSLINK
+        RSEG       ?PR?INT0_ISR_HANDLER?_?OSLINK1
         INT0_ISR_Handler?_ PROC
-; line 157: 
-; line 158: 
-; line 159: 
-; line 160:  
-; line 161: /*
-; line 162:  *
-; line 163:  * @函数名称: PendSV_Handler
-; line 164:  *
-; line 165:  * @函数功能: 启动第一个任务
-; line 166:  *
-; line 167:  * @输入参数: 无
-; line 168:  *
-; line 169:  * @返 回 值: 无
-; line 170:  *
-; line 171:  * @注   释: 无
-; line 172:  *
-; line 173:  */
-; line 174: #if (osTaskUseStack_Config > 0)
-; line 175: void INT0_ISR_Handler (void) interrupt INT0_VECTOR		
-; line 176: {
-; line 177: 
-; line 178: }
-; line 179: #else
-; line 180: void INT0_ISR_Handler (void) interrupt INT0_VECTOR	
         PUSH     DR28
         PUSH     DR24
         PUSH     DR20
@@ -721,34 +507,74 @@ $CASE
         PUSH     PSW
         PUSH     DPH                            ; WORD0(DR56)=DPTR
         PUSH     DPL                            ; WORD0(DR56)=DPTR
-; line 181: {
-; line 182: 	__asm   { CLR	EA      }                   
+; line 45: {
+; line 46: 
+; line 47: 	__asm   { CLR	EA      }
         CLR	EA      
-; line 183:     __asm   { MOV   DR0,DR60}           
+; line 48: 	__asm   { PUSH  DR560    }               
+        PUSH  DR560    
+; line 49:     __asm   { PUSH  DR28    }               
+        PUSH  DR28    
+; line 50:     __asm   { PUSH  DR24    }               
+        PUSH  DR24    
+; line 51:     __asm   { PUSH  DR20    }               
+        PUSH  DR20    
+; line 52:     __asm   { PUSH  DR16    }               
+        PUSH  DR16    
+; line 53:     __asm   { PUSH  DR12    }               
+        PUSH  DR12    
+; line 54:     __asm   { PUSH  DR8     }               
+        PUSH  DR8     
+; line 55:     __asm   { PUSH  DR4     }               
+        PUSH  DR4     
+; line 56:     __asm   { PUSH  DR0     }               
+        PUSH  DR0     
+; line 57:     __asm   { PUSH  PSW     }
+        PUSH  PSW     
+; line 58:     __asm   { MOV   DR0,DR60}           
         MOV   DR0,DR60
-; line 184:     __asm   { MOV   DR4,#OsTaskRunTaskHandle}   
-        MOV   DR4,#OsTaskRunTaskHandle
-; line 185:     __asm   { MOV   @WR6,WR2} 
+; line 59:     __asm   { MOV   DR4,OsTaskRunTaskHandle}   
+        MOV   DR4,OsTaskRunTaskHandle
+; line 60:     __asm   { MOV   @WR6,WR2} 
         MOV   @WR6,WR2
-; line 186: 	__asm   { SETB  EA    } 
+; line 61: 	__asm   { SETB  EA    } 
         SETB  EA    
-; line 187: 	osTaskNext(); 
+; line 62: 	osTaskNext(); 
         LCALL    osTaskNext?_
-; line 188: 	__asm   { CLR	EA      }
+; line 63: 	__asm   { CLR	EA      }
         CLR	EA      
-; line 189: 	__asm   { MOV   DR4,#OsTaskRunTaskHandle}   
-        MOV   DR4,#OsTaskRunTaskHandle
-; line 190:     __asm   { MOV   WR2,@WR6    }   
+; line 64: 	__asm   { MOV   DR4,OsTaskRunTaskHandle}   
+        MOV   DR4,OsTaskRunTaskHandle
+; line 65:     __asm   { MOV   WR2,@WR6    }   
         MOV   WR2,@WR6    
-; line 191:     __asm   { XRL   WR0,WR0     }           
+; line 66:     __asm   { XRL   WR0,WR0     }           
         XRL   WR0,WR0     
-; line 192:     __asm   { MOV   DR60,DR0    }                                      
+; line 67:     __asm   { MOV   DR60,DR0    }           
         MOV   DR60,DR0    
-; line 193:     __asm   { SETB  EA    	} 
+; line 68: 	__asm   { POP   PSW     }               
+        POP   PSW     
+; line 69:     __asm   { POP   DR0     }               
+        POP   DR0     
+; line 70:     __asm   { POP   DR4     }               
+        POP   DR4     
+; line 71:     __asm   { POP   DR8     }               
+        POP   DR8     
+; line 72:     __asm   { POP   DR12    }               
+        POP   DR12    
+; line 73:     __asm   { POP   DR16    }               
+        POP   DR16    
+; line 74:     __asm   { POP   DR20    }               
+        POP   DR20    
+; line 75:     __asm   { POP   DR24    }               
+        POP   DR24    
+; line 76:     __asm   { POP   DR28    }               
+        POP   DR28    
+; line 77:     __asm   { POP   DR56    }  
+        POP   DR56    
+; line 78:     __asm   { SETB  EA    	} 
         SETB  EA    	
-; line 194: 
-; line 195: 	
-; line 196: }
+; line 79: 	OsTaskRunTaskHandle;
+; line 80: }
         POP      DPL                            ; WORD0(DR56)=DPTR
         POP      DPH                            ; WORD0(DR56)=DPTR
         POP      PSW
@@ -761,97 +587,11 @@ $CASE
         POP      DR28
         RETI     
         ENDP
-
-        RSEG       ?PR?PCHAR?_?OSLINK
-        pchar?_ PROC
-; line 197: 
-; line 198: #endif
-; line 199: 
-; line 200: int pchar(const char ch)
-        PUSH     R11                            ; A=R11
-; line 201: {
-; line 202: 	SBUF = ch;
-        MOV      R11,@DR60                      ; ch
-        MOV      SBUF,A                         ; A=R11
-; line 203: 	while(!TI);
-?C0001:
-        JNB      TI,?C0001
-; line 204: 	TI = 0;
-        CLR      TI
-; line 205: 	return (ch);
-        MOV      R7,@DR60                       ; ch
-        MOVS     WR6,R7
-; line 206: }
-        DEC      DR60,#01H
-        RET      
-        ENDP
-
-        RSEG       ?PR?PRINT?_?OSLINK
-        print?_ PROC
-; line 207: 
-; line 208: /*
-; line 209:  *
-; line 210:  * @函数名称: print
-; line 211:  *
-; line 212:  * @函数功能: print函数入口
-; line 213:  *
-; line 214:  * @输入参数: c 控制字符串
-; line 215:  *			  ... 其他传参
-; line 216:  *
-; line 217:  * @返 回 值: 无
-; line 218:  *
-; line 219:  * @注   释: 无
-; line 220:  *
-; line 221:  */
-; line 222: 
-; line 223: //(int* s,char* con,int sp)
-; line 224: void print(const char* c,...)
-; line 225: {
-; line 226: 	__asm {MOV DR4, DR0}
-        MOV DR4, DR0
-; line 227: 	__asm {MOV DR0, DR60}
-        MOV DR0, DR60
-; line 228: 	__asm {SUB DR0, #0x03}
-        SUB DR0, #0x03
-; line 229: 	__asm {PUSH DR0}
-        PUSH DR0
-; line 230: 	__asm {MOV DR0,#0x00}
-        MOV DR0,#0x00
-; line 231: 	xprint();
-        LCALL    xprint?_
-; line 232: 	__asm {POP DR0}
-        POP DR0
-; line 233: }
-        RET      
-        ENDP
-
-        RSEG       ?PR?SPRINT?_?OSLINK
-        sprint?_ PROC
-; line 234: /*
-; line 235:  *
-; line 236:  * @函数名称: sprint
-; line 237:  *
-; line 238:  * @函数功能: sprint函数入口
-; line 239:  *
-; line 240:  * @输入参数: s 输出地址
-; line 241:  *  		  c 控制字符串
-; line 242:  *			  ... 其他传参
-; line 243:  *
-; line 244:  * @返 回 值: 无
-; line 245:  *
-; line 246:  * @注   释: 无
-; line 247:  *
-; line 248:  */
-; line 249: 
-; line 250: void sprint(char* s,const char* c,...)
-; line 251: {
-; line 252: 	
-; line 253: }
-        RET      
-        ENDP
-; line 254: 
-; line 255: 
-; line 256: 
+; line 81: 
+; line 82: #endif
+; line 83: 
+; line 84: 
+; line 85: 
 
         END
 

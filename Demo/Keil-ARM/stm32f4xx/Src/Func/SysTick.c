@@ -48,15 +48,13 @@ s8 SysTick_us_Init_Test_Flag = Unknown;
  * 扩		 充: 
 */
 
-s8 SysTick_us_Init(u8 SysCLK,u16 us)
+s8 SysTick_us_Init(u8 SysCLK,u32 us)
 {
-	if(SysTick->CTRL & 0x01){
-		return (Error); 
-	}
+
 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8); 
 	 
 	SysTick->LOAD = us * (SysCLK / 8) ; //时间加载	  		 
-	SysTick->VAL = 0x00;        		//清空计数器
+	SysTick->VAL = us * (SysCLK / 8) ;  //清空计数器
 	SysTick->CTRL |= ( 0x01 | 0x02) ; //开始倒数
                 //开始倒数  | 计数到0时，产生异常
 	//while(osClockGetTimePulse() == 0);//如果SysTick定时器，未正常工作，则阻塞

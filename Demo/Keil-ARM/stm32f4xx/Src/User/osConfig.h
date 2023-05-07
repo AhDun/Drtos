@@ -68,7 +68,7 @@
  *
  * @注    释: 无
 */
-#define osClock_Init() 		 SysTick_us_Init(osCPU_Freq,osClockTimePeriod)//
+#define osClock_Init(a) 		 SysTick_us_Init(osCPU_Freq,a * 1000)//
 /*
  *
  * @函数名称: osDebug_Init
@@ -229,12 +229,12 @@
 
 //}
 //主任务配置{
-#define MainName_Config 			"Main"//任务名称
-#define MainStackSize_Config 		400	
-#define MainTimeWheel_Config 		TaskTimeWheelDefault
-#define MainPriorityLevel_Config 	0
-#define MainPass_Config 			(void*)0
-#define MainSet_Config 				Task_Set_Default
+#define OSCoreName_Config 			"OSCore"//任务名称
+#define OSCoreStackSize_Config 		400	
+#define OSCoreTimeWheel_Config 		3
+#define OSCorePriorityLevel_Config 	-128
+#define OSCorePass_Config 			(void*)0
+#define OSCoreSet_Config 			Task_Set_OSCore
 //}
 //软中断配置{
 #define SIRQ_Config					1 //软中断配置  0:禁用  1:启用

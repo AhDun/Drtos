@@ -218,13 +218,13 @@ static OsErrorValue osSignalWaitToken(_SignalHandle* ST)
 					TaskInfoTable_Buf -> Config = Task_State_Up_SI;
 					return (OK);
 				}
-				osTaskSwitchConfig(osTaskGetRunTaskHandle(),Task_State_Up_SI);//触发异常,进行任务切换 //修改为信号挂起(等待态)
+				osTaskSwitchConfig(OSCoreTaskHandle,osTaskGetRunTaskHandle(),Task_State_Up_SI);//触发异常,进行任务切换 //修改为信号挂起(等待态)
 				return (OK);
 			}
 			NextAddr_Buf = (_NextAddr*)*NextAddr_Buf;
 		}
 		*NextAddr_Buf = (_NextAddr)SemaphoreToken_Buf;
-		osTaskSwitchConfig(osTaskGetRunTaskHandle(),Task_State_Up_SI);//触发异常,进行任务切换 //修改为信号挂起(等待态)
+		osTaskSwitchConfig(OSCoreTaskHandle,osTaskGetRunTaskHandle(),Task_State_Up_SI);//触发异常,进行任务切换 //修改为信号挂起(等待态)
 		return(OK);
 	}
 }
@@ -345,7 +345,7 @@ OsErrorValue osSignalFree(_SignalHandle* ST)
 			return (Error);
 		}
 		if(TaskInfoTable_Buf -> Level < osTaskGetRunTaskHandle() -> Level){
-			osTaskSwitch();//触发异常,进行任务切换
+			osTaskSwitch(TaskInfoTable_Buf);//触发异常,进行任务切换
 		}
 		return (OK);
 	}else{

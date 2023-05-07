@@ -139,21 +139,32 @@ __asm void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_
  */
 __asm void osLinkUseEnable(void)
 {
-#if (osTaskUseStack_Config > 0)
-  MOV	R1,	  SP
-  MSR   PSP,  R1//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
-  LDR	R0,	  =osTaskGetRunTaskHandle()
-  LDR	R0,	  [R0]
-  LDR	R0,	  [R0]
-  MSR   MSP,  R0//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
- /*使能进程栈{*/
-  MRS	R0,		CONTROL//通过MRS命令读取控制寄存器到R0寄存器
-  ORR	R0,		R0,#0x02//R0寄存器与0x02进行或运算，使的bit1位 置1
-  MSR	CONTROL,R0//再通过MSR命令将R0寄存器中的内容写回控制寄存器中
-  /*}*/
-#endif
-  BX    LR//退出函数，跳转到BX寄存器中所存的地址
-  NOP
+//	#if (osTaskUseStack_Config > 0)
+//	MOV	R1,	  SP
+//	MSR   PSP,  R1//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
+//	LDR	R0,	  =osTaskGetRunTaskHandle()
+//	LDR	R0,	  [R0]
+//	LDR	R0,	  [R0]
+//	MSR   MSP,  R0//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
+//	/*使能进程栈{*/
+//	MRS	R0,		CONTROL//通过MRS命令读取控制寄存器到R0寄存器
+//	ORR	R0,		R0,#0x02//R0寄存器与0x02进行或运算，使的bit1位 置1
+//	MSR	CONTROL,R0//再通过MSR命令将R0寄存器中的内容写回控制寄存器中
+//	/*}*/
+//	#endif
+	#if (osTaskUseStack_Config > 0)
+	MOV	R1,	  SP
+	MSR PSP,  R1//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
+	SUB	R1,	  #0x64
+	MSR MSP,  R1//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
+	/*使能进程栈{*/
+	MRS	R0,		CONTROL//通过MRS命令读取控制寄存器到R0寄存器
+	ORR	R0,		R0,#0x02//R0寄存器与0x02进行或运算，使的bit1位 置1
+	MSR	CONTROL,R0//再通过MSR命令将R0寄存器中的内容写回控制寄存器中
+	/*}*/
+	#endif
+	BX    LR//退出函数，跳转到BX寄存器中所存的地址
+	NOP
 }
 
 
@@ -228,16 +239,19 @@ __asm void PendSV_Handler(void)
 	PRESERVE8
 
 	extern osTaskGetRunTaskHandle()
-	extern osTaskNext
+	extern osTaskGetNextTaskHandle()
+	#if (osPerf_Config > 0)
+	extern OSRecord
+	#endif
 
 	CPSID   I			//禁用所有中断
  
 	MRS	  R1,	PSP		//通过MRS命令将PSP（进程栈）寄存器中的内容读到R1寄存器中
-#if (osFPU_Config > 0) //启用了FPU
+	#if (osFPU_Config > 0) //启用了FPU
     TST		LR, #0x10
     IT		EQ
     VSTMDBEQ R1!,{S16-S31}
-#endif
+	#endif
 
     STMDB R1!,	{R4-R11,LR}	//压栈R4-R11
 
@@ -246,31 +260,42 @@ __asm void PendSV_Handler(void)
     STR   R1,   [R0]	
 	
 
-	CPSIE   I
+//	CPSIE   I
 
-	BL.W	osTaskNext
+//	BL.W	osTaskNext
 
-	CPSID   I			//禁用所有中断
+//	CPSID   I			//禁用所有中断
 
-	LDR   R0,	=osTaskGetRunTaskHandle()
+
+	#if (osPerf_Config > 0)
+//	OSRecord.TSC += 1;
+	LDR	R0, = OSRecord
+	LDR R1,	[R0]
+	ADD	R1, #0x01
+	STR	R1,	[R0]
+	#endif
+
+	LDR   R0,	=osTaskGetNextTaskHandle()
+	LDR	  R1,	=osTaskGetRunTaskHandle()
 	LDR	  R0,	[R0]
+	STR	  R0,	[R1]
 	LDR   R1,   [R0]	
 
 	LDMIA R1! ,{R4-R11,LR}	//弹栈R4-R11
-#if (osFPU_Config > 0) //启用了FPU
+	#if (osFPU_Config > 0) //启用了FPU
 	TST		LR, #0x10
     IT		EQ
     VLDMIAEQ R1!,{S16-S31}
-#endif
+	#endif
 
 	MSR   PSP,  R1		//通过MSR命令将R0寄存器中的内容写到PSP（进程栈）寄存器中
 
 	CPSIE   I			//启用所有中断
     BX	  LR
 	NOP
-#if (osFPU_Config > 0) //启用了FPU
+	#if (osFPU_Config > 0) //启用了FPU
 	NOP
-#endif
+	#endif
 }
 #else
 __asm void PendSV_Handler(void)
@@ -278,7 +303,10 @@ __asm void PendSV_Handler(void)
 	PRESERVE8
 
 	extern osTaskGetRunTaskHandle()
-	extern osTaskNext
+	extern osTaskGetNextTaskHandle()
+	#if (osPerf_Config > 0)
+	extern OSRecord
+	#endif
 
 	CPSID   I			//禁用所有中断
  
@@ -293,17 +321,20 @@ __asm void PendSV_Handler(void)
 	LDR   R0,	=osTaskGetRunTaskHandle()
 	LDR	  R0,	[R0]
     STR   SP,   [R0]	
-	
 
-	CPSIE   I
+	#if (osPerf_Config > 0)
+//	OSRecord.TSC += 1;
+	LDR	R0, = OSRecord
+	LDR R1,	[R0]
+	ADD	R1, #0x01
+	STR	R1,	[R0]
+	#endif
 
-	BL.W	osTaskNext
-
-	CPSID   I			//禁用所有中断
-
-	LDR   R0,	=osTaskGetRunTaskHandle()
+	LDR   R0,	=osTaskGetNextTaskHandle()
+	LDR	  R1,	=osTaskGetRunTaskHandle()
 	LDR	  R0,	[R0]
-	LDR   SP,   [R0]	
+	STR	  R0,	[R1]
+	LDR   R1,   [R0]	
 
 	LDMIA SP! ,{R4-R11,LR}	//弹栈R4-R11
 #if (osFPU_Config > 0) //启用了FPU
@@ -386,10 +417,10 @@ OsErrorValue osTaskSpeedTest(void)
 	uint32_t t0,t1;
 	osTaskGetRunTaskHandle() -> Config = Task_State_RE;
 	t0 = SysTick->VAL;
-	osTaskSwitch();//触发任务切换
+	osTaskSwitch(OSCoreTaskHandle);//触发任务切换
 	t1 = SysTick->VAL;
 	#if (osPerf_Config > 0)
-	PerformanceStatistics.TSSU = (osCPU_Period*(t0 - t1)*8)/osCPU_Period_Times;
+	OSRecord.TSSU = (osCPU_Period*(t0 - t1)*8)/osCPU_Period_Times;
 	#endif
 	#if (osTaskLog_Config > 0)
 	print("任务切换速度测试: t0 %d - t1 %d = %d个时钟周期(%fus)\n",t0,t1,(t0 - t1)*8,(osCPU_Period*(t0 - t1)*8)/osCPU_Period_Times);
@@ -403,7 +434,7 @@ OsErrorValue osTaskMonitor(void)
 	_TaskHandle* TaskHandleListBuf = osTaskGetTaskHandleListHead();;
 	do{
 		print("任务<%s>占用时长:%dms | 任务优先级:%d | 任务状态:",TaskHandleListBuf -> Name,TaskHandleListBuf -> OccupyRatio,TaskHandleListBuf -> Level);
-		if(TaskHandleListBuf != osTaskGetRunTaskHandle() || osTaskGetSwitchQueue()){
+		if(TaskHandleListBuf != osTaskGetRunTaskHandle()){
 			switch(TaskHandleListBuf -> Config){
 				case Task_State_Up_DT:print("延时挂起\n");break;
 				case Task_State_Up_SI:print("信号挂起\n");break;
@@ -422,9 +453,9 @@ OsErrorValue osTaskMonitor(void)
 	}while(TaskHandleListBuf != osTaskGetTaskHandleListHead());
 
 	
-	print("CPU总使用量:%d%% = 任务 %d%% + 中断%d%% + 调度%d%%\n",PerformanceStatistics.CTO + PerformanceStatistics.CISRO + PerformanceStatistics.CSO,PerformanceStatistics.CTO,PerformanceStatistics.CISRO,PerformanceStatistics.CSO);
+	print("CPU总使用量:%d%% = 任务 %d%% + 中断%d%% + 调度%d%%\n",OSRecord.CTO + OSRecord.CISRO + OSRecord.CSO,OSRecord.CTO,OSRecord.CISRO,OSRecord.CSO);
 
-	print("任务调度次数:%d | 预计耗时:%fus(%fms)\n",PerformanceStatistics.TSCb,PerformanceStatistics.TSCb*PerformanceStatistics.TSSU,(PerformanceStatistics.TSCb*PerformanceStatistics.TSSU) / 1000);
+	print("任务调度次数:%d | 预计耗时:%fus(%fms)\n",OSRecord.TSCb,OSRecord.TSCb*2.0,(OSRecord.TSCb*OSRecord.TSSU) / 1000);
 
 	print("内存 总量:%d字节 | 余量:%d字节 | 可分配:%d字节 | 块数:%d\n",osMemoryGetAllValue(),osMemoryGetFreeValue(),osMemoryGetPassValue(),osMemorySum());
 	print("系统已运行: %d天 %d小时 %d分钟 %d秒\n",osClockGetOsRTCD(),osClockGetOsRTCH(),osClockGetOsRTCM(),osClockGetOsRTCS());

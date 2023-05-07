@@ -81,6 +81,8 @@
 #define Task_Set_Start  	0x04u//立即启动任务
 #define Task_Set_Up  		0x05u//挂起任务
 
+#define Task_Set_OSCore		0x0Fu//
+
 #define Task_Set_StopAutoFree	0x80
 //}
 
@@ -132,7 +134,9 @@
  *
  * @注    释: 无
 */
-#define osTaskSwitch() 			do{osTaskGetSwitchQueue()++; ISR_Touch();}while(0);
+//#define osTaskSwitch() 			do{osTaskGetSwitchQueue()++; ISR_Touch();}while(0);
+#define osTaskSwitch(a)				do{OsTaskNextTaskHandle = a;OsTimeTaskTimeWheel = OsTaskNextTaskHandle -> Wheel;ISR_Touch();}while(0);
+//#define osTaskSwitchChock()			do{osTaskNext();}while(0);
 /*
  *
  * @函数名称: osTaskSwitchConfig_Config
@@ -145,7 +149,11 @@
  *
  * @注    释: 无
 */
-#define osTaskSwitchConfig(a,b)  do{a -> Config = b;osTaskGetSwitchQueue()++; ISR_Touch();}while(0);
+#define osTaskSwitchConfig(a,b,c)			do{b -> Config = c;OsTaskNextTaskHandle = a;OsTimeTaskTimeWheel = OsTaskNextTaskHandle -> Wheel;ISR_Touch();}while(0);
+//#define osTaskSwitchChockConfig(a,b)		do{a -> Config = b;OsTaskNextTaskHandle = a;osTaskNext();}while(0);
+//#define osTaskSwitchConfig(a,b)  do{a -> Config = b;osTaskGetSwitchQueue()++; ISR_Touch();}while(0);
+
+
 /*
  *
  * @函数名称: osTaskEnterIRQ
@@ -201,7 +209,7 @@
 */
 
 
-#define osTaskGetSwitchQueue()			OsTaskSwitchQueue//任务调度请求队列
+//#define osTaskGetSwitchQueue()			OsTaskSwitchQueue//任务调度请求队列
 
 
 /*
@@ -313,14 +321,13 @@ typedef		uint8_t		_TaskISRFlag;
 typedef		uint8_t 	_TaskSwitchQueue;
 
 
-extern 	_TaskHandle*	TaskHandle_Main;//Main任务句柄
+extern 	_TaskHandle*	OSCoreTaskHandle;//Main任务句柄
 extern  _TaskHandle* 	volatile OsTaskRunTaskHandle;//正在运行的任务句柄
 extern  _TaskHandle* 	volatile OsTaskNextTaskHandle;//下一个要运行的任务句柄
 extern  _TaskSwitchQueue	OsTaskSwitchQueue;//任务调度请求队列
 extern _TaskISRFlag		OsTaskISRFlag;//中断状态
 extern _TaskHandle* 	OsTaskTaskHandleListHead;//任务句柄链表表头
-extern	uint8_t			OsTaskSum;
-
+extern uint16_t		OsTaskIdle;
 
 typedef _TaskAddr 		_SIRQList;
 
@@ -341,6 +348,7 @@ OsErrorValue osTaskInit(void);
 
 OsErrorValue osTaskSIRQInit(void);	
 
+void osTaskStart(void);
 
 _TaskHandle* osTaskLoad(_TaskHandle* TaskHandle,uint8_t Config);
 

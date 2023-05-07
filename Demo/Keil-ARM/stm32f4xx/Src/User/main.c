@@ -59,7 +59,6 @@ int main(void)
 	//_SignalHandle* a;
 	//_TaskHandle t;
 	osInit();
-	osTaskSpeedTest();
 	osMemoryInstallStatic(osMemoryInitStatic(&Memory_RAM));
 	print("static memory:%d\n",osMemoryStaticGetPassValue());
 //	a = osSignalLogin(Signal_AndGroup);
@@ -104,7 +103,7 @@ int main(void)
 	"RTC", 			                    //任务名称
 	Task_Set_Default);
 
-	print("%s\n",osPostReadWait());
+	//print("%s\n",osPostReadWait());
 
 
 	TaskHandle_Task2 = osTaskLogin(    
@@ -136,20 +135,20 @@ int main(void)
 	"LED2", 			                        //任务名称
 	Task_Set_Default                                    
 	);
+	OSCoreTaskHandle -> Config = Task_Set_OSCore; 
 
 
 	//osTaskLogout(TaskHandle_Task3);
-
-	for(;;){
-		for(_tr0 = 0;_tr0 < 500;_tr0++){
-			osPostReadWait();
-		}
-		osTaskMonitor();
-//		for(_tr0 = 10;_tr0 < MemTank_Max;_tr0++){
-//			MemoryPool[_tr0] = _tr0;
-//			osTaskDelayMs(10);
+	osTaskStart();
+//	for(;;){
+//		for(_tr0 = 0;_tr0 < 500;_tr0++){
+//			osPostReadWait();
 //		}
-	}
+////		for(_tr0 = 10;_tr0 < MemTank_Max;_tr0++){
+////			MemoryPool[_tr0] = _tr0;
+////			osTaskDelayMs(10);
+////		}
+//	}
 /*---------------------------------------------------------------------------------------------------*/
 }
 

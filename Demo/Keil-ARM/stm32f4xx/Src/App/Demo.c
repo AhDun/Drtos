@@ -33,7 +33,7 @@ void Task1_Func(char* a)
 	u8* buf = osMemoryMalloc(20);
 	TFTLCD_Init();			//LCD≥ı ºªØ
 	print(a);
-	osPostSend((u32*)"hello Main",TaskHandle_Main);
+	//osPostSend((u32*)"hello Main",OSCoreTaskHandle);
 	print("%s",osPostReadWait());
 	print("%s",osPostReadWait());
 //	osSignalFree(s1);
@@ -49,7 +49,7 @@ void Task1_Func(char* a)
 	osTaskSIRQLogin(&SIRQ_RTC[0],RTC_Func);
 
 	osTimerLogin("RPost",1000,STimeConfig_Restart,Time_Func);
-
+	osTaskSet(TaskHandle_Task2,Task_Set_Cont);
 	for(;;) 
 	{
 		osSignalUseWait(timebz);
@@ -77,6 +77,7 @@ void Task2_Func(void)
 
 	osPostSend((u32*)"Hello",TaskHandle_Task1);
 	osPostSend((u32*)"World",TaskHandle_Task1);
+	osTaskSet(0,Task_Set_Pause);
 //	osSignalApply_Wait(s1);
 
     LCD_ShowString(10,30,tftlcd_data.width,tftlcd_data.height,16,"STM32F407ZGT6@168MHz");
@@ -93,7 +94,7 @@ void Task2_Func(void)
 		LCD_ShowString(10,180,tftlcd_data.width,tftlcd_data.height,16,buf);
 
 		osMemoryReset(buf,' ');
-		sprint((char *)buf,"CPU: %d%% = T %d%% + I %d%% + S %d%%",PerformanceStatistics.CTO+PerformanceStatistics.CISRO+PerformanceStatistics.CSO,PerformanceStatistics.CTO,PerformanceStatistics.CISRO,PerformanceStatistics.CSO);
+		sprint((char *)buf,"CPU: %d%% = T %d%% + I %d%% + S %d%%",OSRecord.CTO+OSRecord.CISRO+OSRecord.CSO,OSRecord.CTO,OSRecord.CISRO,OSRecord.CSO);
 		LCD_ShowString(10,150,tftlcd_data.width,tftlcd_data.height,16,buf);
 		osMemoryReset(buf,' ');
 		sprint((char *)buf,"OS RTC:%d:%2d:%2d:%2d",(OsTimeGetSystemRunTime() / 1000) /86400,((OsTimeGetSystemRunTime() / 1000) /3600) % 24,((OsTimeGetSystemRunTime() / 1000) /60) % 60,(OsTimeGetSystemRunTime() / 1000) % 60);
@@ -194,9 +195,10 @@ void RTC_Func(void)
 void Time_Func(void)
 {
 	u32 _tr0;
-	for(_tr0 = 0;_tr0 < 500;_tr0++){
-		osPostSend((u32*)"hello",TaskHandle_Main);
-	}
+	osTaskMonitor();
+//	for(_tr0 = 0;_tr0 < 500;_tr0++){
+//		osPostSend((u32*)"hello",OSCoreTaskHandle);
+//	}
 }
 
 

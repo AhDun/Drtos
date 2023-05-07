@@ -173,6 +173,8 @@ extern _TaskWheelMargin	   OsTimeTaskTimeWheel;//任务轮片时间
 typedef uint32_t _ClockTimePeriodValue; //时间周期计数
 extern _ClockTimePeriodValue      OsTimePeriodValue;//时间周期计数
 #endif
+typedef	uint16_t			_OsTimePeriod;
+extern _OsTimePeriod		OsTimePeriod;
 
 
 //性能统计{
@@ -184,16 +186,15 @@ typedef	 uint32_t	_TaskSwitchConut;//任务调度次数
 typedef	 double		_TaskSwitchSpeedUs;//任务切换速度测试
 typedef struct
 {
- 
+	_TaskSwitchConut	TSC;//任务调度次数
 	_CPUTaskOccupy  	CTO;//任务占用比
 	_CPUISROccupy		CISRO;//中断占用比
 	_CPUSwitchOccupy	CSO;//切换占用比
-	_TaskSwitchConut	TSC;//任务调度次数
 	_TaskSwitchConut	TSCb;//任务调度次数
 	_TaskSwitchSpeedUs	TSSU;//任务切换速度测试
 
-}_PerformanceStatistics;
-extern _PerformanceStatistics PerformanceStatistics;//性能统计
+}_OSRecord;
+extern _OSRecord OSRecord;//性能统计
 
 //}
 #endif

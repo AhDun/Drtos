@@ -5,9 +5,9 @@ $INTR4
 $CASE
 
 ;
-; '.\Objects\osLink1.SRC' generated from '..\..\..\buffos\link\MCS251\osLink1.c'
+; '.\Objects\osLink1.SRC' generated from '..\..\..\Drtos\link\MCS251\osLink1.c'
 ; COMPILER INVOKED BY:
-;        C:\Keil\C251\BIN\C251.EXE ..\..\..\buffos\link\MCS251\osLink1.c XSMALL FUNCTIONS(REENTRANT) OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Src\User;.\Src\Drive;.\Src\Func;.\Src\App;.\Src\Drive\inc;.\Src\Drive\isr;.\Src\Drive\lib;.\Src\Drive\src;..\..\..\buffos;..\..\..\buffos\include;..\..\..\buffos\stdfunc\include;..\..\..\buffos\link\MCS251) DEBUG PRINT(.\Listings\osLink1.lst) SRC(.\Objects\osLink1.SRC) 
+;        C:\Keil\C251\BIN\C251.EXE ..\..\..\Drtos\link\MCS251\osLink1.c XSMALL FUNCTIONS(REENTRANT) OPTIMIZE(4,SPEED) BROWSE INCDIR(.\Src\User;.\Src\Drive;.\Src\Func;.\Src\App;.\Src\Drive\inc;.\Src\Drive\isr;.\Src\Drive\lib;.\Src\Drive\src;..\..\..\Drtos;..\..\..\Drtos\include;..\..\..\Drtos\stdfunc\include;..\..\..\Drtos\link\MCS251) DEBUG PRINT(.\Listings\osLink1.lst) SRC(.\Objects\osLink1.SRC) 
 ;
                 NAME osLink1
 

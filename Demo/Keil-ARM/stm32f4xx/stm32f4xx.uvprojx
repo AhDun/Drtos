@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>buffos arm demo</TargetName>
+      <TargetName>Drtos arm demo</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,ARM_MATH_CM4,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Src\App;.\Src\Drive;.\Src\Drive\CMSIS;.\Src\Drive\STM32F4xx_StdPeriph_Driver;.\Src\Func;.\Src\User;..\..\..\buffos;..\..\..\buffos\stdfunc;..\..\..\buffos\include;..\..\..\buffos\stdfunc\include;.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc;.\Src\CPU;..\..\..\buffos\link\M3M4F</IncludePath>
+              <IncludePath>.\Src\App;.\Src\Drive;.\Src\Drive\CMSIS;.\Src\Drive\STM32F4xx_StdPeriph_Driver;.\Src\Func;.\Src\User;..\..\..\Drtos;..\..\..\Drtos\stdfunc;..\..\..\Drtos\include;..\..\..\Drtos\stdfunc\include;.\Src\Drive\STM32F4xx_StdPeriph_Driver\inc;.\Src\CPU;..\..\..\Drtos\link\M3M4F</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -410,37 +410,37 @@
             <File>
               <FileName>osMemory.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osMemory.c</FilePath>
+              <FilePath>..\..\..\Drtos\osMemory.c</FilePath>
             </File>
             <File>
               <FileName>osPost.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osPost.c</FilePath>
+              <FilePath>..\..\..\Drtos\osPost.c</FilePath>
             </File>
             <File>
               <FileName>osSignal.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osSignal.c</FilePath>
+              <FilePath>..\..\..\Drtos\osSignal.c</FilePath>
             </File>
             <File>
               <FileName>osTask.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osTask.c</FilePath>
+              <FilePath>..\..\..\Drtos\osTask.c</FilePath>
             </File>
             <File>
               <FileName>osTime.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osTime.c</FilePath>
+              <FilePath>..\..\..\Drtos\osTime.c</FilePath>
             </File>
             <File>
               <FileName>osLink.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\link\M3M4F\osLink.c</FilePath>
+              <FilePath>..\..\..\Drtos\link\M3M4F\osLink.c</FilePath>
             </File>
             <File>
               <FileName>osLink.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\buffos\link\M3M4F\osLink.s</FilePath>
+              <FilePath>..\..\..\Drtos\link\M3M4F\osLink.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -470,12 +470,12 @@
             <File>
               <FileName>LinkList.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\stdfunc\LinkList.c</FilePath>
+              <FilePath>..\..\..\Drtos\stdfunc\LinkList.c</FilePath>
             </File>
             <File>
               <FileName>str.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\stdfunc\str.c</FilePath>
+              <FilePath>..\..\..\Drtos\stdfunc\str.c</FilePath>
             </File>
             <File>
               <FileName>sram.c</FileName>
@@ -485,7 +485,7 @@
             <File>
               <FileName>print.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\link\M3M4F\print.c</FilePath>
+              <FilePath>..\..\..\Drtos\link\M3M4F\print.c</FilePath>
             </File>
           </Files>
         </Group>

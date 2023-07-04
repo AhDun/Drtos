@@ -1,13 +1,3 @@
-## buffos
-
-```makefile
-全中文注释、轻量RTOS
-感谢您buffos的支持
-本程序使用Apache License 2.0开源协议
-本系统稳定性尚不明确，请勿用到重要的开发上！！！
-所有源码均使用GB2312编码
-```
-
 ### 文件结构说明
 
 ```ABAP
@@ -16,8 +6,8 @@
 |-- LICENSE		 				开源协议
 |-- readme.md    				 本文件
 |- Doc						 	文档
-  |-- buffos.png			     logo
-|- buffos					    系统源码
+  |-- Drtos.png			     logo
+|- Drtos					    系统源码
   |-- osClock.c					系统时钟文件, 提供基本的系统时钟服务
   |-- osMemory.c				系统内存管理文件,提供内存申请、释放
   |-- osPost.c					系统邮箱文件,提供邮箱服务
@@ -59,24 +49,11 @@
 具体内容请参考 /softbufosk/ 文件中内容
 ```
 
-### 开源协议
+### 版权
 
 
 ```c
 /*
- * Copyright (c) 2022-2023 AhDun
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
+ * Copyright (c) 2022-2023 AhDun. All rights reserved.
  */
 ```

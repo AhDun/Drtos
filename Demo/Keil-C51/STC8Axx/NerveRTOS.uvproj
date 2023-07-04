@@ -324,7 +324,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>.\App;.\ASM;.\Func;.\Drive;.\OS;.\User;..\..\..\buffos;..\..\..\buffos\include;..\..\..\buffos\link\8051;..\..\..\buffos\stdfunc;..\..\..\buffos\stdfunc\include</IncludePath>
+              <IncludePath>.\App;.\ASM;.\Func;.\Drive;.\OS;.\User;..\..\..\Drtos;..\..\..\Drtos\include;..\..\..\Drtos\link\8051;..\..\..\Drtos\stdfunc;..\..\..\Drtos\stdfunc\include</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -384,17 +384,17 @@
             <File>
               <FileName>LinkList.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\stdfunc\LinkList.c</FilePath>
+              <FilePath>..\..\..\Drtos\stdfunc\LinkList.c</FilePath>
             </File>
             <File>
               <FileName>print.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\stdfunc\print.c</FilePath>
+              <FilePath>..\..\..\Drtos\stdfunc\print.c</FilePath>
             </File>
             <File>
               <FileName>str.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\stdfunc\str.c</FilePath>
+              <FilePath>..\..\..\Drtos\stdfunc\str.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -414,37 +414,37 @@
             <File>
               <FileName>osClock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osClock.c</FilePath>
+              <FilePath>..\..\..\Drtos\osClock.c</FilePath>
             </File>
             <File>
               <FileName>osMemory.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osMemory.c</FilePath>
+              <FilePath>..\..\..\Drtos\osMemory.c</FilePath>
             </File>
             <File>
               <FileName>osPost.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osPost.c</FilePath>
+              <FilePath>..\..\..\Drtos\osPost.c</FilePath>
             </File>
             <File>
               <FileName>osSignal.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osSignal.c</FilePath>
+              <FilePath>..\..\..\Drtos\osSignal.c</FilePath>
             </File>
             <File>
               <FileName>osTask.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osTask.c</FilePath>
+              <FilePath>..\..\..\Drtos\osTask.c</FilePath>
             </File>
             <File>
               <FileName>osLink.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\buffos\link\8051\osLink.s</FilePath>
+              <FilePath>..\..\..\Drtos\link\8051\osLink.s</FilePath>
             </File>
             <File>
               <FileName>osLink.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\link\8051\osLink.c</FilePath>
+              <FilePath>..\..\..\Drtos\link\8051\osLink.c</FilePath>
             </File>
           </Files>
         </Group>

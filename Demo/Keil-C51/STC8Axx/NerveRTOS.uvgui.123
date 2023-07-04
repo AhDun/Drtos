@@ -6,7 +6,7 @@
   <Header>### uVision Project, (C) Keil Software</Header>
 
   <PrjGuiSettings>
-    <LastAddFilePath>C:\Users\123\Desktop\buffos\Demo\Keil-C51\STC8Axx</LastAddFilePath>
+    <LastAddFilePath>C:\Users\123\Desktop\Drtos\Demo\Keil-C51\STC8Axx</LastAddFilePath>
   </PrjGuiSettings>
 
   <ViewPool/>
@@ -3641,7 +3641,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>C:\Users\123\Desktop\buffos\Demo\Keil-C51\STC8Axx\OS\System_Uart.c</Name>
+        <Name>C:\Users\123\Desktop\Drtos\Demo\Keil-C51\STC8Axx\OS\System_Uart.c</Name>
         <ColumnNumber>8</ColumnNumber>
         <TopLine>13</TopLine>
         <CurrentLine>37</CurrentLine>
@@ -3650,7 +3650,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>C:\Users\123\Desktop\buffos\Demo\Keil-C51\STC8Axx\OS\System_Clock.c</Name>
+        <Name>C:\Users\123\Desktop\Drtos\Demo\Keil-C51\STC8Axx\OS\System_Clock.c</Name>
         <ColumnNumber>0</ColumnNumber>
         <TopLine>64</TopLine>
         <CurrentLine>81</CurrentLine>
@@ -3659,7 +3659,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>C:\Users\123\Desktop\buffos\Demo\Keil-C51\STC8Axx\OS\System_Task.c</Name>
+        <Name>C:\Users\123\Desktop\Drtos\Demo\Keil-C51\STC8Axx\OS\System_Task.c</Name>
         <ColumnNumber>0</ColumnNumber>
         <TopLine>289</TopLine>
         <CurrentLine>349</CurrentLine>
@@ -3668,7 +3668,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>C:\Users\123\Desktop\buffos\Demo\Keil-C51\STC8Axx\OS\System_Control.c</Name>
+        <Name>C:\Users\123\Desktop\Drtos\Demo\Keil-C51\STC8Axx\OS\System_Control.c</Name>
         <ColumnNumber>75</ColumnNumber>
         <TopLine>3</TopLine>
         <CurrentLine>116</CurrentLine>
@@ -3677,7 +3677,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>C:\Users\123\Desktop\buffos\Demo\Keil-C51\STC8Axx\OS\CPU.c</Name>
+        <Name>C:\Users\123\Desktop\Drtos\Demo\Keil-C51\STC8Axx\OS\CPU.c</Name>
         <ColumnNumber>13</ColumnNumber>
         <TopLine>67</TopLine>
         <CurrentLine>91</CurrentLine>
@@ -3704,7 +3704,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>..\..\..\buffos\link\8051\osLink.s</Name>
+        <Name>..\..\..\Drtos\link\8051\osLink.s</Name>
         <ColumnNumber>11</ColumnNumber>
         <TopLine>22</TopLine>
         <CurrentLine>49</CurrentLine>
@@ -3713,7 +3713,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>..\..\..\buffos\link\8051\osLink.c</Name>
+        <Name>..\..\..\Drtos\link\8051\osLink.c</Name>
         <ColumnNumber>33</ColumnNumber>
         <TopLine>1</TopLine>
         <CurrentLine>51</CurrentLine>
@@ -3722,7 +3722,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>C:\Users\123\Desktop\buffos\Demo\Keil-C51\STC8Axx\User\osConfig.h</Name>
+        <Name>C:\Users\123\Desktop\Drtos\Demo\Keil-C51\STC8Axx\User\osConfig.h</Name>
         <ColumnNumber>32</ColumnNumber>
         <TopLine>44</TopLine>
         <CurrentLine>60</CurrentLine>
@@ -3731,7 +3731,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>C:\Users\123\Desktop\buffos\buffos\include\osPost.h</Name>
+        <Name>C:\Users\123\Desktop\Drtos\Drtos\include\osPost.h</Name>
         <ColumnNumber>0</ColumnNumber>
         <TopLine>1</TopLine>
         <CurrentLine>33</CurrentLine>
@@ -3794,7 +3794,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>..\..\..\buffos\stdfunc\print.c</Name>
+        <Name>..\..\..\Drtos\stdfunc\print.c</Name>
         <ColumnNumber>2</ColumnNumber>
         <TopLine>22</TopLine>
         <CurrentLine>47</CurrentLine>

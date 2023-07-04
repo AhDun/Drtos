@@ -1,18 +1,5 @@
 /*
- * Copyright (c) 2022-2023 AhDun
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
+ * Copyright (c) 2022-2023 AhDun. All rights reserved.
  */
 /*
  *
@@ -411,13 +398,23 @@ OsErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
  * @注    释: 无
  *
  */
+void Delay1ms()		//@24.000MHz
+{
+	unsigned long i;
+
+//	_nop_();
+//	_nop_();
+//	_nop_();
+	i = 5998UL;
+	while (i) i--;
+}
 
 OsErrorValue osTaskSpeedTest(void)
 {
 	uint32_t t0,t1;
 	osTaskGetRunTaskHandle() -> Config = Task_State_RE;
 	t0 = SysTick->VAL;
-	osTaskSwitch(OSCoreTaskHandle);//触发任务切换
+	Delay1ms();
 	t1 = SysTick->VAL;
 	#if (osPerf_Config > 0)
 	OSRecord.TSSU = (osCPU_Period*(t0 - t1)*8)/osCPU_Period_Times;
@@ -427,7 +424,6 @@ OsErrorValue osTaskSpeedTest(void)
 	#endif
 	return (OK);
 }
-
 OsErrorValue osTaskMonitor(void)
 
 {

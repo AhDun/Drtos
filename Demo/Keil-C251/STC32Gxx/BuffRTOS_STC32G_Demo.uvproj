@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>BuffOs_STC32G_Demo</TargetName>
+      <TargetName>Drtos_STC32G_Demo</TargetName>
       <ToolsetNumber>0x1</ToolsetNumber>
       <ToolsetName>MCS-251</ToolsetName>
       <uAC6>8</uAC6>
@@ -272,7 +272,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>.\Src\User;.\Src\Drive;.\Src\Func;.\Src\App;.\Src\Drive\inc;.\Src\Drive\isr;.\Src\Drive\lib;.\Src\Drive\src;..\..\..\buffos;..\..\..\buffos\include;..\..\..\buffos\stdfunc\include;..\..\..\buffos\link\MCS251</IncludePath>
+              <IncludePath>.\Src\User;.\Src\Drive;.\Src\Func;.\Src\App;.\Src\Drive\inc;.\Src\Drive\isr;.\Src\Drive\lib;.\Src\Drive\src;..\..\..\Drtos;..\..\..\Drtos\include;..\..\..\Drtos\stdfunc\include;..\..\..\Drtos\link\MCS251</IncludePath>
             </VariousControls>
           </C251>
           <Ax51>
@@ -345,42 +345,42 @@
             <File>
               <FileName>osMemory.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osMemory.c</FilePath>
+              <FilePath>..\..\..\Drtos\osMemory.c</FilePath>
             </File>
             <File>
               <FileName>osPost.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osPost.c</FilePath>
+              <FilePath>..\..\..\Drtos\osPost.c</FilePath>
             </File>
             <File>
               <FileName>osSignal.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osSignal.c</FilePath>
+              <FilePath>..\..\..\Drtos\osSignal.c</FilePath>
             </File>
             <File>
               <FileName>osTask.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osTask.c</FilePath>
+              <FilePath>..\..\..\Drtos\osTask.c</FilePath>
             </File>
             <File>
               <FileName>osTime.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\osTime.c</FilePath>
+              <FilePath>..\..\..\Drtos\osTime.c</FilePath>
             </File>
             <File>
               <FileName>LinkList.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\stdfunc\LinkList.c</FilePath>
+              <FilePath>..\..\..\Drtos\stdfunc\LinkList.c</FilePath>
             </File>
             <File>
               <FileName>str.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\stdfunc\str.c</FilePath>
+              <FilePath>..\..\..\Drtos\stdfunc\str.c</FilePath>
             </File>
             <File>
               <FileName>osLink.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\link\MCS251\osLink.c</FilePath>
+              <FilePath>..\..\..\Drtos\link\MCS251\osLink.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -430,7 +430,7 @@
             <File>
               <FileName>print.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\buffos\link\MCS251\print.c</FilePath>
+              <FilePath>..\..\..\Drtos\link\MCS251\print.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -192,7 +192,7 @@
   */
 
 /** @defgroup SPI_Group1 Initialization and Configuration functions
- *  @brief   Initialization and Configuration functions 
+ *  * @brief   Initialization and Configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -778,7 +778,7 @@ void I2S_FullDuplexConfig(SPI_TypeDef* I2Sxext, I2S_InitTypeDef* I2S_InitStruct)
   */
 
 /** @defgroup SPI_Group2 Data transfers functions
- *  @brief   Data transfers functions
+ *  * @brief   Data transfers functions
  *
 @verbatim   
  ===============================================================================
@@ -835,7 +835,7 @@ void SPI_I2S_SendData(SPI_TypeDef* SPIx, uint16_t Data)
   */
 
 /** @defgroup SPI_Group3 Hardware CRC Calculation functions
- *  @brief   Hardware CRC Calculation functions
+ *  * @brief   Hardware CRC Calculation functions
  *
 @verbatim   
  ===============================================================================
@@ -990,7 +990,7 @@ uint16_t SPI_GetCRCPolynomial(SPI_TypeDef* SPIx)
   */
 
 /** @defgroup SPI_Group4 DMA transfers management functions
- *  @brief   DMA transfers management functions
+ *  * @brief   DMA transfers management functions
   *
 @verbatim   
  ===============================================================================
@@ -1037,7 +1037,7 @@ void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState 
   */
 
 /** @defgroup SPI_Group5 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions
+ *  * @brief   Interrupts and flags management functions
   *
 @verbatim   
  ===============================================================================

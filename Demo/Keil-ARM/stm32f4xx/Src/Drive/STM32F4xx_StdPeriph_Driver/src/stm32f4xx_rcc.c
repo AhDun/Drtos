@@ -148,7 +148,7 @@ static __I uint8_t APBAHBPrescTable[16] = {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6
   */ 
 
 /** @defgroup RCC_Group1 Internal and external clocks, PLL, CSS and MCO configuration functions
- *  @brief   Internal and external clocks, PLL, CSS and MCO configuration functions 
+ *  * @brief   Internal and external clocks, PLL, CSS and MCO configuration functions 
  *
 @verbatim   
  ===================================================================================
@@ -905,7 +905,7 @@ void RCC_MCO2Config(uint32_t RCC_MCO2Source, uint32_t RCC_MCO2Div)
   */
 
 /** @defgroup RCC_Group2 System AHB and APB busses clocks configuration functions
- *  @brief   System, AHB and APB busses clocks configuration functions
+ *  * @brief   System, AHB and APB busses clocks configuration functions
  *
 @verbatim   
  ===============================================================================
@@ -1343,7 +1343,7 @@ void RCC_GetClocksFreq(RCC_ClocksTypeDef* RCC_Clocks)
   */
 
 /** @defgroup RCC_Group3 Peripheral clocks configuration functions
- *  @brief   Peripheral clocks configuration functions 
+ *  * @brief   Peripheral clocks configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -2553,7 +2553,7 @@ void RCC_FMPI2C1ClockSourceConfig(uint32_t RCC_ClockSource)
   */
 
 /** @defgroup RCC_Group4 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions 
+ *  * @brief   Interrupts and flags management functions 
  *
 @verbatim   
  ===============================================================================

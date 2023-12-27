@@ -110,7 +110,7 @@
   */
 
 /** @defgroup IWDG_Group1 Prescaler and Counter configuration functions
- *  @brief   Prescaler and Counter configuration functions
+ *  * @brief   Prescaler and Counter configuration functions
  *
 @verbatim   
  ===============================================================================
@@ -185,7 +185,7 @@ void IWDG_ReloadCounter(void)
   */
 
 /** @defgroup IWDG_Group2 IWDG activation function
- *  @brief   IWDG activation function 
+ *  * @brief   IWDG activation function 
  *
 @verbatim   
  ===============================================================================
@@ -211,7 +211,7 @@ void IWDG_Enable(void)
   */
 
 /** @defgroup IWDG_Group3 Flag management function 
- *  @brief  Flag management function  
+ *  * @brief  Flag management function  
  *
 @verbatim   
  ===============================================================================

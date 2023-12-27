@@ -1,14 +1,27 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 
-/*
+/**
  *
- * @文件名称: osClock.c
+ * @file osClock.c
  *
- * @文件内容: 系统"时钟"文件
+ * @brief 系统"时钟"文件
  *
- * @注    释: 
+ * @note 
  *
  */
 
@@ -38,17 +51,17 @@ _ClockTimePeriodValue      OsTimePeriodValue;//时间周期计数
 #endif
 _OsTimePeriod		OsTimePeriod;
 
-/*
+/**
  *
- * @函数名称: osClockInit
+ * @name osClockInit
  *
- * @函数功能: 系统时钟初始化
+ * @brief 系统时钟初始化
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osClockInit(void)
@@ -59,17 +72,17 @@ OsErrorValue osClockInit(void)
 	}
 	return (OK);//返回OK
 }
-/*
+/**
  *
- * @函数名称: osClockTimePulse
+ * @name osClockTimePulse
  *
- * @函数功能: 系统时钟脉冲处理
+ * @brief 系统时钟脉冲处理
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osClockTimePulse(void)
@@ -162,17 +175,17 @@ void osClockTimePulse(void)
 	OsTimePeriod = 1;
 }
 #if (STime_Config > 0)
-/*
+/**
  *
- * @函数名称: osSTimeInit
+ * @name osSTimeInit
  *
- * @函数功能: 软件定时器初始化
+ * @brief 软件定时器初始化
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osSTimerInit(void)
@@ -195,21 +208,21 @@ OsErrorValue osSTimerInit(void)
 	}
 	return (OK);
 }
-/*
+/**
  *
- * @函数名称: osTimeLoginStatic
+ * @name osTimeLoginStatic
  *
- * @函数功能: 软定时器静态注册
+ * @brief 软定时器静态注册
  *
- * @输入参数: ListAddr	句柄链表表头地址		
- * @输入参数: Name		名字
- * @输入参数: Flag		时长
- * @输入参数: Config	配置
- * @输入参数: Addr		响应地址
+ * @param ListAddr	句柄链表表头地址		
+ * @param Name		名字
+ * @param Flag		时长
+ * @param Config	配置
+ * @param Addr		响应地址
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 _STimer* osTimerLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
@@ -229,20 +242,20 @@ _STimer* osTimerLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,
 	}
 }
 
-/*
+/**
  *
- * @函数名称: osTimeLogin
+ * @name osTimeLogin
  *
- * @函数功能: 软件定时器注册
+ * @brief 软件定时器注册
  *
- * @输入参数: Name		名字
- * @输入参数: Flag		时长
- * @输入参数: Config	配置
- * @输入参数: Addr		响应地址
+ * @param Name		名字
+ * @param Flag		时长
+ * @param Config	配置
+ * @param Addr		响应地址
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 _STimer* osTimerLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr)
@@ -261,17 +274,17 @@ _STimer* osTimerLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void
 //	}
 	return osTimerLoginStatic(Addr1, Name, Flag, Config, Addr);
 }
-/*
+/**
  *
- * @函数名称: osSTimerLogout
+ * @name osSTimerLogout
  *
- * @函数功能: 
+ * @brief 
  *
- * @输入参数: STimer	软件定时器句柄
+ * @param STimer	软件定时器句柄
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osSTimerLogout(_STimer* STimer)
@@ -279,17 +292,17 @@ OsErrorValue osSTimerLogout(_STimer* STimer)
 	return uLinkListDel(&STimeListHead,(uint32_t*)STimer);
 
 }
-/*
+/**
  *
- * @函数名称: osSTime
+ * @name osSTime
  *
- * @函数功能: 软件定时器处理
+ * @brief 软件定时器处理
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osSTimer(void)

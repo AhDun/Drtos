@@ -69,7 +69,7 @@
   */ 
 
 /** @defgroup HASH_Group6 High Level SHA1 functions
- *  @brief   High Level SHA1 Hash and HMAC functions 
+ *  * @brief   High Level SHA1 Hash and HMAC functions 
  *
 @verbatim   
  ===============================================================================

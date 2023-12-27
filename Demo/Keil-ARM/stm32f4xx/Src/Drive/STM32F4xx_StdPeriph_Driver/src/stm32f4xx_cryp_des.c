@@ -72,7 +72,7 @@
   */ 
 
 /** @defgroup CRYP_Group8 High Level DES functions
- *  @brief   High Level DES functions 
+ *  * @brief   High Level DES functions 
  *
 @verbatim   
  ===============================================================================

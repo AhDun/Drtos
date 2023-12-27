@@ -619,7 +619,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fps
 
 #elif defined ( __TASKING__ ) /*------------------ TASKING Compiler --------------*/
 /* TASKING carm specific functions */
-/*
+/**
  * The CMSIS functions have been implemented as intrinsics in the compiler.
  * Please use "carm -?i" to get an up to date list of all intrinsics,
  * Including the CMSIS ones.

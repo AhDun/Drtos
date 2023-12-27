@@ -465,11 +465,11 @@ $CASE
 ; line 16:  */
 ; line 17: /*
 ; line 18:  *
-; line 19:  * @文件名称: osLink.c
+; line 19:  * @file osLink.c
 ; line 20:  *
-; line 21:  * @文件内容: 链接(衔接)文件
+; line 21:  * @brief 链接(衔接)文件
 ; line 22:  *
-; line 23:  * @注    释: 
+; line 23:  * @note 
 ; line 24:  *
 ; line 25:  */
 ; line 26: 

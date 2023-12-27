@@ -77,7 +77,7 @@
   */ 
 
 /** @defgroup RNG_Group1 Initialization and Configuration functions
- *  @brief    Initialization and Configuration functions 
+ *  * @brief    Initialization and Configuration functions 
  *
 @verbatim    
  ===============================================================================
@@ -132,7 +132,7 @@ void RNG_Cmd(FunctionalState NewState)
   */
 
 /** @defgroup RNG_Group2 Get 32 bit Random number function
- *  @brief    Get 32 bit Random number function 
+ *  * @brief    Get 32 bit Random number function 
  *
 
 @verbatim    
@@ -185,7 +185,7 @@ uint32_t RNG_GetRandomNumber(void)
   */
 
 /** @defgroup RNG_Group3 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions
+ *  * @brief   Interrupts and flags management functions
  *
 @verbatim   
  ===============================================================================

@@ -69,7 +69,7 @@
   */ 
 
 /** @defgroup HASH_Group7 High Level MD5 functions
- *  @brief   High Level MD5 Hash and HMAC functions 
+ *  * @brief   High Level MD5 Hash and HMAC functions 
  *
 @verbatim   
  ===============================================================================

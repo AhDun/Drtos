@@ -78,7 +78,7 @@
   */
 
 /** @defgroup FLASH_RAMFUNC_Group1 Peripheral features functions executed from internal RAM 
-  *  @brief Peripheral Extended features functions 
+  *  * @brief Peripheral Extended features functions 
   *
 @verbatim   
 

@@ -478,11 +478,11 @@ $CASE
 ; line 16:  */
 ; line 17: /*
 ; line 18:  *
-; line 19:  * @文件名称: osLink.c
+; line 19:  * @file osLink.c
 ; line 20:  *
-; line 21:  * @文件内容: 链接(衔接)文件
+; line 21:  * @brief 链接(衔接)文件
 ; line 22:  *
-; line 23:  * @注    释: 
+; line 23:  * @note 
 ; line 24:  *
 ; line 25:  */
 ; line 26: 
@@ -532,15 +532,15 @@ $CASE
 ; line 61: 
 ; line 62: /*
 ; line 63:  *
-; line 64:  * @函数名称: osLinkTaskStackInit
+; line 64:  * @name osLinkTaskStackInit
 ; line 65:  *
-; line 66:  * @函数功能: 任务栈初始化
+; line 66:  * @brief 任务栈初始化
 ; line 67:  *
-; line 68:  * @输入参数: uint32_t tta(任务传参) ,uint32_t *tsa(任务开始地址),uint32_t *eca(任务结束回调地址),uint32_t *tsas(任务栈地址)
+; line 68:  * @param uint32_t tta(任务传参) ,uint32_t *tsa(任务开始地址),uint32_t *eca(任务结束回调地址),uint32_t *tsas(任务栈地址)
 ; line 69:  *
-; line 70:  * @返 回 值: 无
+; line 70:  * @retval none
 ; line 71:  *
-; line 72:  * @注    释: 无
+; line 72:  * @note none
 ; line 73:  *
 ; line 74:  */
 ; line 75: void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
@@ -664,15 +664,15 @@ $CASE
         osLinkUseEnable?_ PROC
 ; line 140: /*
 ; line 141:  *
-; line 142:  * @函数名称: osLinkUseEnable
+; line 142:  * @name osLinkUseEnable
 ; line 143:  *
-; line 144:  * @函数功能: 启用进程栈
+; line 144:  * @brief 启用进程栈
 ; line 145:  *
-; line 146:  * @输入参数: uint32_t *tsas(任务栈地址)
+; line 146:  * @param uint32_t *tsas(任务栈地址)
 ; line 147:  *
-; line 148:  * @返 回 值: 无
+; line 148:  * @retval none
 ; line 149:  *
-; line 150:  * @注   释: 无
+; line 150:  * @note none
 ; line 151:  *
 ; line 152:  */
 ; line 153: void osLinkUseEnable(void)
@@ -693,15 +693,15 @@ $CASE
 ; line 160:  
 ; line 161: /*
 ; line 162:  *
-; line 163:  * @函数名称: PendSV_Handler
+; line 163:  * @name PendSV_Handler
 ; line 164:  *
-; line 165:  * @函数功能: 启动第一个任务
+; line 165:  * @brief 启动第一个任务
 ; line 166:  *
-; line 167:  * @输入参数: 无
+; line 167:  * @param none
 ; line 168:  *
-; line 169:  * @返 回 值: 无
+; line 169:  * @retval none
 ; line 170:  *
-; line 171:  * @注   释: 无
+; line 171:  * @note none
 ; line 172:  *
 ; line 173:  */
 ; line 174: #if (osTaskUseStack_Config > 0)
@@ -791,16 +791,16 @@ $CASE
 ; line 207: 
 ; line 208: /*
 ; line 209:  *
-; line 210:  * @函数名称: print
+; line 210:  * @name print
 ; line 211:  *
-; line 212:  * @函数功能: print函数入口
+; line 212:  * @brief print函数入口
 ; line 213:  *
-; line 214:  * @输入参数: c 控制字符串
+; line 214:  * @param c 控制字符串
 ; line 215:  *			  ... 其他传参
 ; line 216:  *
-; line 217:  * @返 回 值: 无
+; line 217:  * @retval none
 ; line 218:  *
-; line 219:  * @注   释: 无
+; line 219:  * @note none
 ; line 220:  *
 ; line 221:  */
 ; line 222: 
@@ -829,17 +829,17 @@ $CASE
         sprint?_ PROC
 ; line 234: /*
 ; line 235:  *
-; line 236:  * @函数名称: sprint
+; line 236:  * @name sprint
 ; line 237:  *
-; line 238:  * @函数功能: sprint函数入口
+; line 238:  * @brief sprint函数入口
 ; line 239:  *
-; line 240:  * @输入参数: s 输出地址
+; line 240:  * @param s 输出地址
 ; line 241:  *  		  c 控制字符串
 ; line 242:  *			  ... 其他传参
 ; line 243:  *
-; line 244:  * @返 回 值: 无
+; line 244:  * @retval none
 ; line 245:  *
-; line 246:  * @注   释: 无
+; line 246:  * @note none
 ; line 247:  *
 ; line 248:  */
 ; line 249: 

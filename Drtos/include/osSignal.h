@@ -1,13 +1,26 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
-/*
+/**
  *
- * @文件名称: .h
+ * @file .h
  *
- * @文件内容: 无
+ * @brief 无
  *
- * @注    释: 无
+ * @note none
  *
  */
 
@@ -59,62 +72,62 @@ typedef struct
 
 #if (osSignalAutoApply_Config > 0)//启用了信号量自动分配
 
-/*
+/**
  *
- * @函数名称: osSignalLogin
+ * @name osSignalLogin
  *
- * @函数功能: 信号量注册
+ * @brief 信号量注册
  *
- * @输入参数: _SignalHandle* ST(信号量结构体)
+ * @param _SignalHandle* ST(信号量结构体)
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 _SignalHandle* osSignalLogin(_SignalType SP);
 #else
 OsErrorValue osSignalLogin(_SignalHandle* ST,_SignalType SP);
 #endif
-/*
+/**
  *
- * @函数名称: osSignalUseWait
+ * @name osSignalUseWait
  *
- * @函数功能: 信号量等待式占用
+ * @brief 信号量等待式占用
  *
- * @输入参数: ST	信号量句柄
+ * @param ST	信号量句柄
  *
- * @返 回 值: 0:占用成功  -1:占用失败
+ * @retval 0:占用成功  -1:占用失败
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osSignalUseWait(_SignalHandle* ST);
-/*
+/**
  *
- * @函数名称: osSignalUse
+ * @name osSignalUse
  *
- * @函数功能: 信号量非等待式占用
+ * @brief 信号量非等待式占用
  *
- * @输入参数: ST	信号量句柄
+ * @param ST	信号量句柄
  *
- * @返 回 值: 0:占用成功  -1:占用失败
+ * @retval 0:占用成功  -1:占用失败
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osSignalUse(_SignalHandle* ST);
-/*
+/**
  *
- * @函数名称: osSignalFree
+ * @name osSignalFree
  *
- * @函数功能: 信号量释放
+ * @brief 信号量释放
  *
- * @输入参数:  ST	信号量句柄
+ * @param  ST	信号量句柄
  *
- * @返 回 值: 0:释放成功  -1:释放失败
+ * @retval 0:释放成功  -1:释放失败
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osSignalFree(_SignalHandle* ST);

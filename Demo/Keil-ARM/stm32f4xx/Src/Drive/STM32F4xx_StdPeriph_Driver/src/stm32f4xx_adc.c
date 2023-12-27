@@ -180,7 +180,7 @@
   */ 
 
 /** @defgroup ADC_Group1 Initialization and Configuration functions
- *  @brief    Initialization and Configuration functions 
+ *  * @brief    Initialization and Configuration functions 
  *
 @verbatim    
  ===============================================================================
@@ -417,7 +417,7 @@ void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   */
 
 /** @defgroup ADC_Group2 Analog Watchdog configuration functions
- *  @brief    Analog Watchdog configuration functions 
+ *  * @brief    Analog Watchdog configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -547,7 +547,7 @@ void ADC_AnalogWatchdogSingleChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channe
 
 /** @defgroup ADC_Group3 Temperature Sensor, Vrefint (Voltage Reference internal) 
  *            and VBAT (Voltage BATtery) management functions
- *  @brief   Temperature Sensor, Vrefint and VBAT management functions 
+ *  * @brief   Temperature Sensor, Vrefint and VBAT management functions 
  *
 @verbatim   
  ===============================================================================
@@ -633,7 +633,7 @@ void ADC_VBATCmd(FunctionalState NewState)
   */
 
 /** @defgroup ADC_Group4 Regular Channels Configuration functions
- *  @brief   Regular Channels Configuration functions 
+ *  * @brief   Regular Channels Configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -1013,7 +1013,7 @@ uint32_t ADC_GetMultiModeConversionValue(void)
   */
 
 /** @defgroup ADC_Group5 Regular Channels DMA Configuration functions
- *  @brief   Regular Channels DMA Configuration functions 
+ *  * @brief   Regular Channels DMA Configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -1120,7 +1120,7 @@ void ADC_MultiModeDMARequestAfterLastTransferCmd(FunctionalState NewState)
   */
 
 /** @defgroup ADC_Group6 Injected channels Configuration functions
- *  @brief   Injected channels Configuration functions 
+ *  * @brief   Injected channels Configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -1493,7 +1493,7 @@ uint16_t ADC_GetInjectedConversionValue(ADC_TypeDef* ADCx, uint8_t ADC_InjectedC
   */
 
 /** @defgroup ADC_Group7 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions
+ *  * @brief   Interrupts and flags management functions
  *
 @verbatim   
  ===============================================================================

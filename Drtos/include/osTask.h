@@ -1,15 +1,28 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 #ifndef __osTask_H_
 #define __osTask_H_
-/*
+/**
  *
- * @文件名称: osTask.h
+ * @file osTask.h
  *
- * @文件内容: 
+ * @brief 
  *
- * @注    释: 
+ * @note 
  *
  */
 
@@ -82,165 +95,165 @@
 
 
 #if (osCriticalToProtect_Config > 0)//启用了临界保护
-/*
+/**
  *
- * @函数名称: osProtect_DISABLE
+ * @name osProtect_DISABLE
  *
- * @函数功能: 退出临界保护
+ * @brief 退出临界保护
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osProtect_DISABLE() 			osLinkISREnable()
-/*
+/**
  *
- * @函数名称: osProtect_DISABLE
+ * @name osProtect_DISABLE
  *
- * @函数功能: 进入临界保护
+ * @brief 进入临界保护
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osProtect_ENABLE() 				osLinkISRDisable()
 #endif
-/*
+/**
  *
- * @函数名称: osTaskSwitch
+ * @name osTaskSwitch
  *
- * @函数功能: 触发任务上下文切换
+ * @brief 触发任务上下文切换
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 //#define osTaskSwitch() 			do{osTaskGetSwitchQueue()++; ISR_Touch();}while(0);
 #define osTaskSwitch(a)				do{OsTaskNextTaskHandle = a;OsTimeTaskTimeWheel = OsTaskNextTaskHandle -> Wheel;ISR_Touch();}while(0);
 //#define osTaskSwitchChock()			do{osTaskNext();}while(0);
-/*
+/**
  *
- * @函数名称: osTaskSwitchConfig_Config
+ * @name osTaskSwitchConfig_Config
  *
- * @函数功能: 带配置触发任务上下文切换
+ * @brief 带配置触发任务上下文切换
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osTaskSwitchConfig(a,b,c)			do{b -> Config = c;OsTaskNextTaskHandle = a;OsTimeTaskTimeWheel = OsTaskNextTaskHandle -> Wheel;ISR_Touch();}while(0);
 //#define osTaskSwitchChockConfig(a,b)		do{a -> Config = b;OsTaskNextTaskHandle = a;osTaskNext();}while(0);
 //#define osTaskSwitchConfig(a,b)  do{a -> Config = b;osTaskGetSwitchQueue()++; ISR_Touch();}while(0);
 
 
-/*
+/**
  *
- * @函数名称: osTaskEnterIRQ
+ * @name osTaskEnterIRQ
  *
- * @函数功能: 进入中断
+ * @brief 进入中断
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osTaskEnterIRQ()			osTaskGetOIRQFlag() += 1;
-/*
+/**
  *
- * @函数名称: osTaskExitIRQ
+ * @name osTaskExitIRQ
  *
- * @函数功能: 退出中断
+ * @brief 退出中断
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osTaskExitIRQ()				osTaskGetOIRQFlag() -= 1;
-/*
+/**
  *
- * @函数名称: osTaskGetRunTaskHandle
+ * @name osTaskGetRunTaskHandle
  *
- * @函数功能: 获取正在运行的任务句柄
+ * @brief 获取正在运行的任务句柄
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 
 #define osTaskGetRunTaskHandle()		OsTaskRunTaskHandle
 
-/*
+/**
  *
- * @函数名称: osTaskGetRunTaskHandle
+ * @name osTaskGetRunTaskHandle
  *
- * @函数功能: 获取正在任务切换状态
+ * @brief 获取正在任务切换状态
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 
 
 //#define osTaskGetSwitchQueue()			OsTaskSwitchQueue//任务调度请求队列
 
 
-/*
+/**
  *
- * @函数名称: osTaskGetOIRQFlag
+ * @name osTaskGetOIRQFlag
  *
- * @函数功能: 获取中断状态
+ * @brief 获取中断状态
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 
 #define osTaskGetOIRQFlag()			OsTaskISRFlag
 
-/*
+/**
  *
- * @函数名称: osTaskGetRunTaskHandle
+ * @name osTaskGetRunTaskHandle
  *
- * @函数功能: 获取正在任务切换状态
+ * @brief 获取正在任务切换状态
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 
 #define osTaskGetNextTaskHandle()			OsTaskNextTaskHandle
 
 
-/*
+/**
  *
- * @函数名称: osTaskGetRunTaskHandle
+ * @name osTaskGetRunTaskHandle
  *
- * @函数功能: 获取任务句柄链表头部指针
+ * @brief 获取任务句柄链表头部指针
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 
 #define osTaskGetTaskHandleListHead()			OsTaskTaskHandleListHead
@@ -319,17 +332,17 @@ extern uint16_t		OsTaskIdle;
 typedef _TaskAddr 		_SIRQList;
 
 	
-/*
+/**
  *
- * @函数名称: osTaskInit
+ * @name osTaskInit
  *
- * @函数功能: 根据任务名称查询任务句柄地址
+ * @brief 根据任务名称查询任务句柄地址
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: OsErrorValue - 函数错误返回值 (0:表示初始化成功，-1:表示初始化成功)
+ * @retval OsErrorValue - 函数错误返回值 (0:表示初始化成功，-1:表示初始化成功)
  *
- * @注    释: 无
+ * @note none
 */
 OsErrorValue osTaskInit(void);	
 
@@ -339,23 +352,23 @@ void osTaskStart(void);
 
 _TaskHandle* osTaskLoad(_TaskHandle* TaskHandle,uint8_t Config);
 
-/*
+/**
  *
- * @函数名称: osTaskLogin
+ * @name osTaskLogin
  *
- * @函数功能: 任务注册(自动分配内存)
+ * @brief 任务注册(自动分配内存)
  *
- * @输入参数: TN	任务名称	
- * @输入参数: TA	任务地址
- * @输入参数: TSS  	任务栈长度
- * @输入参数: TTW  	任务时间轮片
- * @输入参数: TPL   任务优先级
- * @输入参数: TPP 	任务传参
- * @输入参数: TC 	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
+ * @param TN	任务名称	
+ * @param TA	任务地址
+ * @param TSS  	任务栈长度
+ * @param TTW  	任务时间轮片
+ * @param TPL   任务优先级
+ * @param TPP 	任务传参
+ * @param TC 	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
  *
- * @返 回 值: 0:注册失败		任务句柄值:注册成功
+ * @retval 0:注册失败		任务句柄值:注册成功
  *
- * @注    释: 无
+ * @note none
  */
 _TaskHandle* osTaskLogin(
 	void*  Addr,//任务地址	
@@ -370,24 +383,24 @@ _TaskHandle* osTaskLogin(
 	#endif
     _TaskConfig  Config//任务配置
 );
-/*
+/**
  *
- * @函数名称: osTaskLoginStatic
+ * @name osTaskLoginStatic
  *
- * @函数功能: 任务注册(手动提供内存)
+ * @brief 任务注册(手动提供内存)
  *
- * @输入参数: TaskHandle 任务句柄(存储地址)
- * @输入参数: TN	任务名称	
- * @输入参数: TA	任务地址
- * @输入参数: TSS  	任务栈长度
- * @输入参数: TTW  	任务时间轮片
- * @输入参数: TPL   任务优先级
- * @输入参数: TPP 	任务传参
- * @输入参数: TC 	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
+ * @param TaskHandle 任务句柄(存储地址)
+ * @param TN	任务名称	
+ * @param TA	任务地址
+ * @param TSS  	任务栈长度
+ * @param TTW  	任务时间轮片
+ * @param TPL   任务优先级
+ * @param TPP 	任务传参
+ * @param TC 	任务配置（任务配置请参考 - Task_Set_Default - 这个宏定义）
  *
- * @返 回 值: 0:注册失败		任务句柄值:注册成功
+ * @retval 0:注册失败		任务句柄值:注册成功
  *
- * @注    释: 无
+ * @note none
  */
 
 _TaskHandle* osTaskLoginStatic(
@@ -405,160 +418,160 @@ _TaskHandle* osTaskLoginStatic(
     _TaskConfig  Config//任务配置
 );
 
-/*
+/**
  *
- * @函数名称: osTaskLogout
+ * @name osTaskLogout
  *
- * @函数功能: 任务注销(自动释放内存)
+ * @brief 任务注销(自动释放内存)
  *
- * @输入参数: TaskHandle 任务句柄
+ * @param TaskHandle 任务句柄
  *
- * @返 回 值: 0:注册失败		任务句柄值:注册成功
+ * @retval 0:注册失败		任务句柄值:注册成功
  *
- * @注    释: 无
+ * @note none
  */
 OsErrorValue  osTaskLogout(_TaskHandle* TaskHandle);
-/*
+/**
  *
- * @函数名称: osTaskLogoutStatic
+ * @name osTaskLogoutStatic
  *
- * @函数功能: 任务注销(不释放内存)
+ * @brief 任务注销(不释放内存)
  *
- * @输入参数: TaskHandle 任务句柄
+ * @param TaskHandle 任务句柄
  *
- * @返 回 值: 0:注册失败		任务句柄值:注册成功
+ * @retval 0:注册失败		任务句柄值:注册成功
  *
- * @注    释: 无
+ * @note none
  */
 
 OsErrorValue  osTaskLogoutStatic(_TaskHandle* TaskHandle);
 
-/*
+/**
  *
- * @函数名称: osTaskNext
+ * @name osTaskNext
  *
- * @函数功能: 计算下一个要运行的任务
+ * @brief 计算下一个要运行的任务
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osTaskNext(void);
-/*
+/**
  *
- * @函数名称: osTaskDelayMs
+ * @name osTaskDelayMs
  *
- * @函数功能: 任务毫秒级阻塞延时
+ * @brief 任务毫秒级阻塞延时
  *
- * @输入参数: ms	要延时的时长	
+ * @param ms	要延时的时长	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osTaskDelayMs(uint32_t ms);
-/*
+/**
  *
- * @函数名称: osTaskDelayUs
+ * @name osTaskDelayUs
  *
- * @函数功能: 任务微秒级阻塞延时
+ * @brief 任务微秒级阻塞延时
  *
- * @输入参数: us	要延时的时长
+ * @param us	要延时的时长
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osTaskDelayUs(uint32_t us);
 
-/*
+/**
  *
- * @函数名称: osTaskAddrReplace
+ * @name osTaskAddrReplace
  *
- * @函数功能: 任务配置
+ * @brief 任务配置
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: -1:配置时出现错误，0: 配置成功
+ * @retval -1:配置时出现错误，0: 配置成功
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv);
-/*
+/**
  *
- * @函数名称: osTaskAddrReplace
+ * @name osTaskAddrReplace
  *
- * @函数功能: 任务地址替换
+ * @brief 任务地址替换
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: -1:创建错误，0: 创建成功
+ * @retval -1:创建错误，0: 创建成功
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA);
-/*
+/**
  *
- * @函数名称: osTaskExit
+ * @name osTaskExit
  *
- * @函数功能: 任务结束
+ * @brief 任务结束
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 0: 成功结束
+ * @retval 0: 成功结束
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osTaskExit(void);
 
-/*
+/**
  *
- * @函数名称: osTaskSIRQ_Enable
+ * @name osTaskSIRQ_Enable
  *
- * @函数功能: 软中断使能
+ * @brief 软中断使能
  *
- * @输入参数:	SIRQList_Addr	软中断表表头
+ * @param 	SIRQList_Addr	软中断表表头
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr);
-/*
+/**
  *
- * @函数名称: osTaskSIRQLogin
+ * @name osTaskSIRQLogin
  *
- * @函数功能: 软中断注册
+ * @brief 软中断注册
  *
- * @输入参数:	SIRQList_Addr	软中断表表头
- * @输入参数:	Addr			软中断响应函数地址	
+ * @param 	SIRQList_Addr	软中断表表头
+ * @param 	Addr			软中断响应函数地址	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr);
-/*
+/**
  *
- * @函数名称: osTaskSIRQ
+ * @name osTaskSIRQ
  *
- * @函数功能: 软中断响应
+ * @brief 软中断响应
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osTaskSIRQ(void);

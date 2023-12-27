@@ -1,14 +1,27 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 
-/*
+/**
  *
- * @文件名称: osMemory.h
+ * @file osMemory.h
  *
- * @文件内容: 无
+ * @brief 无
  *
- * @注   释: 无
+ * @note none
  *
  */
 #ifndef _osMemory_H_
@@ -75,214 +88,214 @@ typedef  struct
 }MemoryStruct;
 #endif
 //}
-/*
+/**
  *
- * @函数名称: osMemorySwitch
+ * @name osMemorySwitch
  *
- * @函数功能: 内存池切换
+ * @brief 内存池切换
  *
- * @输入参数: a 内存信息句柄
+ * @param a 内存信息句柄
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 #define osMemoryInstall(a) MemoryInfoHandle = a
-/*
+/**
  *
- * @函数名称: osMemoryInit
+ * @name osMemoryInit
  *
- * @函数功能: 内存初始化
+ * @brief 内存初始化
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 _MemoryInfo*  osMemoryInit(_MemoryInfo* MemoryInfo);
-/*
+/**
  *
- * @函数名称: osMemoryMalloc
+ * @name osMemoryMalloc
  *
- * @函数功能: 内存申请
+ * @brief 内存申请
  *
- * @输入参数: MemSize	申请长度
+ * @param MemSize	申请长度
  *
- * @返 回 值: 申请返回的内存地址
+ * @retval 申请返回的内存地址
  *
- * @注    释: 无
+ * @note none
  *
  */
 void* osMemoryMalloc(uint32_t MemSize);
-/*
+/**
  *
- * @函数名称: osMemoryReset
+ * @name osMemoryReset
  *
- * @函数功能: 内存块复位
+ * @brief 内存块复位
  *
- * @输入参数: Addr	内存块地址
+ * @param Addr	内存块地址
 			 Data	复位内容
  *
- * @返 回 值: 与Addr变量输入相同的内存块地址
+ * @retval 与Addr变量输入相同的内存块地址
  *
- * @注    释: 无
+ * @note none
  *
  */
 void* osMemoryReset(void* Addr,uint8_t Data);
-/*
+/**
  *
- * @函数名称: osMemoryFree
+ * @name osMemoryFree
  *
- * @函数功能: 释放内存
+ * @brief 释放内存
  *
- * @输入参数: 0
+ * @param 0
  *
- * @返 回 值: 
+ * @retval 
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osMemoryFree(void* Addr);
-/*
+/**
  *
- * @函数名称: osMemoryGetFreeValue
+ * @name osMemoryGetFreeValue
  *
- * @函数功能: 获取剩余内存的长度
+ * @brief 获取剩余内存的长度
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 剩余内存的长度
+ * @retval 剩余内存的长度
  *
- * @注    释: 无
+ * @note none
  *
  */
 uint32_t osMemoryGetFreeValue(void);
-/*
+/**
  *
- * @函数名称: osMemoryGetPassValue
+ * @name osMemoryGetPassValue
  *
- * @函数功能: 获取可申请内存的长度
+ * @brief 获取可申请内存的长度
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 可申请内存的长度
+ * @retval 可申请内存的长度
  *
- * @注    释: 无
+ * @note none
  *
  */
 uint32_t osMemoryGetPassValue(void);
-/*
+/**
  *
- * @函数名称: osMemoryGetAllValue
+ * @name osMemoryGetAllValue
  *
- * @函数功能: 获取总内存长度
+ * @brief 获取总内存长度
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 总内存长度
+ * @retval 总内存长度
  *
- * @注    释: 无
+ * @note none
  *
  */
 uint32_t osMemoryGetAllValue(void);
-/*
+/**
  *
- * @函数名称: osMemorySum
+ * @name osMemorySum
  *
- * @函数功能: 对所有内存块校验
+ * @brief 对所有内存块校验
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osMemorySum(void);
-/*
+/**
  *
- * @函数名称: osMemoryGetAllValue
+ * @name osMemoryGetAllValue
  *
- * @函数功能: 获取总内存长度
+ * @brief 获取总内存长度
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 总内存长度
+ * @retval 总内存长度
  *
- * @注    释: 无
+ * @note none
  *
  */
 _MemoryInfoStatic* osMemoryInitStatic(_MemoryInfoStatic* MemoryInfoStatic);
-/*
+/**
  *
- * @函数名称: osMemorySwitchoverStatic
+ * @name osMemorySwitchoverStatic
  *
- * @函数功能: 静态内存切换
+ * @brief 静态内存切换
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 总内存长度
+ * @retval 总内存长度
  *
- * @注    释: 无
+ * @note none
  *
  */
 #define osMemoryInstallStatic(a) MemoryInfoStaticHandle = a;
-/*
+/**
  *
- * @函数名称: osMemoryMallocStatic
+ * @name osMemoryMallocStatic
  *
- * @函数功能: 申请静态内存
+ * @brief 申请静态内存
  *
- * @输入参数: MemSize 要要申请的字节数
+ * @param MemSize 要要申请的字节数
  *
- * @返 回 值: 申请到可用的内存地址
+ * @retval 申请到可用的内存地址
  *
- * @注    释: 无
+ * @note none
  *
  */
 void* osMemoryMallocStatic(int32_t MemSize);
-/*
+/**
  *
- * @函数名称: osMemoryFreeStatic
+ * @name osMemoryFreeStatic
  *
- * @函数功能: 静态内存释放
+ * @brief 静态内存释放
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 总内存长度
+ * @retval 总内存长度
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osMemoryFreeStatic(void* Addr);
-/*
+/**
  *
- * @函数名称: osMemoryStaticGetPassValue
+ * @name osMemoryStaticGetPassValue
  *
- * @函数功能: 获取静态内存可申请字节数
+ * @brief 获取静态内存可申请字节数
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 总内存长度
+ * @retval 总内存长度
  *
- * @注    释: 无
+ * @note none
  *
  */
 uint32_t osMemoryStaticGetPassValue(void);
-/*
+/**
  *
- * @函数名称: osMemoryStaticGetAllValue
+ * @name osMemoryStaticGetAllValue
  *
- * @函数功能: 获取静态内存容量字节数
+ * @brief 获取静态内存容量字节数
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 总内存长度
+ * @retval 总内存长度
  *
- * @注    释: 无
+ * @note none
  *
  */
 uint32_t osMemoryStaticGetAllValue(void);

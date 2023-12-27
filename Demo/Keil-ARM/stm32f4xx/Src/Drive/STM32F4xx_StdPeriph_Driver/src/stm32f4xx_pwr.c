@@ -137,7 +137,7 @@
   */
 
 /** @defgroup PWR_Group1 Backup Domain Access function 
- *  @brief   Backup Domain Access function  
+ *  * @brief   Backup Domain Access function  
  *
 @verbatim   
  ===============================================================================
@@ -189,7 +189,7 @@ void PWR_BackupAccessCmd(FunctionalState NewState)
   */
 
 /** @defgroup PWR_Group2 PVD configuration functions
- *  @brief   PVD configuration functions 
+ *  * @brief   PVD configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -262,7 +262,7 @@ void PWR_PVDCmd(FunctionalState NewState)
   */
 
 /** @defgroup PWR_Group3 WakeUp pin configuration functions
- *  @brief   WakeUp pin configuration functions 
+ *  * @brief   WakeUp pin configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -324,7 +324,7 @@ void PWR_WakeUpPinCmd(uint32_t PWR_WakeUpPinx, FunctionalState NewState)
   */
 
 /** @defgroup PWR_Group4 Main and Backup Regulators configuration functions
- *  @brief   Main and Backup Regulators configuration functions 
+ *  * @brief   Main and Backup Regulators configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -632,7 +632,7 @@ void PWR_LowRegulatorLowVoltageCmd(FunctionalState NewState)
   */
 
 /** @defgroup PWR_Group5 FLASH Power Down configuration functions
- *  @brief   FLASH Power Down configuration functions 
+ *  * @brief   FLASH Power Down configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -667,7 +667,7 @@ void PWR_FlashPowerDownCmd(FunctionalState NewState)
   */
 
 /** @defgroup PWR_Group6 Low Power modes configuration functions
- *  @brief   Low Power modes configuration functions 
+ *  * @brief   Low Power modes configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -934,7 +934,7 @@ void PWR_EnterSTANDBYMode(void)
   */
 
 /** @defgroup PWR_Group7 Flags management functions
- *  @brief   Flags management functions 
+ *  * @brief   Flags management functions 
  *
 @verbatim   
  ===============================================================================

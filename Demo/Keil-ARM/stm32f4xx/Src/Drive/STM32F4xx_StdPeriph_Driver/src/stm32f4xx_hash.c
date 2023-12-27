@@ -144,7 +144,7 @@
   */ 
 
 /** @defgroup HASH_Group1 Initialization and Configuration functions
- *  @brief    Initialization and Configuration functions 
+ *  * @brief    Initialization and Configuration functions 
  *
 @verbatim    
  ===============================================================================
@@ -256,7 +256,7 @@ void HASH_Reset(void)
   */
  
 /** @defgroup HASH_Group2 Message Digest generation functions
- *  @brief    Message Digest generation functions
+ *  * @brief    Message Digest generation functions
  *
 @verbatim    
  ===============================================================================
@@ -360,7 +360,7 @@ void HASH_StartDigest(void)
   */
 
 /** @defgroup HASH_Group3 Context swapping functions
- *  @brief   Context swapping functions
+ *  * @brief   Context swapping functions
  *
 @verbatim   
  ===============================================================================
@@ -438,7 +438,7 @@ void HASH_RestoreContext(HASH_Context* HASH_ContextRestore)
   */
 
 /** @defgroup HASH_Group4 HASH's DMA interface Configuration function
- *  @brief   HASH's DMA interface Configuration function 
+ *  * @brief   HASH's DMA interface Configuration function 
  *
 @verbatim   
  ===============================================================================
@@ -507,7 +507,7 @@ void HASH_DMACmd(FunctionalState NewState)
   */
 
 /** @defgroup HASH_Group5 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions
+ *  * @brief   Interrupts and flags management functions
  *
 @verbatim   
  ===============================================================================

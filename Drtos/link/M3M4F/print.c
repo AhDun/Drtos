@@ -1,13 +1,26 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
-/*
+/**
  *
- * @文件名称: print.c
+ * @file print.c
  *
- * @文件内容: print函数，与printf用法无异
+ * @brief print函数，与printf用法无异
  *
- * @注    释: 无
+ * @note none
  *
  */
 
@@ -22,15 +35,15 @@
 
 ///*
 // *
-// * @函数名称: pchar
+// * @name pchar
 // *
-// * @函数功能: 输出接口
+// * @brief 输出接口
 // *
-// * @输入参数: ch	字符
+// * @param ch	字符
 // *
-// * @返 回 值: 无
+// * @retval none
 // *
-// * @注    释: 该函数可以用于重定向
+// * @note 该函数可以用于重定向
 // *
 // */
 //int pchar(const char ch)
@@ -39,18 +52,18 @@
 ////	while(USART_GetFlagStatus(USART1,USART_FLAG_TXE)==RESET);
 ////	return (ch);
 //}
-/*
+/**
  *
- * @函数名称: pchar
+ * @name pchar
  *
- * @函数功能: sprint函数字符回流
+ * @brief sprint函数字符回流
  *
- * @输入参数: ch	字符
- * @输入参数: s		sprint函数回流数据
+ * @param ch	字符
+ * @param s		sprint函数回流数据
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 该函数可以用于重定向
+ * @note 该函数可以用于重定向
  *
  */
 static void _spchar(const char ch,int* s)
@@ -63,17 +76,17 @@ static void _spchar(const char ch,int* s)
 		pchar(ch);//直接输出
 	}
 }
-/*
+/**
  *
- * @函数名称: _printU10
+ * @name _printU10
  *
- * @输入参数: num	无符号十进制数
- * @输入参数: ctl	前置0个数
- * @输入参数: s		sprint函数回流数据
+ * @param num	无符号十进制数
+ * @param ctl	前置0个数
+ * @param s		sprint函数回流数据
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void _printU10(unsigned int num,int ctl,int* s)
@@ -97,19 +110,19 @@ void _printU10(unsigned int num,int ctl,int* s)
 	}
 	_spchar(num % 10 + 48,s);//输出最后一位
 }
-/*
+/**
  *
- * @函数名称: _printS10
+ * @name _printS10
  *
- * @函数功能: print内联输出有符号十进制数
+ * @brief print内联输出有符号十进制数
  *
- * @输入参数: num	有符号十进制数
- * @输入参数: ctl	前置0个数
- * @输入参数: s		sprint函数回流数据
+ * @param num	有符号十进制数
+ * @param ctl	前置0个数
+ * @param s		sprint函数回流数据
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 static void _printS10(int num,int ctl,int* s)
@@ -120,18 +133,18 @@ static void _printS10(int num,int ctl,int* s)
 	}
 	_printU10(num,ctl,s);//无使用号十进制数输出
 }
-/*
+/**
  *
- * @函数名称: _printSring
+ * @name _printSring
  *
- * @函数功能: print内联输出字符串
+ * @brief print内联输出字符串
  *
- * @输入参数: p		字符串首地址
- * @输入参数: s		sprint函数回流数据
+ * @param p		字符串首地址
+ * @param s		sprint函数回流数据
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void _printSring(int p,int* s)
@@ -140,19 +153,19 @@ void _printSring(int p,int* s)
 		_spchar(*(char*)p++,s);//逐个输出字符
 	}
 } 
-/*
+/**
  *
- * @函数名称: _print16
+ * @name _print16
  *
- * @函数功能: printf内联输出十六形式
+ * @brief printf内联输出十六形式
  *
- * @输入参数: num	十六进制数值
- * @输入参数: c		ASCII码起始值
- * @输入参数: s		sprint函数回流数据
+ * @param num	十六进制数值
+ * @param c		ASCII码起始值
+ * @param s		sprint函数回流数据
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 static void _print16(int num,int c,int* s)
@@ -186,18 +199,18 @@ static void _print16(int num,int c,int* s)
 		}
 	}
 }
-/*
+/**
  *
- * @函数名称: _print8
+ * @name _print8
  *
- * @函数功能: printf内联输出八进制
+ * @brief printf内联输出八进制
  *
- * @输入参数: num	八进制数值
- * @输入参数: s		sprint函数回流数据
+ * @param num	八进制数值
+ * @param s		sprint函数回流数据
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 static void _print8(int num,int* s)
@@ -227,18 +240,18 @@ static void _print8(int num,int* s)
 		_Bit = _Bit - 3;//位数减三
 	}
 }
-/*
+/**
  *
- * @函数名称: _print_lf
+ * @name _print_lf
  *
- * @函数功能: print内联输出双精度浮点数(64位)
+ * @brief print内联输出双精度浮点数(64位)
  *
- * @输入参数: num	双精度浮点数
- * @输入参数: s		sprint函数回流数据
+ * @param num	双精度浮点数
+ * @param s		sprint函数回流数据
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 static void _print_lf(double* num,char ctrl,int* s)
@@ -285,19 +298,19 @@ static void _print_lf(double* num,char ctrl,int* s)
 	
 	
 }
-/*
+/**
  *
- * @函数名称: xprint
+ * @name xprint
  *
- * @函数功能: print函数子函数
+ * @brief print函数子函数
  *
- * @输入参数: s 回写地址
+ * @param s 回写地址
  * 			  con 控制字符串地址
  *			  sp 栈指针
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void xprint(int* s,char* con,int sp)

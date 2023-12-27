@@ -188,7 +188,7 @@
   */ 
 
 /** @defgroup CRYP_Group1 Initialization and Configuration functions
- *  @brief    Initialization and Configuration functions 
+ *  * @brief    Initialization and Configuration functions 
  *
 @verbatim    
  ===============================================================================
@@ -421,7 +421,7 @@ void CRYP_Cmd(FunctionalState NewState)
   */
   
 /** @defgroup CRYP_Group2 CRYP Data processing functions
- *  @brief    CRYP Data processing functions
+ *  * @brief    CRYP Data processing functions
  *
 @verbatim    
  ===============================================================================
@@ -462,7 +462,7 @@ uint32_t CRYP_DataOut(void)
   */
   
 /** @defgroup CRYP_Group3 Context swapping functions
- *  @brief   Context swapping functions
+ *  * @brief   Context swapping functions
  *
 @verbatim   
  ===============================================================================
@@ -648,7 +648,7 @@ void CRYP_RestoreContext(CRYP_Context* CRYP_ContextRestore)
   */
 
 /** @defgroup CRYP_Group4 CRYP's DMA interface Configuration function
- *  @brief   CRYP's DMA interface Configuration function 
+ *  * @brief   CRYP's DMA interface Configuration function 
  *
 @verbatim   
  ===============================================================================
@@ -700,7 +700,7 @@ void CRYP_DMACmd(uint8_t CRYP_DMAReq, FunctionalState NewState)
   */
 
 /** @defgroup CRYP_Group5 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions
+ *  * @brief   Interrupts and flags management functions
  *
 @verbatim   
  ===============================================================================

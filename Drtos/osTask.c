@@ -1,13 +1,29 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
-/*
+
+
+
+/**
  *
- * @文件名称: osTask.c
+ * @file osTask.c
  *
- * @文件内容: 系统"任务"文件
+ * @brief 系统"任务"文件
  *
- * @注    释: 
+ * @note 
  *
  */
 
@@ -31,17 +47,17 @@ uint16_t		OsTaskIdle;
 
 
 
-/*
+/**
  *
- * @函数名称: osTaskInit
+ * @name osTaskInit
  *
- * @函数功能: 任务系统初始化
+ * @brief 任务系统初始化
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: -1:发生错误 / 0: 初始化成功
+ * @retval -1:发生错误 / 0: 初始化成功
  *
- * @注    释: 无
+ * @note none
  *
  */
 
@@ -93,23 +109,23 @@ void osTaskStart(void)
 	for(;;){osTaskNext();}
 }
 
-/*
+/**
  *
- * @函数名称: osTaskLogin
+ * @name osTaskLogin
  *
- * @函数功能: 任务创建（自动分配内存）
+ * @brief 任务创建（自动分配内存）
  *
- * @输入参数:	TN 任务名称
- * @输入参数: 	TA 任务地址
- * @输入参数: 	TSS 任务栈长度
- * @输入参数: 	TTW 任务时间轮片
- * @输入参数: 	TPL 任务优先级
- * @输入参数: 	TPP 任务传参
- * @输入参数: 	TC 任务配置	
+ * @param	TN 任务名称
+ * @param 	TA 任务地址
+ * @param 	TSS 任务栈长度
+ * @param 	TTW 任务时间轮片
+ * @param 	TPL 任务优先级
+ * @param 	TPP 任务传参
+ * @param 	TC 任务配置	
  *
- * @返 回 值: -1:创建错误 / 0: 创建成功
+ * @retval -1:创建错误 / 0: 创建成功
  *
- * @注    释:
+ * @note none
  *
  */	
 
@@ -250,24 +266,24 @@ _TaskHandle* osTaskLogin(
 
 
 
-/*
+/**
  *
- * @函数名称: 
+ * @name 
  *
- * @函数功能: 任务创建
+ * @brief 任务创建
  *
- * @输入参数: 	TaskHandle 任务句柄
- * @输入参数: 	Name 任务名称
- * @输入参数: 	Addr 任务地址
- * @输入参数: 	StackSize 任务栈长度
- * @输入参数: 	Wheel 任务时间轮片
- * @输入参数: 	Level 任务优先级
- * @输入参数: 	Arg 任务传参
- * @输入参数: 	Config 任务配置	
+ * @param 	TaskHandle 任务句柄
+ * @param 	Name 任务名称
+ * @param 	Addr 任务地址
+ * @param 	StackSize 任务栈长度
+ * @param 	Wheel 任务时间轮片
+ * @param 	Level 任务优先级
+ * @param 	Arg 任务传参
+ * @param 	Config 任务配置	
  *
- * @返 回 值: -1:创建错误 / 0: 创建成功
+ * @retval -1:创建错误 / 0: 创建成功
  *
- * @注    释: 例如:
+ * @note 例如:
  *
  */
 _TaskHandle* osTaskLoginStatic(
@@ -392,17 +408,17 @@ osTaskLoginStatic_Error:
 
 
 }
-/*
+/**
  *
- * @函数名称: 	osTaskLogout
+ * @name 	osTaskLogout
  *
- * @函数功能: 	任务注销
+ * @brief 	任务注销
  *
- * @输入参数:	TaskHandle	任务句柄
+ * @param 	TaskHandle	任务句柄
  *
- * @返 回 值: 	-1:注销错误，0: 注销成功
+ * @retval 	-1:注销错误，0: 注销成功
  *
- * @注    释: 	这个任务注销会释放
+ * @note 	这个任务注销会释放
  *
  */	
 OsErrorValue  osTaskLogout(_TaskHandle* TaskHandle)
@@ -424,17 +440,17 @@ OsErrorValue  osTaskLogout(_TaskHandle* TaskHandle)
 	return (OK);//无异常，返回OK
 
 }
-/*
+/**
  *
- * @函数名称: 	osTaskLogout
+ * @name 	osTaskLogout
  *
- * @函数功能: 	任务注销
+ * @brief 	任务注销
  *
- * @输入参数:	TaskHandle	任务句柄
+ * @param 	TaskHandle	任务句柄
  *
- * @返 回 值: 	-1:注销错误，0: 注销成功
+ * @retval 	-1:注销错误，0: 注销成功
  *
- * @注    释: 	
+ * @note 	
  *
  */	
 OsErrorValue  osTaskLogoutStatic(_TaskHandle* TaskHandle)
@@ -477,17 +493,17 @@ osTaskLogoutStatic_Error:
 
 }
 
-/*
+/**
  *
- * @函数名称: osTaskDelayMs
+ * @name osTaskDelayMs
  *
- * @函数功能: 毫秒级任务延时
+ * @brief 毫秒级任务延时
  *
- * @输入参数: ms(延时时长，单位毫秒)	
+ * @param ms(延时时长，单位毫秒)	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */	
 void osTaskDelayMs(uint32_t ms)
@@ -500,17 +516,17 @@ void osTaskDelayMs(uint32_t ms)
 		osTaskSwitchConfig(OSCoreTaskHandle,osTaskGetRunTaskHandle(),Task_State_Up_DT);
 	}
 }
-/*
+/**
  *
- * @函数名称: osTaskDelayUs
+ * @name osTaskDelayUs
  *
- * @函数功能: 微秒级任务延时
+ * @brief 微秒级任务延时
  *
- * @输入参数: ms(延时时长，单位微秒)	
+ * @param ms(延时时长，单位微秒)	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */	
 void osTaskDelayUs(uint32_t us)
@@ -520,17 +536,17 @@ void osTaskDelayUs(uint32_t us)
 }
 
 
-/*
+/**
  *
- * @函数名称: osTaskNext
+ * @name osTaskNext
  *
- * @函数功能: 任务切换
+ * @brief 任务切换
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: -1:创建错误，0: 创建成功
+ * @retval -1:创建错误，0: 创建成功
  *
- * @注    释: 无
+ * @note none
  *
  */	
 void osTaskNext(void)
@@ -565,17 +581,17 @@ void osTaskNext(void)
 			}
     }
 }
-/*
+/**
  *
- * @函数名称: osTaskSet
+ * @name osTaskSet
  *
- * @函数功能: 任务配置
+ * @brief 任务配置
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: -1:创建错误，0: 创建成功
+ * @retval -1:创建错误，0: 创建成功
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
@@ -628,17 +644,17 @@ OsErrorValue osTaskSet(_TaskHandle* TaskHandle,uint8_t Pv)
 	#endif
 	return (Error);
 }
-/*
+/**
  *
- * @函数名称: osTaskEnd
+ * @name osTaskEnd
  *
- * @函数功能: 任务结束
+ * @brief 任务结束
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: -1:创建错误，0: 创建成功
+ * @retval -1:创建错误，0: 创建成功
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osTaskExit(void)
@@ -647,17 +663,17 @@ OsErrorValue osTaskExit(void)
 		osTaskSwitchConfig(OSCoreTaskHandle,osTaskGetRunTaskHandle(),Task_State_ST);//触发任务切换
 	}
 }
-/*
+/**
  *
- * @函数名称: osTaskAddrReplace
+ * @name osTaskAddrReplace
  *
- * @函数功能: 任务地址替换
+ * @brief 任务地址替换
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: -1:创建错误，0: 创建成功
+ * @retval -1:创建错误，0: 创建成功
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA)
@@ -676,17 +692,17 @@ OsErrorValue osTaskAddrReplace(_TaskHandle* TaskHandle,void* NewTA)
 }
 
 #if (SIRQ_Config > 0)
-/*
+/**
  *
- * @函数名称: osTaskSIRQInit
+ * @name osTaskSIRQInit
  *
- * @函数功能: 软中断初始化
+ * @brief 软中断初始化
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osTaskSIRQInit(void)
@@ -707,17 +723,17 @@ OsErrorValue osTaskSIRQInit(void)
 	}
 	return (OK);
 }
-/*
+/**
  *
- * @函数名称: osTaskSIRQ_Enable
+ * @name osTaskSIRQ_Enable
  *
- * @函数功能: 软中断使能
+ * @brief 软中断使能
  *
- * @输入参数:	SIRQList_Addr	软中断表表头
+ * @param 	SIRQList_Addr	软中断表表头
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr)
@@ -725,18 +741,18 @@ void osTaskSIRQ_Enable(_SIRQList* SIRQList_Addr)
 	TaskHandle_SIRQ -> Arg = (_TaskArg*)SIRQList_Addr;
 	osTaskSwitchConfig(TaskHandle_SIRQ,TaskHandle_SIRQ,Task_State_RE);
 }
-/*
+/**
  *
- * @函数名称: osTaskSIRQLogin
+ * @name osTaskSIRQLogin
  *
- * @函数功能: 软中断注册
+ * @brief 软中断注册
  *
- * @输入参数:	SIRQList_Addr	软中断表表头
- * @输入参数:	Addr			软中断响应函数地址	
+ * @param 	SIRQList_Addr	软中断表表头
+ * @param 	Addr			软中断响应函数地址	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr)
@@ -744,17 +760,17 @@ OsErrorValue osTaskSIRQLogin(_SIRQList* SIRQList_Addr,void* Addr)
 	SIRQList_Addr[++*SIRQList_Addr] = (_TaskAddr)Addr;
 	return (OK);//返回错误
 }
-/*
+/**
  *
- * @函数名称: osTaskSIRQ
+ * @name osTaskSIRQ
  *
- * @函数功能: 软中断响应
+ * @brief 软中断响应
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osTaskSIRQ(void)

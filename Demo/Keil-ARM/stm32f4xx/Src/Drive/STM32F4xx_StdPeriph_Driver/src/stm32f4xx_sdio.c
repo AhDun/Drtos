@@ -247,7 +247,7 @@
   */
 
 /** @defgroup SDIO_Group1 Initialization and Configuration functions
- *  @brief   Initialization and Configuration functions 
+ *  * @brief   Initialization and Configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -374,7 +374,7 @@ uint32_t SDIO_GetPowerState(void)
   */
 
 /** @defgroup SDIO_Group2 Command path state machine (CPSM) management functions
- *  @brief   Command path state machine (CPSM) management functions 
+ *  * @brief   Command path state machine (CPSM) management functions 
  *
 @verbatim   
  ===============================================================================
@@ -479,7 +479,7 @@ uint32_t SDIO_GetResponse(uint32_t SDIO_RESP)
   */
 
 /** @defgroup SDIO_Group3 Data path state machine (DPSM) management functions
- *  @brief   Data path state machine (DPSM) management functions
+ *  * @brief   Data path state machine (DPSM) management functions
  *
 @verbatim   
  ===============================================================================
@@ -597,7 +597,7 @@ uint32_t SDIO_GetFIFOCount(void)
   */
 
 /** @defgroup SDIO_Group4 SDIO IO Cards mode management functions
- *  @brief   SDIO IO Cards mode management functions
+ *  * @brief   SDIO IO Cards mode management functions
  *
 @verbatim   
  ===============================================================================
@@ -687,7 +687,7 @@ void SDIO_SendSDIOSuspendCmd(FunctionalState NewState)
   */
 
 /** @defgroup SDIO_Group5 CE-ATA mode management functions
- *  @brief   CE-ATA mode management functions
+ *  * @brief   CE-ATA mode management functions
  *
 @verbatim   
  ===============================================================================
@@ -747,7 +747,7 @@ void SDIO_SendCEATACmd(FunctionalState NewState)
   */
 
 /** @defgroup SDIO_Group6 DMA transfers management functions
- *  @brief   DMA transfers management functions
+ *  * @brief   DMA transfers management functions
  *
 @verbatim   
  ===============================================================================
@@ -779,7 +779,7 @@ void SDIO_DMACmd(FunctionalState NewState)
   */
 
 /** @defgroup SDIO_Group7 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions  
+ *  * @brief   Interrupts and flags management functions  
  *
 @verbatim   
  ===============================================================================

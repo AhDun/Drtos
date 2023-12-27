@@ -1,13 +1,26 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
-/*
+/**
  *
- * @文件名称: osPost.c
+ * @file osPost.c
  *
- * @文件内容: 系统"队列与邮箱"文件
+ * @brief 系统"队列与邮箱"文件
  *
- * @注    释: 无
+ * @note none
  *
  */
 
@@ -16,17 +29,17 @@
 
 #if (osPost_Config > 0)
 
-/*
+/**
  *
- * @函数名称: osPostSend
+ * @name osPostSend
  *
- * @函数功能: 发送邮件
+ * @brief 发送邮件
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: -1:发生错误 / 0:发送成功
+ * @retval -1:发生错误 / 0:发送成功
  *
- * @注   释: 无
+ * @note none
  *
  */
 OsErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
@@ -57,17 +70,17 @@ OsErrorValue osPostSend(void* PB,_TaskHandle* TaskHandle)
 }
 
 
-/*
+/**
  *
- * @函数名称: osPostRead
+ * @name osPostRead
  *
- * @函数功能: 读取邮件
+ * @brief 读取邮件
  *
- * @输入参数: uint8_t* ResiduePost(邮箱指针)
+ * @param uint8_t* ResiduePost(邮箱指针)
  *
- * @返 回 值: 邮件内容
+ * @retval 邮件内容
  *
- * @注   释: 无
+ * @note none
  *
  */
 uint32_t* osPostRead(void)
@@ -94,17 +107,17 @@ uint32_t* osPostRead(void)
 		return (NULL);//没有邮件，返回空
 	}
 }
-/*
+/**
  *
- * @函数名称: osPostRead_Wait
+ * @name osPostRead_Wait
  *
- * @函数功能: 阻塞式读取邮件
+ * @brief 阻塞式读取邮件
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 邮件内容
+ * @retval 邮件内容
  *
- * @注   释: 无
+ * @note none
  *
  */
 uint32_t* osPostReadWait(void)

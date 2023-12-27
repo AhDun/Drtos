@@ -78,7 +78,7 @@ const FSMC_NORSRAMTimingInitTypeDef FSMC_DefaultTimingStruct = {0x0F, /* FSMC_Ad
   */
 
 /** @defgroup FSMC_Group1 NOR/SRAM Controller functions
- *  @brief   NOR/SRAM Controller functions 
+ *  * @brief   NOR/SRAM Controller functions 
  *
 @verbatim   
  ===============================================================================
@@ -321,7 +321,7 @@ void FSMC_NORSRAMCmd(uint32_t FSMC_Bank, FunctionalState NewState)
   */
 
 /** @defgroup FSMC_Group2 NAND Controller functions
- *  @brief   NAND Controller functions 
+ *  * @brief   NAND Controller functions 
  *
 @verbatim   
  ===============================================================================
@@ -645,7 +645,7 @@ uint32_t FSMC_GetECC(uint32_t FSMC_Bank)
   */
 
 /** @defgroup FSMC_Group3 PCCARD Controller functions
- *  @brief   PCCARD Controller functions 
+ *  * @brief   PCCARD Controller functions 
  *
 @verbatim   
  ===============================================================================
@@ -840,7 +840,7 @@ void FSMC_PCCARDCmd(FunctionalState NewState)
   */
 
 /** @defgroup FSMC_Group4  Interrupts and flags management functions
- *  @brief    Interrupts and flags management functions
+ *  * @brief    Interrupts and flags management functions
  *
 @verbatim   
  ===============================================================================

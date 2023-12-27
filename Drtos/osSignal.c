@@ -1,13 +1,26 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
-/*
+/**
  *
- * @文件名称: .c
+ * @file .c
  *
- * @文件内容: 系统"信号量"文件
+ * @brief 系统"信号量"文件
  *
- * @注    释: 无
+ * @note none
  *
  */
 
@@ -17,39 +30,20 @@
 
 
 #if (osSignal_Config > 0)
-/*
 
- @头文件名称: 无
 
- @头文件功能: 无
 
- @注      释: 无
+/**
  *
- */
-
-
-/*
-
- @变量名称: 无
-
- @变量功能: 无
+ * @name osSignalRegister
  *
- * @注    释: 无
+ * @brief 注册信号量
  *
- */
-
-
-/*
+ * @param _SignalType SP(信号量的类型)
  *
- * @函数名称: osSignalRegister
+ * @retval none
  *
- * @函数功能: 注册信号量
- *
- * @输入参数: _SignalType SP(信号量的类型)
- *
- * @返 回 值: 无
- *
- * @注    释: 无
+ * @note none
  *
  */
 #if (osSignalAutoApply_Config > 0)//启用了信号量自动分配
@@ -88,17 +82,17 @@ _SignalHandle* osSignalLogin(_SignalType SP)
 	}
 }
 #else
-/*
+/**
  *
- * @函数名称: osSignalRegister
+ * @name osSignalRegister
  *
- * @函数功能: 注册信号量
+ * @brief 注册信号量
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osSignalLogin(_SignalHandle* ST,_SignalType SP)
@@ -131,17 +125,17 @@ OsErrorValue osSignalLogin(_SignalHandle* ST,_SignalType SP)
 }
 #endif
 
-/*
+/**
  *
- * @函数名称: osSignalApply_Wait
+ * @name osSignalApply_Wait
  *
- * @函数功能: 信号量请求
+ * @brief 信号量请求
  *
- * @输入参数: _SignalHandle* ST(信号量结构体)
+ * @param _SignalHandle* ST(信号量结构体)
  *
- * @返 回 值: -1:发生错误 / 0:请求成功
+ * @retval -1:发生错误 / 0:请求成功
  *
- * @注    释: 无
+ * @note none
  *
  */
 
@@ -162,17 +156,17 @@ static OsErrorValue osSignalApplyToken(_SignalHandle* ST)
 }
 
 
-/*
+/**
  *
- * @函数名称: osSignalApply_Wait
+ * @name osSignalApply_Wait
  *
- * @函数功能: 信号量请求
+ * @brief 信号量请求
  *
- * @输入参数: _SignalHandle* ST(信号量结构体)
+ * @param _SignalHandle* ST(信号量结构体)
  *
- * @返 回 值: -1:发生错误 / 0:请求成功
+ * @retval -1:发生错误 / 0:请求成功
  *
- * @注    释: 无
+ * @note none
  *
  */
 
@@ -277,17 +271,17 @@ OsErrorValue osSignalUse(_SignalHandle* ST)
 	}
 }
 
-/*
+/**
  *
- * @函数名称: osSignalFree
+ * @name osSignalFree
  *
- * @函数功能: 释放信号量
+ * @brief 释放信号量
  *
- * @输入参数: _SignalHandle* ST(信号量结构体)
+ * @param _SignalHandle* ST(信号量结构体)
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osSignalFree(_SignalHandle* ST)
@@ -343,17 +337,17 @@ OsErrorValue osSignalFree(_SignalHandle* ST)
 	}
 }
 
-/*
+/**
  *
- * @函数名称: osSignalLogout
+ * @name osSignalLogout
  *
- * @函数功能: 信号量注销
+ * @brief 信号量注销
  *
- * @输入参数: _SignalHandle* ST(信号量结构体)
+ * @param _SignalHandle* ST(信号量结构体)
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osSignalLogout(_SignalHandle* ST)

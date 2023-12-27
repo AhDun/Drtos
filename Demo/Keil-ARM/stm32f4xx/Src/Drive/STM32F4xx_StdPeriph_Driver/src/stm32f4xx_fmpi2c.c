@@ -109,7 +109,7 @@
 
 
 /** @defgroup FMPI2C_Group1 Initialization and Configuration functions
- *  @brief   Initialization and Configuration functions 
+ *  * @brief   Initialization and Configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -568,7 +568,7 @@ void FMPI2C_10BitAddressingModeCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewS
 
 
 /** @defgroup FMPI2C_Group2 Communications handling functions
- *  @brief   Communications handling functions 
+ *  * @brief   Communications handling functions 
  *
 @verbatim
  ===============================================================================
@@ -901,7 +901,7 @@ void FMPI2C_TransferHandling(FMPI2C_TypeDef* FMPI2Cx, uint16_t Address, uint8_t 
 
 
 /** @defgroup FMPI2C_Group3 SMBUS management functions
- *  @brief   SMBUS management functions 
+ *  * @brief   SMBUS management functions 
  *
 @verbatim
  ===============================================================================
@@ -1161,7 +1161,7 @@ uint8_t FMPI2C_GetPEC(FMPI2C_TypeDef* FMPI2Cx)
   
   
 /** @defgroup FMPI2C_Group4 FMPI2C registers management functions
- *  @brief   FMPI2C registers management functions 
+ *  * @brief   FMPI2C registers management functions 
  *
 @verbatim
  ===============================================================================
@@ -1212,7 +1212,7 @@ uint32_t FMPI2C_ReadRegister(FMPI2C_TypeDef* FMPI2Cx, uint8_t FMPI2C_Register)
   */  
   
 /** @defgroup FMPI2C_Group5 Data transfers management functions
- *  @brief   Data transfers management functions 
+ *  * @brief   Data transfers management functions 
  *
 @verbatim
  ===============================================================================
@@ -1264,7 +1264,7 @@ uint8_t FMPI2C_ReceiveData(FMPI2C_TypeDef* FMPI2Cx)
   
   
 /** @defgroup FMPI2C_Group6 DMA transfers management functions
- *  @brief   DMA transfers management functions 
+ *  * @brief   DMA transfers management functions 
  *
 @verbatim
  ===============================================================================
@@ -1316,7 +1316,7 @@ void FMPI2C_DMACmd(FMPI2C_TypeDef* FMPI2Cx, uint32_t FMPI2C_DMAReq, FunctionalSt
 
 
 /** @defgroup FMPI2C_Group7 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions 
+ *  * @brief   Interrupts and flags management functions 
  *
 @verbatim
  ===============================================================================

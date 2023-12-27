@@ -129,7 +129,7 @@
   */
 
 /** @defgroup USART_Group1 Initialization and Configuration functions
- *  @brief   Initialization and Configuration functions 
+ *  * @brief   Initialization and Configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -520,7 +520,7 @@ void USART_OneBitMethodCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   */
 
 /** @defgroup USART_Group2 Data transfers functions
- *  @brief   Data transfers functions 
+ *  * @brief   Data transfers functions 
  *
 @verbatim   
  ===============================================================================
@@ -584,7 +584,7 @@ uint16_t USART_ReceiveData(USART_TypeDef* USARTx)
   */
 
 /** @defgroup USART_Group3 MultiProcessor Communication functions
- *  @brief   Multi-Processor Communication functions 
+ *  * @brief   Multi-Processor Communication functions 
  *
 @verbatim   
  ===============================================================================
@@ -684,7 +684,7 @@ void USART_WakeUpConfig(USART_TypeDef* USARTx, uint16_t USART_WakeUp)
   */
 
 /** @defgroup USART_Group4 LIN mode functions
- *  @brief   LIN mode functions 
+ *  * @brief   LIN mode functions 
  *
 @verbatim   
  ===============================================================================
@@ -794,7 +794,7 @@ void USART_SendBreak(USART_TypeDef* USARTx)
   */
 
 /** @defgroup USART_Group5 Halfduplex mode function
- *  @brief   Half-duplex mode function 
+ *  * @brief   Half-duplex mode function 
  *
 @verbatim   
  ===============================================================================
@@ -857,7 +857,7 @@ void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 
 /** @defgroup USART_Group6 Smartcard mode functions
- *  @brief   Smartcard mode functions 
+ *  * @brief   Smartcard mode functions 
  *
 @verbatim   
  ===============================================================================
@@ -983,7 +983,7 @@ void USART_SmartCardNACKCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   */
 
 /** @defgroup USART_Group7 IrDA mode functions
- *  @brief   IrDA mode functions 
+ *  * @brief   IrDA mode functions 
  *
 @verbatim   
  ===============================================================================
@@ -1073,7 +1073,7 @@ void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState)
   */
 
 /** @defgroup USART_Group8 DMA transfers management functions
- *  @brief   DMA transfers management functions
+ *  * @brief   DMA transfers management functions
  *
 @verbatim   
  ===============================================================================
@@ -1122,7 +1122,7 @@ void USART_DMACmd(USART_TypeDef* USARTx, uint16_t USART_DMAReq, FunctionalState 
   */
   
 /** @defgroup USART_Group9 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions 
+ *  * @brief   Interrupts and flags management functions 
  *
 @verbatim   
  ===============================================================================

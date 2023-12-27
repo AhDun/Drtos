@@ -57,7 +57,7 @@
   */
 
 /** @defgroup SPDIFRX_Group1 Initialization and Configuration functions
-  *  @brief   Initialization and Configuration functions 
+  *  * @brief   Initialization and Configuration functions 
   *
 @verbatim   
  ===============================================================================

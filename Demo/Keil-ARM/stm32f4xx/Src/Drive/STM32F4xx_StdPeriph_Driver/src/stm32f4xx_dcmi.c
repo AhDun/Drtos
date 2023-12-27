@@ -107,7 +107,7 @@
   */ 
 
 /** @defgroup DCMI_Group1 Initialization and Configuration functions
- *  @brief   Initialization and Configuration functions 
+ *  * @brief   Initialization and Configuration functions 
  *
 @verbatim   
  ===============================================================================
@@ -279,7 +279,7 @@ void DCMI_JPEGCmd(FunctionalState NewState)
   */
 
 /** @defgroup DCMI_Group2 Image capture functions
- *  @brief   Image capture functions
+ *  * @brief   Image capture functions
  *
 @verbatim   
  ===============================================================================
@@ -350,7 +350,7 @@ uint32_t DCMI_ReadData(void)
   */
 
 /** @defgroup DCMI_Group3 Interrupts and flags management functions
- *  @brief   Interrupts and flags management functions
+ *  * @brief   Interrupts and flags management functions
  *
 @verbatim   
  ===============================================================================

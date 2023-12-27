@@ -1,15 +1,28 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 #ifndef __osConfig_H_
 #define __osConfig_H_
-/*
+/**
  *
- * @文件名称: osConfig.h
+ * @file osConfig.h
  *
- * @文件内容: 系统配置
+ * @brief 系统配置
  *
- * @注    释: 
+ * @note 
  *
  */
 
@@ -43,79 +56,79 @@
 
 //硬件驱动{
 
-/*
+/**
  *
- * @函数名称: osClock_Init
+ * @name osClock_Init
  *
- * @函数功能: 系统时钟初始化
+ * @brief 系统时钟初始化
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osClock_Init(a) 		 SysTick_us_Init(osCPU_Freq,a * 1000)//
 
 
 #define osClockSetLoad(a)		 SysTick_us_load(osCPU_Freq,a * 1000)
-/*
+/**
  *
- * @函数名称: osDebug_Init
+ * @name osDebug_Init
  *
- * @函数功能: 系统Debug初始化
+ * @brief 系统Debug初始化
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osDebug_Init() 		 USART1_Init(115200)//
-/*
+/**
  *
- * @函数名称: osIRQ_Init
+ * @name osIRQ_Init
  *
- * @函数功能: 系统中断初始化
+ * @brief 系统中断初始化
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osIRQ_Init()  		 do{\
 								NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);\
 								NVIC_SetPriority (SysTick_IRQn, 0x04|0x02|0x01);\
 								NVIC_SetPriority (PendSV_IRQn, 0x08|0x04|0x02|0x01);\
 							 }while(0);
-/*
+/**
  *
- * @函数名称: osClockPause
+ * @name osClockPause
  *
- * @函数功能: 系统时钟暂停
+ * @brief 系统时钟暂停
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 
 #define osClockPause()   	do{\
 									SysTick->CTRL &= ~(0x02) ;\
 								}while(0);//暂停系统
-/*
+/**
  *
- * @函数名称: osClockRecover
+ * @name osClockRecover
  *
- * @函数功能: 系统时钟恢复
+ * @brief 系统时钟恢复
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osClockRecover() 	do{\
 									SysTick->CTRL |= (0x02) ;\
@@ -128,17 +141,17 @@
 #define osTaskTimeUs(a) 	SysTick_us(us)//微秒级延时
 //}
 
-/*
+/**
  *
- * @函数名称: osInfoPrint
+ * @name osInfoPrint
  *
- * @函数功能: 系统信息打印
+ * @brief 系统信息打印
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osInfoPrint()  		do{\
 							print("系统名称: %s\n",osName);\
@@ -150,17 +163,17 @@
 							print("CPU位数: %d\n",osCPU_Bit);\
 							osTaskSpeedTest();\
 							}while(0);//系统信息
-/*
+/**
  *
- * @函数名称: osInit
+ * @name osInit
  *
- * @函数功能: 系统初始化
+ * @brief 系统初始化
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osInit()    do{\
 						osIRQ_Init();\

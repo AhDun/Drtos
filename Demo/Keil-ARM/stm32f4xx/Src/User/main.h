@@ -1,9 +1,9 @@
-/* *
- * @文件名称: main.h
+/**
+ * @file main.h
  *
- * @文件内容: 基本库
+ * @brief 基本库
  *
- * @注    释: 
+ * @note 
 */
 
 #ifndef __main_H_

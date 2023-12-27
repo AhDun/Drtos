@@ -18,9 +18,9 @@ import os
 
 
 def shell(cmd):
-    print(cmd)
+    #print(cmd)
     res = os.popen(cmd).read()
-    print(res.encode("gbk"))
+    #print(res.encode("gbk"))
     return res
 
 
@@ -68,25 +68,32 @@ def rm():
     cmd = "rm -rf .git"
     return cmd
 
+def pull():
+    cmd = "pull "
+    return cmd
+
 
 
 
 def git():
-    print("---------------")
-    print(" 自动git脚本")
-    print("---------------")
-    print("1.首次提交与仓库推送")
-    print("2.本地提交")
-    print("3.仓库推送")
-    print("W.回滚上一个版本")
-    print("E.回滚到指定版本")
-    print("R.删除本地git")
-    print("S.更改仓库地址")
-    print("---------------")
-    print("按shift+c退出程序")
-    print("---------------")
-
-    i = input("请输入:")
+    print("---------------------------")
+    print("git-python自动脚本")
+    print("---------------------------\n")
+    if os.path.isdir(".git") == 0:
+        print(" 1.首次提交与仓库推送")
+    else:
+        print(" 2.本地提交并仓库推送")
+        print(" 3.本地提交")
+        print(" 4.仓库推送")
+        print("---------------")
+        print(" 6.下载到本地")
+        print("---------------")
+        print(" 7.回滚上一个版本")
+        print(" 8.回滚到指定版本")
+        # print(" 9.删除本地git")
+        print(" 0.更改仓库地址")
+    print("\n---------------")
+    i = input(" 请输入:")
 
     if i == "1":
         shell(init())
@@ -97,15 +104,21 @@ def git():
     elif i == "2":
         shell(add())
         shell(commit(input("\n请输入,提交备注：")))
-    elif i == "3":
         shell(push())
-    elif i == "W":
+    elif i == "3":
+        shell(add())
+        shell(commit(input("\n请输入,提交备注：")))
+    elif i == "4":
+        shell(push())
+    elif i == "6":
+        shell(pull())
+    elif i == "7":
         shell(reseth())
-    elif i == "E":
+    elif i == "8":
         shell(resets(input("\n请输入,指定版本哈希：")))
-    elif i == "R":
-        shell(rm())
-    elif i == "S":
+    # elif i == "9":
+    #     shell(rm())
+    elif i == "0":
         shell(remoterm())
         shell(remoteadd(input("\n请输入,仓库地址：")))
     print("\n\n")
@@ -118,5 +131,4 @@ while True:
     try:
         git()
     except:
-        print("已退出")
-        break
+        print("error")

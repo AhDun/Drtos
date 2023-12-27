@@ -1,17 +1,30 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 
 #ifndef __osLink_H_
 #define __osLink_H_
 
-/*
+/**
  *
- * @文件名称: osCPU.h
+ * @file osCPU.h
  *
- * @文件内容: 
+ * @brief 
  *
- * @注    释: 
+ * @note 
  *
  */
 
@@ -37,134 +50,134 @@
 
 
 
-/*
+/**
  *
- * @函数名称: osLinkISRDisable
+ * @name osLinkISRDisable
  *
- * @函数功能: 关闭所有中断
+ * @brief 关闭所有中断
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 //void osLinkISRDisable(void);
 #define osLinkISRDisable() 	EA = 0
-/*
+/**
  *
- * @函数名称: osLinkISREnable
+ * @name osLinkISREnable
  *
- * @函数功能: 开启所有中断
+ * @brief 开启所有中断
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 //void osLinkISREnable(void);
 #define osLinkISREnable() 	EA = 1
-/*
+/**
  *
- * @函数名称: Jump
+ * @name Jump
  *
- * @函数功能: 跳转到指定位置
+ * @brief 跳转到指定位置
  *
- * @输入参数: addr 	地址
+ * @param addr 	地址
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osLinkJump(uint32_t* addr);
-/*
+/**
  *
- * @函数名称: osLinkTaskStackInit
+ * @name osLinkTaskStackInit
  *
- * @函数功能: 任务栈初始化
+ * @brief 任务栈初始化
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas);
-/*
+/**
  *
- * @函数名称: INTX_ENABLE
+ * @name INTX_ENABLE
  *
- * @函数功能: 开启所有中断
+ * @brief 开启所有中断
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osLinkUseEnable(void);
-/*
+/**
  *
- * @函数名称: ISR_Touch
+ * @name ISR_Touch
  *
- * @函数功能: 触发中断
+ * @brief 触发中断
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 //void ISR_Touch(void);
 #define ISR_Touch() IE0 = 1
-/*
+/**
  * 
- * @函数名称: ISR_Touch1
+ * @name ISR_Touch1
  *
- * @函数功能: 触发中断
+ * @brief 触发中断
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void ISR_Touch1(void);
 
 
-/*
+/**
  *
- * @函数名称: print
+ * @name print
  *
- * @函数功能: 与printf函数一致
+ * @brief 与printf函数一致
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void print(const char* c,...);
-/*
+/**
  *
- * @函数名称: sprint
+ * @name sprint
  *
- * @函数功能: 与sprintf函数一致
+ * @brief 与sprintf函数一致
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void sprint(char* s,const char* c,...);

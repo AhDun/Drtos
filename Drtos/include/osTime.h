@@ -1,16 +1,29 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
 #ifndef __osClockH_
 #define __osClockH_
 
-/*
+/**
  *
- * @文件名称: osClock.h
+ * @file osClock.h
  *
- * @文件内容: 
+ * @brief 
  *
- * @注    释: 
+ * @note 
  *
  */
 
@@ -25,124 +38,124 @@
 
 
 
-/*
+/**
  *
- * @函数名称: osClockGetOsRTC
+ * @name osClockGetOsRTC
  *
- * @函数功能: 获取OSRTC
+ * @brief 获取OSRTC
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osClockGetOsRTC()		OsTimeSystemRunTime		
-/*
+/**
  *
- * @函数名称: osClockGetOsRTCD
+ * @name osClockGetOsRTCD
  *
- * @函数功能: 获取OSRTC天数
+ * @brief 获取OSRTC天数
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osClockGetOsRTCD()	(osClockGetOsRTC() / 1000) /86400
-/*
+/**
  *
- * @函数名称: osClockRTCGetH
+ * @name osClockRTCGetH
  *
- * @函数功能: 获取OSRTC小时数
+ * @brief 获取OSRTC小时数
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osClockGetOsRTCH()		((osClockGetOsRTC() / 1000) /3600) % 24
-/*
+/**
  *
- * @函数名称: osClockRTCGetH
+ * @name osClockRTCGetH
  *
- * @函数功能: 获取OSRTC分钟数
+ * @brief 获取OSRTC分钟数
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osClockGetOsRTCM()	((osClockGetOsRTC() / 1000) /60) % 60
-/*
+/**
  *
- * @函数名称: osClockRTCGetH
+ * @name osClockRTCGetH
  *
- * @函数功能: 获取OSRTC秒数
+ * @brief 获取OSRTC秒数
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define osClockGetOsRTCS()	(osClockGetOsRTC() / 1000) % 60
 
 
-/*
+/**
  *
- * @函数名称: osClockGetTimePulse
+ * @name osClockGetTimePulse
  *
- * @函数功能: 获取系统的时钟数
+ * @brief 获取系统的时钟数
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define OsTimeGetSystemRunTime()		OsTimeSystemRunTime
-/*
+/**
  *
- * @函数名称: osClockGetTimePulse
+ * @name osClockGetTimePulse
  *
- * @函数功能: 获取系统的时钟数
+ * @brief 获取系统的时钟数
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define OsTimeGetTaskISRTime()			OsTimeTaskISRTime
 
-/*
+/**
  *
- * @函数名称: osClockGetTimePulse
+ * @name osClockGetTimePulse
  *
- * @函数功能: 任务轮片时间
+ * @brief 任务轮片时间
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define OsTimeGetTaskTimeWheel()			OsTimeTaskTimeWheel
-/*
+/**
  *
- * @函数名称: osClockGetTimePulse
+ * @name osClockGetTimePulse
  *
- * @函数功能: 获取系统的时钟数
+ * @brief 获取系统的时钟数
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
 */
 #define OsTimeGetPeriodValue()			OsTimePeriodValue
 
@@ -213,110 +226,110 @@ typedef struct
 
 
 
-/*
+/**
  *
- * @函数名称: osClockInit
+ * @name osClockInit
  *
- * @函数功能: 系统时钟初始化
+ * @brief 系统时钟初始化
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osClockInit(void);
-/*
+/**
  *
- * @函数名称: osClockTimePulse
+ * @name osClockTimePulse
  *
- * @函数功能: 系统时钟脉冲处理
+ * @brief 系统时钟脉冲处理
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osClockTimePulse(void);
 
-/*
+/**
  *
- * @函数名称: osTimeLoginStatic
+ * @name osTimeLoginStatic
  *
- * @函数功能: 软定时器注册
+ * @brief 软定时器注册
  *
- * @输入参数: ListAddr	软定时器句柄地址
- * @输入参数: Name	软定时器名称
- * @输入参数: Flag	软定时器类型标志
- * @输入参数: Config	软定时器句柄配置
- * @输入参数: Addr	回调函数地址
+ * @param ListAddr	软定时器句柄地址
+ * @param Name	软定时器名称
+ * @param Flag	软定时器类型标志
+ * @param Config	软定时器句柄配置
+ * @param Addr	回调函数地址
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 _STimer* osTimerLoginStatic(uint8_t* ListAddr,_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
-/*
+/**
  *
- * @函数名称: osSTimeLogout
+ * @name osSTimeLogout
  *
- * @函数功能: 软定时器注销
+ * @brief 软定时器注销
  *
- * @输入参数: STimer	软定时器地址
+ * @param STimer	软定时器地址
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osSTimerLogout(_STimer* STimer);
-/*
+/**
  *
- * @函数名称: osTimeLogin
+ * @name osTimeLogin
  *
- * @函数功能: 软定时器注册
+ * @brief 软定时器注册
  *
- * @输入参数: Name	软定时器名称
- * @输入参数: Flag	软定时器类型标志
- * @输入参数: Config	软定时器句柄配置
- * @输入参数: Addr	回调函数地址
+ * @param Name	软定时器名称
+ * @param Flag	软定时器类型标志
+ * @param Config	软定时器句柄配置
+ * @param Addr	回调函数地址
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 
 _STimer* osTimerLogin(_STimeName* Name,_STaskDelay Flag,_STimeConfig Config,void* Addr);
-/*
+/**
  *
- * @函数名称: osSTimeInit
+ * @name osSTimeInit
  *
- * @函数功能: 软定时器初始化
+ * @brief 软定时器初始化
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 OsErrorValue osSTimerInit(void);
-/*
+/**
  *
- * @函数名称: osSTime
+ * @name osSTime
  *
- * @函数功能: 软定时器响应程序
+ * @brief 软定时器响应程序
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osSTimer(void);

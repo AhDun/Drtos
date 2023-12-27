@@ -1,13 +1,26 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
-/*
+/**
  *
- * @文件名称: osLink.c
+ * @file osLink.c
  *
- * @文件内容: 链接(衔接)文件
+ * @brief 链接(衔接)文件
  *
- * @注    释: 
+ * @note 
  *
  */
 
@@ -46,17 +59,17 @@ void osLinkJump(uint32_t* addr)
 
 //}
 
-/*
+/**
  *
- * @函数名称: osLinkTaskStackInit
+ * @name osLinkTaskStackInit
  *
- * @函数功能: 任务栈初始化
+ * @brief 任务栈初始化
  *
- * @输入参数: uint32_t tta(任务传参) ,uint32_t *tsa(任务开始地址),uint32_t *eca(任务结束回调地址),uint32_t *tsas(任务栈地址)
+ * @param uint32_t tta(任务传参) ,uint32_t *tsa(任务开始地址),uint32_t *eca(任务结束回调地址),uint32_t *tsas(任务栈地址)
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
@@ -124,17 +137,17 @@ void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsa
 
 	//__asm	{MOV	   DR60,DR8}
 }
-/*
+/**
  *
- * @函数名称: osLinkUseEnable
+ * @name osLinkUseEnable
  *
- * @函数功能: 启用进程栈
+ * @brief 启用进程栈
  *
- * @输入参数: uint32_t *tsas(任务栈地址)
+ * @param uint32_t *tsas(任务栈地址)
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注   释: 无
+ * @note none
  *
  */
 void osLinkUseEnable(void)
@@ -145,17 +158,17 @@ void osLinkUseEnable(void)
 
 
  
-/*
+/**
  *
- * @函数名称: PendSV_Handler
+ * @name PendSV_Handler
  *
- * @函数功能: 启动第一个任务
+ * @brief 启动第一个任务
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注   释: 无
+ * @note none
  *
  */
 #if (osTaskUseStack_Config > 0)
@@ -192,18 +205,18 @@ int pchar(const char ch)
 	return (ch);
 }
 
-/*
+/**
  *
- * @函数名称: print
+ * @name print
  *
- * @函数功能: print函数入口
+ * @brief print函数入口
  *
- * @输入参数: c 控制字符串
+ * @param c 控制字符串
  *			  ... 其他传参
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注   释: 无
+ * @note none
  *
  */
 
@@ -218,19 +231,19 @@ void print(const char* c,...)
 	xprint();
 	__asm {POP DR0}
 }
-/*
+/**
  *
- * @函数名称: sprint
+ * @name sprint
  *
- * @函数功能: sprint函数入口
+ * @brief sprint函数入口
  *
- * @输入参数: s 输出地址
+ * @param s 输出地址
  *  		  c 控制字符串
  *			  ... 其他传参
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注   释: 无
+ * @note none
  *
  */
 

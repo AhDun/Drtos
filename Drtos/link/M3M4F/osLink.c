@@ -1,13 +1,26 @@
-/*
- * Copyright (c) 2022-2023 AhDun. All rights reserved.
+/**
+ * Copyright 2022-2023 AhDun. All rights reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
-/*
+/**
  *
- * @文件名称: osLink.c
+ * @file osLink.c
  *
- * @文件内容: 链接(衔接)文件
+ * @brief 链接(衔接)文件
  *
- * @注    释: 
+ * @note 
  *
  */
 
@@ -45,17 +58,17 @@ __asm void osLinkISREnable(void)
 	BX      LR  //退出函数，跳转到BX寄存器中所存的地址
 }
 
-/*
+/**
  *
- * @函数名称: osLinkTaskStackInit
+ * @name osLinkTaskStackInit
  *
- * @函数功能: 任务栈初始化
+ * @brief 任务栈初始化
  *
- * @输入参数: uint32_t tta(任务传参) ,uint32_t *tsa(任务开始地址),uint32_t *eca(任务结束回调地址),uint32_t *tsas(任务栈地址)
+ * @param uint32_t tta(任务传参) ,uint32_t *tsa(任务开始地址),uint32_t *eca(任务结束回调地址),uint32_t *tsas(任务栈地址)
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 无
+ * @note none
  *
  */
 __asm void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_t* tsas)
@@ -111,17 +124,17 @@ __asm void osLinkTaskStackInit(uint32_t* tpp,uint32_t* tsa,uint32_t* eca,uint32_
 
 	BX	  LR
 }
-/*
+/**
  *
- * @函数名称: osLinkUseEnable
+ * @name osLinkUseEnable
  *
- * @函数功能: 启用进程栈
+ * @brief 启用进程栈
  *
- * @输入参数: uint32_t *tsas(任务栈地址)
+ * @param uint32_t *tsas(任务栈地址)
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注   释: 无
+ * @note none
  *
  */
 __asm void osLinkUseEnable(void)
@@ -155,17 +168,17 @@ __asm void osLinkUseEnable(void)
 }
 
 
-/*
+/**
  *
- * @函数名称: HardFault_Handler
+ * @name HardFault_Handler
  *
- * @函数功能: 任务错误入口
+ * @brief 任务错误入口
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注   释: 无
+ * @note none
  *
  */
 __asm void HardFault_Handler(void)
@@ -182,17 +195,17 @@ __asm void HardFault_Handler(void)
 
 	POP		{PC}
 }
-/*
+/**
  *
- * @函数名称: SysTick_Handler
+ * @name SysTick_Handler
  *
- * @函数功能: 系统时钟入口
+ * @brief 系统时钟入口
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注   释: 无
+ * @note none
  *
  */
 __asm void SysTick_Handler(void)
@@ -207,17 +220,17 @@ __asm void SysTick_Handler(void)
 
 	NOP
 }
-/*
+/**
  *
- * @函数名称: PendSV_Handler
+ * @name PendSV_Handler
  *
- * @函数功能: 启动第一个任务
+ * @brief 启动第一个任务
  *
- * @输入参数: 无
+ * @param none
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注   释: 无
+ * @note none
  *
  */
 #if (osTaskUseStack_Config > 0)
@@ -385,17 +398,17 @@ OsErrorValue osTaskErrorHardFault(uint32_t pc,uint32_t psp)
 	osTaskExitIRQ();
 	return (OK);
 }
-/*
+/**
  *
- * @函数名称: osTaskSpeedTest
+ * @name osTaskSpeedTest
  *
- * @函数功能: 任务切换速度测试
+ * @brief 任务切换速度测试
  *
- * @输入参数: 无	
+ * @param none	
  *
- * @返 回 值: -1:创建错误，0: 创建成功
+ * @retval -1:创建错误，0: 创建成功
  *
- * @注    释: 无
+ * @note none
  *
  */
 void Delay1ms()		//@24.000MHz
@@ -462,17 +475,17 @@ OsErrorValue osTaskMonitor(void)
 
 
 
-/*
+/**
  *
- * @函数名称: pchar
+ * @name pchar
  *
- * @函数功能: 输出接口
+ * @brief 输出接口
  *
- * @输入参数: ch	字符
+ * @param ch	字符
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注    释: 该函数可以用于重定向
+ * @note 该函数可以用于重定向
  *
  */
 int pchar(const char ch)
@@ -482,18 +495,18 @@ int pchar(const char ch)
 	return (ch);
 }
 
-/*
+/**
  *
- * @函数名称: print
+ * @name print
  *
- * @函数功能: print函数入口
+ * @brief print函数入口
  *
- * @输入参数: c 控制字符串
+ * @param c 控制字符串
  *			  ... 其他传参
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注   释: 无
+ * @note none
  *
  */
 __asm void print(const char* c,...)
@@ -515,19 +528,19 @@ __asm void print(const char* c,...)
 	ADD		SP,#0x0C//释放栈
 	BX		LR//根据LR寄存器中的地址,返回上一个函数
 }
-/*
+/**
  *
- * @函数名称: sprint
+ * @name sprint
  *
- * @函数功能: sprint函数入口
+ * @brief sprint函数入口
  *
- * @输入参数: s 输出地址
+ * @param s 输出地址
  *  		  c 控制字符串
  *			  ... 其他传参
  *
- * @返 回 值: 无
+ * @retval none
  *
- * @注   释: 无
+ * @note none
  *
  */
 

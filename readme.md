@@ -1,4 +1,4 @@
-![buffos](buffos.png)
+<img src="./buffos.png" alt="buffos" style="zoom:50%;" />
 
 ### 文件结构
 

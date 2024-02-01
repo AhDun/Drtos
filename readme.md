@@ -9,8 +9,8 @@
 |-- readme.md    				 本文件
 |-- Drtos.png			         logo
 |- Tools						工具
-|- C51							8051内核RTOS
-|- ARM-C251					     ARM和STC32内核RTOS
+|- Keil-C51						8051内核RTOS
+|- Keil-ARM					     ARM内核RTOS
   |-- filestruct.py				 文件结构生成脚本
   |-- MDK-ARM Clear.bat			 MDK-ARM清理批处理文件
   |-- MDK-C51 Clear.bat			 MDK-C51清理批处理文件

@@ -21,7 +21,7 @@
 	listing	-keil5信息(.M51 .lst等)
 	Objects	-目标文件(.Hex .obj等)
 	Uvproj	-keil5工程文件(. uvproj . uvport等)
-	Readme  -参考文档、手册资料(.ppt .pdf等)
+	Readme  -参考文档、手册资料(.ppt .word等)
 	User  	-用户层 	-主要用来放置Main.c文件
 	App   	-应用层 	-用户自己开发的通过系统来运行的程序
 			|-- App 	-未启用应用层文件

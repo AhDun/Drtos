@@ -4,16 +4,16 @@
 
 ```
  
-|-- .gitignore   				 git过滤文件
-|-- LICENSE		 				开源协议
-|-- readme.md    				 本文件
-|-- Drtos.png			         logo
-|- Tools						工具
-|- Keil-C51						8051内核RTOS
-|- Keil-ARM					     ARM内核RTOS
-  |-- filestruct.py				 文件结构生成脚本
-  |-- MDK-ARM Clear.bat			 MDK-ARM清理批处理文件
-  |-- MDK-C51 Clear.bat			 MDK-C51清理批处理文件
+|-- .gitignore  --  git过滤文件
+|-- LICENSE  --  开源协议
+|-- readme.md  --  本文件
+|-- Drtos.png  --  logo
+|- Tools  --  工具
+|- Keil-C51  --  8051内核RTOS
+|- Keil-ARM  --  ARM内核RTOS
+  |-- filestruct.py  --  文件结构生成脚本
+  |-- MDK-ARM Clear.bat  --  MDK-ARM清理批处理文件
+  |-- MDK-C51 Clear.bat  --  MDK-C51清理批处理文件
 ```
 
 ### 开源协议
@@ -40,5 +40,5 @@
 
 ### 开发周期
 
-- DRTOS 51 2020.08.29~2022.03.17
-- DRTOS ARM 2022.04.18~2023.09.02
+- Keil-C51 51 2020.08.29~2022.03.17
+- Keil-ARM 2022.04.18~2023.09.02

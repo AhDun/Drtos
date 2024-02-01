@@ -36,3 +36,5 @@ JLinkSettings.ini
 debug.ini
 *.uvguix.123
 *.uvoptx
+
+git_python_tools.py
